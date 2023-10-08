@@ -1,59 +1,115 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Link } from 'react-router-dom';
+import styles from './Sidebar.module.scss'
+import classNames from 'classnames/bind';
+import {
+    AiOutlineApartment,
+    AiOutlineHome,
+    AiOutlineHistory,
+    AiOutlineTags
+} from "react-icons/ai";
+import {PiShirtFolded} from 'react-icons/pi'
+import { MdOutlineAnalytics,MdOutlineRateReview } from "react-icons/md";
+import { BsPeople } from "react-icons/bs";
+import {BiMessageError} from 'react-icons/bi'
+import { useState } from 'react';
+const cx = classNames.bind(styles);
 function Sidebar() {
+    const [activeItem , setActiveItem ] = useState(null)
+    const handleClickItem = (item) =>{
+        setActiveItem(item)
+    }
     return (
 
-        <div class="d-flex flex-column flex-shrink-0 p-3 text-bg-dark" style={{ width: "260px", position: 'fixed', top: '68px', left: 0, bottom:0 }}>
-            <Link href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-white text-decoration-none">
-                <svg class="bi pe-none me-2" width="40" height="32"><use href="#bootstrap"></use></svg>
-                <span class="fs-4">Sidebar</span>
-            </Link>
+        <div class="d-flex flex-column flex-shrink-0 p-5 text-bg-dark" style={{ width: "250px", position: 'fixed', top:0, left: 0, bottom:0 }}>
+            <div className={cx(`header-logo` )} >
+                    <Link to="/admin" style={{ color: 'white', fontWeight: 'bold', fontSize: '24px' }}>
+                        Shop<span style={{ backgroundColor: 'white', color: 'black', borderRadius: '3px', padding: '0' }}>App</span>
+                    </Link>
+                </div>
             <hr />
-            <ul class="nav nav-pills flex-column mb-auto">
-                <li class="nav-item">
-                    <Link href="#" class="nav-link active" aria-current="page">
-                        <svg class="bi pe-none me-2" width="16" height="16"><use href="#home"></use></svg>
-                        Home
+            <div class="d-flex nav nav-pills flex-column mb-auto pt-2">
+                <div className={cx('sidebar-item')} >
+                    <Link to={'/admin'}  className={cx(`sidebar-item-link`, {
+                        'active-item':activeItem==='Dashboard'
+                    } )} onClick={()=>{handleClickItem('Dashboard')}}>
+                        <AiOutlineHome className={cx('sidebar-icon')}/>
+                        <div>Dashboard</div>
                     </Link>
-                </li>
-                <li>
-                    <Link href="#" class="nav-link text-white">
-                        <svg class="bi pe-none me-2" width="16" height="16"><use href="#speedometer2"></use></svg>
-                        Dashboard
+                </div>
+                <div className={cx('sidebar-item')}>
+                    <Link to={'/admin'}  className={cx(`sidebar-item-link`, {
+                        'active-item':activeItem==='Orders'
+                    } )} onClick={()=>{handleClickItem('Orders')}}>
+                        <MdOutlineAnalytics className={cx('sidebar-icon')}/>
+                        <div>Orders</div>
                     </Link>
-                </li>
-                <li>
-                    <Link href="#" class="nav-link text-white">
-                        <svg class="bi pe-none me-2" width="16" height="16"><use href="#table"></use></svg>
-                        Orders
+                </div>
+                <div className={cx('sidebar-item')}>
+                    <Link to={'/admin'}  className={cx('sidebar-item-link', {
+                        'active-item':activeItem==='Storage'
+                    } )} onClick={()=>{handleClickItem('Storage')}}>
+                        <AiOutlineApartment className={cx('sidebar-icon')}/>
+                        <div>Storage</div>
                     </Link>
-                </li>
-                <li>
-                    <Link href="#" class="nav-link text-white">
-                        <svg class="bi pe-none me-2" width="16" height="16"><use href="#grid"></use></svg>
-                        Products
+                </div>
+                <div className={cx('sidebar-item')}>
+                    <Link to={'/admin'}  className={cx('sidebar-item-link', {
+                        'active-item':activeItem==='Products'
+                    } )} onClick={()=>{handleClickItem('Products')}}>
+                        <PiShirtFolded className={cx('sidebar-icon')}/>
+                        <div>Products</div>
                     </Link>
-                </li>
-                <li>
-                    <Link href="#" class="nav-link text-white">
-                        <svg class="bi pe-none me-2" width="16" height="16"><use href="#people-circle"></use></svg>
-                        Customers
+                </div>
+                <div className={cx('sidebar-item')}>
+                    <Link to={'/admin'}  className={cx('sidebar-item-link', {
+                        'active-item':activeItem==='Customer'
+                    } )} onClick={()=>{handleClickItem('Customer')}}>
+                        <BsPeople className={cx('sidebar-icon')}/>
+                        <div>Customer</div>
                     </Link>
-                </li>
-            </ul>
+                </div>
+                <div className={cx('sidebar-item')}>
+                    <Link to={'/admin'}  className={cx('sidebar-item-link', {
+                        'active-item':activeItem==='Vouchers'
+                    })} onClick={()=>{handleClickItem('Vouchers')}}>
+                        <AiOutlineTags className={cx('sidebar-icon')}/>
+                        <div>Vouchers</div>
+                    </Link>
+                </div>
+                <div className={cx('sidebar-item')}>
+                    <Link to={'/admin'}  className={cx('sidebar-item-link', {
+                        'active-item':activeItem==='Reviews'
+                    })} onClick={()=>{handleClickItem('Reviews')}}>
+                        <MdOutlineRateReview className={cx('sidebar-icon')}/>
+                        <div>Reviews</div>
+                    </Link>
+                </div>
+                <div className={cx('sidebar-item')}>
+                    <Link to={'/admin'}  className={cx('sidebar-item-link', {
+                        'active-item':activeItem==='Ideas'
+                    })} onClick={()=>{handleClickItem('Ideas')}}>
+                        <BiMessageError className={cx('sidebar-icon')}/>
+                        <div>Ideas</div>
+                    </Link>
+                </div>
+                <div className={cx('sidebar-item')}>
+                    <Link to={'/admin'}  className={cx('sidebar-item-link', {
+                        'active-item':activeItem==='History'
+                    })} onClick={()=>{handleClickItem('History')}}>
+                        <AiOutlineHistory className={cx('sidebar-icon')}/>
+                        <div>History</div>
+                    </Link>
+                </div>
+                
+            </div>
             <hr />
             <div class="dropdown">
                 <Link href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
                     <img src="https://github.com/mdo.png" alt="" width="32" height="32" class="rounded-circle me-2" />
-                    <strong>mdo</strong>
+                    <strong>Admin</strong>
                 </Link>
-                <ul class="dropdown-menu dropdown-menu-dark text-small shadow" style={{position: 'absolute', inset: 'auto auto 0px 0px', margin: 0, transform: 'translate3d(0px, -34px, 0px)'}}>
-                    <li><Link class="dropdown-item" href="#">New project...</Link></li>
-                    <li><Link class="dropdown-item" href="#">Settings</Link></li>
-                    <li><Link class="dropdown-item" href="#">Profile</Link></li>
-                    <li><hr class="dropdown-divider" /></li>
-                    <li><Link class="dropdown-item" href="#">Sign out</Link></li>
-                </ul>
+                
             </div>
         </div>
 
