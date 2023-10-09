@@ -1,13 +1,11 @@
-import Header from "./Header";
 import Sidebar from "./Sidebar";
 
 function LayoutSidebar({children}) {
     return ( 
         <div>
-            <Header/>
-            <div style={{paddingTop:'68px', display:'flex'}}>
-                <Sidebar/>
-                <div >{children}</div>
+            <div style={{ display:'flex'}}>
+                <Sidebar />
+                <div style={{paddingLeft:'250px'}}>{children}</div>
             </div>
         </div>
         );

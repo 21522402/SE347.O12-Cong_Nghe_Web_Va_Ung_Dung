@@ -1,0 +1,32 @@
+.header-logo{
+    align-items: center;
+    justify-content: center;
+    display: flex;
+    padding-bottom: 12px;
+}
+.sidebar-item{
+    display: flex;
+    justify-content: left;
+    align-items: center;
+    cursor: pointer;
+    margin-bottom: 10px;
+}
+.sidebar-item-link:hover {
+    background-color: #a09a9a;
+    color: #222e5b;
+}
+.sidebar-item-link {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    font-size: 18px;
+    padding: 8px 22px ;
+    border-radius: 8px;
+}
+.sidebar-icon{
+    margin-right: 10px;
+}
+.active-item {
+    background-color: #a09a9a;
+    color: #222e5b;
+}
