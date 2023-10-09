@@ -23,10 +23,10 @@ function Sidebar() {
 
         <div class="d-flex flex-column flex-shrink-0 p-5 text-bg-dark" style={{ width: "250px", position: 'fixed', top:0, left: 0, bottom:0 }}>
             <div className={cx(`header-logo` )} >
-                    <Link to="/admin" style={{ color: 'white', fontWeight: 'bold', fontSize: '24px' }}>
-                        Shop<span style={{ backgroundColor: 'white', color: 'black', borderRadius: '3px', padding: '0' }}>App</span>
-                    </Link>
-                </div>
+                <Link to="/admin" style={{ color: 'white', fontWeight: 'bold', fontSize: '24px' }}>
+                    Shop<span style={{ backgroundColor: 'white', color: 'black', borderRadius: '3px', padding: '0' }}>App</span>
+                </Link>
+            </div>
             <hr />
             <div class="d-flex nav nav-pills flex-column mb-auto pt-2">
                 <div className={cx('sidebar-item')} >

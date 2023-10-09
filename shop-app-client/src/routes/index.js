@@ -1,6 +1,6 @@
 import Home from "~/pages/user/Home"
 import { LayoutNoSidebar,LayoutSidebar } from "~/components/Layout"
-import Statistical from "~/pages/admin/Statistical"
+import Dashboard from "~/pages/admin/Dashboard"
 import Profile from "~/pages/user/Profile"
 export const publicRoutes = [
     // user: => path: '/user/[pageName]'
@@ -10,7 +10,7 @@ export const publicRoutes = [
 
 
     // admin: => path: '/admin/[pageName]'
-    {path:'/admin' , component: Statistical, layout:LayoutSidebar}
+    {path:'/admin' , component: Dashboard, layout:LayoutSidebar}
 ]
 export const privateRoutes = [
 
