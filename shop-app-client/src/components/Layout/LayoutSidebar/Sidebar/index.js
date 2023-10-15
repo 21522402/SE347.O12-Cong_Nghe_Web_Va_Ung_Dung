@@ -62,7 +62,7 @@ function Sidebar() {
                     </Link>
                 </div>
                 <div className={cx('sidebar-item')}>
-                    <Link to={'/admin'}  className={cx('sidebar-item-link', {
+                    <Link to={'/admin/customer-manage'}  className={cx('sidebar-item-link', {
                         'active-item':activeItem==='Customer'
                     } )} onClick={()=>{handleClickItem('Customer')}}>
                         <BsPeople className={cx('sidebar-icon')}/>
@@ -70,7 +70,7 @@ function Sidebar() {
                     </Link>
                 </div>
                 <div className={cx('sidebar-item')}>
-                    <Link to={'/admin'}  className={cx('sidebar-item-link', {
+                    <Link to={'/admin/vouchers-manage'}  className={cx('sidebar-item-link', {
                         'active-item':activeItem==='Vouchers'
                     })} onClick={()=>{handleClickItem('Vouchers')}}>
                         <AiOutlineTags className={cx('sidebar-icon')}/>
