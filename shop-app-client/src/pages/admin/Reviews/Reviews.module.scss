@@ -1,0 +1,111 @@
+
+
+.container-reviews {
+    position: fixed;
+    padding-right: 250px;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+.container-search {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    margin-top: 40px;
+}
+.search-input {
+    width: 50%;
+    padding: 6px 20px;
+    border: 2px solid #000;
+    box-shadow: 2px 2px 4px #d8d8d8;
+    border-radius: 4px;
+}
+.search-button {
+    margin-left: -4px;
+    border: 2px solid #000;
+    background-color: #000;
+    width: 8%;
+    padding: 4px 0;
+    box-shadow: 2px 2px 4px #d8d8d8;
+    border-top-right-radius: 4px;
+    border-bottom-right-radius: 4px;
+}
+.search-button:hover {
+    background-color: #555555;
+    cursor: pointer;
+}
+.search-icon {
+    width: 20px;
+    height: 24px;
+}
+
+.container-list {
+    margin: 40px 24px;
+    display: flex;
+    justify-content: flex-start;
+    
+}
+.item-list {
+    width: 182px;
+    height: 240px;
+    padding: 1px;
+    border-radius: 4px;
+    border: 1px solid #d8d8d8;
+    position: relative;
+    justify-content: center;
+    display: flex;
+    align-items: center;
+    margin: 12px;
+}
+.item-product {
+    width: 180px;
+    height: 240px;
+}
+.item-list:hover {
+    .item-hover {
+        width: 180px;
+        height: 240px;
+        position: absolute;
+        background-color: rgba(51, 51, 51, 0.5);
+        border-radius: 4px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        .display_button {
+            display: inline;
+        }
+    }
+}
+.item-img {
+    width: 180px;
+    height: 180px;
+    border-top-right-radius: 4px;
+    border-top-left-radius: 4px;
+}
+.item-name {
+    font-size: 16px;
+    color: #000;
+    font-weight: 700;
+    padding: 4px 8px;
+
+    text-overflow: ellipsis;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+}
+
+.item-button {
+    width: 110px;
+    height: 60px;
+    border-radius: 10px;
+    background-color: #000;
+    color: #fff;
+    margin-top: -40px;
+    position: absolute;
+    border: 0px solid transparent;
+    display: none;
+}
+
+

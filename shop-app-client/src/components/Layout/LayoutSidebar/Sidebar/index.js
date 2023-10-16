@@ -87,10 +87,10 @@ function Sidebar() {
                 </div>
                 <div className={cx('sidebar-item')}>
                     <Link to={'/admin'}  className={cx('sidebar-item-link', {
-                        'active-item':activeItem==='Ideas'
-                    })} onClick={()=>{handleClickItem('Ideas')}}>
+                        'active-item':activeItem==='Feedback'
+                    })} onClick={()=>{handleClickItem('Feedback')}}>
                         <BiMessageError className={cx('sidebar-icon')}/>
-                        <div>Ideas</div>
+                        <div>Feedback</div>
                     </Link>
                 </div>
                 <div className={cx('sidebar-item')}>
