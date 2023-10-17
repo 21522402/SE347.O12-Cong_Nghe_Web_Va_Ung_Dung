@@ -21,42 +21,27 @@ const cx = classNames.bind(styles)
 function ProductDetail() {
     const listImage = [
         {
-            src: 'https://fastly.picsum.photos/id/513/600/400.jpg?hmac=WirdW7m-GpYBbFSFn_DPG2w2h-pzmboPQR_2l5KVgYw',
-            alt: 'Hình'
+            src: 'https://cdn-app.kiotviet.vn/sample/fashion/38.png'
         },
         {
-            src: 'https://fastly.picsum.photos/id/795/600/400.jpg?hmac=ZN6Zneojz5PbUk3OJl03-sH5GTbNLJxlEvBV7KQXvh8',
-            alt: 'Hình'
+            src: 'https://cdn2-retail-images.kiotviet.vn/quichua333/17020689ffc24e6eb5483cb7376ed1ba.jpg'
         },
         {
-            src: 'https://fastly.picsum.photos/id/924/600/400.jpg?hmac=Hfb7YBk-BA3W7v7gLxvH2SspirC0hWfOhkATGSWJBs4',
-            alt: 'Hình'
+            src: 'https://cdn-app.kiotviet.vn/sample/fashion/38.png'
         },
         {
-            src: 'https://cdn-app.kiotviet.vn/sample/fashion/38.png',
-            alt: 'Hình'
+            src: 'https://cdn2-retail-images.kiotviet.vn/quichua333/17020689ffc24e6eb5483cb7376ed1ba.jpg'
         }
-        
+
     ]
-    const responsive = {
-        superLargeDesktop: {
-            // the naming can be any, depends on you.
-            breakpoint: { max: 4000, min: 3000 },
-            items: 5
-        },
-        desktop: {
-            breakpoint: { max: 3000, min: 1024 },
-            items: 4
-        },
-        tablet: {
-            breakpoint: { max: 1024, min: 464 },
-            items: 3
-        },
-        mobile: {
-            breakpoint: { max: 464, min: 0 },
-            items: 2
-        }
-    };
+    const imageProductDefault = 'https://cdn-app.kiotviet.vn/retailler/Content/img/default-product.png';
+    const [productAvt, setProductAvt] = useState(listImage.length > 0 ? listImage[0].src : imageProductDefault);
+    const [indexImageActive, setIndexImageActive] = useState(0);
+    const handleClickImage = (src, index) => {
+        setProductAvt(src)
+        setIndexImageActive(index)
+
+    }
     return (
         <div className={cx('wrapper')}>
             {/* Header */}
@@ -72,34 +57,35 @@ function ProductDetail() {
                 </div>
                 <div className={cx('product-detail')}>
                     {/* Ảnh */}
-                    <div className={cx('product-img')}>
+                 <div className={cx('container-img')}>
+                 <div className={cx('product-img')}>
                         {/* Ảnh đại di */}
-                        <div className={cx('product-avt-img')}>
-                            {/* <img src="https://cdn-app.kiotviet.vn/sample/fashion/38.png" /> */}
-                            <Carousel data={listImage} width={280} height={275}/>
-                        </div>
+                        <div className={cx('container-avt')}><img src={productAvt} className={cx('product-avt')} /></div>
                         {/* List ảnh */}
-                        <div className={cx('product-list-img')} style={{ margin: '0 24px 0 0px' }}>
-                            {/* <img src="https://cdn-app.kiotviet.vn/sample/fashion/38.png"/> */}
-                            {/* <Carousel responsive={responsive} swipeable={true}
-                                draggable={true}
-                                showDots={false}
-                                >
-                                <img src="https://cdn-app.kiotviet.vn/sample/fashion/38.png" className={cx('img-slider')} />
-                                <img src="https://cdn-app.kiotviet.vn/sample/fashion/38.png" className={cx('img-slider')} />
-                                <img src="https://cdn-app.kiotviet.vn/sample/fashion/38.png" className={cx('img-slider')} />
-                                <img src="https://cdn-app.kiotviet.vn/sample/fashion/38.png" className={cx('img-slider')} />
-                                <img src="https://cdn-app.kiotviet.vn/sample/fashion/38.png" className={cx('img-slider')} />
-                                <img src="https://cdn-app.kiotviet.vn/sample/fashion/38.png" className={cx('img-slider')} />
-                                <img src="https://cdn-app.kiotviet.vn/sample/fashion/38.png" className={cx('img-slider')} />
-                                <img src="https://cdn-app.kiotviet.vn/sample/fashion/38.png" className={cx('img-slider')} />
-                                <img src="https://cdn-app.kiotviet.vn/sample/fashion/38.png" className={cx('img-slider')} />
+                        <div  className={cx('container-product-list-img')}>
+                            <ul className={cx('product-list-img')}>
 
-                            </Carousel> */}
-                          
 
+                                {
+                                    listImage.length > 0 ? listImage.map((item, index) => {
+                                        return (
+                                            <li key={index} onClick={() => handleClickImage(item.src, index)} className={cx('product-item-img', {
+                                                active: index === indexImageActive
+                                            })}>
+                                                <img src={item.src} />
+                                            </li>
+                                        )
+                                    }) : <li className={cx('product-item-img', 'active')}>
+                                        <img src='https://cdn-app.kiotviet.vn/retailler/Content/img/default-product.png' />
+                                    </li>
+
+                                }
+
+
+                            </ul>
                         </div>
                     </div>
+                 </div>
 
 
                     {/* info */}
@@ -126,9 +112,15 @@ function ProductDetail() {
                             <label>Giá vốn:</label>
                             <div className={cx('info-value')}>1,720,000</div>
                         </div>
-                        <div className={cx('form-group-text-area')}>
+                        <div className={cx('form-group-description')}>
                             <div><label>Mô tả:</label></div>
-                            <p style={{marginTop: '10px', color: '#777'}}>Chất liệu: 100% Polyester Xử lý hoàn thiện vải: Quick-Dry và Wicking Dệt kiểu Mesh, thoáng khí Hoạ tiết hình in chuyển nhiệt không lo bong tróc Phù hợp với: chơi thể thao, mặc ở nhà Kiểu dáng: Regular fit dáng suông Tự hào sản xuất tại Việt Nam</p>
+                            <div className={cx('description')}>
+                                <p>
+                                Chất liệu: 100% Polyester Xử lý hoàn thiện vải: Quick-Dry và Wicking Dệt kiểu Mesh, thoáng khí Hoạ tiết hình in chuyển nhiệt không lo bong tróc Phù hợp với: chơi thể thao, mặc ở nhà Kiểu dáng: Regular fit dáng suông Tự hào sản xuất tại Việt Nam
+                                và Wicking Dệt kiểu Mesh, thoáng khí Hoạ tiết hình in chuyển nhiệt không lo bong tróc Phù hợp với: chơi thể thao, mặc ở nhà Kiểu dáng: Regular fit dáng suông Tự hào sản xuất tại Việt Nam
+                                </p>
+                            </div>
+                            
                         </div>
 
 
@@ -139,20 +131,20 @@ function ProductDetail() {
                         {/* Form group */}
                         <div className={cx('form-group-color-size')}>
                             <div><label>Bảng:</label></div>
-                            <div style={{marginTop: '10px'}}>
+                            <div style={{ marginTop: '10px' }}>
                                 <ColorSize />
                             </div>
                         </div>
 
-                       
+
                     </div>
                 </div>
 
                 {/* Chức năng */}
                 <div className={cx('product-fucntion')}>
-                    <span className={cx('btn','btn-succeed')}><AiOutlineEdit style={{marginRight: '6px', fontSize: '16px'}}/>   Cập nhật </span>
-                    <span className={cx('btn','btn-succeed')}><BiImport style={{marginRight: '6px', fontSize: '18px'}}/>   Nhập hàng </span>
-                    <span className={cx('btn','btn-error')}><BiSolidLockAlt style={{marginRight: '6px', fontSize: '16px'}}/>   Ngừng kinh doanh</span>
+                    <span className={cx('btn', 'btn-succeed')}><AiOutlineEdit style={{ marginRight: '6px', fontSize: '16px' }} />   Cập nhật </span>
+                    <span className={cx('btn', 'btn-succeed')}><BiImport style={{ marginRight: '6px', fontSize: '18px' }} />   Nhập hàng </span>
+                    <span className={cx('btn', 'btn-error')}><BiSolidLockAlt style={{ marginRight: '6px', fontSize: '16px' }} />   Ngừng kinh doanh</span>
                 </div>
             </div>
         </div>

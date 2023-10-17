@@ -52,6 +52,18 @@ function ColorSize() {
                             <td className={cx('size')}>XL</td>
                             <td className={cx('quantity')}>32</td>
                         </tr>
+                        <tr>
+                            <td className={cx('color')}>Vàng</td>
+                            <td className={cx('size')}>XL</td>
+                            <td className={cx('quantity')}>32</td>
+                        </tr>
+                        <tr>
+                            <td className={cx('color')}>Vàng</td>
+                            <td className={cx('size')}>XL</td>
+                            <td className={cx('quantity')}>32</td>
+                        </tr>
+                   
+
                       
                        
                         

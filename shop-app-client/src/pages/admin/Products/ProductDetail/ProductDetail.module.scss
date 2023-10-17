@@ -41,23 +41,87 @@
     margin-top: 12px;
 }
 
+.container-img {
+    width: calc(100% / 3);
+    padding-right: 10px;
+}
 
 .product-img {
-    padding: 0 15px;
-    width: calc(100% / 3);
+    padding: 0;
+    width: 100%;
     display: flex;
-    justify-content: center;
+
+   
 }
 
-.product-avt-img img{
-    width: 280px;
-    height: 100%;
+.container-avt {
+    width: calc(100% - 70px);
+    max-height: 350px;
+    display: flex;
+    align-items: center;
+}
+
+.product-avt {
+    width: 100%;
+    max-height: 100%;
+    box-shadow: 0px 0px 10px #ccc;
     object-fit: cover;
-}
 
+
+}
+.container-product-list-img {
+    max-height: 370px;
+    position: relative;
+    overflow: auto;
+    margin-left: 8px;
+    padding-right: 2px;
+    
+
+    &::-webkit-scrollbar {
+        width: 4px;
+    
+      }
+      
+      /* Track */
+      &::-webkit-scrollbar-track {
+        background-color: transparent;
+        
+      }
+       
+      /* Handle */
+      &::-webkit-scrollbar-thumb {
+        background: #c2c7ce; 
+        border-radius: 10px;
+      }
+      
+}
 
 .product-list-img {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
 
+    width: 54px;
+    gap: 8px;
+    padding: 0;
+    li img {
+        width: 54px;
+        height: 54px;
+
+    }
+    .product-item-img img{
+        opacity: 0.5;
+        transition: opacity .3s ease;
+    }
+    .product-item-img.active img {
+        border: 1px solid #ccc;
+        opacity: 1;
+    }
+
+
+
+
+    
 }
 
 .product-list-img .img-slider{
@@ -74,6 +138,7 @@
 
 .product-info {
     padding: 0 15px;
+    padding-left: 20px;
     width: calc(100% / 3);
 }
 
@@ -107,20 +172,32 @@
     padding-top: 0;
 }
 
-.form-group-text-area {
+.form-group-description {
     padding: 10px 0 10px 0;
     border-top: 1px solid #ddd;
 
-    textarea {
-        padding: 5px 10px;
-        margin-top: 8px;
-        width: 100%;
-        outline: none;
-        border: 1px solid #ccc;
-        background-color: transparent;
-        color: #231F20;
-        height: 100px;
-        resize: none;
+    .description {
+        height: 140px;
+        overflow: auto;
+        margin-top: 10px;
+        color: #777;
+
+        &::-webkit-scrollbar {
+            width: 0;
+        
+          }
+          
+        //   /* Track */
+        //   &::-webkit-scrollbar-track {
+        //     background-color: transparent;
+            
+        //   }
+           
+        //   /* Handle */
+        //   &::-webkit-scrollbar-thumb {
+        //     background: #c2c7ce; 
+        //     border-radius: 10px;
+        //   }
     }
 }
 
