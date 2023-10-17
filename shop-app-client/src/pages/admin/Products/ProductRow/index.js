@@ -10,28 +10,17 @@ const cx = classNames.bind(styles)
 
 function ProductRow({ index, open, onClick}) {
     const element = useRef(null)
-    const handleClickProductItem = () => {
-        if (open) {
-            onClick(-1);
-        }
-        else {
-            
-            onClick(index);
-            
-        }
-   
-    }
+    const [openDetail,setOpenDetail] = useState(false);
     
     useEffect(() => {
-        if (open) {
+        if (openDetail) {
             const topElement = element.current?.offsetTop;
             window.scroll({top: topElement, behavior: 'smooth'})
-        
         }
     })
     return (
         <React.Fragment >
-            <tr onClick={handleClickProductItem} className={cx('product-item', {showDetail: open})} ref={element}>
+            <tr onClick={() => setOpenDetail(prev => !prev)} className={cx('product-item', {showDetail: openDetail})} ref={element}>
                 <td className={cx('checkbox')} ><IoCheckboxSharp className={cx('icon-checkbox')} /></td>
                 <td className={cx('img')}>
                     <img src="https://cdn-app.kiotviet.vn/sample/fashion/38.png"/>
@@ -46,7 +35,7 @@ function ProductRow({ index, open, onClick}) {
             </tr>
 
             {
-                open &&
+                openDetail &&
                 <tr className={cx('product-detail')}>
                     <td colSpan={8} style={{ padding: '0' }}>
                         <ProductDetail />

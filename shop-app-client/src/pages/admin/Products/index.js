@@ -10,10 +10,6 @@ const cx = classNames.bind(styles)
 function Products() {
 
     const [inputFocus, setInputFocus] = useState(false);
-    const [indexOpen,setIndexOpen] = useState(-1);
-    const handleClick = (key) => {
-        setIndexOpen(key);
-    }
 
 
     return (
@@ -118,9 +114,7 @@ function Products() {
                        
                         {[0,1,2,3,4,5,6,7,8,9,10,11,12].map((item,index) => {
                             return (
-                            
-
-                                <ProductRow key={index} index={index} open={index===indexOpen} onClick={handleClick}/>
+                                <ProductRow key={index} />
                             )
                         })}
                         
