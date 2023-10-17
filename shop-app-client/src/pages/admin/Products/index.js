@@ -2,17 +2,26 @@ import classNames from "classnames/bind";
 import { AiOutlineSearch, AiFillCaretDown, AiOutlinePlus } from "react-icons/ai";
 import { FaFileImport, FaFileExport } from "react-icons/fa";
 import { IoSquareOutline, IoCheckboxSharp } from "react-icons/io5";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, createContext } from "react";
 import ProductRow from "./ProductRow";
 import styles from './Products.module.scss'
+import Modal from "./Modal";
+import DropDown from "./DropDown";
 
 const cx = classNames.bind(styles)
+export const ModalContext = createContext();
 function Products() {
 
     const [inputFocus, setInputFocus] = useState(false);
-
+    const listProductCategory = ['Tất cả','Áo','Quần','Đồ lót']
+    const listProductType = ['Tất cả','Quần dài','Quần thể thao','Quần short']
+    const [showCategory, setShowCategory] = useState(false)
+    const [showType, setShowType] = useState(false)
+    const [openModel,setOpenModal] = useState(false)
 
     return (
+        <ModalContext.Provider value={setOpenModal}>
+
         <div className={cx('wrapper')}>
 
             {/* Tool */}
@@ -28,12 +37,12 @@ function Products() {
                     </div>
 
                     {/* nhóm hàng */}
-                    <div className={cx('product-category')}>
+                    <div className={cx('product-category')} onMouseOver={() => setShowCategory(true)} onMouseOut={()=> setShowCategory(false)}>
                         <div className={cx('function-button')}>
                             <span className={cx('btn','btn-succeed')}>Nhóm hàng <AiFillCaretDown /></span>
                         </div>
 
-                        <ul className={cx('product-category-list')}>
+                        {/* <ul className={cx('product-category-list')}>
                             <li>
                                 <span>Tất cả</span>
                             </li>
@@ -46,16 +55,18 @@ function Products() {
                             <li>
                                 <span>Đồ lót</span>
                             </li>
-                        </ul>
+                        </ul> */}
+
+                        {showCategory && <DropDown items={listProductCategory}/>}
                     </div>
 
                     {/* Loại hàng */}
-                    <div className={cx('product-type')}>
+                    <div className={cx('product-type')} onMouseOver={() => setShowType(true)} onMouseOut={()=> setShowType(false)}>
                         <div className={cx('function-button')}>
                             <span className={cx('btn','btn-succeed')}>Loại hàng <AiFillCaretDown /></span>
                         </div>
 
-                        <ul className={cx('product-type-list')}>
+                        {/* <ul className={cx('product-type-list')}>
                             <li>
                                 <span>Tất cả</span>
                             </li>
@@ -68,7 +79,9 @@ function Products() {
                             <li>
                                 <span>Quần short</span>
                             </li>
-                        </ul>
+                        </ul> */}
+                        {showType && <DropDown items={listProductType}/>}
+                        
                     </div>
                 </div>
 
@@ -121,9 +134,12 @@ function Products() {
                     </tbody>
                 </table>
             </div>
+
+            {openModel && <Modal setModal={setOpenModal}/>}
            
 
         </div>
+        </ModalContext.Provider>
     );
 }
 

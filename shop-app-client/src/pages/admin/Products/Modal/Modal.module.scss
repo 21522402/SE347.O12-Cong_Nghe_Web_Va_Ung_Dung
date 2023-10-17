@@ -1,0 +1,152 @@
+.ovelay {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background-color: rgba(0,0,0,0.5);
+    z-index: 100;
+    font-size: 13px;
+}
+
+.container {
+    position: absolute;
+    top: 70px;
+    left: 26%;
+    background-color: #fff;
+    width: 980px;
+    animation: dropTop .3s linear;
+
+}
+
+.button-close {
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    cursor: pointer;
+    &:hover .icon-close {
+        opacity: 0.7;
+    }
+
+    .icon-close {
+        font-size: 24px;
+        margin: auto;
+        opacity: 0.5;
+
+        
+    }
+}
+
+.header {
+    padding: 10px 35px;
+    background-color: #000;
+    display: inline-block;
+    color: #fff;
+    font-weight: 600;
+}
+
+.tabpanel {
+    margin-top: 10px;
+    border-bottom: 1px solid #ccc;
+    font-weight: 500;
+}
+
+.tabpanel-item-active {
+    display: inline-block;
+    padding: 10px 35px 5px 35px;
+    border-bottom: 3px solid #00b63e;
+}
+.body {
+    display: flex;
+    padding: 35px;
+}
+
+.col1 {
+    flex: 2;
+}
+
+.col2 {
+    flex: 1;
+    padding-left: 50px;
+}
+
+.form-group {
+    display: flex;
+    align-items: flex-start;
+    margin-bottom: 10px;
+    label {
+        width: 180px;
+        padding-top: 7px;
+        font-weight: 700;
+    }
+
+    input {
+        padding: 7px 5px;
+        outline: none;
+        border: none;
+        border-bottom: 1px solid #c2c7ce;
+        width: 100%;
+        height: 32px;
+        color: #15171a;
+
+        &:focus {
+            border-bottom: 2px solid #00b63e;
+            padding-bottom: 6px;
+        }
+    }
+
+    .product-category-select, .product-type-select {
+        position: relative;
+        padding: 7px 0;
+        outline: none;
+        border: none;
+        border-bottom: 1px solid #c2c7ce;
+        width: 100%;
+        height: 32px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        cursor: pointer;
+
+        span {
+            color: #15171a;
+            padding-left: 7px;
+        }
+
+        &.active {
+            border-bottom: 2px solid #00b63e;
+            padding-bottom: 6px;
+        }
+    }
+}
+
+.col2 .form-group input {
+    text-align: right;
+    padding-right: 7px;
+}
+
+
+@keyframes dropTop {
+    // 0% {
+    //     transform: translateY(-100%) scale(0) ;
+    //     opacity: 0;
+    // }
+    
+    // 100% {  
+    //     transform: translateY(0%) scale(1);
+    //     opacity: 1;
+    // }
+
+    0% {
+        transform:  scale(0) ;
+        opacity: 0;
+    }
+    
+    100% {  
+        transform: scale(1);
+        opacity: 1;
+    }
+}

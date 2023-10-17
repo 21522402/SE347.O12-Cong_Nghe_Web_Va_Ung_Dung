@@ -8,6 +8,7 @@ import styles from './ProductRow.module.scss'
 const cx = classNames.bind(styles)
 
 
+
 function ProductRow({ index, open, onClick}) {
     const element = useRef(null)
     const [openDetail,setOpenDetail] = useState(false);

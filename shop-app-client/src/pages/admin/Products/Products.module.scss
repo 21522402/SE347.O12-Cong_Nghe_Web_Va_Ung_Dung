@@ -49,44 +49,40 @@
 
 .product-category {
     position: relative;
-    &:hover .product-category-list{
-        display: block;
-    }
+
 }
 
 
 
 .product-type {
     position: relative;
-    &:hover .product-type-list{
-        display: block;
-    }
 }
 
-.product-type-list, .product-category-list {
-    display: none;
-    position: absolute;
-    z-index: 100;
-    top: 27px;
-    left: 11px;
-    list-style: none;
-    padding: 10px 0;
-    background-color: red;
-    border-radius: 5px;
-    box-shadow: 0 5px 25px rgb(0,  0, 0,0.25);
-    background-color: #fff;
+// .product-type-list, .product-category-list {
+//     display: none;
+//     position: absolute;
+//     z-index: 100;
+//     width: 180px;
+//     top: 27px;
+//     left: 11px;
+//     list-style: none;
+//     padding: 10px 0;
+//     background-color: red;
+//     border-radius: 5px;
+//     box-shadow: 0 5px 25px rgb(0,  0, 0,0.25);
+//     background-color: #fff;
 
-    li {
-        font-size: 14px;
-        width: 180px;
-        padding: 8px 24px;
-        cursor: pointer;
+//     li {
+//         font-size: 14px;
+
+//         padding: 8px 24px;
+//         cursor: pointer;
     
-        &:hover {
-            background-color: #f0f1f3;
-        }
-    }
-}
+//         &:hover {
+//             background-color: #f0f1f3;
+//         }
+//     }
+// }
 
 .btn {
     

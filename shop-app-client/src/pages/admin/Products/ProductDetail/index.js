@@ -5,10 +5,9 @@ import { IoSquareOutline, IoCheckboxSharp } from "react-icons/io5";
 import { BsCheckLg } from "react-icons/bs";
 import { AiOutlineEdit } from "react-icons/ai";
 import { BiImport, BiSolidLockAlt } from "react-icons/bi";
+import { useContext } from "react";
+import { ModalContext } from "..";
 
-
-
-import Carousel from "../Carousel";
 import ColorSize from "../ColorSize";
 
 import { useState } from "react";
@@ -19,6 +18,7 @@ import styles from './ProductDetail.module.scss'
 const cx = classNames.bind(styles)
 
 function ProductDetail() {
+    const setModal = useContext(ModalContext);
     const listImage = [
         {
             src: 'https://cdn-app.kiotviet.vn/sample/fashion/38.png'
@@ -142,7 +142,7 @@ function ProductDetail() {
 
                 {/* Chức năng */}
                 <div className={cx('product-fucntion')}>
-                    <span className={cx('btn', 'btn-succeed')}><AiOutlineEdit style={{ marginRight: '6px', fontSize: '16px' }} />   Cập nhật </span>
+                    <span className={cx('btn', 'btn-succeed')} onClick={() => setModal(true)}><AiOutlineEdit style={{ marginRight: '6px', fontSize: '16px' }} />   Cập nhật </span>
                     <span className={cx('btn', 'btn-succeed')}><BiImport style={{ marginRight: '6px', fontSize: '18px' }} />   Nhập hàng </span>
                     <span className={cx('btn', 'btn-error')}><BiSolidLockAlt style={{ marginRight: '6px', fontSize: '16px' }} />   Ngừng kinh doanh</span>
                 </div>
