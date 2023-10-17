@@ -1,0 +1,191 @@
+
+.wrapper {
+ font-size: 13px;
+
+}
+
+.header {
+    padding: 0 30px;
+    background-color: #e6f8ec;
+}
+
+
+
+.tabpanel {
+    font-weight: 600;
+    padding: 5px 10px;
+    background-color: #fff;
+    display: inline-block;
+    border-radius: 3px;
+    border: 0.2px solid #e3e1e1;
+    border-bottom: none;
+}
+
+.product-container {
+    padding: 20px 30px;
+}
+
+.product-name {
+    font-size: 18px;
+    color: #004392;
+    font-weight: 700;
+    margin-bottom: 12px;
+}
+
+.product-status {
+    font-weight: bold;
+}
+
+.product-detail {
+    display: flex;
+    margin-top: 12px;
+}
+
+
+.product-img {
+    padding: 0 15px;
+    width: calc(100% / 3);
+    display: flex;
+    justify-content: center;
+}
+
+.product-avt-img img{
+    width: 280px;
+    height: 100%;
+    object-fit: cover;
+}
+
+
+.product-list-img {
+
+}
+
+.product-list-img .img-slider{
+    width: 60px;
+    height: 60px;
+    border: 1px solid #ccc;
+    border-radius: 2px;
+}
+
+.img-slider {
+
+}
+
+
+.product-info {
+    padding: 0 15px;
+    width: calc(100% / 3);
+}
+
+.product-cz {
+    padding: 0 15px;
+    width: calc(100% / 3);
+}
+
+
+
+.form-group {
+    display: flex;
+    width: 100%;
+    padding: 10px 0 10px 0;
+
+    label {
+        width: 110px;
+    }
+
+    & + .form-group {
+    border-top: 1px solid #ddd;
+
+    }
+}
+
+.product-info .form-group:first-child {
+    padding-top: 0;
+}
+
+.product-cz .form-group:first-child {
+    padding-top: 0;
+}
+
+.form-group-text-area {
+    padding: 10px 0 10px 0;
+    border-top: 1px solid #ddd;
+
+    textarea {
+        padding: 5px 10px;
+        margin-top: 8px;
+        width: 100%;
+        outline: none;
+        border: 1px solid #ccc;
+        background-color: transparent;
+        color: #231F20;
+        height: 100px;
+        resize: none;
+    }
+}
+
+.form-group-color-size {
+    padding: 10px 0 10px 0;
+    padding-top: 0;
+
+   
+}
+
+
+.info-value {
+
+}
+
+.form-group {
+
+}
+
+.info-value {
+
+}
+
+.product-cz {
+
+}
+
+.product-fucntion {
+    text-align: right;
+    margin-top: 28px;
+    
+    .btn {
+        font-weight: bold;
+    }
+}
+
+.btn {
+    
+    display: inline-flex;
+    align-items: center;
+    border-radius: 5px;
+    padding: 7px 20px;
+
+    color: #fff;
+    font-weight: 600;
+    margin-left: 10px;
+    cursor: pointer;
+    transition: background-color .15s ease-in-out;
+   
+}
+
+.btn-succeed {
+    background-color: #4bac4d;
+      // background-color: #6d6d6d;
+    // background-color: #000;
+    // background-color: orange;
+    &:hover {
+        background-color: #009232;
+    }
+}
+
+.btn-error {
+    background-color: #ED232F;
+    &:hover {
+        background-color: #be1c26;
+    }
+
+}
