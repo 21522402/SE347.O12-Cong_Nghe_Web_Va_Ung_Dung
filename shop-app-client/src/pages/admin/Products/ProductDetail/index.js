@@ -130,7 +130,7 @@ function ProductDetail() {
                     <div className={cx('product-cz')}>
                         {/* Form group */}
                         <div className={cx('form-group-color-size')}>
-                            <div><label>Bảng:</label></div>
+                            <div><label>Tồn kho:</label> <span><strong>150</strong></span></div>
                             <div style={{ marginTop: '10px' }}>
                                 <ColorSize />
                             </div>

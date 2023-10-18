@@ -17,10 +17,10 @@ function Products() {
     const listProductType = ['Tất cả','Quần dài','Quần thể thao','Quần short']
     const [showCategory, setShowCategory] = useState(false)
     const [showType, setShowType] = useState(false)
-    const [openModel,setOpenModal] = useState(false)
+    const [openModelAdd,setOpenModalAdd] = useState(false)
 
     return (
-        <ModalContext.Provider value={setOpenModal}>
+        <ModalContext.Provider value={setOpenModalAdd}>
 
         <div className={cx('wrapper')}>
 
@@ -90,7 +90,7 @@ function Products() {
 
                     {/* thêm */}
                     <div className={cx('function-button')}>
-                        <span className={cx('btn','btn-succeed')}><AiOutlinePlus className={cx('icon')} /> Thêm mới</span>
+                        <span  onClick={() => setOpenModalAdd(true)} className={cx('btn','btn-succeed')}><AiOutlinePlus className={cx('icon')}  /> Thêm mới</span>
                     </div>
 
 
@@ -135,7 +135,7 @@ function Products() {
                 </table>
             </div>
 
-            {openModel && <Modal setModal={setOpenModal}/>}
+            {openModelAdd && <Modal setModal={setOpenModalAdd}/>}
            
 
         </div>

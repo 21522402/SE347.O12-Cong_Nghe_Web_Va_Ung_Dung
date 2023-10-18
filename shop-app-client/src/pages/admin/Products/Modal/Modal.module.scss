@@ -61,7 +61,7 @@
 }
 .body {
     display: flex;
-    padding: 35px;
+    padding: 35px 35px 0px 35px;
 }
 
 .col1 {
@@ -71,6 +71,17 @@
 .col2 {
     flex: 1;
     padding-left: 50px;
+}
+
+.text-editor {
+    padding: 0px 35px 35px 35px;
+    .form-group {
+        display: block;
+    }
+
+    .wrapper-react-quill {
+        margin-top: 8px;
+    }
 }
 
 .form-group {
@@ -127,6 +138,47 @@
     text-align: right;
     padding-right: 7px;
 }
+
+
+
+.btn {
+    
+    display: inline-flex;
+    align-items: center;
+    border-radius: 5px;
+    padding: 7px 20px;
+    color: #fff;
+    font-weight: 600;
+    margin-left: 10px;
+    cursor: pointer;
+    transition: background-color .15s ease-in-out;
+   
+}
+
+.footer {
+    text-align: right;
+    padding: 35px;
+}
+.btn-succeed {
+    background-color: #4bac4d;
+      // background-color: #6d6d6d;
+    // background-color: #000;
+    // background-color: orange;
+    &:hover {
+        background-color: #009232;
+    }
+}
+
+.btn-failed {
+    background-color: #677484;
+
+    &:hover {
+    background-color: #525d6a;
+
+    }
+}
+
+
 
 
 @keyframes dropTop {

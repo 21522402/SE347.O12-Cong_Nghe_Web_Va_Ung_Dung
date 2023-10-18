@@ -19,7 +19,7 @@ function ProductRow({ index, open, onClick}) {
         if (openDetail) {
             const topElement = element.current?.offsetTop;
             window.scroll({top: topElement, behavior: 'smooth'})
-        }
+        } 
     })
     return (
         <React.Fragment >

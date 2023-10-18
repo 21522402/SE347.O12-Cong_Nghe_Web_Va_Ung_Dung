@@ -5,7 +5,16 @@ import ProductDetail from "../ProductDetail";
 import { IoSquareOutline, IoCheckboxSharp, IoInformationCircleOutline } from "react-icons/io5";
 import { AiFillCaretDown, AiFillCaretUp } from "react-icons/ai";
 import { GrFormClose } from "react-icons/gr";
+import { BsSave } from "react-icons/bs";
+import { MdPublish } from "react-icons/md";
+import { TiCancel } from "react-icons/ti";
 import DropDown from "../DropDown";
+
+
+
+
+import ReactQuill from "react-quill";
+import 'react-quill/dist/quill.snow.css'
 
 
 
@@ -19,6 +28,7 @@ function Modal({setModal}) {
     const [showType, setShowType] = useState(false)
     const [category, setCategory] = useState('')
     const [type, setType] = useState('')
+    const [value, setValue] = useState('');
     const handleClickCategory = () => {
         setShowCategory(prev => !prev);
         setShowType(false);
@@ -27,7 +37,10 @@ function Modal({setModal}) {
         setShowType(prev => !prev);
         setShowCategory(false);
     }
-
+    const handleClickInput = () => {
+        setShowType(false)
+        setShowCategory(false)
+    }
     const handleClickItemCategory = (item) => {
         setCategory(item)
     }
@@ -35,6 +48,7 @@ function Modal({setModal}) {
     const handleClickItemType = (item) => {
         setType(item)
     }
+    
     return (
         <div className={cx('ovelay')}>
 
@@ -61,15 +75,15 @@ function Modal({setModal}) {
                         {/* Form group */}
                         <div className={cx('form-group')}>
                             <label>Mã sản phẩm  <IoInformationCircleOutline style={{ fontSize: '18px', marginLeft: '4px' }} /></label>
-                            <input type="text" placeholder="Mã sản phẩm tự động" />
+                            <input onFocus={handleClickInput} type="text" placeholder="Mã sản phẩm tự động" disabled style={{background: 'transparent'}}/>
                         </div>
                         <div className={cx('form-group')}>
                             <label>Tên sản phẩm  <IoInformationCircleOutline style={{ fontSize: '18px', marginLeft: '4px' }} /></label>
-                            <input type="text" />
+                            <input onFocus={handleClickInput} type="text" />
                         </div>
                         <div className={cx('form-group')}>
                             <label>Nhóm hàng  <IoInformationCircleOutline style={{ fontSize: '18px', marginLeft: '4px' }} /></label>
-                            {/* <input type="text"/> */}
+                            {/* <input onFocus={handleClickInput} type="text"/> */}
                             <div className={cx('product-category-select', { active: showCategory })} onClick={handleClickCategory}>
                                 <span>{category}</span>
                                 <span> {!showCategory ? <AiFillCaretDown /> : <AiFillCaretUp />}</span>
@@ -78,7 +92,7 @@ function Modal({setModal}) {
                         </div>
                         <div className={cx('form-group')}>
                             <label>Nhóm hàng  <IoInformationCircleOutline style={{ fontSize: '18px', marginLeft: '4px' }} /></label>
-                            {/* <input type="text"/> */}
+                            {/* <input onFocus={handleClickInput} type="text"/> */}
                             <div className={cx('product-category-select', { active: showType })} onClick={handleClickType}>
                                 <span>{type}</span>
                                 <span> {!showType ? <AiFillCaretDown /> : <AiFillCaretUp />}</span>
@@ -91,22 +105,44 @@ function Modal({setModal}) {
                         {/* Form group */}
                         <div className={cx('form-group')}>
                             <label>Giá vốn  <IoInformationCircleOutline style={{ fontSize: '18px', marginLeft: '4px' }} /></label>
-                            <input type="text" />
+                            <input onFocus={handleClickInput} type="text" />
                         </div>
                         <div className={cx('form-group')}>
                             <label>Giá bán  <IoInformationCircleOutline style={{ fontSize: '18px', marginLeft: '4px' }} /></label>
-                            <input type="text" />
+                            <input onFocus={handleClickInput} type="text" />
                         </div>
                         <div className={cx('form-group')}>
                             <label>Tồn kho  <IoInformationCircleOutline style={{ fontSize: '18px', marginLeft: '4px' }} /></label>
-                            <input type="text" />
+                            <input onFocus={handleClickInput} type="text" value={0} disabled style={{background: 'transparent'}}/>
                         </div>
+                        <div className={cx('form-group')}>
+                            <label>Trạng thái  <IoInformationCircleOutline style={{ fontSize: '18px', marginLeft: '4px' }} /></label>
+                            <input onFocus={handleClickInput} type="text" value={'Chưa đăng bán'} disabled style={{background: 'transparent'}}/>
+                        </div>
+                        
 
                     </div>
                 </div>
 
-                <div className={cx('footer')}>
+                <div className={cx('text-editor')}>
+                    <div className={cx('form-group')}>
+                                <label>Mô tả  <IoInformationCircleOutline style={{ fontSize: '18px', marginLeft: '4px' }} /></label>
+                                <div  className={cx('wrapper-react-quill')}>
+                                <ReactQuill theme="snow" value={value} onChange={setValue} onFocus={handleClickInput} style={{height: '100px'}}/>
 
+                                </div>
+                    </div>
+                </div>
+
+         
+                
+                    
+
+                <div className={cx('footer')}>
+                <span className={cx('btn', 'btn-succeed')}><BsSave style={{ marginRight: '6px', fontSize: '16px' }} />   Lưu</span>
+                {/* <span className={cx('btn', 'btn-succeed')}><MdPublish style={{ marginRight: '6px', fontSize: '16px' }} />   Lưu và đăng bán</span> */}
+                <span onClick={() => setModal(false)} className={cx('btn', 'btn-failed')}><TiCancel style={{ marginRight: '6px', fontSize: '16px' }} />   Hủy</span>
+              
                 </div>
             </div>
         </div>
