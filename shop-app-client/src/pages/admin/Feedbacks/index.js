@@ -1,12 +1,25 @@
-import React from "react";
+import React, { useState } from "react";
 import classNames from "classnames/bind";
 import styles from "./Feedbacks.module.scss";
 import icons from "~/assets/icons";
 import images from "~/assets/images";
+import ItemFeedback from "~/components/ItemFeeback";
+import FeedbackDetail from "./FeedbackDetail";
 const cx = classNames.bind(styles);
 
 function Feedbacks() {
+
+  const [isOpen, setIsOpen] = useState(false);
+
+  function handleOpen() {
+    setIsOpen(true);
+  }
+  function handleClose() {
+    setIsOpen(false);
+  }
+
   return (
+
     <div className={cx("container-feedback")}>
       <div className={cx("container-search")}>
         <input
@@ -29,101 +42,135 @@ function Feedbacks() {
         <div className={cx("body-list")}>
           <ul>
             <li>
-              <div className={cx("item-list")}>
-                <img className={cx("item-avt")} src={images.item_product} alt="img"/>
-                <div className={cx("item-info")}>
-                  <span className={cx("item-title")}>CHO TÔI XIN THÔNG TIN LIÊN LẠC VỚI BỘ PHẬN GIAO HÀNG CỦA ĐƠN HÀNG WPAODER</span>
-                  <span className={cx("item-email")}>email@gmail.com</span>
-                  <span className={cx("item-date")}>11/09/2023</span>
-                </div>
-                <span className={cx("item-status")}>Đã phản hồi</span>
-                <button className={cx("item-button")} type="button">Xem chi tiết</button>
-              </div>
+              <ItemFeedback 
+                avt={images.item_product}
+                title="Title nha"
+                email="email@gmail.com"
+                date="11/09/2023"
+                status="Chưa phản hồi"
+                open={handleOpen}
+              />
             </li>
 
             <li>
-              <div className={cx("item-list")}>
-                <img className={cx("item-avt")} src={images.item_product} alt="img"/>
-                <div className={cx("item-info")}>
-                  <span className={cx("item-title")}>Title</span>
-                  <span className={cx("item-email")}>email@gmail.com</span>
-                  <span className={cx("item-date")}>11/09/2023</span>
-                </div>
-                <span className={cx("item-status-red")}>Chưa phản hồi</span>
-                <button className={cx("item-button")} type="button">Xem chi tiết</button>
-              </div>
+              <ItemFeedback 
+                avt={images.item_product}
+                title="Title nha"
+                email="email@gmail.com"
+                date="11/09/2023"
+                status="Chưa phản hồi"
+                open={handleOpen}
+              />
             </li>
 
             <li>
-              <div className={cx("item-list")}>
-                <img className={cx("item-avt")} src={images.item_product} alt="img"/>
-                <div className={cx("item-info")}>
-                  <span className={cx("item-title")}>Title</span>
-                  <span className={cx("item-email")}>email@gmail.com</span>
-                  <span className={cx("item-date")}>11/09/2023</span>
-                </div>
-                <span className={cx("item-status")}>Đã phản hồi</span>
-                <button className={cx("item-button")} type="button">Xem chi tiết</button>
-              </div>
+              <ItemFeedback 
+                avt={images.item_product}
+                title="Title nha"
+                email="email@gmail.com"
+                date="11/09/2023"
+                status="Chưa phản hồi"
+                open={handleOpen}
+              />
             </li>
 
             <li>
-              <div className={cx("item-list")}>
-                <img className={cx("item-avt")} src={images.item_product} alt="img"/>
-                <div className={cx("item-info")}>
-                  <span className={cx("item-title")}>Title</span>
-                  <span className={cx("item-email")}>email@gmail.com</span>
-                  <span className={cx("item-date")}>11/09/2023</span>
-                </div>
-                <span className={cx("item-status")}>Đã phản hồi</span>
-                <button className={cx("item-button")} type="button">Xem chi tiết</button>
-              </div>
+              <ItemFeedback 
+                avt={images.item_product}
+                title="Title nha"
+                email="email@gmail.com"
+                date="11/09/2023"
+                status="Chưa phản hồi"
+                open={handleOpen}
+              />
             </li>
 
             <li>
-              <div className={cx("item-list")}>
-                <img className={cx("item-avt")} src={images.item_product} alt="img"/>
-                <div className={cx("item-info")}>
-                  <span className={cx("item-title")}>Title</span>
-                  <span className={cx("item-email")}>email@gmail.com</span>
-                  <span className={cx("item-date")}>11/09/2023</span>
-                </div>
-                <span className={cx("item-status")}>Đã phản hồi</span>
-                <button className={cx("item-button")} type="button">Xem chi tiết</button>
-              </div>
+              <ItemFeedback 
+                avt={images.item_product}
+                title="Title nha"
+                email="email@gmail.com"
+                date="11/09/2023"
+                status="Chưa phản hồi"
+                open={handleOpen}
+              />
             </li>
 
             <li>
-              <div className={cx("item-list")}>
-                <img className={cx("item-avt")} src={images.item_product} alt="img"/>
-                <div className={cx("item-info")}>
-                  <span className={cx("item-title")}>Title</span>
-                  <span className={cx("item-email")}>email@gmail.com</span>
-                  <span className={cx("item-date")}>11/09/2023</span>
-                </div>
-                <span className={cx("item-status")}>Đã phản hồi</span>
-                <button className={cx("item-button")} type="button">Xem chi tiết</button>
-              </div>
+              <ItemFeedback 
+                avt={images.item_product}
+                title="Title nha"
+                email="email@gmail.com"
+                date="11/09/2023"
+                status="Chưa phản hồi"
+                open={handleOpen}
+              />
             </li>
 
             <li>
-              <div className={cx("item-list")}>
-                <img className={cx("item-avt")} src={images.item_product} alt="img"/>
-                <div className={cx("item-info")}>
-                  <span className={cx("item-title")}>Title</span>
-                  <span className={cx("item-email")}>email@gmail.com</span>
-                  <span className={cx("item-date")}>11/09/2023</span>
-                </div>
-                <span className={cx("item-status")}>Đã phản hồi</span>
-                <button className={cx("item-button")} type="button">Xem chi tiết</button>
-              </div>
+              <ItemFeedback 
+                avt={images.item_product}
+                title="Title nha"
+                email="email@gmail.com"
+                date="11/09/2023"
+                status="Chưa phản hồi"
+                open={handleOpen}
+              />
             </li>
+
+            <li>
+              <ItemFeedback 
+                avt={images.item_product}
+                title="Title nha"
+                email="email@gmail.com"
+                date="11/09/2023"
+                status="Chưa phản hồi"
+                open={handleOpen}
+              />
+            </li>
+
+            <li>
+              <ItemFeedback 
+                avt={images.item_product}
+                title="Title nha"
+                email="email@gmail.com"
+                date="11/09/2023"
+                status="Chưa phản hồi"
+                open={handleOpen}
+              />
+            </li>
+
+            <li>
+              <ItemFeedback 
+                avt={images.item_product}
+                title="Title nha"
+                email="email@gmail.com"
+                date="11/09/2023"
+                status="Chưa phản hồi"
+                open={handleOpen}
+              />
+            </li>
+
+            <li>
+              <ItemFeedback 
+                avt={images.item_product}
+                title="Title nha"
+                email="email@gmail.com"
+                date="11/09/2023"
+                status="Chưa phản hồi"
+                open={handleOpen}
+              />
+            </li>
+
+            
           </ul>
         </div>
 
         <span className={cx("quantity-item")}>Kết quả: <span>6</span></span>
       </div>
-      
+      {isOpen && (
+        <FeedbackDetail close={handleClose}/>
+      )}
     </div>
   );
 }
