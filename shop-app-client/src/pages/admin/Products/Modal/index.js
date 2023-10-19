@@ -15,11 +15,8 @@ import DropDown from "../DropDown";
 import styles from './Modal.module.scss'
 
 import 'react-quill/dist/quill.snow.css'
-import ReactQuill, {Quill} from "react-quill";
+import ReactQuill from "react-quill";
 
-import ImageResize from 'quill-image-resize-module-react';
-Quill.register('modules/imageResize', ImageResize);
-window.Quill = Quill;
 
 
 
@@ -156,10 +153,6 @@ function Modal({ setModal }) {
                                     },
                                     clipboard: {
                                         matchVisual: false,
-                                    },
-                                    imageResize: {
-                                        parchment: Quill.import('parchment'),
-                                        modules: ['Resize', 'DisplaySize']
                                     }
                                 }}
 
