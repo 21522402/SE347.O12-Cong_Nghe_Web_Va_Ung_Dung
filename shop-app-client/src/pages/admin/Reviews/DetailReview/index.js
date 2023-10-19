@@ -3,6 +3,10 @@ import classNames from "classnames/bind";
 import styles from "./DetailReview.module.scss";
 import image from "~/assets/images";
 import ReactStars from "react-stars";
+import TextareaAutosize from "react-textarea-autosize";
+import { BsFillSendFill, BsFillImageFill } from "react-icons/bs";
+import { AiFillCloseCircle } from "react-icons/ai";
+import ItemReview from "~/components/ItemReview";
 
 const cx = classNames.bind(styles);
 function DetailReview() {
@@ -26,7 +30,8 @@ function DetailReview() {
                 value={4.5}
                 color1="#C4C4C4"
                 color2="#ffb21d"
-                className={cx("star-product")}
+                edit={false}
+                className={cx("star-product-first")}
               />
               <p className={cx("price-product")}>179.000 đ</p>
               <div className={cx("sold-product")}>
@@ -69,13 +74,14 @@ function DetailReview() {
           <h1>ĐÁNH GIÁ SẢN PHẨM</h1>
           <h1>4.5</h1>
           <ReactStars
-                count={5}
-                size={40}
-                value={4.5}
-                color1="#C4C4C4"
-                color2="#ffb21d"
-                className={cx("star")}
-              />
+            count={5}
+            size={40}
+            value={4.5}
+            edit={false}
+            color1="#C4C4C4"
+            color2="#ffb21d"
+            className={cx("star")}
+          />
           <i className={cx("quantity")}>8 lượt đánh giá</i>
         </div>
       </div>
@@ -105,9 +111,64 @@ function DetailReview() {
           </select>
         </div>
         {/* List Reivew */}
-        <div className={cx("container-content")}>Nội dung đánh giá</div>
+        <div className={cx("container-content")}>
+          <ItemReview
+            avt={image.item_product}
+            name="Phan Trọng Tính"
+            quantityStar={4.5}
+            imageReview={image.item_product}
+            contentReview="Chẳng lẻ em nói sản phẩm này như c*t. Sản phẩm ngon lắm nha, mua về xài bao êm"
+            dateReview="19/10/2023"
+            imageResponse={image.item_product}
+            contentResponse="Anh đánh giá cao độ biết điều của em !!!"
+            dateResponse="20/10/2023"
+          />
+          <ItemReview
+            avt={image.item_product}
+            name="Phan Trọng Tính"
+            quantityStar={4.5}
+            imageReview={image.item_product}
+            contentReview="Chẳng lẻ em nói sản phẩm này như c*t. Sản phẩm ngon lắm nha, mua về xài bao êm"
+            dateReview="19/10/2023"
+            imageResponse={image.item_product}
+            contentResponse="Anh đánh giá cao độ biết điều của em !!!"
+            dateResponse="20/10/2023"
+          />
+          <ItemReview
+            avt={image.item_product}
+            name="Phan Trọng Tính"
+            quantityStar={4.5}
+            imageReview={image.item_product}
+            contentReview="Chẳng lẻ em nói sản phẩm này như c*t. Sản phẩm ngon lắm nha, mua về xài bao êm"
+            dateReview="19/10/2023"
+            imageResponse={image.item_product}
+            contentResponse="Anh đánh giá cao độ biết điều của em !!!"
+            dateResponse="20/10/2023"
+          />
+          <ItemReview
+            avt={image.item_product}
+            name="Phan Trọng Tính"
+            quantityStar={4.5}
+            imageReview={image.item_product}
+            contentReview="Chẳng lẻ em nói sản phẩm này như c*t. Sản phẩm ngon lắm nha, mua về xài bao êm"
+            dateReview="19/10/2023"
+            imageResponse={image.item_product}
+            contentResponse="Anh đánh giá cao độ biết điều của em !!!"
+            dateResponse="20/10/2023"
+          />
+          <ItemReview
+            avt={image.item_product}
+            name="Phan Trọng Tính"
+            quantityStar={4.5}
+            imageReview={image.item_product}
+            contentReview="Chẳng lẻ em nói sản phẩm này như c*t. Sản phẩm ngon lắm nha, mua về xài bao êm"
+            dateReview="19/10/2023"
+            imageResponse={image.item_product}
+            contentResponse="Anh đánh giá cao độ biết điều của em !!!"
+            dateResponse="20/10/2023"
+          />
+        </div>
       </div>
-
     </div>
   );
 }

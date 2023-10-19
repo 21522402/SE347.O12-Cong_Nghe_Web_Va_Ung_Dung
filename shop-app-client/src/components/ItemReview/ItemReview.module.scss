@@ -7,8 +7,11 @@
     border-radius: 50%;
 }
 .container-item {
-    border-bottom: 2px dashed #8c8c8c;
+    border: 2px solid #8c8c8c;
     margin: 6px;
+    overflow:hidden;
+    overflow-y:scroll;
+    border-radius: 2px;
 }
 .container-reivew-detail {
     position: fixed;
@@ -59,11 +62,6 @@
 .star-product {
     margin: -8px 0 0 20px;
 }
-
-.star-product-first {
-    margin-top: -8px;
-}
-
 .price-product {
     font-weight: bold;
     margin-top: -4px;
@@ -142,11 +140,9 @@
 }
 .container-content {
     height: 87%;
+    border: 2px solid #ccc;
     border-radius: 4px;
     margin-bottom: 20px;
-    max-height: 86%;
-    overflow:hidden; 
-    overflow-y: scroll;
 }
 
 select {
