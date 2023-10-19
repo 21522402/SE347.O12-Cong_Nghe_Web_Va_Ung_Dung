@@ -1,18 +1,21 @@
-.ovelay {
+.overlay {
     position: fixed;
     top: 0;
-    right: 0;
-    bottom: 0;
     left: 0;
+    bottom: 0;
+    right: 0;
     background-color: rgba(0,0,0,0.5);
-    z-index: 100;
+    z-index: 15;
     font-size: 13px;
 }
 
+
+
 .container {
     position: absolute;
-    top: 70px;
-    left: 26%;
+    top: 40px;
+    left: 25%;
+    z-index: 20;
     background-color: #fff;
     width: 980px;
     animation: dropTop .3s linear;
@@ -178,6 +181,10 @@
     }
 }
 
+.quill .ql-container {
+    max-height: 160px;
+    overflow-y: auto;
+}
 
 
 
