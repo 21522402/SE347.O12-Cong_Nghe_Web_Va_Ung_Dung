@@ -5,7 +5,8 @@ import Profile from "~/pages/user/Profile"
 import Feedbacks from '~/pages/admin/Feedbacks'
 import Reviews from "~/pages/admin/Reviews"
 import DetailReview from "~/pages/admin/Reviews/DetailReview"
-import ItemReview from "~/components/ItemReview"
+
+
 export const publicRoutes = [
     // user: => path: '/user/[pageName]'
     {path:'/user' , component: Home, layout:LayoutNoSidebar},
