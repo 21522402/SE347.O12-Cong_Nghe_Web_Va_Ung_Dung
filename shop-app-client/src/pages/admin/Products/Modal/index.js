@@ -146,7 +146,7 @@ function Modal({ setModal }) {
                                                 { indent: "-1" },
                                                 { indent: "+1" },
                                             ],
-                                            ["link", "image", "video"],
+                                            ["link"],
                                             ["code-block"],
                                             ["clean"],
                                         ],

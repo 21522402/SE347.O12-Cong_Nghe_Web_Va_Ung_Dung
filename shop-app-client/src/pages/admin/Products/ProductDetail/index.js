@@ -4,6 +4,7 @@ import { FaFileImport, FaFileExport } from "react-icons/fa";
 import { IoSquareOutline, IoCheckboxSharp } from "react-icons/io5";
 import { BsCheckLg } from "react-icons/bs";
 import { AiOutlineEdit } from "react-icons/ai";
+import { MdPublish } from "react-icons/md";
 import { BiImport, BiSolidLockAlt } from "react-icons/bi";
 import { useContext } from "react";
 import { ModalContext } from "..";
@@ -145,6 +146,7 @@ function ProductDetail() {
                     <span className={cx('btn', 'btn-succeed')} onClick={() => setModal(true)}><AiOutlineEdit style={{ marginRight: '6px', fontSize: '16px' }} />   Cập nhật </span>
                     <span className={cx('btn', 'btn-succeed')}><BiImport style={{ marginRight: '6px', fontSize: '18px' }} />   Nhập hàng </span>
                     <span className={cx('btn', 'btn-error')}><BiSolidLockAlt style={{ marginRight: '6px', fontSize: '16px' }} />   Ngừng kinh doanh</span>
+                    <span className={cx('btn', 'btn-succeed')}><MdPublish style={{ marginRight: '6px', fontSize: '16px' }} />   Đăng bán</span>
                 </div>
             </div>
         </div>

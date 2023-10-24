@@ -1,0 +1,169 @@
+.wrapper {
+    padding: 20px 40px 0 40px;
+    font-size: 13px;
+    width: 100%;
+    margin-bottom: 32px;
+    display: flex;
+    gap: 12px;
+
+}
+
+.toolbox {
+    display: flex;
+    width: 100%;
+    align-items: center;
+}
+
+.title-import {
+    margin-right: 30px;
+    display: flex;
+    align-items: center;
+    font-size: 20px;
+    font-weight: bold;
+
+    .icon {
+        // style={{marginRight: '8px', fontSize: '24px', marginBottom: '2px'}}
+        margin-right: 8px;
+        font-size: 24px;
+        color: #333;
+        padding: 3px;
+        border-radius: 50%;
+        display: inline-flex;
+
+        &:hover {
+            background-color: #eee;
+        }
+    }
+}
+
+.filter-box {
+    display: flex;
+    align-items: center;
+    position: relative;
+}
+.search-box {
+    padding: 8px;
+    border: 1px solid #ccc;
+    display: flex;
+    align-items: center;
+    border-radius: 2px;
+}
+
+.search-input {
+
+    padding: 0px 10px;
+    width: 350px;
+    outline: none;
+    border: none;
+}
+
+.input-focus {
+    border: 1px solid #b8b7b7;
+    box-shadow: 0 3px 10px rgb(0,  0, 0,0.25);
+    transition: all .2s linear;
+}
+
+.icon {
+    font-size: 20px;
+    cursor: pointer;
+    color: #6b6b6b;
+}
+
+.tableView {
+    margin-top: 32px;
+    // height: 400px;
+    overflow: auto;
+ 
+}
+
+.table {
+    width: 100%;
+    table-layout: fixed;
+    min-width: 875px;
+    border-collapse: collapse;
+}
+
+.thead {
+    tr {
+        border: 0.5px solid rgb(212, 231, 249);
+    }
+}
+
+.thead th {
+    position: sticky;
+    top: 0;
+    background-color: #f6f9fc;
+    background-color: #e6f1fe;
+
+    color: #000;
+    font-size: 13px;
+    padding: 10px 10px;
+    word-break: break-all;
+    text-align: left;
+    vertical-align: middle;
+}
+
+tr td {
+    text-align: left;
+    padding: 10px 10px;
+}
+
+th.delete {
+    width: 50px;
+    text-align: right;
+    .icon-delete {
+        font-size: 20px;
+        color: #666;
+    }
+    
+}
+
+th.stt {
+    width: 50px;
+    text-align: center;
+}
+
+th.code {
+    width: 100px;
+}
+
+th.name {
+    width: 100%;
+}
+
+th.quantity {
+    width: 80px;
+    text-align: right;
+}
+
+th.unitPrice {
+    width: 100px;
+    text-align: right;
+
+}
+
+th.price {
+    width: 146px;
+    text-align: right;
+    padding: 10px 40px 10px 10px;
+
+}
+
+th.import {
+    width: 100px;
+    padding: 10px 0;
+}
+
+.import-contract {
+    width: 320px;
+    background: red;
+    overflow: hidden;
+    &.hide {
+        width: 0px;
+    }
+
+    transition: all .2s ease-in;
+}
+
+
+
