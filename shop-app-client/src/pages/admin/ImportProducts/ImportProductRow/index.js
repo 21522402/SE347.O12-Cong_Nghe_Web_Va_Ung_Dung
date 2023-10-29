@@ -10,17 +10,20 @@ const cx = classNames.bind(styles)
 
 
 
-function ImportProductRow({ index, setModal, setProduct, product}) {
+function ImportProductRow({ index, setModal, setProduct,  product, onClickRemoveItem}) {
     const handleClickImport = () => {
         setProduct(product)
         setModal(true)
+    }
+    const handleClickDeleteItem = (index) => {
+        onClickRemoveItem(index)
     }
     
   
     return (
         <React.Fragment >
             <tr  className={cx('product-item')}>
-                <td className={cx('delete')} ><RiDeleteBin6Line className={cx('icon-delete')} /></td>
+                <td className={cx('delete')} ><span onClick={() => handleClickDeleteItem(index)}><RiDeleteBin6Line className={cx('icon-delete')} /></span></td>
                 <td className={cx('stt')}>{index+1}</td>
                 <td className={cx('code')}>{product.productId}</td>
                 <td className={cx('name')}>{product.productName}</td>

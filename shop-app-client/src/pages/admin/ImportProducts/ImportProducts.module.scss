@@ -5,6 +5,7 @@
     margin-bottom: 32px;
     display: flex;
     gap: 12px;
+    overflow-x: hidden;
 
 }
 
@@ -154,15 +155,119 @@ th.import {
     padding: 10px 0;
 }
 
+.btn {
+    
+    display: inline-flex;
+    align-items: center;
+    border-radius: 5px;
+    padding: 7px 20px;
+    color: #fff;
+    font-weight: 600;
+    margin-left: 10px;
+    cursor: pointer;
+    transition: background-color .15s ease-in-out;
+   
+}
+
+.btn-succeed {
+    background-color: #4bac4d;
+      // background-color: #6d6d6d;
+    // background-color: #000;
+    // background-color: orange;
+    &:hover {
+        background-color: #009232;
+    }
+}
+
 .import-contract {
     width: 320px;
-    background: red;
+    border:  1px solid #cccc;
+
+    height: 100vh;
+    padding: 16px 20px;
+    transition: all .2s ease-in-out;
     overflow: hidden;
     &.hide {
-        width: 0px;
+        width: 0px; 
+        opacity: 0;
+        margin-right: -60px;
     }
 
-    transition: all .2s ease-in;
+    .button-right {
+        width: 32px;
+        height: 32px;
+        background-color: #0070F4;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+
+        &:hover {
+            background-color: #005ac3;
+        }
+    }
+
+    .icon-right {
+        color: #fff;
+        font-size: 18px;
+    }
+
+    .date {
+
+    }
+
+    .time {
+        color: #8b8a8a;
+        display: inline-block;
+        padding: 0 0 4px 0;
+        border-bottom: 1px solid #ccc;
+    }
+
+    .form-group {
+        margin-top: 20px;
+        width: 100%;
+        display: flex;
+        align-items: center;
+  
+        justify-content: space-between;
+        label {
+            font-weight: 600;
+      
+        }
+    
+        input {
+            padding: 7px 0px;
+            outline: none;
+            border: none;
+            border-bottom: 1px solid #c2c7ce;
+            height: 32px;
+            align-self: flex-start;
+            color: #8590aa;
+          
+    
+            &:focus {
+                border-bottom: 2px solid #00b63e;
+                padding-bottom: 6px;
+            }
+
+            &.text {
+                color: #231f20;
+            }
+        }
+
+
+
+        .text {
+            display: inline-block;
+            width: 140px;
+            text-align: left;
+        }
+
+        
+    }
+
+ 
 }
 
 

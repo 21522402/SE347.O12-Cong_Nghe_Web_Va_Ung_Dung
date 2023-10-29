@@ -5,6 +5,10 @@ td.delete {
         font-size: 20px;
         color: #666;
             // color: #00B63E;
+
+            &:hover {
+                color: rgb(220, 12, 12);
+            }
     }
     
 }
