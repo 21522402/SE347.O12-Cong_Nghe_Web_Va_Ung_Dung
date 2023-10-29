@@ -13,7 +13,7 @@ function ItemFeedback(props) {
         <span className={cx("item-email")}>{props.email}</span>
         <span className={cx("item-date")}>{props.date}</span>
       </div>
-      <span className={cx("item-status")}>{props.status}</span>
+      <span className={cx(props.isRespon ? "item-status":"item-status-red")}>{props.isRespon ? "Đã phản hồi" : "Chưa phản hồi"}</span>
       <button className={cx("item-button")} type="button" onClick={props.open}>
         Xem chi tiết
       </button>

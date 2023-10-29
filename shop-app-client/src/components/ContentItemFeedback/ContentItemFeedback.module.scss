@@ -1,0 +1,43 @@
+.container-rieview {
+    width: 90%;
+    height: auto;
+    background-color: rgb(225, 225, 225);
+    margin: 10px 0px 10px 16px;
+    padding: 4px 10px 10px 10px;
+    border-radius: 10px;
+}
+
+.title-review {
+    font-size: 12px;
+}
+.container-images {
+    width: 100%;
+    height: auto;
+    display: flex;
+    align-items: flex-start;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+    margin-top: 10px;
+    padding: 10px;
+    border: 2px solid #8c8c8c;
+    border-radius: 10px;
+}
+.images-list {
+    width: 80px;
+    height: 50px;
+    position: relative;
+    margin: 12px 8px;
+}
+
+.image {
+    width: 100%;
+    height: 100%;
+    border-radius: 5px;
+    border: 2px solid #ccc;
+}
+.message-review {
+    width: 100%;
+    font-size: 14px;
+    height: auto;
+    text-align: justify;
+}

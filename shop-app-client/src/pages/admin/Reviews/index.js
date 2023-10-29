@@ -23,18 +23,13 @@ function Reviews() {
       </div>
 
       <div className={cx("container-list", 'row')}>
-
-        <ProductReviewItem img={images.item_product} name="Quần tây phong cách GenZ cực chất best seller"/>
-        <ProductReviewItem img={images.item_product} name="Quần tây phong cách GenZ cực chất best seller"/>
-        <ProductReviewItem img={images.item_product} name="Quần tây phong cách GenZ cực chất best seller"/>
-        <ProductReviewItem img={images.item_product} name="Quần tây phong cách GenZ cực chất best seller"/>
-        <ProductReviewItem img={images.item_product} name="Quần tây phong cách GenZ cực chất best seller"/>
-        <ProductReviewItem img={images.item_product} name="Quần tây phong cách GenZ cực chất best seller"/>
-        <ProductReviewItem img={images.item_product} name="Quần tây phong cách GenZ cực chất best seller"/>
-        <ProductReviewItem img={images.item_product} name="Quần tây phong cách GenZ cực chất best seller"/>
-        <ProductReviewItem img={images.item_product} name="Quần tây phong cách GenZ cực chất best seller"/>
-        <ProductReviewItem img={images.item_product} name="Quần tây phong cách GenZ cực chất best seller"/>
-
+        {
+          [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 6, 7, 8, 9, 10].map((item, index) => {
+            return (
+              <ProductReviewItem img={images.item_product} name="Quần tây phong cách GenZ cực chất best seller"/>
+            )
+          })
+        }
       </div>
     </div>
   )

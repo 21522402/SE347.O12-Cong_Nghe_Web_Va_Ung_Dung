@@ -18,7 +18,7 @@ function ProductReview(props) {
       </div>
       <div className={cx("item-hover")}>
         <button className={cx("item-button", "display_button")} type="button">
-          Xem chi tiết đánh giá
+          <a href="/admin/reviews/detail">Xem chi tiết đánh giá</a>
         </button>
       </div>
     </div>

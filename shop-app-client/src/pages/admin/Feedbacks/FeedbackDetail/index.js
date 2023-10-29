@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useRef, useState } from "react";
 import classNames from "classnames/bind";
 import styles from "./FeedbackDetail.module.scss";
@@ -6,13 +6,13 @@ import image from "~/assets/images";
 import { AiFillCloseCircle } from "react-icons/ai";
 import TextareaAutosize from "react-textarea-autosize";
 import { BsFillSendFill, BsFillImageFill } from "react-icons/bs";
+import ContentItemFeedback from "~/components/ContentItemFeedback";
 const cx = classNames.bind(styles);
 
-function FeedbackDetail(props) {
+function FeedbackDetail({close, itemFeedbackActive, send}) {
   const [images, setImages] = useState([]);
   const fileInputRef = useRef(null);
   const [text, setText] = useState("");
-  const [isSent, setIsSent] = useState(false);
 
   function selectFiles() {
     fileInputRef.current.click();
@@ -40,18 +40,27 @@ function FeedbackDetail(props) {
   }
 
   function sendFeedback() {
-    if (text.length > 0)
-    {
-      setIsSent(true);
-    }
-    else
-    {
-      if (images.length > 0)
-      {
-        setIsSent(true);
-      }
-    }
+    itemFeedbackActive.isRespon = true;
+    itemFeedbackActive.contentResponsed.text = text;
+    const newListImage = images.map((itemp) => {
+      return itemp.url;
+    });
+    itemFeedbackActive.contentResponsed.listImage = [...newListImage];
+    send({...itemFeedbackActive});
+    // if (text.length > 0)
+    // {
+      
+    // }
+    // else
+    // {
+    //   if (images.length > 0)
+    //   {
+    //     setIsSent(true);
+    //   }
+    // }
   }
+
+
 
   return (
     <div className={cx("main-modal")}>
@@ -59,59 +68,34 @@ function FeedbackDetail(props) {
         <div className={cx("header")}>
           <img className={cx("avt")} src={image.item_product} alt="img" />
           <div className={cx("info")}>
-            <span className={cx("title")}>
-              CHO TÔI XIN THÔNG TIN LIÊN LẠC VỚI BỘ PHẬN GIAO HÀNG CỦA ĐƠN HÀNG
-              WPAODER
-            </span>
-            <span className={cx("email")}>email@gmail.com</span>
-            <span className={cx("date")}>11/09/2023</span>
+            <span className={cx("title")}>{itemFeedbackActive.title}</span>
+            <span className={cx("email")}>{itemFeedbackActive.email}</span>
+            <span className={cx("date")}>{itemFeedbackActive.date}</span>
           </div>
-          <button className={cx("close")} onClick={props.close}>&times;</button>
+          <button className={cx("close")} onClick={close}>&times;</button>
         </div>
 
-        <div className={cx("container-rieview")}>
-          <i className={cx("title-review")}>*** Nội dung đánh giá ***</i>
-          <div className={cx("container-images")}>
-            <div className={cx("images-list")}>
-              <img className={cx("image")} src={image.item_product} alt="" />
-            </div>
-            <div className={cx("images-list")}>
-              <img className={cx("image")} src={image.item_product} alt="" />
-            </div>
-            <div className={cx("images-list")}>
-              <img className={cx("image")} src={image.item_product} alt="" />
-            </div>
-            <div className={cx("images-list")}>
-              <img className={cx("image")} src={image.item_product} alt="" />
-            </div>
-            <div className={cx("images-list")}>
-              <img className={cx("image")} src={image.item_product} alt="" />
-            </div>
+        <ContentItemFeedback  contentFeedback={itemFeedbackActive.contentFeedback}/>
 
-            <span className={cx("message-review")}>
-              Tôi có đặt đơn hàng là một chiếc áo thun loại CoolXstra New màu
-              đen size XL hôm 27/8/2023 và theo thông tin ghi trên hệ thống
-              website thì sau 3 ngày sẽ nhận được hàng, nhưng hôm nay đã là ngày
-              thứ tư nhưng tôi vẫn chưa nhận được hàng. Cảm ơn shop !
-            </span>
-          </div>
-        </div>
-
-        {isSent ? (
+        {itemFeedbackActive.isRespon ? (
           <div className={cx("res")}>
             <div className={cx("container-reply")}>
               <i className={cx("title-reply")}>*** Nội dung phản hồi ***</i>
               <div className={cx("container-images")}>
-                {images.map((image, index) => (
-                  <div className={cx("images-list")} key={index}>
-                    <img
-                      className={cx("image")}
-                      src={image.url}
-                      alt={image.name}
-                    />
-                  </div>
-                ))}
-                <span className={cx("message-review")}>{text}</span>
+                {itemFeedbackActive.contentResponsed.listImage.map((item, index) => {
+                  console.log(item)
+                  return (
+                    <div className={cx("images-list")} key={index}>
+                      <img
+                        className={cx("image")}
+                        src={item}
+                        alt="img"
+                      />
+                    </div>
+                  )
+                  
+                })}
+                <span className={cx("message-review")}>{itemFeedbackActive.contentResponsed.text}</span>
               </div>
             </div>
             <div className={cx("isRespond")}>ĐÃ PHẢN HỒI</div>
