@@ -28,13 +28,26 @@ td.name {
 }
 
 td.quantity {
-    
-    text-align: right;
+    text-align: center;
 }
 
 td.unitPrice {
     
-    text-align: right;
+    text-align: center;
+    input {
+        padding: 7px 5px;
+        outline: none;
+        border: none;
+        border-bottom: 1px solid #c2c7ce;
+        width: 100%;
+        height: 32px;
+        color: #15171a;
+    
+        &:focus {
+            border-bottom: 2px solid #00b63e;
+            padding-bottom: 6px;
+        }
+    }
 
 }
 
@@ -42,7 +55,7 @@ td.price {
     
     text-align: right;
     padding: 10px 40px 10px 10px;
-
+    
 }
 
 td.import {

@@ -6,6 +6,7 @@ import Products from "~/pages/admin/Products"
 import ImportProducts from "~/pages/admin/ImportProducts"
 import Orders from "~/pages/admin/Orders"
 import Bill from "~/pages/admin/History/Bill"
+import RentalImport from "~/pages/admin/History/RentalImport"
  
 
 export const publicRoutes = [
@@ -20,7 +21,8 @@ export const publicRoutes = [
     {path:'/admin/products' , component: Products, layout:LayoutSidebar},
     {path:'/admin/products/import' , component: ImportProducts, layout:LayoutSidebar},
     {path:'/admin/orders' , component: Orders, layout:LayoutSidebar},
-    {path:'/admin/history/bill' , component: Bill, layout:LayoutSidebar}
+    {path:'/admin/history/bill' , component: Bill, layout:LayoutSidebar},
+    {path:'/admin/history/import' , component: RentalImport, layout:LayoutSidebar}
 
 ]
 export const privateRoutes = [

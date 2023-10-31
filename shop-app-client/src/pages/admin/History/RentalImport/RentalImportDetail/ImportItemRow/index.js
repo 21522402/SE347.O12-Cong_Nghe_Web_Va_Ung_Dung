@@ -6,14 +6,15 @@ import { IoSquareOutline, IoCheckboxSharp } from "react-icons/io5";
 import { RiDeleteBin6Line } from "react-icons/ri";
 
 
-import styles from './BillItemRow.module.scss'
+import styles from './ImportItemRow.module.scss'
 const cx = classNames.bind(styles)
 
-function BillItemRow({ index, open, onClick, onClickRemoveItem, product }) {
+function ImportItemRow({ index, open, onClick, onClickRemoveItem, product }) {
+   
 
     return (
         <React.Fragment >
-            <tr className={cx('bill-item')} >
+            <tr  className={cx('bill-item')}>
                 {/* <td className={cx('delete')} ><span onClick={() => handleClickDeleteItem(index)}><RiDeleteBin6Line className={cx('icon-delete')} /></span></td> */}
                 <td className={cx('code')}>MH001</td>
                 <td className={cx('name')}>Áo thể thao mùa đông</td>
@@ -21,8 +22,6 @@ function BillItemRow({ index, open, onClick, onClickRemoveItem, product }) {
                 <td className={cx('color-size')}>Xanh/S</td>
                 <td className={cx('quantity')}>2</td>
                 <td className={cx('unitPrice')}>90,000</td>
-                <td className={cx('discountPrice')}>5000</td>
-                <td className={cx('sellPrice')}>85000</td>
                 <td className={cx('price')}>170000</td>
 
 
@@ -31,4 +30,4 @@ function BillItemRow({ index, open, onClick, onClickRemoveItem, product }) {
     );
 }
 
-export default BillItemRow;
+export default ImportItemRow;

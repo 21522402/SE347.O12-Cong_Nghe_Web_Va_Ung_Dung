@@ -18,11 +18,8 @@ import { BsPlusCircleFill } from "react-icons/bs";
 
 
 import styles from './Modal.module.scss'
-import images from "~/assets/img";
 import DropDown from "../../Products/DropDown";
 
-import 'react-quill/dist/quill.snow.css'
-import ReactQuill from "react-quill";
 
 
 
@@ -34,10 +31,8 @@ import ReactQuill from "react-quill";
 const cx = classNames.bind(styles)
 
 function Modal({ setModal, product }) {
-    const listImageDefault = [1, 2, 3, 4, 5].map((item, index) => { return { url: '', isImageDefault: true, } })
     const [listColor, setListColor] = useState([{
         color: '',
-        listImage: [...listImageDefault],
         listSize: [{ sizeName: '', quantity: '', showDropSize: false }],
         showDropColor: false,
         showMore: true
@@ -66,7 +61,6 @@ function Modal({ setModal, product }) {
         setListColor(prev => [...prev,
         {
             color: '',
-            listImage: [...listImageDefault],
             listSize: [{ sizeName: '', quantity: '', showDropSize: false }],
             showDropColor: false,
             showMore: true
@@ -151,7 +145,6 @@ function Modal({ setModal, product }) {
 
     const handleRemoveSize = (indexA, indexB) => {
 
-
         setListColor(prev => {
             const nextState = prev.map((item, index) => {
                 if (index === indexA) {
@@ -229,29 +222,7 @@ function Modal({ setModal, product }) {
         })
     }
 
-    const handlePreviewImage = (event, indexA, indexB) => {
-        if (event.target.files[0]) {
-            const file = event.target.files[0]
-            const url = URL.createObjectURL(file)
-            setListColor(prev => {
-                const nextState = prev.map((item, index) => {
-                    if (index === indexA) {
-                        return {
-                            ...item,
-                            listImage: item.listImage.map((item2, index2) => {
-                                if (index2 === indexB) {
-                                    return { ...item2, isImageDefault: false, url: url }
-                                }
-                                else return item2;
-                            })
-                        }
-                    }
-                    else return item;
-                })
-                return nextState;
-            })
-        }
-    }
+
     const handleClickItemColorCategory = (itemColor, indexA) => {
         setListColor(prev => {
             const nextState = prev.map((item, index) => {
@@ -338,7 +309,7 @@ function Modal({ setModal, product }) {
                                                         {itemA.showDropColor && <DropDown items={listColorCategoryDefault} style={{ width: '100%', left: '0', top: '35px' }} onClick={handleClickItemColorCategory} indexA={indexA} />}
                                                     </div> */}
                                                     <div className={cx('custom-selector')}>
-                                                        <select className={cx('select-size')} onChange={(e) => handleChangeColorName(e, indexA)}>
+                                                        <select className={cx('select-size')} onChange={(e) => handleChangeColorName(e, indexA)} value={itemA.color}>
                                                         <option value={''} selected>Chọn màu</option>
                                                             {
                                                            
@@ -358,24 +329,7 @@ function Modal({ setModal, product }) {
                                                 }
                                             </div>
 
-                                            {/* Image */}
-                                            {/* <div style={{ padding: '28px' }}>
-                                                {
-                                                    itemA.listImage.map((itemB, indexB) => {
-                                                        return (
-                                                            <div key={indexB} className={cx('img-wrapper')} style={{ marginRight: '32px' }}>
-                                                                <img src={itemB.isImageDefault ? images.productImageDefault : itemB.url} width={100} height={88} crop='fill'>
-                                                                </img>
-                                                                {
-                                                                    itemB.isImageDefault && <p>+ Thêm</p>
-                                                                }
-                                                                <input type="file" onChange={(event) => handlePreviewImage(event, indexA, indexB)} accept="image/jpg, image/jpeg, image/png" />
-                                                            </div>
-                                                        )
-                                                    })
-                                                }
-                                            </div> */}
-
+                                          
                                             {/* Sỉze */}
                                             <div style={{ padding: '28px', paddingTop: '0px' }}>
                                                 <label style={{ fontWeight: '700', marginTop: '16px' }}>Bảng size ({itemA.listSize.length}): <span onClick={() => handleClickAddSize(indexA)} className={cx('icon-plus')}><BsPlusCircleFill /></span></label>
@@ -401,7 +355,7 @@ function Modal({ setModal, product }) {
                                                                                 {itemB.showDropSize && <DropDown items={listSizeCategoryDefault[itemA.color] || []} style={{ width: '100%', left: '0', top: '35px' }} onClick={handleClickItemSizeCategory} indexA={indexA} indexB={indexB} />}
                                                                             </div> */}
                                                                             <div className={cx('custom-selector')}>
-                                                                                <select className={cx('select-size')} onChange={(e) => handleChangeSizeName(e, indexA, indexB)}>
+                                                                                <select className={cx('select-size')} onChange={(e) => handleChangeSizeName(e, indexA, indexB)} value={itemB.sizeName}>
                                                                                 <option value={''} selected>Chọn size</option>
                                                                                     {
                                                                                         itemA.color &&

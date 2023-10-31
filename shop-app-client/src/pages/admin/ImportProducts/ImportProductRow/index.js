@@ -10,7 +10,7 @@ const cx = classNames.bind(styles)
 
 
 
-function ImportProductRow({ index, setModal, setProduct,  product, onClickRemoveItem}) {
+function ImportProductRow({ index, setModal, setProduct, product, onClickRemoveItem }) {
     const handleClickImport = () => {
         setProduct(product)
         setModal(true)
@@ -18,17 +18,19 @@ function ImportProductRow({ index, setModal, setProduct,  product, onClickRemove
     const handleClickDeleteItem = (index) => {
         onClickRemoveItem(index)
     }
-    
-  
+
+
     return (
         <React.Fragment >
-            <tr  className={cx('product-item')}>
+            <tr className={cx('product-item')}>
                 <td className={cx('delete')} ><span onClick={() => handleClickDeleteItem(index)}><RiDeleteBin6Line className={cx('icon-delete')} /></span></td>
-                <td className={cx('stt')}>{index+1}</td>
+                <td className={cx('stt')}>{index + 1}</td>
                 <td className={cx('code')}>{product.productId}</td>
                 <td className={cx('name')}>{product.productName}</td>
                 <td className={cx('quantity')}>15</td>
-                <td className={cx('unitPrice')}>750000</td>
+                <td className={cx('unitPrice')}>
+                    <input  placeholder="100000" type="text" style={{ width: '80px', textAlign: 'center', background: 'transparent' }}  />
+                </td>
                 <td className={cx('price')}>1,720,000</td>
                 <td className={cx('import')}>
                     <span onClick={handleClickImport} className={cx('btn', 'btn-succeed')}>Nhập</span>
@@ -36,7 +38,7 @@ function ImportProductRow({ index, setModal, setProduct,  product, onClickRemove
 
             </tr>
 
-         
+
         </React.Fragment>
     );
 }

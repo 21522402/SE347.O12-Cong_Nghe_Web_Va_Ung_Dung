@@ -12,6 +12,7 @@ import { BsSave } from "react-icons/bs";
 import { MdPublish } from "react-icons/md";
 import { TiCancel } from "react-icons/ti";
 import { BsPlusCircleFill } from "react-icons/bs";
+import { RiSubtractLine } from "react-icons/ri";
 import DropDown from "../DropDown";
 
 import styles from './Modal.module.scss'
@@ -112,6 +113,15 @@ function Modal({ setModal, typeModal }) {
         ])
         setListShowMore(prev => [...prev, true]);
     }
+    const handleRemoveColor = (indexRemove) => {
+        setListColor(prev => {
+            const nextState = [...prev];
+            nextState.splice(indexRemove, 1);
+            return nextState;
+        })
+
+
+    }
     const handleChangeColorName = (e, indexChange) => {
         const colorName = e.target.value;
         setListColor(prev => {
@@ -137,6 +147,28 @@ function Modal({ setModal, typeModal }) {
 
             return nextState;
         })
+    }
+    const handleRemoveSize = (indexA, indexB) => {
+
+        setListColor(prev => {
+            const nextState = prev.map((item, index) => {
+                if (index === indexA) {
+                    const newListSize = [...item.listSize];
+                    newListSize.splice(indexB, 1);
+                    return {
+                        ...item,
+                        listSize: [...newListSize]
+                    }
+                }
+                else return item;
+            })
+            return nextState;
+        })
+
+
+
+
+
     }
     const handleChangeSizeName = (e, indexA, indexB) => {
         const newSizeName = e.target.value
@@ -348,6 +380,12 @@ function Modal({ setModal, typeModal }) {
                                                                 <label>Màu</label>
                                                                 <input onChange={(e) => handleChangeColorName(e, indexA)} placeholder="Đen,..." type="text" style={{ width: '80px', textAlign: 'center', background: 'transparent' }} value={itemA.color} />
                                                             </div>
+                                                            {
+                                                                listColor.length > 1 &&
+                                                                <div style={{ marginLeft: '24px', marginTop: '10px' }}>
+                                                                    <span onClick={() => handleRemoveColor(indexA)} style={{ cursor: 'pointer', padding: '4px 4px', borderRadius: '50%', display: 'inline-flex', backgroundColor: 'red', fontSize: '16px' }}><RiSubtractLine style={{ color: '#fff' }} /></span>
+                                                                </div>
+                                                            }
 
 
                                                         </div>
@@ -398,7 +436,7 @@ function Modal({ setModal, typeModal }) {
                                                                                 <div className={cx('size')}>
                                                                                     <div className={cx('form-group2')} style={{ marginRight: '48px' }}>
                                                                                         <label>Size:</label>
-                                                                                        <input onChange={(e) => handleChangeSizeName(e, indexA, indexB)} value={itemB.sizeName} type="text" style={{ width: '80px', textAlign: 'center', background: 'transparent' }}  placeholder="S,M,..."/>
+                                                                                        <input onChange={(e) => handleChangeSizeName(e, indexA, indexB)} value={itemB.sizeName} type="text" style={{ width: '80px', textAlign: 'center', background: 'transparent' }} placeholder="S,M,..." />
                                                                                     </div>
                                                                                     <div className={cx('form-group2')}>
                                                                                         <label>Số lượng:</label>
@@ -407,6 +445,12 @@ function Modal({ setModal, typeModal }) {
 
 
                                                                                 </div>
+                                                                                {
+                                                                                    itemA.listSize.length > 1 &&
+                                                                                    <div>
+                                                                                        <span onClick={(e) => handleRemoveSize(indexA, indexB)} style={{ cursor: 'pointer', padding: '4px 4px', borderRadius: '50%', display: 'inline-flex', backgroundColor: 'red', fontSize: '16px' }}><RiSubtractLine style={{ color: '#fff' }} /></span>
+                                                                                    </div>
+                                                                                }
 
 
                                                                             </div>
