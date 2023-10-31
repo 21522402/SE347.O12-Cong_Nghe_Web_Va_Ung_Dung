@@ -37,11 +37,13 @@ function Orders() {
     const handleChangeDateInput = (e) => {
         let value = e.target.value;
         if (!value) {
-            setDateFilter("Ngày hôm nay");
+            dateInputElement.current.valueAsDate = new Date();
+            const nowDate = convertDate(dateInputElement.current.value);
+            setDateFilter(nowDate)
             return;
         }
         const res = convertDate(value);
-        
+
         setDateFilter(res);
     }
 
@@ -49,7 +51,7 @@ function Orders() {
         dateInputElement.current.valueAsDate = new Date();
         const nowDate = convertDate(dateInputElement.current.value);
         setDateFilter(nowDate)
-    },[])
+    }, [])
 
     return (
         <div className={cx('wrapper')}>
@@ -138,31 +140,31 @@ function Orders() {
             </div>
 
             <div className={cx('tableView')}>
-                        <table className={cx('table')}>
-                            <thead className={cx('thead')}>
-                                <tr>
-                                {/* <th className={cx('delete')}></th> */}
-                                <th className={cx('code')}>Mã đơn hàng</th>
-                                <th className={cx('date')}>Thời gian tạo</th>
-                                <th className={cx('customerName')}>Tên khách hàng</th>
-                                <th className={cx('customerPhone')}>Số điện thoại</th>
-                                <th className={cx('province')}>Khu vực giao</th>
-                                <th className={cx('totalPrice')}>Trị giá</th>
-                                <th className={cx('status')}>Trạng thái</th>
-                                </tr>
-                            </thead>
-                            <tbody>
+                <table className={cx('table')}>
+                    <thead className={cx('thead')}>
+                        <tr>
+                            {/* <th className={cx('delete')}></th> */}
+                            <th className={cx('code')}>Mã đơn hàng</th>
+                            <th className={cx('date')}>Thời gian tạo</th>
+                            <th className={cx('customerName')}>Tên khách hàng</th>
+                            <th className={cx('customerPhone')}>Số điện thoại</th>
+                            <th className={cx('province')}>Khu vực giao</th>
+                            <th className={cx('totalPrice')}>Trị giá</th>
+                            <th className={cx('status')}>Trạng thái</th>
+                        </tr>
+                    </thead>
+                    <tbody>
 
-                                {[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12].map((item, index) => {
-                                    return (
-                                        <OrderRow key={index} />
-                                    )
-                                })}
+                        {[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12].map((item, index) => {
+                            return (
+                                <OrderRow key={index} />
+                            )
+                        })}
 
-                            </tbody>
-                        </table>
-                    </div>
-                 
+                    </tbody>
+                </table>
+            </div>
+
         </div>
     );
 }

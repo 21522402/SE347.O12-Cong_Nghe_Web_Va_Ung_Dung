@@ -2,17 +2,17 @@
 import classNames from "classnames/bind";
 import React, { useEffect, useRef } from "react";
 import { useState } from "react";
-import OrderDetail from "../OrderDetail";
+import BillDetail from "../BillDetail";
 import { IoSquareOutline, IoCheckboxSharp } from "react-icons/io5";
 import { RiDeleteBin6Line } from "react-icons/ri";
 
 
-import styles from './OrderRow.module.scss'
+import styles from './BillRow.module.scss'
 const cx = classNames.bind(styles)
 
-function OrderRow({ index, open, onClick, onClickRemoveItem, product}) {
+function BillRow({ index, open, onClick, onClickRemoveItem, product }) {
     const element = useRef(null)
-    const [openDetail,setOpenDetail] = useState(false);
+    const [openDetail, setOpenDetail] = useState(false);
     const handleClickProducItem = () => {
         setOpenDetail(prev => !prev);
     }
@@ -22,20 +22,20 @@ function OrderRow({ index, open, onClick, onClickRemoveItem, product}) {
     useEffect(() => {
         if (openDetail) {
             const topElement = element.current?.offsetTop;
-            window.scroll({top: topElement, behavior: 'smooth'})
-        } 
-    },[openDetail])
+            window.scroll({ top: topElement, behavior: 'smooth' })
+        }
+    }, [openDetail])
     return (
         <React.Fragment >
-            <tr onClick={handleClickProducItem} className={cx('product-item', {showDetail: openDetail})} ref={element}>
-            {/* <td className={cx('delete')} ><span onClick={() => handleClickDeleteItem(index)}><RiDeleteBin6Line className={cx('icon-delete')} /></span></td> */}
-                <td className={cx('code')}>DH0001</td>
-                <td className={cx('date')}>15/02/2003</td>
+            <tr onClick={handleClickProducItem} className={cx('product-item', { showDetail: openDetail })} ref={element}>
+                {/* <td className={cx('delete')} ><span onClick={() => handleClickDeleteItem(index)}><RiDeleteBin6Line className={cx('icon-delete')} /></span></td> */}
+                <td className={cx('code')}>HD00001</td>
+                <td className={cx('date')}>15/08/2019 11:05</td>
+                <td className={cx('payMethod')}>Thanh toán trực tuyến</td>
                 <td className={cx('customerName')}>Huỳnh Ngọc Quí</td>
                 <td className={cx('customerPhone')}>0868208744</td>
-                <td className={cx('province')}>Hồ Chí Minh</td>
-                <td className={cx('totalPrice')}>1,720,000</td>
-                <td className={cx('status')}>Chờ xác nhận</td>
+                <td className={cx('totalPrice')}>4,200,000</td>
+      
 
             </tr>
 
@@ -43,7 +43,7 @@ function OrderRow({ index, open, onClick, onClickRemoveItem, product}) {
                 openDetail &&
                 <tr className={cx('product-detail')}>
                     <td colSpan={8} style={{ padding: '0' }}>
-                        <OrderDetail />
+                        <BillDetail />
                     </td>
                 </tr>
             }
@@ -51,4 +51,4 @@ function OrderRow({ index, open, onClick, onClickRemoveItem, product}) {
     );
 }
 
-export default OrderRow;
+export default BillRow;

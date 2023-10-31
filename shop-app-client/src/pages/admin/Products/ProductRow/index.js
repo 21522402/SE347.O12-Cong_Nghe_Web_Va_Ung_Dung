@@ -20,7 +20,7 @@ function ProductRow({ index, open, onClick}) {
             const topElement = element.current?.offsetTop;
             window.scroll({top: topElement, behavior: 'smooth'})
         } 
-    })
+    },[openDetail])
     return (
         <React.Fragment >
             <tr onClick={handleClickProducItem} className={cx('product-item', {showDetail: openDetail})} ref={element}>
