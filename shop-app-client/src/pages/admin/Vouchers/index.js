@@ -6,116 +6,140 @@ import { BsEye } from 'react-icons/bs';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { AiOutlineEdit } from 'react-icons/ai';
-import { ChangePass, CustomeButton, Login, Modal, SignUp } from '~/components';
+import { CustomeButton, Modal } from '~/components';
 import { MdAdd } from 'react-icons/md';
 import AddVoucher from './AddVoucher';
-
-
+import EditVoucher from './EditVoucher';
+import ViewVoucher from './ViewVoucher';
 const cx = classNames.bind(styles);
-const cbb = [
-    { value: 'All', label: 'All' },
-    { value: 'Expired', label: 'Expired' },
-    { value: 'UnExpired', label: 'UnExpired' }
-]
-const cusList = [
-    {
-        voucherCode: 'UNDERW3TR',
-        price: 70000,
-        amount: 100,
-        startDate: '20/10/2022',
-        expiredDate: '20/10/2022',
-        status: 'Expired'
-    },
-    {
-        voucherCode: 'UNDERW3TR',
-        price: 70000,
-        amount: 100,
-        startDate: '20/10/2022',
-        expiredDate: '20/10/2022',
-        status: 'UnExpired'
-    },
-    {
-        voucherCode: 'UNDERW3TR',
-        price: 70000,
-        amount: 100,
-        startDate: '20/10/2022',
-        expiredDate: '20/10/2022',
-        status: 'Expired'
-    },
-    {
-        voucherCode: 'UNDERW3TR',
-        price: 70000,
-        amount: 100,
-        startDate: '20/10/2022',
-        expiredDate: '20/10/2022',
-        status: 'UnExpired'
-    },
-    {
-        voucherCode: 'UNDERW3TR',
-        price: 70000,
-        amount: 100,
-        startDate: '20/10/2022',
-        expiredDate: '20/10/2022',
-        status: 'Expired'
-    },
-    {
-        voucherCode: 'UNDERW3TR',
-        price: 70000,
-        amount: 100,
-        startDate: '20/10/2022',
-        expiredDate: '20/10/2022',
-        status: 'Expired'
-    },
-    {
-        voucherCode: 'UNDERW3TR',
-        price: 70000,
-        amount: 100,
-        startDate: '20/10/2022',
-        expiredDate: '20/10/2022',
-        status: 'Expired'
-    },
-    {
-        voucherCode: 'UNDERW3TR',
-        price: 70000,
-        amount: 100,
-        startDate: '20/10/2022',
-        expiredDate: '20/10/2022',
-        status: 'UnExpired'
-    },
-    {
-        voucherCode: 'UNDERW3TR',
-        price: 70000,
-        amount: 100,
-        startDate: '20/10/2022',
-        expiredDate: '20/10/2022',
-        status: 'Expired'
-    },
-    {
-        voucherCode: 'UNDERW3TR',
-        price: 70000,
-        amount: 100,
-        startDate: '20/10/2022',
-        expiredDate: '20/10/2022',
-        status: 'UnExpired'
-    },
-    {
-        voucherCode: 'UNDERW3TR',
-        price: 70000,
-        amount: 100,
-        startDate: '20/10/2022',
-        expiredDate: '20/10/2022',
-        status: 'Expired'
-    },
-    {
-        voucherCode: 'UNDERW3TR',
-        price: 70000,
-        amount: 100,
-        startDate: '20/10/2022',
-        expiredDate: '20/10/2022',
-        status: 'UnExpired'
-    },
-]
 function Vouchers() {
+    const cbb = [
+        { value: 'All', label: 'All' },
+        { value: 'Expired', label: 'Expired' },
+        { value: 'UnExpired', label: 'UnExpired' }
+    ]
+    const cusList = [
+        {
+            voucherCode: 'UNDERW3TR',
+            price: 70000,
+            amount: 100,
+            minPrice:500000,
+            description:'Khuyen mai dat biet nhan ngay quoc te phu nu viet nam. Ap dung ngay de tru truc tiep vao don hang',
+            startDate: '20/10/2022',
+            expiredDate: '20/10/2022',
+            status: 'Expired'
+        },
+        {
+            voucherCode:'WOMENDAY8TR',
+            price: 90000,
+            amount: 100,
+            minPrice:500000,
+            description:'Khuyen mai dat biet nhan ngay quoc te phu nu viet nam. Ap dung ngay de tru truc tiep vao don hang',
+            startDate: '20/10/2022',
+            expiredDate: '30/10/2023',
+            status: 'UnExpired'
+        },
+        {
+            voucherCode: 'UNDERW3TR',
+            price: 70000,
+            amount: 100,
+            minPrice:500000,
+            description:'Khuyen mai dat biet nhan ngay quoc te phu nu viet nam. Ap dung ngay de tru truc tiep vao don hang',
+            startDate: '20/10/2022',
+            expiredDate: '20/10/2022',
+            status: 'Expired'
+        },
+        {
+            voucherCode: 'UNDERW3TR',
+            price: 70000,
+            amount: 100,
+            minPrice:500000,
+            description:'Khuyen mai dat biet nhan ngay quoc te phu nu viet nam. Ap dung ngay de tru truc tiep vao don hang',
+            startDate: '20/10/2022',
+            expiredDate: '20/10/2022',
+            status: 'UnExpired'
+        },
+        {
+            voucherCode: 'UNDERW3TR',
+            price: 70000,
+            amount: 100,
+            minPrice:500000,
+            description:'Khuyen mai dat biet nhan ngay quoc te phu nu viet nam. Ap dung ngay de tru truc tiep vao don hang',
+            startDate: '20/10/2022',
+            expiredDate: '20/10/2022',
+            status: 'Expired'
+        },
+        {
+            voucherCode: 'UNDERW3TR',
+            price: 70000,
+            amount: 100,
+            minPrice:500000,
+            description:'Khuyen mai dat biet nhan ngay quoc te phu nu viet nam. Ap dung ngay de tru truc tiep vao don hang',
+            startDate: '20/10/2022',
+            expiredDate: '20/10/2022',
+            status: 'Expired'
+        },
+        {
+            voucherCode: 'UNDERW3TR',
+            price: 70000,
+            amount: 100,
+            minPrice:500000,
+            description:'Khuyen mai dat biet nhan ngay quoc te phu nu viet nam. Ap dung ngay de tru truc tiep vao don hang',
+            startDate: '20/10/2022',
+            expiredDate: '20/10/2022',
+            status: 'Expired'
+        },
+        {
+            voucherCode: 'UNDERW3TR',
+            price: 70000,
+            amount: 100,
+            minPrice:500000,
+            description:'Khuyen mai dat biet nhan ngay quoc te phu nu viet nam. Ap dung ngay de tru truc tiep vao don hang',
+            startDate: '20/10/2022',
+            expiredDate: '20/10/2022',
+            status: 'UnExpired'
+        },
+        {
+            voucherCode: 'UNDERW3TR',
+            price: 70000,
+            amount: 100,
+            minPrice:500000,
+            description:'Khuyen mai dat biet nhan ngay quoc te phu nu viet nam. Ap dung ngay de tru truc tiep vao don hang',
+            startDate: '20/10/2022',
+            expiredDate: '20/10/2022',
+            status: 'Expired'
+        },
+        {
+            voucherCode: 'UNDERW3TR',
+            price: 70000,
+            amount: 100,
+            minPrice:500000,
+            description:'Khuyen mai dat biet nhan ngay quoc te phu nu viet nam. Ap dung ngay de tru truc tiep vao don hang',
+            startDate: '20/10/2022',
+            expiredDate: '20/10/2022',
+            status: 'UnExpired'
+        },
+        {
+            voucherCode: 'UNDERW3TR',
+            price: 70000,
+            amount: 100,
+            minPrice:500000,
+            description:'Khuyen mai dat biet nhan ngay quoc te phu nu viet nam. Ap dung ngay de tru truc tiep vao don hang',
+            startDate: '20/10/2022',
+            expiredDate: '20/10/2022',
+            status: 'Expired'
+        },
+        {
+            voucherCode: 'UNDERW3TR',
+            price: 70000,
+            amount: 100,
+            minPrice:500000,
+            description:'Khuyen mai dat biet nhan ngay quoc te phu nu viet nam. Ap dung ngay de tru truc tiep vao don hang',
+            startDate: '20/10/2022',
+            expiredDate: '20/10/2022',
+            status: 'UnExpired'
+        },
+    ]
     const [currentPage, setCurrentPage] = useState(1);
     const recordPerPages = 10;
     const lastIndex = currentPage * recordPerPages;
@@ -126,9 +150,13 @@ function Vouchers() {
 
 
     const [modalAddVoucher, setModalAddVoucher] = useState(false)
+    const [modalEditVoucher, setModalEditVoucher] = useState(false)
+    const [modalViewVoucher, setModalViewVoucher] = useState(false)
+    const [seletedItem, setSetlectedItem] = useState()
+
 
     return (
-        <div className={cx('wrapper')}>
+        <div className={cx('wrapper')} style={{fontSize:'14px'}}>
             <div className={cx('top-navbar')}>
             </div>
             <div className={cx('container')}>
@@ -147,9 +175,9 @@ function Vouchers() {
                                 defaultValue={cbb[0]}
                                 className={cx('combobox')} />
                         </div>
-                        <Link to={'/'} >
+                        <div  onClick={()=>setModalAddVoucher(true)}>
                             <CustomeButton className={cx('cus-button')} title={'Add Voucher'} icon={<MdAdd fontSize={20} />} isLeft={true} bgHover={'#2f5acf'} textColorHover={'white'} containStyles={{ width: '150px', backgroundColor: 'black', color: 'white', borderRadius: '8px', padding: '22px 10px', marginTop: '6px' }} />
-                        </Link>
+                        </div>
                     </div>
                     <div style={{ padding: '10px 32px 40px', width: '100%', minHeight: '620px' }}>
                         <table style={{ width: '100%', borderRadius: '10px', borderColor: 'transparent', border: 'none', position: 'relative' }}>
@@ -183,10 +211,10 @@ function Vouchers() {
                                                 </td>
                                                 <td>
                                                     <div style={{ display: 'flex' }}>
-                                                        <button style={{ marginRight: '4px' }} onClick={()=>setModalAddVoucher(true)}>
+                                                        <button style={{ marginRight: '4px' }} onClick={()=>{setModalEditVoucher(true); setSetlectedItem(item)}}>
                                                             <AiOutlineEdit fontSize={20} color='blue' />
                                                         </button>
-                                                        <button style={{ marginRight: '4px' }}>
+                                                        <button style={{ marginRight: '4px' }} onClick={()=>{setModalViewVoucher(true); setSetlectedItem(item)}}>
                                                             <BsEye fontSize={20} color='blue' />
                                                         </button>
                                                         <button>
@@ -236,10 +264,13 @@ function Vouchers() {
                 </div>
             </footer>
             <Modal visible={modalAddVoucher} setModal={setModalAddVoucher}>
-                {/* <Login/> */}
-                {/* <SignUp/> */}
-                {/* <ChangePass/> */}
-                <AddVoucher/>
+                <AddVoucher />
+            </Modal>
+            <Modal visible={modalEditVoucher} setModal={setModalEditVoucher}>
+                <EditVoucher item={seletedItem}/>
+            </Modal>
+            <Modal visible={modalViewVoucher} setModal={setModalViewVoucher}>
+                <ViewVoucher item={seletedItem}/>
             </Modal>
         </div>
     );

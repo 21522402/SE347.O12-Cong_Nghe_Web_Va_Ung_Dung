@@ -98,7 +98,7 @@ function CustomerManage() {
 
 
     return (
-        <div className={cx('wrapper')}>
+        <div className={cx('wrapper')} style={{fontSize:'14px'}}>
             <div className={cx('top-navbar')}>
             </div>
             <div className={cx('container')}>
