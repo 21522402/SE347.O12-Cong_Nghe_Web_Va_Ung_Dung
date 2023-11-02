@@ -38,7 +38,7 @@ function Sidebar() {
                     </Link>
                 </div>
                 <div className={cx('sidebar-item')}>
-                    <Link to={'/admin'}  className={cx(`sidebar-item-link`, {
+                    <Link to={'/admin/orders'}  className={cx(`sidebar-item-link`, {
                         'active-item':activeItem==='Orders'
                     } )} onClick={()=>{handleClickItem('Orders')}}>
                         <MdOutlineAnalytics className={cx('sidebar-icon')}/>
@@ -54,7 +54,7 @@ function Sidebar() {
                     </Link>
                 </div>
                 <div className={cx('sidebar-item')}>
-                    <Link to={'/admin'}  className={cx('sidebar-item-link', {
+                    <Link to={'/admin/products'}  className={cx('sidebar-item-link', {
                         'active-item':activeItem==='Products'
                     } )} onClick={()=>{handleClickItem('Products')}}>
                         <PiShirtFolded className={cx('sidebar-icon')}/>
@@ -94,7 +94,7 @@ function Sidebar() {
                     </Link>
                 </div>
                 <div className={cx('sidebar-item')}>
-                    <Link to={'/admin'}  className={cx('sidebar-item-link', {
+                    <Link to={'/admin/history/bill'}  className={cx('sidebar-item-link', {
                         'active-item':activeItem==='History'
                     })} onClick={()=>{handleClickItem('History')}}>
                         <AiOutlineHistory className={cx('sidebar-icon')}/>
