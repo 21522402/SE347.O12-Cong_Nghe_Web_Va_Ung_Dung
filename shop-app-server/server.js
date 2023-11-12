@@ -5,6 +5,7 @@ const dbConnect = require('./config/db/dbConnect');
 const userRoutes = require('./routes/user/UserRoutes');
 const { errorHandler, notFound } = require('./middlewares/error/errorHandler');
 const cors = require('cors');
+const voucherRoutes = require('./routes/voucher/VoucherRoutes');
 // declaire app express
 const app = express();
 
@@ -19,6 +20,8 @@ app.use(cors());
 // use routes + path 
 // User Route
 app.use('/api/users', userRoutes);
+app.use('/api/vouchers', voucherRoutes);
+
 
 
 // Error handler
