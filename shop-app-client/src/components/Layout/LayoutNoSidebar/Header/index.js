@@ -1,12 +1,18 @@
-import { Link } from 'react-router-dom';
-import styles from './Header.module.scss'
 import classNames from 'classnames/bind';
-import { BsSearch } from 'react-icons/bs'
-import { MdManageAccounts, MdShoppingCart } from 'react-icons/md'
+import { useContext } from 'react';
+import { BsSearch } from 'react-icons/bs';
+import { MdManageAccounts, MdShoppingCart } from 'react-icons/md';
+import { Link } from 'react-router-dom';
+import { ShopContext } from '~/context/ShopContext';
+import styles from './Header.module.scss';
+
+
 const cx = classNames.bind(styles);
 
 function Header() {
+    const {getTotalCartItems}=useContext(ShopContext);
     return (
+        
         <header className={cx('wrapper')}>
             <div className={cx('header')}>
                 <div className={cx('header-logo')}>
@@ -16,28 +22,28 @@ function Header() {
                 </div>
                 <ul className={cx('nav-bar')}>
                     <li className={cx('nav-item')}>
-                        <Link to='/' >
-                            sale
+                        <Link to='/user' >
+                            Shop
                         </Link>
                     </li>
                     <li className={cx('nav-item')}>
-                        <Link to='/' >
-                            sale
+                        <Link to='/men' >
+                            Men
                         </Link>
                     </li>
                     <li className={cx('nav-item')}>
-                        <Link to='/' >
-                            sale
+                        <Link to='/women' >
+                            Women
                         </Link>
                     </li>
                     <li className={cx('nav-item')}>
-                        <Link to='/' >
-                            sale
+                        <Link to='/kid' >
+                            kid
                         </Link>
                     </li>
                     <li className={cx('nav-item')}>
-                        <Link to='/' >
-                            sale
+                        <Link to='' >
+                            Product
                         </Link>
                     </li>
                 </ul>
@@ -52,10 +58,10 @@ function Header() {
                         </Link>
                     </div>
                     <div className={cx("header-actions-button cart-hover")}>
-                        <Link to="/">
+                        <Link to="/cart">
                             <MdShoppingCart fontSize={32} color="white" />
                         </Link>
-                        <span className={cx("site-header__cartcount")}>0</span>
+                        <span className={cx("site-header__cartcount")}>{getTotalCartItems()}</span>
                         
                     </div>
 
