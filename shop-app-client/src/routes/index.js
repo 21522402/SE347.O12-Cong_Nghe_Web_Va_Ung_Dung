@@ -18,7 +18,7 @@ export const publicRoutes = [
     {path:'/admin' , component: Dashboard, layout:LayoutSidebar},
     {path:'/admin/feedbacks' , component: Feedbacks, layout:LayoutSidebar},
     {path:'/admin/reviews' , component: Reviews, layout:LayoutSidebar},
-    {path:'/admin/reviews/detail' , component: DetailReview, layout:LayoutSidebar},
+    {path:'/admin/reviews/:id/detail' , component: DetailReview, layout:LayoutSidebar},
 ]
 export const privateRoutes = [
 

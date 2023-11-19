@@ -1,15 +1,1058 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import classNames from "classnames/bind";
 import styles from "./DetailReview.module.scss";
-import image from "~/assets/images";
+import images from "~/assets/images";
 import ReactStars from "react-stars";
-import TextareaAutosize from "react-textarea-autosize";
-import { BsFillSendFill, BsFillImageFill } from "react-icons/bs";
-import { AiFillCloseCircle } from "react-icons/ai";
 import ItemReview from "~/components/ItemReview";
 
 const cx = classNames.bind(styles);
+
 function DetailReview() {
+  const [listItemReview, setListItemReview] = useState([]);
+  const getAllReviews = async () => {
+    // let listAllReviewProduct = await axios.get();
+    // if (listAllReviewProduct) setListItemReview(listAllReviewProduct);
+    // return listAllReviewProduct;
+    let listAllReviewProduct = [
+      {
+        idProduct: "SP001",
+        nameProduct: "T-shirt Cotton 1",
+        price: "179000 VND",
+        isSold: 1379,
+        listImageProduct: [
+          images.item_product,
+          images.item_product,
+          images.item_product,
+          images.item_product,
+          images.item_product,
+          images.item_product,
+        ],
+        colors: [
+          images.item_product,
+          images.item_product,
+          images.item_product,
+          images.item_product,
+          images.item_product,
+          images.item_product,
+        ],
+        sizes: ["M", "L", "X", "XL", "2XL", "3XL"],
+        quantityReview: 4,
+        reviewItem: [
+          {
+            avatar: images.item_product,
+            nameUser: "Phan Trọng Tính 1",
+            quantityStar: 4,
+            date: "11/09/2023",
+            isResponsed: false,
+            contentReview: {
+              text: "Chẳng lẻ em nói sản phẩm này như c*t. Sản phẩm ngon lắm nha, mua về xài bao êm",
+              listImageReview: [
+                images.item_product,
+                images.item_product,
+                images.item_product,
+                images.item_product,
+                images.item_product,
+                images.item_product,
+              ],
+            },
+            contentResponsed: {},
+          },
+          {
+            avatar: images.item_product,
+            nameUser: "Phan Trọng Tính 2",
+            quantityStar: 5,
+            date: "11/09/2023",
+            isResponsed: true,
+            contentReview: {
+              text: "Chẳng lẻ em nói sản phẩm này như c*t. Sản phẩm ngon lắm nha, mua về xài bao êm",
+              listImageReview: [
+                images.item_product,
+                images.item_product,
+                images.item_product,
+                images.item_product,
+                images.item_product,
+                images.item_product,
+              ],
+            },
+            contentResponsed: {
+              textResponse: "OK bạng. Cảm ơn bạn đã ủng hộ nha.",
+              listImageResponse: [images.item_product, images.item_product],
+            },
+          },
+          {
+            avatar: images.item_product,
+            nameUser: "Phan Trọng Tính 3",
+            quantityStar: 4,
+            date: "11/09/2023",
+            isResponsed: false,
+            contentReview: {
+              text: "Chẳng lẻ em nói sản phẩm này như c*t. Sản phẩm ngon lắm nha, mua về xài bao êm",
+              listImageReview: [
+                images.item_product,
+                images.item_product,
+                images.item_product,
+                images.item_product,
+                images.item_product,
+                images.item_product,
+              ],
+            },
+          },
+          {
+            avatar: images.item_product,
+            nameUser: "Phan Trọng Tính 4",
+            quantityStar: 5,
+            date: "11/09/2023",
+            isResponsed: false,
+            contentReview: {
+              text: "Chẳng lẻ em nói sản phẩm này như c*t. Sản phẩm ngon lắm nha, mua về xài bao êm",
+              listImageReview: [
+                images.item_product,
+                images.item_product,
+                images.item_product,
+                images.item_product,
+                images.item_product,
+                images.item_product,
+              ],
+            },
+          },
+        ],
+      },
+      {
+        idProduct: "SP002",
+        nameProduct: "T-shirt Cotton 2",
+        price: "179000 VND",
+        isSold: 1379,
+        listImageProduct: [
+          images.item_product,
+          images.item_product,
+          images.item_product,
+          images.item_product,
+          images.item_product,
+          images.item_product,
+        ],
+        colors: [
+          images.item_product,
+          images.item_product,
+          images.item_product,
+          images.item_product,
+          images.item_product,
+          images.item_product,
+        ],
+        sizes: ["M", "L", "X", "XL", "2XL", "3XL"],
+        quantityReview: 4,
+        reviewItem: [
+          {
+            avatar: images.item_product,
+            nameUser: "Phan Trọng Tính 1",
+            quantityStar: 4,
+            date: "11/09/2023",
+            isResponsed: false,
+            contentReview: {
+              text: "Chẳng lẻ em nói sản phẩm này như c*t. Sản phẩm ngon lắm nha, mua về xài bao êm",
+              listImageReview: [
+                images.item_product,
+                images.item_product,
+                images.item_product,
+                images.item_product,
+                images.item_product,
+                images.item_product,
+              ],
+            },
+            contentResponsed: {},
+          },
+          {
+            avatar: images.item_product,
+            nameUser: "Phan Trọng Tính 2",
+            quantityStar: 5,
+            date: "11/09/2023",
+            isResponsed: true,
+            contentReview: {
+              text: "Chẳng lẻ em nói sản phẩm này như c*t. Sản phẩm ngon lắm nha, mua về xài bao êm",
+              listImageReview: [
+                images.item_product,
+                images.item_product,
+                images.item_product,
+                images.item_product,
+                images.item_product,
+                images.item_product,
+              ],
+            },
+            contentResponsed: {
+              textResponse: "OK bạng. Cảm ơn bạn đã ủng hộ nha.",
+              listImageResponse: [images.item_product, images.item_product],
+            },
+          },
+          {
+            avatar: images.item_product,
+            nameUser: "Phan Trọng Tính 3",
+            quantityStar: 4,
+            date: "11/09/2023",
+            isResponsed: false,
+            contentReview: {
+              text: "Chẳng lẻ em nói sản phẩm này như c*t. Sản phẩm ngon lắm nha, mua về xài bao êm",
+              listImageReview: [
+                images.item_product,
+                images.item_product,
+                images.item_product,
+                images.item_product,
+                images.item_product,
+                images.item_product,
+              ],
+            },
+          },
+          {
+            avatar: images.item_product,
+            nameUser: "Phan Trọng Tính 4",
+            quantityStar: 5,
+            date: "11/09/2023",
+            isResponsed: false,
+            contentReview: {
+              text: "Chẳng lẻ em nói sản phẩm này như c*t. Sản phẩm ngon lắm nha, mua về xài bao êm",
+              listImageReview: [
+                images.item_product,
+                images.item_product,
+                images.item_product,
+                images.item_product,
+                images.item_product,
+                images.item_product,
+              ],
+            },
+          },
+        ],
+      },
+      {
+        idProduct: "SP003",
+        nameProduct: "T-shirt Cotton 3",
+        price: "179000 VND",
+        isSold: 1379,
+        listImageProduct: [
+          images.item_product,
+          images.item_product,
+          images.item_product,
+          images.item_product,
+          images.item_product,
+          images.item_product,
+        ],
+        colors: [
+          images.item_product,
+          images.item_product,
+          images.item_product,
+          images.item_product,
+          images.item_product,
+          images.item_product,
+        ],
+        sizes: ["M", "L", "X", "XL", "2XL", "3XL"],
+        quantityReview: 4,
+        reviewItem: [
+          {
+            avatar: images.item_product,
+            nameUser: "Phan Trọng Tính 1",
+            quantityStar: 4,
+            date: "11/09/2023",
+            isResponsed: false,
+            contentReview: {
+              text: "Chẳng lẻ em nói sản phẩm này như c*t. Sản phẩm ngon lắm nha, mua về xài bao êm",
+              listImageReview: [
+                images.item_product,
+                images.item_product,
+                images.item_product,
+                images.item_product,
+                images.item_product,
+                images.item_product,
+              ],
+            },
+            contentResponsed: {},
+          },
+          {
+            avatar: images.item_product,
+            nameUser: "Phan Trọng Tính 2",
+            quantityStar: 5,
+            date: "11/09/2023",
+            isResponsed: true,
+            contentReview: {
+              text: "Chẳng lẻ em nói sản phẩm này như c*t. Sản phẩm ngon lắm nha, mua về xài bao êm",
+              listImageReview: [
+                images.item_product,
+                images.item_product,
+                images.item_product,
+                images.item_product,
+                images.item_product,
+                images.item_product,
+              ],
+            },
+            contentResponsed: {
+              textResponse: "OK bạng. Cảm ơn bạn đã ủng hộ nha.",
+              listImageResponse: [images.item_product, images.item_product],
+            },
+          },
+          {
+            avatar: images.item_product,
+            nameUser: "Phan Trọng Tính 3",
+            quantityStar: 4,
+            date: "11/09/2023",
+            isResponsed: false,
+            contentReview: {
+              text: "Chẳng lẻ em nói sản phẩm này như c*t. Sản phẩm ngon lắm nha, mua về xài bao êm",
+              listImageReview: [
+                images.item_product,
+                images.item_product,
+                images.item_product,
+                images.item_product,
+                images.item_product,
+                images.item_product,
+              ],
+            },
+          },
+          {
+            avatar: images.item_product,
+            nameUser: "Phan Trọng Tính 4",
+            quantityStar: 5,
+            date: "11/09/2023",
+            isResponsed: false,
+            contentReview: {
+              text: "Chẳng lẻ em nói sản phẩm này như c*t. Sản phẩm ngon lắm nha, mua về xài bao êm",
+              listImageReview: [
+                images.item_product,
+                images.item_product,
+                images.item_product,
+                images.item_product,
+                images.item_product,
+                images.item_product,
+              ],
+            },
+          },
+        ],
+      },
+      {
+        idProduct: "SP004",
+        nameProduct: "T-shirt Cotton 4",
+        price: "179000 VND",
+        isSold: 1379,
+        listImageProduct: [
+          images.item_product,
+          images.item_product,
+          images.item_product,
+          images.item_product,
+          images.item_product,
+          images.item_product,
+        ],
+        colors: [
+          images.item_product,
+          images.item_product,
+          images.item_product,
+          images.item_product,
+          images.item_product,
+          images.item_product,
+        ],
+        sizes: ["M", "L", "X", "XL", "2XL", "3XL"],
+        quantityReview: 4,
+        reviewItem: [
+          {
+            avatar: images.item_product,
+            nameUser: "Phan Trọng Tính 1",
+            quantityStar: 4,
+            date: "11/09/2023",
+            isResponsed: false,
+            contentReview: {
+              text: "Chẳng lẻ em nói sản phẩm này như c*t. Sản phẩm ngon lắm nha, mua về xài bao êm",
+              listImageReview: [
+                images.item_product,
+                images.item_product,
+                images.item_product,
+                images.item_product,
+                images.item_product,
+                images.item_product,
+              ],
+            },
+            contentResponsed: {},
+          },
+          {
+            avatar: images.item_product,
+            nameUser: "Phan Trọng Tính 2",
+            quantityStar: 5,
+            date: "11/09/2023",
+            isResponsed: true,
+            contentReview: {
+              text: "Chẳng lẻ em nói sản phẩm này như c*t. Sản phẩm ngon lắm nha, mua về xài bao êm",
+              listImageReview: [
+                images.item_product,
+                images.item_product,
+                images.item_product,
+                images.item_product,
+                images.item_product,
+                images.item_product,
+              ],
+            },
+            contentResponsed: {
+              textResponse: "OK bạng. Cảm ơn bạn đã ủng hộ nha.",
+              listImageResponse: [images.item_product, images.item_product],
+            },
+          },
+          {
+            avatar: images.item_product,
+            nameUser: "Phan Trọng Tính 3",
+            quantityStar: 4,
+            date: "11/09/2023",
+            isResponsed: false,
+            contentReview: {
+              text: "Chẳng lẻ em nói sản phẩm này như c*t. Sản phẩm ngon lắm nha, mua về xài bao êm",
+              listImageReview: [
+                images.item_product,
+                images.item_product,
+                images.item_product,
+                images.item_product,
+                images.item_product,
+                images.item_product,
+              ],
+            },
+          },
+          {
+            avatar: images.item_product,
+            nameUser: "Phan Trọng Tính 4",
+            quantityStar: 5,
+            date: "11/09/2023",
+            isResponsed: false,
+            contentReview: {
+              text: "Chẳng lẻ em nói sản phẩm này như c*t. Sản phẩm ngon lắm nha, mua về xài bao êm",
+              listImageReview: [
+                images.item_product,
+                images.item_product,
+                images.item_product,
+                images.item_product,
+                images.item_product,
+                images.item_product,
+              ],
+            },
+          },
+        ],
+      },
+      {
+        idProduct: "SP005",
+        nameProduct: "T-shirt Cotton 5",
+        price: "179000 VND",
+        isSold: 1379,
+        listImageProduct: [
+          images.item_product,
+          images.item_product,
+          images.item_product,
+          images.item_product,
+          images.item_product,
+          images.item_product,
+        ],
+        colors: [
+          images.item_product,
+          images.item_product,
+          images.item_product,
+          images.item_product,
+          images.item_product,
+          images.item_product,
+        ],
+        sizes: ["M", "L", "X", "XL", "2XL", "3XL"],
+        quantityReview: 4,
+        reviewItem: [
+          {
+            avatar: images.item_product,
+            nameUser: "Phan Trọng Tính 1",
+            quantityStar: 4,
+            date: "11/09/2023",
+            isResponsed: false,
+            contentReview: {
+              text: "Chẳng lẻ em nói sản phẩm này như c*t. Sản phẩm ngon lắm nha, mua về xài bao êm",
+              listImageReview: [
+                images.item_product,
+                images.item_product,
+                images.item_product,
+                images.item_product,
+                images.item_product,
+                images.item_product,
+              ],
+            },
+            contentResponsed: {},
+          },
+          {
+            avatar: images.item_product,
+            nameUser: "Phan Trọng Tính 2",
+            quantityStar: 5,
+            date: "11/09/2023",
+            isResponsed: true,
+            contentReview: {
+              text: "Chẳng lẻ em nói sản phẩm này như c*t. Sản phẩm ngon lắm nha, mua về xài bao êm",
+              listImageReview: [
+                images.item_product,
+                images.item_product,
+                images.item_product,
+                images.item_product,
+                images.item_product,
+                images.item_product,
+              ],
+            },
+            contentResponsed: {
+              textResponse: "OK bạng. Cảm ơn bạn đã ủng hộ nha.",
+              listImageResponse: [images.item_product, images.item_product],
+            },
+          },
+          {
+            avatar: images.item_product,
+            nameUser: "Phan Trọng Tính 3",
+            quantityStar: 4,
+            date: "11/09/2023",
+            isResponsed: false,
+            contentReview: {
+              text: "Chẳng lẻ em nói sản phẩm này như c*t. Sản phẩm ngon lắm nha, mua về xài bao êm",
+              listImageReview: [
+                images.item_product,
+                images.item_product,
+                images.item_product,
+                images.item_product,
+                images.item_product,
+                images.item_product,
+              ],
+            },
+          },
+          {
+            avatar: images.item_product,
+            nameUser: "Phan Trọng Tính 4",
+            quantityStar: 5,
+            date: "11/09/2023",
+            isResponsed: false,
+            contentReview: {
+              text: "Chẳng lẻ em nói sản phẩm này như c*t. Sản phẩm ngon lắm nha, mua về xài bao êm",
+              listImageReview: [
+                images.item_product,
+                images.item_product,
+                images.item_product,
+                images.item_product,
+                images.item_product,
+                images.item_product,
+              ],
+            },
+          },
+        ],
+      },
+      {
+        idProduct: "SP006",
+        nameProduct: "T-shirt Cotton 6",
+        price: "179000 VND",
+        isSold: 1379,
+        listImageProduct: [
+          images.item_product,
+          images.item_product,
+          images.item_product,
+          images.item_product,
+          images.item_product,
+          images.item_product,
+        ],
+        colors: [
+          images.item_product,
+          images.item_product,
+          images.item_product,
+          images.item_product,
+          images.item_product,
+          images.item_product,
+        ],
+        sizes: ["M", "L", "X", "XL", "2XL", "3XL"],
+        quantityReview: 4,
+        reviewItem: [
+          {
+            avatar: images.item_product,
+            nameUser: "Phan Trọng Tính 1",
+            quantityStar: 4,
+            date: "11/09/2023",
+            isResponsed: false,
+            contentReview: {
+              text: "Chẳng lẻ em nói sản phẩm này như c*t. Sản phẩm ngon lắm nha, mua về xài bao êm",
+              listImageReview: [
+                images.item_product,
+                images.item_product,
+                images.item_product,
+                images.item_product,
+                images.item_product,
+                images.item_product,
+              ],
+            },
+            contentResponsed: {},
+          },
+          {
+            avatar: images.item_product,
+            nameUser: "Phan Trọng Tính 2",
+            quantityStar: 5,
+            date: "11/09/2023",
+            isResponsed: true,
+            contentReview: {
+              text: "Chẳng lẻ em nói sản phẩm này như c*t. Sản phẩm ngon lắm nha, mua về xài bao êm",
+              listImageReview: [
+                images.item_product,
+                images.item_product,
+                images.item_product,
+                images.item_product,
+                images.item_product,
+                images.item_product,
+              ],
+            },
+            contentResponsed: {
+              textResponse: "OK bạng. Cảm ơn bạn đã ủng hộ nha.",
+              listImageResponse: [images.item_product, images.item_product],
+            },
+          },
+          {
+            avatar: images.item_product,
+            nameUser: "Phan Trọng Tính 3",
+            quantityStar: 4,
+            date: "11/09/2023",
+            isResponsed: false,
+            contentReview: {
+              text: "Chẳng lẻ em nói sản phẩm này như c*t. Sản phẩm ngon lắm nha, mua về xài bao êm",
+              listImageReview: [
+                images.item_product,
+                images.item_product,
+                images.item_product,
+                images.item_product,
+                images.item_product,
+                images.item_product,
+              ],
+            },
+          },
+          {
+            avatar: images.item_product,
+            nameUser: "Phan Trọng Tính 4",
+            quantityStar: 5,
+            date: "11/09/2023",
+            isResponsed: false,
+            contentReview: {
+              text: "Chẳng lẻ em nói sản phẩm này như c*t. Sản phẩm ngon lắm nha, mua về xài bao êm",
+              listImageReview: [
+                images.item_product,
+                images.item_product,
+                images.item_product,
+                images.item_product,
+                images.item_product,
+                images.item_product,
+              ],
+            },
+          },
+        ],
+      },
+      {
+        idProduct: "SP007",
+        nameProduct: "T-shirt Cotton 7",
+        price: "179000 VND",
+        isSold: 1379,
+        listImageProduct: [
+          images.item_product,
+          images.item_product,
+          images.item_product,
+          images.item_product,
+          images.item_product,
+          images.item_product,
+        ],
+        colors: [
+          images.item_product,
+          images.item_product,
+          images.item_product,
+          images.item_product,
+          images.item_product,
+          images.item_product,
+        ],
+        sizes: ["M", "L", "X", "XL", "2XL", "3XL"],
+        quantityReview: 4,
+        reviewItem: [
+          {
+            avatar: images.item_product,
+            nameUser: "Phan Trọng Tính 1",
+            quantityStar: 4,
+            date: "11/09/2023",
+            isResponsed: false,
+            contentReview: {
+              text: "Chẳng lẻ em nói sản phẩm này như c*t. Sản phẩm ngon lắm nha, mua về xài bao êm",
+              listImageReview: [
+                images.item_product,
+                images.item_product,
+                images.item_product,
+                images.item_product,
+                images.item_product,
+                images.item_product,
+              ],
+            },
+            contentResponsed: {},
+          },
+          {
+            avatar: images.item_product,
+            nameUser: "Phan Trọng Tính 2",
+            quantityStar: 5,
+            date: "11/09/2023",
+            isResponsed: true,
+            contentReview: {
+              text: "Chẳng lẻ em nói sản phẩm này như c*t. Sản phẩm ngon lắm nha, mua về xài bao êm",
+              listImageReview: [
+                images.item_product,
+                images.item_product,
+                images.item_product,
+                images.item_product,
+                images.item_product,
+                images.item_product,
+              ],
+            },
+            contentResponsed: {
+              textResponse: "OK bạng. Cảm ơn bạn đã ủng hộ nha.",
+              listImageResponse: [images.item_product, images.item_product],
+            },
+          },
+          {
+            avatar: images.item_product,
+            nameUser: "Phan Trọng Tính 3",
+            quantityStar: 4,
+            date: "11/09/2023",
+            isResponsed: false,
+            contentReview: {
+              text: "Chẳng lẻ em nói sản phẩm này như c*t. Sản phẩm ngon lắm nha, mua về xài bao êm",
+              listImageReview: [
+                images.item_product,
+                images.item_product,
+                images.item_product,
+                images.item_product,
+                images.item_product,
+                images.item_product,
+              ],
+            },
+          },
+          {
+            avatar: images.item_product,
+            nameUser: "Phan Trọng Tính 4",
+            quantityStar: 5,
+            date: "11/09/2023",
+            isResponsed: false,
+            contentReview: {
+              text: "Chẳng lẻ em nói sản phẩm này như c*t. Sản phẩm ngon lắm nha, mua về xài bao êm",
+              listImageReview: [
+                images.item_product,
+                images.item_product,
+                images.item_product,
+                images.item_product,
+                images.item_product,
+                images.item_product,
+              ],
+            },
+          },
+        ],
+      },
+      {
+        idProduct: "SP008",
+        nameProduct: "T-shirt Cotton 8",
+        price: "179000 VND",
+        isSold: 1379,
+        listImageProduct: [
+          images.item_product,
+          images.item_product,
+          images.item_product,
+          images.item_product,
+          images.item_product,
+          images.item_product,
+        ],
+        colors: [
+          images.item_product,
+          images.item_product,
+          images.item_product,
+          images.item_product,
+          images.item_product,
+          images.item_product,
+        ],
+        sizes: ["M", "L", "X", "XL", "2XL", "3XL"],
+        quantityReview: 4,
+        reviewItem: [
+          {
+            avatar: images.item_product,
+            nameUser: "Phan Trọng Tính 1",
+            quantityStar: 4,
+            date: "11/09/2023",
+            isResponsed: false,
+            contentReview: {
+              text: "Chẳng lẻ em nói sản phẩm này như c*t. Sản phẩm ngon lắm nha, mua về xài bao êm",
+              listImageReview: [
+                images.item_product,
+                images.item_product,
+                images.item_product,
+                images.item_product,
+                images.item_product,
+                images.item_product,
+              ],
+            },
+            contentResponsed: {},
+          },
+          {
+            avatar: images.item_product,
+            nameUser: "Phan Trọng Tính 2",
+            quantityStar: 5,
+            date: "11/09/2023",
+            isResponsed: true,
+            contentReview: {
+              text: "Chẳng lẻ em nói sản phẩm này như c*t. Sản phẩm ngon lắm nha, mua về xài bao êm",
+              listImageReview: [
+                images.item_product,
+                images.item_product,
+                images.item_product,
+                images.item_product,
+                images.item_product,
+                images.item_product,
+              ],
+            },
+            contentResponsed: {
+              textResponse: "OK bạng. Cảm ơn bạn đã ủng hộ nha.",
+              listImageResponse: [images.item_product, images.item_product],
+            },
+          },
+          {
+            avatar: images.item_product,
+            nameUser: "Phan Trọng Tính 3",
+            quantityStar: 4,
+            date: "11/09/2023",
+            isResponsed: false,
+            contentReview: {
+              text: "Chẳng lẻ em nói sản phẩm này như c*t. Sản phẩm ngon lắm nha, mua về xài bao êm",
+              listImageReview: [
+                images.item_product,
+                images.item_product,
+                images.item_product,
+                images.item_product,
+                images.item_product,
+                images.item_product,
+              ],
+            },
+          },
+          {
+            avatar: images.item_product,
+            nameUser: "Phan Trọng Tính 4",
+            quantityStar: 5,
+            date: "11/09/2023",
+            isResponsed: false,
+            contentReview: {
+              text: "Chẳng lẻ em nói sản phẩm này như c*t. Sản phẩm ngon lắm nha, mua về xài bao êm",
+              listImageReview: [
+                images.item_product,
+                images.item_product,
+                images.item_product,
+                images.item_product,
+                images.item_product,
+                images.item_product,
+              ],
+            },
+          },
+        ],
+      },
+      {
+        idProduct: "SP009",
+        nameProduct: "T-shirt Cotton 9",
+        price: "179000 VND",
+        isSold: 1379,
+        listImageProduct: [
+          images.item_product,
+          images.item_product,
+          images.item_product,
+          images.item_product,
+          images.item_product,
+          images.item_product,
+        ],
+        colors: [
+          images.item_product,
+          images.item_product,
+          images.item_product,
+          images.item_product,
+          images.item_product,
+          images.item_product,
+        ],
+        sizes: ["M", "L", "X", "XL", "2XL", "3XL"],
+        quantityReview: 4,
+        reviewItem: [
+          {
+            avatar: images.item_product,
+            nameUser: "Phan Trọng Tính 1",
+            quantityStar: 4,
+            date: "11/09/2023",
+            isResponsed: false,
+            contentReview: {
+              text: "Chẳng lẻ em nói sản phẩm này như c*t. Sản phẩm ngon lắm nha, mua về xài bao êm",
+              listImageReview: [
+                images.item_product,
+                images.item_product,
+                images.item_product,
+                images.item_product,
+                images.item_product,
+                images.item_product,
+              ],
+            },
+            contentResponsed: {},
+          },
+          {
+            avatar: images.item_product,
+            nameUser: "Phan Trọng Tính 2",
+            quantityStar: 5,
+            date: "11/09/2023",
+            isResponsed: true,
+            contentReview: {
+              text: "Chẳng lẻ em nói sản phẩm này như c*t. Sản phẩm ngon lắm nha, mua về xài bao êm",
+              listImageReview: [
+                images.item_product,
+                images.item_product,
+                images.item_product,
+                images.item_product,
+                images.item_product,
+                images.item_product,
+              ],
+            },
+            contentResponsed: {
+              textResponse: "OK bạng. Cảm ơn bạn đã ủng hộ nha.",
+              listImageResponse: [images.item_product, images.item_product],
+            },
+          },
+          {
+            avatar: images.item_product,
+            nameUser: "Phan Trọng Tính 3",
+            quantityStar: 4,
+            date: "11/09/2023",
+            isResponsed: false,
+            contentReview: {
+              text: "Chẳng lẻ em nói sản phẩm này như c*t. Sản phẩm ngon lắm nha, mua về xài bao êm",
+              listImageReview: [
+                images.item_product,
+                images.item_product,
+                images.item_product,
+                images.item_product,
+                images.item_product,
+                images.item_product,
+              ],
+            },
+          },
+          {
+            avatar: images.item_product,
+            nameUser: "Phan Trọng Tính 4",
+            quantityStar: 5,
+            date: "11/09/2023",
+            isResponsed: false,
+            contentReview: {
+              text: "Chẳng lẻ em nói sản phẩm này như c*t. Sản phẩm ngon lắm nha, mua về xài bao êm",
+              listImageReview: [
+                images.item_product,
+                images.item_product,
+                images.item_product,
+                images.item_product,
+                images.item_product,
+                images.item_product,
+              ],
+            },
+          },
+        ],
+      },
+      {
+        idProduct: "SP010",
+        nameProduct: "T-shirt Cotton 10",
+        price: "179000 VND",
+        isSold: 1379,
+        listImageProduct: [
+          images.item_product,
+          images.item_product,
+          images.item_product,
+          images.item_product,
+          images.item_product,
+          images.item_product,
+        ],
+        colors: [
+          images.item_product,
+          images.item_product,
+          images.item_product,
+          images.item_product,
+          images.item_product,
+          images.item_product,
+        ],
+        sizes: ["M", "L", "X", "XL", "2XL", "3XL"],
+        quantityReview: 4,
+        reviewItem: [
+          {
+            avatar: images.item_product,
+            nameUser: "Phan Trọng Tính 1",
+            quantityStar: 4,
+            date: "11/09/2023",
+            isResponsed: false,
+            contentReview: {
+              text: "Chẳng lẻ em nói sản phẩm này như c*t. Sản phẩm ngon lắm nha, mua về xài bao êm",
+              listImageReview: [
+                images.item_product,
+                images.item_product,
+                images.item_product,
+                images.item_product,
+                images.item_product,
+                images.item_product,
+              ],
+            },
+            contentResponsed: {},
+          },
+          {
+            avatar: images.item_product,
+            nameUser: "Phan Trọng Tính 2",
+            quantityStar: 5,
+            date: "11/09/2023",
+            isResponsed: true,
+            contentReview: {
+              text: "Chẳng lẻ em nói sản phẩm này như c*t. Sản phẩm ngon lắm nha, mua về xài bao êm",
+              listImageReview: [
+                images.item_product,
+                images.item_product,
+                images.item_product,
+                images.item_product,
+                images.item_product,
+                images.item_product,
+              ],
+            },
+            contentResponsed: {
+              textResponse: "OK bạng. Cảm ơn bạn đã ủng hộ nha.",
+              listImageResponse: [images.item_product, images.item_product],
+            },
+          },
+          {
+            avatar: images.item_product,
+            nameUser: "Phan Trọng Tính 3",
+            quantityStar: 4,
+            date: "11/09/2023",
+            isResponsed: false,
+            contentReview: {
+              text: "Chẳng lẻ em nói sản phẩm này như c*t. Sản phẩm ngon lắm nha, mua về xài bao êm",
+              listImageReview: [
+                images.item_product,
+                images.item_product,
+                images.item_product,
+                images.item_product,
+                images.item_product,
+                images.item_product,
+              ],
+            },
+          },
+          {
+            avatar: images.item_product,
+            nameUser: "Phan Trọng Tính 4",
+            quantityStar: 5,
+            date: "11/09/2023",
+            isResponsed: false,
+            contentReview: {
+              text: "Chẳng lẻ em nói sản phẩm này như c*t. Sản phẩm ngon lắm nha, mua về xài bao êm",
+              listImageReview: [
+                images.item_product,
+                images.item_product,
+                images.item_product,
+                images.item_product,
+                images.item_product,
+                images.item_product,
+              ],
+            },
+          },
+        ],
+      },
+    ];
+
+    setListItemReview(listAllReviewProduct);
+  };
+
+  useEffect(() => {
+    getAllReviews();
+  }, []);
+
   return (
     <div className={cx("container-reivew-detail")}>
       {/*Container Left */}
@@ -19,7 +1062,7 @@ function DetailReview() {
           <div className={cx("product")}>
             <img
               className={cx("img-product")}
-              src={image.item_product}
+              src={images.item_product}
               alt="sp"
             />
             <div className={cx("info-product")}>
@@ -44,13 +1087,13 @@ function DetailReview() {
           <div className={cx("container-options")}>
             <p>Màu sắc: </p>
             <div className={cx("list-options")}>
-              <div className={cx("bg-black")}></div>
-              <div></div>
-              <div className={cx("bg-primary")}></div>
-              <div className={cx("bg-secondary")}></div>
-              <div className={cx("bg-info")}></div>
-              <div className={cx("bg-success")}></div>
-              <div className={cx("bg-warning")}></div>
+              <img src={images.item_product} alt="black" />
+              <img src={images.item_product} alt="black" />
+              <img src={images.item_product} alt="black" />
+              <img src={images.item_product} alt="black" />
+              <img src={images.item_product} alt="black" />
+              <img src={images.item_product} alt="black" />
+              <img src={images.item_product} alt="black" />
             </div>
           </div>
 
@@ -112,61 +1155,21 @@ function DetailReview() {
         </div>
         {/* List Reivew */}
         <div className={cx("container-content")}>
-          <ItemReview
-            avt={image.item_product}
-            name="Phan Trọng Tính"
-            quantityStar={4.5}
-            imageReview={image.item_product}
-            contentReview="Chẳng lẻ em nói sản phẩm này như c*t. Sản phẩm ngon lắm nha, mua về xài bao êm"
-            dateReview="19/10/2023"
-            imageResponse={image.item_product}
-            contentResponse="Anh đánh giá cao độ biết điều của em !!!"
-            dateResponse="20/10/2023"
-          />
-          <ItemReview
-            avt={image.item_product}
-            name="Phan Trọng Tính"
-            quantityStar={4.5}
-            imageReview={image.item_product}
-            contentReview="Chẳng lẻ em nói sản phẩm này như c*t. Sản phẩm ngon lắm nha, mua về xài bao êm"
-            dateReview="19/10/2023"
-            imageResponse={image.item_product}
-            contentResponse="Anh đánh giá cao độ biết điều của em !!!"
-            dateResponse="20/10/2023"
-          />
-          <ItemReview
-            avt={image.item_product}
-            name="Phan Trọng Tính"
-            quantityStar={4.5}
-            imageReview={image.item_product}
-            contentReview="Chẳng lẻ em nói sản phẩm này như c*t. Sản phẩm ngon lắm nha, mua về xài bao êm"
-            dateReview="19/10/2023"
-            imageResponse={image.item_product}
-            contentResponse="Anh đánh giá cao độ biết điều của em !!!"
-            dateResponse="20/10/2023"
-          />
-          <ItemReview
-            avt={image.item_product}
-            name="Phan Trọng Tính"
-            quantityStar={4.5}
-            imageReview={image.item_product}
-            contentReview="Chẳng lẻ em nói sản phẩm này như c*t. Sản phẩm ngon lắm nha, mua về xài bao êm"
-            dateReview="19/10/2023"
-            imageResponse={image.item_product}
-            contentResponse="Anh đánh giá cao độ biết điều của em !!!"
-            dateResponse="20/10/2023"
-          />
-          <ItemReview
-            avt={image.item_product}
-            name="Phan Trọng Tính"
-            quantityStar={4.5}
-            imageReview={image.item_product}
-            contentReview="Chẳng lẻ em nói sản phẩm này như c*t. Sản phẩm ngon lắm nha, mua về xài bao êm"
-            dateReview="19/10/2023"
-            imageResponse={image.item_product}
-            contentResponse="Anh đánh giá cao độ biết điều của em !!!"
-            dateResponse="20/10/2023"
-          />
+          {listItemReview.map((item, index) => {
+            return (
+              <ItemReview
+                avt={images.item_product}
+                name="Phan Trọng Tính"
+                quantityStar={4.5}
+                imageReview={images.item_product}
+                contentReview="Chẳng lẻ em nói sản phẩm này như c*t. Sản phẩm ngon lắm nha, mua về xài bao êm"
+                dateReview="19/10/2023"
+                imageResponse={images.item_product}
+                contentResponse="Anh đánh giá cao độ biết điều của em !!!"
+                dateResponse="20/10/2023"
+              />
+            );
+          })}
         </div>
       </div>
     </div>

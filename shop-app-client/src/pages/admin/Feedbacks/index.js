@@ -193,7 +193,7 @@ function Feedbacks() {
     }
 
     const tmpArr = value.split("-");
-    let date = [];
+    let date = []; 
     for (let i = tmpArr.length - 1; i >= 0; i--) date = [...date, tmpArr[i]];
     const res = date.join("/");
     setSelectDay(res);

@@ -77,11 +77,12 @@
     width: 100%;
     max-height: 90.5%;
 }
-ul {
+.body-list ul {
     width: 100%;
     max-height: 100%;
     overflow-y: scroll;
     list-style: none;
+    padding: 0;
 }
 ::-webkit-scrollbar {
     display: none;
@@ -151,12 +152,8 @@ ul {
     background-color: #fff;
     color: #000;
 }
-li {
+.body-list li {
     border-bottom: 1px solid #9a9a9a;
-}
-
-ul {
-    padding: 0;
 }
 .quantity-item {
     margin-top: 10px;
