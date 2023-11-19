@@ -5,9 +5,14 @@ import { BsSearch } from 'react-icons/bs'
 import SettingPopup from './SettingPopup';
 import { MdManageAccounts, MdShoppingCart } from 'react-icons/md'
 import { AiOutlineClose } from 'react-icons/ai';
+import { useRef } from 'react';
 const cx = classNames.bind(styles);
 
 function Header() {
+    const overLay = useRef();
+    const hideOverLay = () => {
+        overLay.current.checked = false
+    }
     return (
         <header className={cx('wrapper')}>
             <div className={cx('header')}>
@@ -56,14 +61,14 @@ function Header() {
                         {/* </Link> */}
                     </div>
                     <div className={cx("header-actions-button cart-hover")}>
-                        <Link to="/">
+                        <Link to="/cart">
                             <MdShoppingCart fontSize={32} color="white"/>
                         </Link>
                         <span className={cx("site-header__cartcount")}>0</span>
                     </div>
-                    <input type="checkbox" hidden className={cx("main__header-navBar-hide-open")} id={cx("main__header-navBar-hide-open")}/>
+                    <input ref={overLay} type="checkbox" hidden className={cx("main__header-navBar-hide-open")} id={cx("main__header-navBar-hide-open")}/>
                     <div className={cx("main__header-navBar")}>
-                        <SettingPopup closeBtn={cx("main__header-navBar-hide-open")}/>
+                        <SettingPopup closeBtn={hideOverLay}/>
                     </div>
                     <label for={cx("main__header-navBar-hide-open")} className={cx("main__header-navbar-overlay")}>
                     </label>
