@@ -3,14 +3,17 @@ const successTemplate = require('../../templates/succesTemplate');
 const errorTemplate = require("../../templates/errorTemplate");
 const Voucher = require('../../model/voucher/Voucher');
 const validationId = require('../../utils/validationId');
+const cloudinaryUploadImage = require('../../utils/cloudinary');
 
 const addVoucherCtrl = async (req, res) => {
     try {
-        const existedVoucher = await Voucher.findOne({ voucherCode: req?.body?.voucherCode })
-        const currentDate = new Date()
-        if (existedVoucher && existedVoucher.expiredDate > currentDate) throw new Error('Voucher code is existed and launched. Please try again!')
+        const existedVoucher = await Voucher.findOne({ voucherCode: req?.body?.voucherCode });
+        const currentDate = new Date();
+        if (existedVoucher && existedVoucher.expiredDate > currentDate) throw new Error('Voucher code is existed and launched. Please try again!');
+        const localPath = `public/images/vouchers/${req.file.filename}`;
+        const imgUpload = await cloudinaryUploadImage(localPath)
         const voucher = await Voucher.create({
-            ...req?.body
+            ...req?.body, voucherImage:imgUpload
         })
         return successTemplate(res, voucher, "Add new voucher successfully!", 200)
     } catch (error) {

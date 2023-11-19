@@ -21,9 +21,11 @@ function Vouchers() {
     const cusList = [
         {
             voucherCode: 'UNDERW3TR',
-            price: 70000,
+            price: 20,
             amount: 100,
             minPrice:500000,
+            isPercent:true,
+            voucherImage:'https://mcdn.coolmate.me/image/October2023/mceclip2_40.jpg',
             description:'Khuyen mai dat biet nhan ngay quoc te phu nu viet nam. Ap dung ngay de tru truc tiep vao don hang',
             startDate: '20/10/2022',
             expiredDate: '20/10/2022',
@@ -34,6 +36,8 @@ function Vouchers() {
             price: 90000,
             amount: 100,
             minPrice:500000,
+            isPercent:false,
+            voucherImage:'https://mcdn.coolmate.me/image/October2023/mceclip2_40.jpg',
             description:'Khuyen mai dat biet nhan ngay quoc te phu nu viet nam. Ap dung ngay de tru truc tiep vao don hang',
             startDate: '20/10/2022',
             expiredDate: '30/10/2023',
@@ -44,6 +48,8 @@ function Vouchers() {
             price: 70000,
             amount: 100,
             minPrice:500000,
+            isPercent:false,
+            voucherImage:'https://mcdn.coolmate.me/image/October2023/mceclip2_40.jpg',
             description:'Khuyen mai dat biet nhan ngay quoc te phu nu viet nam. Ap dung ngay de tru truc tiep vao don hang',
             startDate: '20/10/2022',
             expiredDate: '20/10/2022',
@@ -54,6 +60,8 @@ function Vouchers() {
             price: 70000,
             amount: 100,
             minPrice:500000,
+            isPercent:false,
+            voucherImage:'https://mcdn.coolmate.me/image/October2023/mceclip2_40.jpg',
             description:'Khuyen mai dat biet nhan ngay quoc te phu nu viet nam. Ap dung ngay de tru truc tiep vao don hang',
             startDate: '20/10/2022',
             expiredDate: '20/10/2022',
@@ -64,6 +72,8 @@ function Vouchers() {
             price: 70000,
             amount: 100,
             minPrice:500000,
+            isPercent:false,
+            voucherImage:'https://mcdn.coolmate.me/image/October2023/mceclip2_40.jpg',
             description:'Khuyen mai dat biet nhan ngay quoc te phu nu viet nam. Ap dung ngay de tru truc tiep vao don hang',
             startDate: '20/10/2022',
             expiredDate: '20/10/2022',
@@ -74,6 +84,8 @@ function Vouchers() {
             price: 70000,
             amount: 100,
             minPrice:500000,
+            isPercent:false,
+            voucherImage:'https://mcdn.coolmate.me/image/October2023/mceclip2_40.jpg',
             description:'Khuyen mai dat biet nhan ngay quoc te phu nu viet nam. Ap dung ngay de tru truc tiep vao don hang',
             startDate: '20/10/2022',
             expiredDate: '20/10/2022',
@@ -84,6 +96,8 @@ function Vouchers() {
             price: 70000,
             amount: 100,
             minPrice:500000,
+            isPercent:false,
+            voucherImage:'https://mcdn.coolmate.me/image/October2023/mceclip2_40.jpg',
             description:'Khuyen mai dat biet nhan ngay quoc te phu nu viet nam. Ap dung ngay de tru truc tiep vao don hang',
             startDate: '20/10/2022',
             expiredDate: '20/10/2022',
@@ -94,6 +108,8 @@ function Vouchers() {
             price: 70000,
             amount: 100,
             minPrice:500000,
+            isPercent:false,
+            voucherImage:'https://mcdn.coolmate.me/image/October2023/mceclip2_40.jpg',
             description:'Khuyen mai dat biet nhan ngay quoc te phu nu viet nam. Ap dung ngay de tru truc tiep vao don hang',
             startDate: '20/10/2022',
             expiredDate: '20/10/2022',
@@ -104,6 +120,8 @@ function Vouchers() {
             price: 70000,
             amount: 100,
             minPrice:500000,
+            isPercent:false,
+            voucherImage:'https://mcdn.coolmate.me/image/October2023/mceclip2_40.jpg',
             description:'Khuyen mai dat biet nhan ngay quoc te phu nu viet nam. Ap dung ngay de tru truc tiep vao don hang',
             startDate: '20/10/2022',
             expiredDate: '20/10/2022',
@@ -114,6 +132,8 @@ function Vouchers() {
             price: 70000,
             amount: 100,
             minPrice:500000,
+            isPercent:false,
+            voucherImage:'https://mcdn.coolmate.me/image/October2023/mceclip2_40.jpg',
             description:'Khuyen mai dat biet nhan ngay quoc te phu nu viet nam. Ap dung ngay de tru truc tiep vao don hang',
             startDate: '20/10/2022',
             expiredDate: '20/10/2022',
@@ -124,6 +144,8 @@ function Vouchers() {
             price: 70000,
             amount: 100,
             minPrice:500000,
+            isPercent:false,
+            voucherImage:'https://mcdn.coolmate.me/image/October2023/mceclip2_40.jpg',
             description:'Khuyen mai dat biet nhan ngay quoc te phu nu viet nam. Ap dung ngay de tru truc tiep vao don hang',
             startDate: '20/10/2022',
             expiredDate: '20/10/2022',
@@ -134,6 +156,8 @@ function Vouchers() {
             price: 70000,
             amount: 100,
             minPrice:500000,
+            isPercent:false,
+            voucherImage:'https://mcdn.coolmate.me/image/October2023/mceclip2_40.jpg',
             description:'Khuyen mai dat biet nhan ngay quoc te phu nu viet nam. Ap dung ngay de tru truc tiep vao don hang',
             startDate: '20/10/2022',
             expiredDate: '20/10/2022',
@@ -152,7 +176,7 @@ function Vouchers() {
     const [modalAddVoucher, setModalAddVoucher] = useState(false)
     const [modalEditVoucher, setModalEditVoucher] = useState(false)
     const [modalViewVoucher, setModalViewVoucher] = useState(false)
-    const [seletedItem, setSetlectedItem] = useState()
+    const [seletedItem, setSetlectedItem] = useState(null)
 
 
     return (
@@ -200,7 +224,7 @@ function Vouchers() {
                                             <tr key={index} className={cx('row-item')}>
                                                 <td style={{ paddingLeft: '34px', width: '12%' }}>KM{index + (currentPage - 1) * recordPerPages + 1}</td>
                                                 <td style={{ width: '20%' }}>{item.voucherCode}</td>
-                                                <td style={{ width: '13%' }}>{item.price} VND</td>
+                                                <td style={{ width: '13%' }}>{item.isPercent ? `${item.price} %` : `${item.price} VND`} </td>
                                                 <td style={{ width: '10%' }}>{item.amount}</td>
                                                 <td style={{ width: '10%' }}>{item.startDate}</td>
                                                 <td style={{ width: '12%' }}>{item.expiredDate}</td>

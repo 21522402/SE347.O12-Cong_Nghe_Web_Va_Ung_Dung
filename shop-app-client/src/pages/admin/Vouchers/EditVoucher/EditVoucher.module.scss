@@ -14,12 +14,13 @@
     width: 40%;
 }
 .input-field-left{
-    width: 45%;
+    width: 100%;
     display: flex;
     align-items: center;
+    justify-content: space-between;
 }
 .input-field-right{
-    width: 45%;
+    width: 100%;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -41,20 +42,15 @@
     width: 100%;
     justify-content: space-between;
     margin-bottom: 24px;
+    height: 50px;
 }
-.expired-item {
-    background-color:rgb(247, 202, 202);
-    border-radius: 12px;
-    width: fit-content;
+.error {
+    display: flex;
+    flex-direction: row;
+    margin-top: 8px;
     color: red;
-    padding: 5px 16px;
-    align-items: center;
+    margin-left: 170px;
 }
-.unExpired-item {
-    background-color:rgb(202, 247, 209);
-    border-radius: 12px;
-    width: fit-content;
-    color: green;
-    padding: 5px 16px;
-    align-items: center;
+.mt{
+    margin-bottom: 0;
 }
