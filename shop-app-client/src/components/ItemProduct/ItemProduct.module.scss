@@ -1,0 +1,14 @@
+
+
+.container-item{
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    display: "flex";
+    flex-direction: "column";
+    
+    &:hover {
+        box-shadow: 0px 0px 2px 2px #ededed;
+        transform: translateY(-2px);
+        cursor: pointer;
+    }
+}

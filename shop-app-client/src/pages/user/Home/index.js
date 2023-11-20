@@ -1,93 +1,111 @@
-import 'bootstrap/dist/css/bootstrap.min.css';
-import classNames from 'classnames/bind';
-import arrow_icon from '~/components/Assets/arrow.png';
-import data_product from '~/components/Assets/data';
-import exclusive_image from '~/components/Assets/exclusive_image.png';
-import hand_icon from '~/components/Assets/hand_icon.png';
-import hero_image from '~/components/Assets/hero_image.png';
-import new_collections from '~/components/Assets/new_collections';
-import styles from './Home.module.scss';
-const cx=classNames.bind(styles);
-const Item = (props) => {
-    return(
-        <div className='item'>
-        <img src={props.image} />
-        <p>{props.name}</p>
-        <div className="item-prices">
-            <div className="item-price-new">
-                ${props.new_price}
-            </div>
-            <div className="item-price-old">
-                ${props.old_price}
-            </div>
-        </div>
-    </div>
-    )
-}
+// Home.jsx
+import classNames from "classnames/bind";
+import Carousel from "react-multi-carousel";
+import "react-multi-carousel/lib/styles.css";
+import ItemProduct from "~/components/ItemProduct/ItemProduct";
+import styles from "./Home.module.scss";
+
+const cx = classNames.bind(styles);
 
 function Home() {
-    return (
-        <>
-          <div className={cx('hero')}>
-                <div className={cx('hero-left')}>
-                    <h2>NEW ARRIVALS ONLY</h2>
-                    <div>
-                    <div className={cx('hero-hand-icon')}>
-                        <p>new</p>
-                        <img src={hand_icon} alt=''/>
-                    </div>
-                    <p>collection</p>
-                    <p>for everyone</p>
-                </div>
-                <div className={cx('hero-latest-btn')}>
-                    <div>Latest Collection</div>
-                    <img src={arrow_icon} alt=''/>
-                </div>
-                </div>
-                <div className={cx('hero-right')}>
-                <img src={hero_image} alt=''/>
-                </div>
+  const linkImagesSlider = [
+    "https://media.coolmate.me/cdn-cgi/image/width=1920,quality=90,format=auto/uploads/November2023/141920x788.jpg",
+    "https://media.coolmate.me/cdn-cgi/image/width=1920,quality=90,format=auto/uploads/November2023/kkGraphic_Special_(1).png",
+    "https://media.coolmate.me/cdn-cgi/image/width=1920,quality=90,format=auto/uploads/November2023/cc1920x788-ver-3_68.jpg",
+  ];
+  const linkImagesSlider2 = [
+    "https://media.coolmate.me/cdn-cgi/image/quality=80,format=auto/uploads/October2023/mceclip0_74.png",
+    "https://media.coolmate.me/cdn-cgi/image/quality=80,format=auto/uploads/October2023/mceclip0_87.png",
+    "https://mcdn.coolmate.me/image/September2023/mceclip4_64.jpg",
+  ];
+
+  const responsive = {
+    desktop: {
+      breakpoint: { max: 3000, min: 1024 },
+      items: 1,
+      slidesToSlide: 1, // optional, default to 1.
+    },
+    tablet: {
+      breakpoint: { max: 1024, min: 464 },
+      items: 1,
+      slidesToSlide: 1, // optional, default to 1.
+    },
+    mobile: {
+      breakpoint: { max: 464, min: 0 },
+      items: 1,
+      slidesToSlide: 1, // optional, default to 1.
+    },
+  };
+  return (
+    <div>
+      {/* Slider */}
+      <div>
+        <Carousel
+          swipeable={true}
+          draggable={false}
+          responsive={responsive}
+          autoPlay
+          ssr={true} // means to render carousel on server-side.
+          infinite={true}
+          autoPlaySpeed={3000}
+          transitionDuration={500}
+        >
+          {linkImagesSlider.map((item, index) => {
+            return <img key={index} src={item} alt="img" />;
+          })}
+        </Carousel>
+      </div>
+      {/* Filtter */}
+      <div></div>
+      {/* List product */}
+      <div
+        style={{
+          display: "grid",
+          gap: "30px",
+          gridTemplateColumns: "1fr 1fr 1fr 1fr",
+          padding: "20px",
+        }}
+      >
+        {[1, 2, 3, 4, 5, 6, 7, 8, 9].map(() => {
+          return (
+            <div style={{ width: "350px" }}>
+              <ItemProduct />
             </div>
-            <br/>
-            <div className={cx('popular')}>
-                <h1>POPULAR IN WOMEN</h1>
-                <hr/>
-                <div className={cx('popular-item')}>
-                {data_product.map((item,i)=>{
-                    return <Item key={i} id={item.id} name={item.name} image={item.image} new_price={item.new_price} old_price={item.old_price}/>
-                })}
-                </div>
-            </div>
-            
-         <div className={cx('offers')}>
-            <div className={cx('offers-left')}>
-            <h1>Exclusive</h1>
-            <p>ONLY ON BEST SELLERS PRODUCTS</p>
-            <button>Check Now</button>
-            </div>
-            <div className={cx('offers-right')}>
-                <img src={exclusive_image} alt=""/>
-            </div>
-          
-        </div>
-        <div className={cx('new_collections')}>
-        <h1>NEW COLLECTIONS</h1>
-            <hr/>
-            <div className={cx('collections')}>
-                {new_collections.map((item,i)=>{
-              return <Item key={i} id={item.id} name={item.name} image={item.image} new_price={item.new_price} old_price={item.old_price}/>       
-                })}
-            </div>
-        </div>
-        <div className={cx('newsletter')}>
-            <h1>Get Exclusive Offers On Your Email</h1>
-            <p>Subscribe to our newsletter and stay updated</p>
-            <div>
-                <input type="email" placeholder="Your email is"/>
-                <button>Subcribe</button>
-            </div>
-        </div>
-        </>
-    )
+          );
+        })}
+      </div>
+
+      <div>
+        <Carousel
+          swipeable={true}
+          draggable={false}
+          responsive={responsive}
+          autoPlay
+          ssr={true} // means to render carousel on server-side.
+          infinite={true}
+          autoPlaySpeed={3000}
+          transitionDuration={500}
+        >
+          {linkImagesSlider2.map((item, index) => {
+            return (
+              <div>
+                <img style={{width: '100%'}} key={index} src={item} alt="img" />
+              </div>
+            )
+          })}
+        </Carousel>
+      </div>
+      <div style={{textAlign: 'center', margin: '20px 0'}}>
+        <img 
+          style={{width: '100%'}}
+          src="https://mcdn.coolmate.me/image/March2023/mceclip0_137.jpg"
+          alt="img"
+        />
+      </div>
+
+      {/* Anh quang cao */}
+    </div>
+  );
 }
+
 export default Home;

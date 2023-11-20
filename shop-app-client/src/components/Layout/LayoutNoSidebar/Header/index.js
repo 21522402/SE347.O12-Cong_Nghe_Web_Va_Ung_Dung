@@ -1,16 +1,13 @@
 import classNames from 'classnames/bind';
-import { useContext } from 'react';
 import { BsSearch } from 'react-icons/bs';
 import { MdManageAccounts, MdShoppingCart } from 'react-icons/md';
 import { Link } from 'react-router-dom';
-import { ShopContext } from '~/context/ShopContext';
 import styles from './Header.module.scss';
 
 
 const cx = classNames.bind(styles);
 
 function Header() {
-    const {getTotalCartItems}=useContext(ShopContext);
     return (
         
         <header className={cx('wrapper')}>
@@ -61,8 +58,6 @@ function Header() {
                         <Link to="/cart">
                             <MdShoppingCart fontSize={32} color="white" />
                         </Link>
-                        <span className={cx("site-header__cartcount")}>{getTotalCartItems()}</span>
-                        
                     </div>
 
                 </div>
