@@ -143,7 +143,7 @@ function Bill() {
                                     {/* <th className={cx('delete')}></th> */}
                                     <th className={cx('code')}>Mã hóa đơn</th>
                                     <th className={cx('date')}>Thời gian</th>
-                                       <th className={cx('payMethod')}>Phương thức thanh toán</th>
+                                    <th className={cx('payMethod')}>Phương thức thanh toán</th>
                                     <th className={cx('customerName')}>Tên khách hàng</th>
                                     <th className={cx('customerPhone')}>Số điện thoại</th>
                                     <th className={cx('totalPrice')}>Tổng tiền</th>

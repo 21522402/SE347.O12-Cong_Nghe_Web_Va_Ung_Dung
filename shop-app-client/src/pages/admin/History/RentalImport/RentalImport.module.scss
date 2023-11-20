@@ -143,84 +143,86 @@
     margin-top: 32px;
     // height: 400px;
     overflow: auto;
+
+    .table {
+        width: 100%;
+        table-layout: fixed;
+        min-width: 875px;
+        border-collapse: collapse;
+    }
+    
+    .thead {
+        tr {
+            border: 0.5px solid rgb(212, 231, 249);
+        }
+    }
+    
+    .thead th {
+        position: sticky;
+        top: 0;
+        background-color: #f6f9fc;
+        background-color: #e6f1fe;
+    
+        color: #000;
+        font-size: 13px;
+        padding: 10px 10px;
+        word-break: break-all;
+        text-align: left;
+        vertical-align: middle;
+    }
+    
+    tr td {
+        text-align: left;
+        padding: 10px 10px;
+    }
+    
+    // th.delete {
+    //     width: 50px;
+    //     text-align: right;
+    //     .icon-delete {
+    //         font-size: 20px;
+    //         color: #666;
+    //     }
+        
+    // }
+    
+    
+    th.code {
+        width: 100%;
+        padding: 10px 10px 10px 25px;
+        text-align: center;
+    }
+    th.date {
+        width: 240px;
+        padding: 10px 10px 10px 25px;
+        text-align: center;
+    }
+    
+    th.productQuantity {
+        width: 240px;
+        padding: 10px 10px 10px 30px;
+        text-align: center;
+    }
+    
+    th.itemQuantity {
+        width: 240px;
+        padding: 10px 0px 10px 10px;
+        text-align: center;
+    }
+    
+    
+    
+    
+    th.totalPrice {
+        width: 240px;
+        text-align: center;
+        padding: 10px 40px 10px 10px;
+    
+    }
  
 }
 
-.table {
-    width: 100%;
-    table-layout: fixed;
-    min-width: 875px;
-    border-collapse: collapse;
-}
 
-.thead {
-    tr {
-        border: 0.5px solid rgb(212, 231, 249);
-    }
-}
-
-.thead th {
-    position: sticky;
-    top: 0;
-    background-color: #f6f9fc;
-    background-color: #e6f1fe;
-
-    color: #000;
-    font-size: 13px;
-    padding: 10px 10px;
-    word-break: break-all;
-    text-align: left;
-    vertical-align: middle;
-}
-
-tr td {
-    text-align: left;
-    padding: 10px 10px;
-}
-
-// th.delete {
-//     width: 50px;
-//     text-align: right;
-//     .icon-delete {
-//         font-size: 20px;
-//         color: #666;
-//     }
-    
-// }
-
-
-th.code {
-    width: 100%;
-    padding: 10px 10px 10px 25px;
-    text-align: center;
-}
-th.date {
-    width: 240px;
-    padding: 10px 10px 10px 25px;
-    text-align: center;
-}
-
-th.productQuantity {
-    width: 240px;
-    padding: 10px 10px 10px 30px;
-    text-align: center;
-}
-
-th.itemQuantity {
-    width: 240px;
-    padding: 10px 0px 10px 10px;
-    text-align: center;
-}
-
-
-
-
-th.totalPrice {
-    width: 240px;
-    text-align: center;
-    padding: 10px 40px 10px 10px;
-
-}
 
 
 

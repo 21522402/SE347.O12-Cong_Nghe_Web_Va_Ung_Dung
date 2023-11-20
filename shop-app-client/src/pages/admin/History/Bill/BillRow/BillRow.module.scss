@@ -1,49 +1,51 @@
 
 
 
-td.code {
-    color: #0070f4;
-    padding: 10px 10px 10px 15px;
-    text-align: center;
 
-}
-
-
-td.date {
-    padding: 10px 10px 10px 25px;
-}
-
-td.customerName {
-    padding: 10px 10px 10px 30px;
-}
-
-td.customerPhone {
-    padding: 10px 0px 10px 10px;
-    text-align: right;
-}
-
-
-td.payMethod {
-    text-align: center;
-    padding: 10px 20px 10px 10px;
-   
-}
-
-td.totalPrice {
-    
-    text-align: right;
-    padding: 10px 40px 10px 10px;
-
-}
-
-td.status {
-
-    
-}
 
 
 
 .product-item {
+
+    td.code {
+        color: #0070f4;
+        padding: 10px 10px 10px 15px;
+        text-align: center;
+    
+    }
+    
+    
+    td.date {
+        padding: 10px 10px 10px 25px;
+    }
+    
+    td.customerName {
+        padding: 10px 10px 10px 30px;
+    }
+    
+    td.customerPhone {
+        padding: 10px 0px 10px 10px;
+        text-align: right;
+    }
+    
+    
+    td.payMethod {
+        text-align: center;
+        padding: 10px 20px 10px 10px;
+       
+    }
+    
+    td.totalPrice {
+        
+        text-align: right;
+        padding: 10px 40px 10px 10px;
+    
+    }
+    
+    td.status {
+    
+        
+    }
      
     border: 1px solid #ddd;
     border-top: none;

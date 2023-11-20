@@ -357,85 +357,87 @@ font-size: 13px;
     margin-top: 32px;
     // height: 400px;
     overflow: auto;
- 
-}
 
-.table {
-    width: 100%;
-    table-layout: fixed;
-    min-width: 875px;
-    border-collapse: collapse;
-}
-
-.thead {
-    tr {
-        border: 0.5px solid rgb(212, 231, 249);
+    .table {
+        width: 100%;
+        table-layout: fixed;
+        min-width: 875px;
+        border-collapse: collapse;
     }
-}
-
-.thead th {
-    position: sticky;
-    top: 0;
-    background-color: #f6f9fc;
-    background-color: #e6f1fe;
-
-    color: #000;
-    font-size: 13px;
-    padding: 10px 0;
-    padding-right: 10px;
-    word-break: break-all;
-    text-align: left;
-    vertical-align: middle;
-}
-
-tr td {
-    text-align: left;
+    
+    .thead {
+        tr {
+            border: 0.5px solid rgb(212, 231, 249);
+        }
+    }
+    
+    .thead th {
+        position: sticky;
+        top: 0;
+        background-color: #f6f9fc;
+        background-color: #e6f1fe;
+    
+        color: #000;
+        font-size: 13px;
+        padding: 10px 0;
+        padding-right: 10px;
+        word-break: break-all;
+        text-align: left;
+        vertical-align: middle;
+    }
+    
+    tr td {
+        text-align: left;
+     
+    }
+    
+    
+    
+    th.code {
+        width: 140px;
+        padding-left: 10px;
+        text-align: center;
+    }
+    th.name {
+        width: 100%;
+        padding-left: 20px;
+     
+    }
+    
+    th.type {
+        width: 140px;
+    }
+    
+    th.color-size {
+        width: 130px;
+        text-align: center;
+    
+       
+    }
+    
+    th.quantity {
+        width: 80px;
+    
+        text-align: center;
+    }
+    
+    
+    
+    
+    th.unitPrice {
+        width: 120px;
+        text-align: right;
+    
+    }
+    
+    th.price {
+        width: 140px;
+        padding-right: 20px;
+        text-align: right;
+    
+       
+    }
  
 }
 
 
-
-th.code {
-    width: 140px;
-    padding-left: 10px;
-    text-align: center;
-}
-th.name {
-    width: 100%;
-    padding-left: 20px;
- 
-}
-
-th.type {
-    width: 140px;
-}
-
-th.color-size {
-    width: 130px;
-    text-align: center;
-
-   
-}
-
-th.quantity {
-    width: 80px;
-
-    text-align: center;
-}
-
-
-
-
-th.unitPrice {
-    width: 120px;
-    text-align: right;
-
-}
-
-th.price {
-    width: 140px;
-    padding-right: 20px;
-    text-align: right;
-
-   
-}

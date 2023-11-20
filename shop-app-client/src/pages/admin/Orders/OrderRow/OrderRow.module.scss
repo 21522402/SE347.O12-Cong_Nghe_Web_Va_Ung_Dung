@@ -1,61 +1,46 @@
-// td.delete {
-//     width: 50px;
-//     text-align: right;
-//     .icon-delete {
-//         font-size: 20px;
-//         color: #666;
-//             // color: #00B63E;
-
-//             &:hover {
-//                 color: rgb(220, 12, 12);
-//             }
-//     }
-    
-// }
 
 
-
-td.code {
-    color: #0070f4;
-    padding: 10px 10px 10px 15px;
-    text-align: center;
-
-}
-
-
-td.date {
-    padding: 10px 10px 10px 25px;
-}
-
-td.customerName {
-
-}
-
-td.customerPhone {
-
-}
-
-
-
-td.province {
-  
-}
-
-td.totalPrice {
-    
-    text-align: right;
-    padding: 10px 40px 10px 10px;
-
-}
-
-td.status {
-
-    
-}
 
 
 
 .product-item {
+    td.code {
+        color: #0070f4;
+        padding: 10px 10px 10px 15px;
+        text-align: center;
+    
+    }
+    
+    
+    td.date {
+        padding: 10px 10px 10px 25px;
+    }
+    
+    td.customerName {
+    
+    }
+    
+    td.customerPhone {
+    
+    }
+    
+    
+    
+    td.province {
+      
+    }
+    
+    td.totalPrice {
+        
+        text-align: right;
+        padding: 10px 40px 10px 10px;
+    
+    }
+    
+    td.status {
+    
+        
+    }
      
     border: 1px solid #ddd;
     border-top: none;
@@ -74,6 +59,7 @@ td.status {
             border-top: 1px solid #4cb050;
         }
     }
+    
 
     
     cursor: pointer;

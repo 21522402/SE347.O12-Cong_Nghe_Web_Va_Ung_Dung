@@ -1,53 +1,54 @@
-td.checkbox {
-    width: 40px;
-    .icon-checkbox {
-        font-size: 16px;
-        color: #00B63E;
-    }
-    
-}
 
-td.img {
-    img {
-        width: 24px;
-        height: 24px;
-        object-fit: cover;
-    }
-}
-
-td.code {
-    
-}
-
-td.name {
-    
-}
-
-td.price-buy {
-    
-    text-align: right;
-}
-
-td.price-origin {
-    
-    text-align: right;
-
-}
-
-td.quantity {
-    
-    text-align: right;
-    padding: 10px 40px 10px 10px;
-
-}
-
-td.status {
-    
-}
 
 
 
 .product-item {
+    td.checkbox {
+        width: 40px;
+        .icon-checkbox {
+            font-size: 16px;
+            color: #00B63E;
+        }
+        
+    }
+    
+    td.img {
+        img {
+            width: 24px;
+            height: 24px;
+            object-fit: cover;
+        }
+    }
+    
+    td.code {
+        
+    }
+    
+    td.name {
+        
+    }
+    
+    td.price-buy {
+        
+        text-align: right;
+    }
+    
+    td.price-origin {
+        
+        text-align: right;
+    
+    }
+    
+    td.quantity {
+        
+        text-align: right;
+        padding: 10px 40px 10px 10px;
+    
+    }
+    
+    td.status {
+        
+    }
      
     border: 1px solid #ddd;
     border-top: none;

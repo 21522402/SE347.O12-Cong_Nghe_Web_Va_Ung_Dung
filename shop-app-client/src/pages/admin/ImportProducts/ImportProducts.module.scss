@@ -82,78 +82,81 @@
     table-layout: fixed;
     min-width: 875px;
     border-collapse: collapse;
-}
 
-.thead {
-    tr {
-        border: 0.5px solid rgb(212, 231, 249);
-    }
-}
 
-.thead th {
-    position: sticky;
-    top: 0;
-    background-color: #f6f9fc;
-    background-color: #e6f1fe;
-
-    color: #000;
-    font-size: 13px;
-    padding: 10px 10px;
-    word-break: break-all;
-    text-align: left;
-    vertical-align: middle;
-}
-
-tr td {
-    text-align: left;
-    padding: 10px 10px;
-}
-
-th.delete {
-    width: 50px;
-    text-align: right;
-    .icon-delete {
-        font-size: 20px;
-        color: #666;
+    .thead {
+        tr {
+            border: 0.5px solid rgb(212, 231, 249);
+        }
     }
     
+    .thead th {
+        position: sticky;
+        top: 0;
+        background-color: #f6f9fc;
+        background-color: #e6f1fe;
+    
+        color: #000;
+        font-size: 13px;
+        padding: 10px 10px;
+        word-break: break-all;
+        text-align: left;
+        vertical-align: middle;
+    }
+    
+    tr td {
+        text-align: left;
+        padding: 10px 10px;
+    }
+    
+    th.delete {
+        width: 50px;
+        text-align: right;
+        .icon-delete {
+            font-size: 20px;
+            color: #666;
+        }
+        
+    }
+    
+    th.stt {
+        width: 50px;
+        text-align: center;
+    }
+    
+    th.code {
+        width: 100px;
+    }
+    
+    th.name {
+        width: 100%;
+    }
+    
+    th.quantity {
+        width: 90px;
+        text-align: center;
+    }
+    
+    th.unitPrice {
+        width: 140px;
+        text-align: center;
+    
+    }
+    
+    th.price {
+        width: 146px;
+        text-align: right;
+        padding: 10px 40px 10px 10px;
+    
+    }
+    
+    th.import {
+        width: 100px;
+        padding: 10px 0;
+    }
 }
 
-th.stt {
-    width: 50px;
-    text-align: center;
-}
 
-th.code {
-    width: 100px;
-}
-
-th.name {
-    width: 100%;
-}
-
-th.quantity {
-    width: 90px;
-    text-align: center;
-}
-
-th.unitPrice {
-    width: 140px;
-    text-align: center;
-
-}
-
-th.price {
-    width: 146px;
-    text-align: right;
-    padding: 10px 40px 10px 10px;
-
-}
-
-th.import {
-    width: 100px;
-    padding: 10px 0;
-}
 
 .btn {
     
