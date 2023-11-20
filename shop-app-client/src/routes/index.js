@@ -7,12 +7,14 @@ import ImportProducts from "~/pages/admin/ImportProducts"
 import Orders from "~/pages/admin/Orders"
 import Bill from "~/pages/admin/History/Bill"
 import RentalImport from "~/pages/admin/History/RentalImport"
+import ProductDetail from "~/pages/user/ProductDetail"
  
 
 export const publicRoutes = [
     // user: => path: '/user/[pageName]'
     {path:'/user' , component: Home, layout:LayoutNoSidebar},
     {path:'/user-profile' , component: Profile, layout:LayoutNoSidebar},
+    {path:'/product/:id' , component: ProductDetail, layout:LayoutNoSidebar},
 
 
 
