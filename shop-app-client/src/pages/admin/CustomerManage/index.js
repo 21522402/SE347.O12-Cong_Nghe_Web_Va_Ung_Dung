@@ -9,8 +9,8 @@ import { Link } from 'react-router-dom';
 const cx = classNames.bind(styles);
 const cbb = [
     { value: 'All', label: 'All' },
-    { value: 'Last 3 months', label: 'Last 3 months' },
-    { value: 'Last 6 months', label: 'Last 6 months' }
+    { value: 'Last 3 months', label: '3 tháng cuối' },
+    { value: 'Last 6 months', label: '6 tháng cuối' }
 
 ]
 const cusList = [
@@ -110,7 +110,7 @@ function CustomerManage() {
                     <div className={cx('header-content')}>
                         <form className={cx('search-field')}>
                             <BiSearch fontSize={20} style={{ position: 'absolute', top: '0', left: 0, marginTop: '20px', marginLeft: '18px' }} />
-                            <input type='text' name='searchField' id='searchField' className={cx('search-input')} placeholder='Search' />
+                            <input type='text' name='searchField' id='searchField' className={cx('search-input')} placeholder='Tìm kiếm' />
                         </form>
                         <Select options={cbb} 
                                 
@@ -122,11 +122,11 @@ function CustomerManage() {
                             <thead style={{ width: '100%', borderRadius: '10px', borderColor: 'transparent', border: 'none', }} >
                                 <tr style={{ width: '100%', backgroundColor: '#a4c4e9', color: 'black', borderRadius: '10px' }}>
                                     <th className={cx('col-tbl')} style={{ paddingLeft: '20px' }}>CusID</th>
-                                    <th className={cx('col-tbl')}>Customer Name</th>
-                                    <th className={cx('col-tbl')}>Address</th>
-                                    <th className={cx('col-tbl')}>Register Date</th>
-                                    <th className={cx('col-tbl')}>Total amount</th>
-                                    <th className={cx('col-tbl')}>Action</th>
+                                    <th className={cx('col-tbl')}>Tên khách hàng</th>
+                                    <th className={cx('col-tbl')}>Địa chỉ</th>
+                                    <th className={cx('col-tbl')}>Ngày đăng ký</th>
+                                    <th className={cx('col-tbl')}>Tổng giao dịch</th>
+                                    <th className={cx('col-tbl')}>Tác vụ</th>
                                 </tr>
                             </thead>
                             <tbody>

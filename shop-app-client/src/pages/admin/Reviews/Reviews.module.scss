@@ -1,0 +1,69 @@
+.wrapper{
+    background-color: #F4F7FE;
+    min-height: 100vh;
+    width: 100%;
+}
+.top-navbar{
+    height: 30px;
+}
+.container{
+    padding: 40px;
+    width: 100%;
+}
+.content {
+    min-height: max-content;
+    width: 100%;
+    border-radius: 16px;
+    background-color: #fff;
+    margin-top: 28px;
+    
+}
+.header-content{
+    padding: 28px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.search-field{
+    position: relative;
+    padding: 10px;
+    height: 48px;
+    width: 340px;
+}
+.search-input{
+    padding-left: 32px;
+    border-radius: 8px;
+    height: 40px;
+    border: 1px solid #ccc;
+    background-color: #F4F7FE;
+    width: 320px;
+}
+.combobox{
+    padding: 10px;
+    height: 40px;
+    width: 200px;
+}
+.container-reviews {
+    position: fixed;
+    padding-right: 250px;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+.container-search {
+    display: flex;
+}
+
+.container-list {
+    margin: 0px 20px 10px 20px ;
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    justify-items: center;
+}
+
+
+
+
+
+

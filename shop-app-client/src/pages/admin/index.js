@@ -1,8 +1,6 @@
-import Dashboard from "./Dashboard";
 import CustomerManage from "./CustomerManage";
-import Vouchers from "./Vouchers";
+import VouchersAdmin from "./Vouchers";
 export {
-    Dashboard,
     CustomerManage,
-    Vouchers
+    VouchersAdmin
 }

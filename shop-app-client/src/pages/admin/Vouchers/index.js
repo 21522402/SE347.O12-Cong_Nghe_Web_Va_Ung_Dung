@@ -14,9 +14,9 @@ import ViewVoucher from './ViewVoucher';
 const cx = classNames.bind(styles);
 function Vouchers() {
     const cbb = [
-        { value: 'All', label: 'All' },
-        { value: 'Expired', label: 'Expired' },
-        { value: 'UnExpired', label: 'UnExpired' }
+        { value: 'All', label: 'Tất cả' },
+        { value: 'Expired', label: 'Còn hạn' },
+        { value: 'UnExpired', label: 'Hết hạn' }
     ]
     const cusList = [
         {
@@ -193,14 +193,14 @@ function Vouchers() {
                         <div style={{ display: 'flex' }}>
                             <form className={cx('search-field')}>
                                 <BiSearch fontSize={20} style={{ position: 'absolute', top: '0', left: 0, marginTop: '20px', marginLeft: '18px' }} />
-                                <input type='text' name='searchField' id='searchField' className={cx('search-input')} placeholder='Search' />
+                                <input type='text' name='searchField' id='searchField' className={cx('search-input')} placeholder='Tìm kiếm' />
                             </form>
                             <Select options={cbb}
                                 defaultValue={cbb[0]}
                                 className={cx('combobox')} />
                         </div>
                         <div  onClick={()=>setModalAddVoucher(true)}>
-                            <CustomeButton className={cx('cus-button')} title={'Add Voucher'} icon={<MdAdd fontSize={20} />} isLeft={true} bgHover={'#2f5acf'} textColorHover={'white'} containStyles={{ width: '150px', backgroundColor: 'black', color: 'white', borderRadius: '8px', padding: '22px 10px', marginTop: '6px' }} />
+                            <CustomeButton className={cx('cus-button')} title={'Thêm Voucher'} icon={<MdAdd fontSize={20} />} isLeft={true} bgHover={'#2f5acf'} textColorHover={'white'} containStyles={{ width: '150px', backgroundColor: 'black', color: 'white', borderRadius: '8px', padding: '22px 10px', marginTop: '6px' }} />
                         </div>
                     </div>
                     <div style={{ padding: '10px 32px 40px', width: '100%', minHeight: '620px' }}>
@@ -208,13 +208,13 @@ function Vouchers() {
                             <thead style={{ width: '100%', borderRadius: '10px', borderColor: 'transparent', border: 'none', }} >
                                 <tr style={{ width: '100%', backgroundColor: '#a4c4e9', color: 'black', borderRadius: '10px' }}>
                                     <th className={cx('col-tbl')} style={{ paddingLeft: '20px' }}>VoucherID</th>
-                                    <th className={cx('col-tbl')}>Voucher Code</th>
-                                    <th className={cx('col-tbl')} >Price</th>
-                                    <th className={cx('col-tbl')}>Amount</th>
-                                    <th className={cx('col-tbl')}>Start Date</th>
-                                    <th className={cx('col-tbl')}>Expired Date</th>
-                                    <th className={cx('col-tbl')}>Status</th>
-                                    <th className={cx('col-tbl')}>Action</th>
+                                    <th className={cx('col-tbl')}>Mã Voucher</th>
+                                    <th className={cx('col-tbl')}>Gía giảm</th>
+                                    <th className={cx('col-tbl')}>Số lượng</th>
+                                    <th className={cx('col-tbl')}>Ngày bắt đầu</th>
+                                    <th className={cx('col-tbl')}>Ngày hết hạn</th>
+                                    <th className={cx('col-tbl')}>Tình trạng</th>
+                                    <th className={cx('col-tbl')}>Tác vụ</th>
                                 </tr>
                             </thead>
                             <tbody>

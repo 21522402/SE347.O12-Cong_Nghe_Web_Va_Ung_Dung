@@ -4,7 +4,7 @@ import classNames from 'classnames/bind';
 import { CustomeButton } from '~/components';
 import { MdAdd } from 'react-icons/md';
 import { useForm } from 'react-hook-form';
-import { dfImgVoucher } from '~/assets/images/img';
+import { dfImgVoucher } from '~/assets/images';
 import { useState } from 'react';
 const cx = classNames.bind(styles);
 function AddVoucher() {
