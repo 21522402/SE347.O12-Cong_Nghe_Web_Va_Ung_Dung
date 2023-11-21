@@ -8,7 +8,7 @@ function LayoutSidebar({children}) {
                 <div style={{marginLeft:'250px', width: '100%'}}>{children}</div>
             </div>
         </div>
-        );
+    );
 }
 
 export default LayoutSidebar;

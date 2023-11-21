@@ -1,5 +1,5 @@
 function Home() {
-    return ( <h1>Home page xxxsdfsf</h1> );
+    return ( <h1 style={{height: '100vh'}}>Home Page</h1> );
 }
 
 export default Home;
