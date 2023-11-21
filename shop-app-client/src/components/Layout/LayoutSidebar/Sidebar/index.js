@@ -78,7 +78,7 @@ function Sidebar() {
                     </Link>
                 </div>
                 <div className={cx('sidebar-item')}>
-                    <Link to={'/admin'}  className={cx('sidebar-item-link', {
+                    <Link to={'/admin/reviews'}  className={cx('sidebar-item-link', {
                         'active-item':activeItem==='Reviews'
                     })} onClick={()=>{handleClickItem('Reviews')}}>
                         <MdOutlineRateReview className={cx('sidebar-icon')}/>
@@ -86,11 +86,11 @@ function Sidebar() {
                     </Link>
                 </div>
                 <div className={cx('sidebar-item')}>
-                    <Link to={'/admin'}  className={cx('sidebar-item-link', {
-                        'active-item':activeItem==='Ideas'
-                    })} onClick={()=>{handleClickItem('Ideas')}}>
+                    <Link to={'/admin/feedbacks'}  className={cx('sidebar-item-link', {
+                        'active-item':activeItem==='Feedback'
+                    })} onClick={()=>{handleClickItem('Feedback')}}>
                         <BiMessageError className={cx('sidebar-icon')}/>
-                        <div>Ideas</div>
+                        <div>Feedback</div>
                     </Link>
                 </div>
                 <div className={cx('sidebar-item')}>
