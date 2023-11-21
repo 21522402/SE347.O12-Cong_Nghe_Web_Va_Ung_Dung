@@ -1,7 +1,7 @@
 const User = require("../../model/user/User")
-
 const successTemplate = require('../../templates/succesTemplate');
 const errorTemplate = require("../../templates/errorTemplate");
+
 const userRegisterCtrl = async (req, res) => {
     try {
         const existedUsser = await User.findOne({ phoneNumber: req?.body?.phoneNumber });

@@ -8,7 +8,7 @@ function ViewVoucher({ item }) {
             <div style={{ fontWeight: 500, fontSize: '20px', marginBottom: '20px', backgroundColor: 'black', color: 'white', padding: '8px', width: '15%', borderRadius: '4px' }}>Xem Voucher</div>
             <div style={{ display: 'flex', alignItems: 'end' }}>
                 <div style={{ paddingLeft: '4rem', marginBottom: '8px' }}>
-                    <img src={item.voucherImage} alt='avtVoucher' style={{ width: '300px', height: '170px' }} />
+                    <img src={item.voucherImage} alt='avtVoucher' style={{ width: '300px', height: '200px' }} />
                 </div>
             </div>
             <div style={{ padding: '2rem 4rem 2.5rem 4rem', width: '100%' }}>

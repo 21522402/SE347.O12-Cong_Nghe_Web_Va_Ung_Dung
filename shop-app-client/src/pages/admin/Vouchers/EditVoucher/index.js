@@ -13,6 +13,8 @@ function EditVoucher({item}) {
         return formatDate
     }
     const [isPc , setIsPc] =useState(item.isPercent)
+    const [file, setFile] = useState(null)
+    const [img, setImage] = useState(item.voucherImage)
     const {
         register,
         handleSubmit,
@@ -25,14 +27,26 @@ function EditVoucher({item}) {
     const onChangeCheckBox=()=>{
         setIsPc(prev=>!prev)
     }
+    const onImageChange = (e) => {
+        const file = e.target.files[0];
+        setFile(file)
+        if (file) {
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                // Cập nhật state với đường link mới của ảnh
+                setImage(reader.result);
+            };
+            reader.readAsDataURL(file);
+        }
+    }
     return (
         <div className={cx('wrapper')} style={{ animation: 'dropTop .3s linear' }}>
             <div style={{ fontWeight: 500, fontSize: '20px', marginBottom: '20px', backgroundColor: 'black', color: 'white', padding: '8px', width: '20%', borderRadius: '4px' }}>Cập nhật voucher</div>
             <div style={{ display: 'flex', alignItems: 'end' }}>
                 <div style={{ paddingLeft: '4rem', marginBottom: '8px' }}>
-                    <img src={item.voucherImage} alt='avtVoucher' style={{ width: '300px', height: '170px' }} />
+                    <img src={img} alt='avtVoucher' style={{ width: '300px', height: '200px' }} />
                 </div>
-                <input type='file' id='fileImg' hidden title='Choose Image' />
+                <input type='file' id='fileImg' hidden title='Choose Image' accept='image/*' onChange={onImageChange}/>
                 <label htmlFor='fileImg' style={{ border: '1px dashed #ccc', marginBottom: '8px', borderRadius: '10px', height: '30px', display: 'flex', justifyContent: 'center', alignItems: 'end', padding: '4px', marginLeft: '12px', cursor: 'pointer', justifySelf: 'end' }}>Choose Image</label>
             </div>
             <form onSubmit={handleSubmit(onSubmit)} style={{ padding: '2rem 4rem 2.5rem 4rem', width: '100%' }}>
