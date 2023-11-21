@@ -1,9 +1,6 @@
 import classNames from "classnames/bind";
 import { useState } from "react";
 import ReactStars from "react-stars";
-import image from "../Assets/p1_product.png";
-import image2 from "../Assets/p1_product_i1.png";
-import image3 from "../Assets/p1_product_i2.png";
 import styles from "./ItemProduct.module.scss";
 
 const cx = classNames.bind(styles);
@@ -13,86 +10,78 @@ function ItemProduct() {
     const list = {
         colors: [
             {
-                img: image,
-                img_color: image,
+                img: "https://media.coolmate.me/cdn-cgi/image/quality=100/uploads/November2023/3dsinglet.1.jpg",
+                img_color: "#fff",
             },
             {
-                img: image2,
-                img_color: image2,
+                img: "https://media.coolmate.me/cdn-cgi/image/quality=100/uploads/November2023/3dsinglet.3_28.jpg",
+                img_color: "#14413a",
             },
             {
-                img: image3,
-                img_color: image3,
+                img: "https://media.coolmate.me/cdn-cgi/image/quality=100/uploads/November2023/3dsinglet.2.jpg",
+                img_color: "#000",
             },
         ],
     }
 
-    const [color, setColor] = useState(list.colors[0].img);
+    const [imageColor, setImageColor] = useState(list.colors[0].img);
     const [indexItem, setIndexItem] = useState(0);
     const handleClick = (itemImage, index) => {
-        setColor(itemImage);
+        setImageColor(itemImage);
         setIndexItem(index)
     }
   return (
     <div className={cx("container-item")}>
         <img
-          style={{ width: "350px", height: "450px", borderRadius: "4px" }}
-          src={color}
+          style={{ width: "100%", height: "300px", borderTopLeftRadius: "4px", borderTopRightRadius: '4px' }}
+          src={imageColor}
           alt="abc"
         />
         <div style={{ display: "flex", alignItems: "center", marginLeft: '15px'}}>
           {list.colors.map((item, index) => {
             return (
               <div
-              key={index}
+                key={index}
                 style={{
-                  width: "60px",
-                  height: "32px",
+                  width: "46px",
+                  height: "28px",
                   borderRadius: "10px",
                   margin: "10px 5px",
                   textAlign: 'center',
                   display: "flex", alignItems: "center", justifyContent: 'center',
-                  border: index === indexItem ? '2px solid #000' : "1px solid #ccc",
+                  border: index === indexItem ? '3px solid #c7c7c7' : "1px solid #ccc",
+                  backgroundColor: item.img_color
                 }}
-                onClick={() => handleClick(item.img, index)}
-                
+                onClick={() => handleClick(item.img, index)}             
               >
-                <img style={{
-                  width: "58px",
-                  height: "28px",
-                  border: "1px solid #ccc",
-                  borderRadius: "10px",
-                }} src={item.img_color} alt="img"/>
               </div>
             );
           })}
         </div>
 
-        <span
-          style={{ fontSize: "20px", fontWeight: "500", margin: "15px 20px" }}
-        >
-          Ao thun tay ngan
+        <span className={cx('three-dot')}>
+          Áo chạy bộ CoolmateXtra Siêu thoáng
         </span>
         <div
           style={{
             display: "flex",
-            justifyContent: "flex-start",
+            justifyContent: "space-between",
             alignItems: "center",
-            fontSize: "22px",
+            fontSize: "17px",
             margin: "8px 20px 0px",
           }}
         >
           <span style={{ color: "#000", fontWeight: "bold" }}>250.000 đ</span>
           <span
             style={{
-              marginLeft: "20px",
+              marginLeft: "10px",
               color: "#ccc",
               textDecorationLine: "line-through",
             }}
           >
             350.000 đ
           </span>
-          <span style={{ marginLeft: "20px", color: "red", fontWeight: "500" }}>
+          <span style={{ marginLeft: "10px", color: "red", fontWeight: "500" }}>
             10 %
           </span>
         </div>
@@ -106,7 +95,6 @@ function ItemProduct() {
             color2={"#ffd700"}
             edit={false}
             value={4.5}
-            style={{marginTop: '-6px'}}
           />
         </div>
       </div>

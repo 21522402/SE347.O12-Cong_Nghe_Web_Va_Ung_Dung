@@ -1,9 +1,9 @@
 // Home.jsx
-import classNames from "classnames/bind";
 import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
 import ItemProduct from "~/components/ItemProduct/ItemProduct";
 import styles from "./Home.module.scss";
+import classNames from "classnames/bind";
 
 const cx = classNames.bind(styles);
 
@@ -12,11 +12,6 @@ function Home() {
     "https://media.coolmate.me/cdn-cgi/image/width=1920,quality=90,format=auto/uploads/November2023/141920x788.jpg",
     "https://media.coolmate.me/cdn-cgi/image/width=1920,quality=90,format=auto/uploads/November2023/kkGraphic_Special_(1).png",
     "https://media.coolmate.me/cdn-cgi/image/width=1920,quality=90,format=auto/uploads/November2023/cc1920x788-ver-3_68.jpg",
-  ];
-  const linkImagesSlider2 = [
-    "https://media.coolmate.me/cdn-cgi/image/quality=80,format=auto/uploads/October2023/mceclip0_74.png",
-    "https://media.coolmate.me/cdn-cgi/image/quality=80,format=auto/uploads/October2023/mceclip0_87.png",
-    "https://mcdn.coolmate.me/image/September2023/mceclip4_64.jpg",
   ];
 
   const responsive = {
@@ -55,24 +50,49 @@ function Home() {
           })}
         </Carousel>
       </div>
-      {/* Filtter */}
-      <div></div>
       {/* List product */}
+      <div>
+        <Carousel
+          swipeable={true}
+          draggable={false}
+          responsive={responsive}
+          autoPlay
+          ssr={true} // means to render carousel on server-side.
+          infinite={true}
+          autoPlaySpeed={3000}
+          transitionDuration={500}
+        >
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            {[1, 2, 3, 4].map(() => {
+              return (
+                <div style={{ width: "280px", margin: "20px 10px" }}>
+                  <ItemProduct />
+                </div>
+              );
+            })}
+          </div>
+        </Carousel>
+      </div>
+
       <div
         style={{
-          display: "grid",
-          gap: "30px",
-          gridTemplateColumns: "1fr 1fr 1fr 1fr",
-          padding: "20px",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          margin: "20px 0",
         }}
       >
-        {[1, 2, 3, 4, 5, 6, 7, 8, 9].map(() => {
-          return (
-            <div style={{ width: "350px" }}>
-              <ItemProduct />
-            </div>
-          );
-        })}
+        <img
+          style={{ width: "100%" }}
+          src="https://media.coolmate.me/cdn-cgi/image/quality=80,format=auto/uploads/October2023/mceclip0_74.png"
+          alt="img"
+        />
       </div>
 
       <div>
@@ -86,24 +106,180 @@ function Home() {
           autoPlaySpeed={3000}
           transitionDuration={500}
         >
-          {linkImagesSlider2.map((item, index) => {
-            return (
-              <div>
-                <img style={{width: '100%'}} key={index} src={item} alt="img" />
-              </div>
-            )
-          })}
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            {[1, 2, 3, 4].map(() => {
+              return (
+                <div style={{ width: "301px", margin: "20px 10px" }}>
+                  <ItemProduct />
+                </div>
+              );
+            })}
+          </div>
         </Carousel>
       </div>
-      <div style={{textAlign: 'center', margin: '20px 0'}}>
-        <img 
-          style={{width: '100%'}}
+
+      <div
+        style={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          margin: "20px 0",
+        }}
+      >
+        <img
+          style={{ width: "100%" }}
+          src="https://media.coolmate.me/cdn-cgi/image/quality=80,format=auto/uploads/October2023/mceclip0_87.png"
+          alt="img"
+        />
+      </div>
+
+      <div>
+        <Carousel
+          swipeable={true}
+          draggable={false}
+          responsive={responsive}
+          autoPlay
+          ssr={true} // means to render carousel on server-side.
+          infinite={true}
+          autoPlaySpeed={3000}
+          transitionDuration={500}
+        >
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              borderTop: "1px solid #ccc",
+            }}
+          >
+            {[1, 2, 3, 4].map(() => {
+              return (
+                <div style={{ width: "301px", margin: "20px 10px" }}>
+                  <ItemProduct />
+                </div>
+              );
+            })}
+          </div>
+        </Carousel>
+      </div>
+
+      <div
+        style={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          margin: "20px 0",
+        }}
+      >
+        <img
+          style={{ width: "100%" }}
+          src="https://mcdn.coolmate.me/image/September2023/mceclip4_64.jpg"
+          alt="img"
+        />
+      </div>
+
+      <div>
+        <Carousel
+          swipeable={true}
+          draggable={false}
+          responsive={responsive}
+          autoPlay
+          ssr={true} // means to render carousel on server-side.
+          infinite={true}
+          autoPlaySpeed={3000}
+          transitionDuration={500}
+        >
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            {[1, 2, 3, 4].map(() => {
+              return (
+                <div style={{ width: "301px", margin: "20px 10px" }}>
+                  <ItemProduct />
+                </div>
+              );
+            })}
+          </div>
+        </Carousel>
+      </div>
+
+      <div
+        style={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          margin: "20px 0",
+        }}
+      >
+        <img
+          style={{ width: "100%" }}
           src="https://mcdn.coolmate.me/image/March2023/mceclip0_137.jpg"
           alt="img"
         />
       </div>
 
-      {/* Anh quang cao */}
+      <div
+        style={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-evenly",
+          margin: "10px 30px",
+        }}
+      >
+        <div className={cx("container-item")}>
+          <img
+            className={cx("itemIMG")}
+            src="https://media.coolmate.me/cdn-cgi/image/width=1069,height=1575,quality=80,format=auto/uploads/October2023/mceclip1_36.png"
+            alt="all"
+          />
+          <div className={cx("btn-item")}>
+            <a href="./user/all-products">Xem chi tiết</a>
+          </div>
+        </div>
+
+        <div className={cx("container-item")}>
+          <img
+            className={cx("itemIMG")}
+            src="https://media.coolmate.me/cdn-cgi/image/width=1069,height=1575,quality=80,format=auto/uploads/October2023/mceclip4_7.png"
+            alt="all"
+          />{" "}
+          <div className={cx("btn-item")}>
+            <a href="./user/product-underwears">Xem chi tiết</a>
+          </div>
+        </div>
+
+        <div className={cx("container-item")}>
+          <img
+            className={cx("itemIMG")}
+            src="https://media.coolmate.me/cdn-cgi/image/width=1069,height=1575,quality=80,format=auto/uploads/October2023/mceclip3_86.png"
+            alt="all"
+          />
+          <div className={cx("btn-item")}>
+            <a href="./user/product-clothes">Xem chi tiết</a>
+          </div>
+        </div>
+
+        <div className={cx("container-item")}>
+          <img
+            className={cx("itemIMG")}
+            src="https://media.coolmate.me/cdn-cgi/image/width=1069,height=1575,quality=80,format=auto/uploads/October2023/mceclip0_40.png"
+            alt="all"
+          />{" "}
+          <div className={cx("btn-item")}>
+            <a href="./user/product-sports">Xem chi tiết</a>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }
