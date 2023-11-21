@@ -10,7 +10,7 @@ function ComboBox({placeHolder, icon, listItems, filterValueSelected, type, sele
     let [hover, setHover] = useState('')
     let input = useRef()
     useEffect(()=>{
-        filterValueSelected(selected)
+        if(selected.id !== -1) filterValueSelected(selected)
     },[selected])
 
     
@@ -56,9 +56,9 @@ function ComboBox({placeHolder, icon, listItems, filterValueSelected, type, sele
                     </div>
                 ) :
                 (type === 'list' ? (
-                    <div className={cx(`${type}_container`)} onClick={() => {console.log(selected, selectedItem)}}>
+                    <div className={cx(`${type}_container`)}>
                         <div className={cx(`${type}_form-field`, `${type}_${hover}`)} ref={input} tabIndex={0} onClick={toggleDropDown} onBlur={() => {setDropDown('hide'); setHover('')}}>
-                            <div className={cx(`${type}_form-input`)} value={selectedItem ? selectedItem : (selectedItem === "" ? "" : selected.name)}>{selectedItem ? selectedItem : (selectedItem === "" ? "" : selected.name)}</div>
+                            <div className={cx(`${type}_form-input`)} value={selectedItem ? selectedItem : (selectedItem === "" ? "" : selected.name)}><span>{selectedItem ? selectedItem : (selectedItem === "" ? "" : selected.name)}</span></div>
                             <label for="name" className={cx(`${type}_form-label`)}>{placeHolder}</label>
                             <div className={cx(`${type}_form-icon-drop-down`)}><RxChevronDown strokeWidth={1}/></div>
                             <div className={cx(`${type}_drop-down-list`, `${type}_${dropdown}`)}>
@@ -76,7 +76,30 @@ function ComboBox({placeHolder, icon, listItems, filterValueSelected, type, sele
                             </div>
                         </div>
                     </div>
-                ) : null)
+                ) : 
+                (type === 'list-gray' ? (
+                    <div className={cx(`${type}_container`)}>
+                        <div className={cx(`${type}_form-field`, `${type}_${hover}`)} ref={input} tabIndex={0} onClick={toggleDropDown} onBlur={() => {setDropDown('hide'); setHover('')}}>
+                            <div className={cx(`${type}_form-input`)} value={selectedItem ? selectedItem : (selectedItem === "" ? "" : selected.name)}><span>{selectedItem ? selectedItem : (selectedItem === "" ? "" : selected.name)}</span></div>
+                            <label for="name" className={cx(`${type}_form-label`)}>{placeHolder}</label>
+                            <div className={cx(`${type}_form-icon-drop-down`)}><RxChevronDown strokeWidth={1}/></div>
+                            <div className={cx(`${type}_drop-down-list`, `${type}_${dropdown}`)}>
+                                {
+                                    listItems ? listItems.map((item, index) => {
+                                        return (
+                                            <>
+                                                <div className={cx(`${type}_item-outer`)} key={index} onClick={(e) => {setSelected(item);}} style={{backgroundColor: `${selected.id === item.id ? '#999': ''}`}}>
+                                                    <span className={cx(`${type}_item-content`)} style={{ color: `${selected.id === item.id ? 'white': ''}`}}>{item.name}</span>
+                                                </div>
+                                            </> 
+                                        )
+                                    }) : null
+                                }
+                            </div>
+                        </div>
+                    </div>
+                ) : 
+                null))
             }
         </div>
     );

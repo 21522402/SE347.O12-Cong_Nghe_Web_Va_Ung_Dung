@@ -4,6 +4,7 @@ import TransportInfo from './TransportInfo';
 import { useEffect, useState } from 'react';
 import PaymentForm from './PaymentForm';
 import Cart from './Cart';
+import { BiLeftArrow } from 'react-icons/bi';
 const cx = classNames.bind(styles);
 
 function Payment() {
@@ -22,7 +23,6 @@ function Payment() {
                     <PaymentForm/>
                 </div>
             </div>
-            <hr style={{height: '100%', width: '1px', background: '#f1f1f1'}}/>
             <div className={cx('nav_right')}>
                 <span className={cx('title')}>Giỏ hàng</span>
                 <Cart/>

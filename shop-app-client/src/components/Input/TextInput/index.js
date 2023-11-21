@@ -28,7 +28,7 @@ function TextInput({placeHolder, icon, secure, type, value}) {
                 type === 'type_2' ? 
                 (
                     <div className={cx(`${type}_form-field`)}>
-                        <input type={`${secure && hide ? 'password': 'text'}`} className={cx(`${type}_form-input`)} placeholder='   ' value={value}/>
+                        <input type={`${secure && hide ? 'password': 'text'}`} className={cx(`${type}_form-input`)} placeholder='   ' defaultValue={value}/>
                         <label for="name" className={cx(`${type}_form-label`)}>{placeHolder}</label>
                         {
                             secure ? 
