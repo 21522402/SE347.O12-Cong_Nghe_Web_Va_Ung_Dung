@@ -8,6 +8,7 @@ import Orders from "~/pages/admin/Orders"
 import Bill from "~/pages/admin/History/Bill"
 import RentalImport from "~/pages/admin/History/RentalImport"
 import ProductDetail from "~/pages/user/ProductDetail"
+import Collection from "~/pages/user/Collection"
  
 
 export const publicRoutes = [
@@ -15,6 +16,7 @@ export const publicRoutes = [
     {path:'/user' , component: Home, layout:LayoutNoSidebar},
     {path:'/user-profile' , component: Profile, layout:LayoutNoSidebar},
     {path:'/product/:id' , component: ProductDetail, layout:LayoutNoSidebar},
+    {path:'/collection/:id' , component: Collection, layout:LayoutNoSidebar},
 
 
 

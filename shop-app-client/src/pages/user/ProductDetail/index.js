@@ -140,8 +140,8 @@ function ProductDetail() {
         <div className={cx('wrapper')}>
 
             <div className={cx('header')}>
-                <span style={{ color: 'grey', fontWeight: '500' }}>Trang chủ</span>
-                <span style={{ fontWeight: '500' }}> / Áo thể thao nam</span>
+                <span style={{ color: 'grey', fontWeight: '500', fontSize: '16px' }}>Trang chủ</span>
+                <span style={{ fontWeight: '500', fontSize: '16px' }}> / Áo thể thao nam</span>
             </div>
             <div className={cx('body')}>
 
