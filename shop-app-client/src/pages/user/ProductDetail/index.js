@@ -207,7 +207,7 @@ function ProductDetail() {
                                 product.colors.map((item, index) => {
                                     return (
                                         <div key={index} className={cx('img-color-wrapper', { active: index === indexColorActive })}>
-                                            <img onClick={() => setIndexColorActive(index)} alt="" src={item.images[0]} className={cx('img-color')} />
+                                            <img onClick={() => {setIndexColorActive(index); setIndexSizeActive(0); setIndexImageActive(0)}} alt="" src={item.images[0]} className={cx('img-color')} />
 
                                         </div>
                                     )
@@ -235,12 +235,12 @@ function ProductDetail() {
 
                     <div style={{ marginTop: '32px', padding: '16px 0', display: 'flex', alignItems: 'center', gap: '16px' }}>
                         <div style={{ display: 'inline-flex', borderRadius: '30px', height: '40px', width: '100px', alignItems: 'center', justifyContent: 'space-between', border: '1px solid #000' }}>
-                            <span onClick={() => { if (quantityAddCart === 1) return; setQuantityAddCart(prev => prev - 1) }} style={{ display: 'inline-block', padding: '0px 16px', fontSize: '20px', cursor: 'pointer', fontWeight: '700' }}>-</span>
+                            <span onClick={() => { if (quantityAddCart === 1) return; setQuantityAddCart(prev => prev - 1) }} style={{userSelect: 'none', display: 'inline-block', padding: '0px 16px', fontSize: '20px', cursor: 'pointer', fontWeight: '700' }}>-</span>
                             <span style={{ display: 'inline-block', fontWeight: '600' }}>{quantityAddCart}</span>
-                            <span onClick={() => setQuantityAddCart(prev => prev + 1)} style={{ display: 'inline-block', padding: '0px 16px', fontSize: '20px', cursor: 'pointer', fontWeight: 'bold' }}>+</span>
+                            <span onClick={() => setQuantityAddCart(prev => prev + 1)} style={{userSelect: 'none', display: 'inline-block', padding: '0px 16px', fontSize: '20px', cursor: 'pointer', fontWeight: 'bold' }}>+</span>
                         </div>
                         <div onClick={handleClickBtnAddCart} className={cx('btn-add-cart')} >
-                            <BsCartCheck style={{ marginRight: '8px', fontSize: '20px' }} /> {indexSizeActive === -1 ? 'Chọn kích thước' : 'Thêm vào giỏ hàng'}
+                           {indexSizeActive === -1 ? 'Chọn kích thước' : <><BsCartCheck style={{ marginRight: '8px', fontSize: '20px' }} />  Thêm vào giỏ hàng </>}
                         </div>
                     </div>
 
@@ -339,7 +339,7 @@ function ProductDetail() {
             </div>
             <div className={cx('carsousel-wrapper')}>
                 <h1 style={{ fontSize: '30px', fontWeight: '700', marginBottom: '28px', textAlign: 'center' }}>SẢN PHẨM BẠN CÓ THỂ THÍCH</h1>
-                <Carousel itemClass={styles.carouselItem} responsive={responsive} arrows={false} renderButtonGroupOutside={true} customButtonGroup={<ButtonGroup />}>
+                <Carousel  responsive={responsive} arrows={false} renderButtonGroupOutside={true} customButtonGroup={<ButtonGroup />}>
                     <ItemCarousel />
                     <ItemCarousel />
                     <ItemCarousel />
