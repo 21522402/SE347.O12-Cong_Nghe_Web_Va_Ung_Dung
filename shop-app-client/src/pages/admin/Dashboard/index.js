@@ -12,7 +12,7 @@ import {
 import { BiUserCircle } from "react-icons/bi";
 import Chart from "chart.js/auto";
 import { Bar, Doughnut } from "react-chartjs-2";
-import images from "~/assets/images";
+import {item_product} from "~/assets/images";
 
 const cx = classNames.bind(styles);
 
@@ -508,11 +508,11 @@ function Dashboard() {
                       height: "75px",
                       borderRadius: "6px",
                     }}
-                    src={images.item_product}
+                    src={item_product}
                     alt="img"
                   />
                   <div>
-                    <p style={{margin: '0 10px' ,display: 'inline-block', maxWidth: '150px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis'}}>Branded T-Shirts</p>
+                    <p style={{ margin: '0 10px', display: 'inline-block', maxWidth: '150px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>Branded T-Shirts</p>
                     <p
                       style={{
                         color: "#878a99",
@@ -648,12 +648,12 @@ function Dashboard() {
                       height: "75px",
                       borderRadius: "6px",
                     }}
-                    src={images.item_product}
+                    src={item_product}
                     alt="img"
                   />
-                  <p style={{margin: '0 10px' ,display: 'inline-block', maxWidth: '150px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis'}}>Nguyễn Văn A</p>
+                  <p style={{ margin: '0 10px', display: 'inline-block', maxWidth: '150px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>Nguyễn Văn A</p>
                   <p>0379361210</p>
-                  <p style={{margin: '0 10px' ,display: 'inline-block', maxWidth: '170px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis'}}>tinh@gmail.com</p>
+                  <p style={{ margin: '0 10px', display: 'inline-block', maxWidth: '170px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>tinh@gmail.com</p>
                   <div
                     style={{
                       display: "flex",
@@ -679,8 +679,8 @@ function Dashboard() {
         </div>
       </div>
       {/* List table đơn hàng gần đây  */}
-      <div style={{margin: "20px 30px"}}>
-          <div
+      <div style={{ margin: "20px 30px" }}>
+        <div
           style={{
             backgroundColor: "#fff",
             padding: "10px 20px",
@@ -729,7 +729,7 @@ function Dashboard() {
                       height: "75px",
                       borderRadius: "6px",
                     }}
-                    src={images.item_product}
+                    src={item_product}
                     alt="img"
                   />
                   <div
@@ -775,7 +775,7 @@ function Dashboard() {
                       alignItems: "center",
                     }}
                   >
-                    <p style={{display: 'inline-block', maxWidth: '280px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis'}}>Branded T-Shirts</p>
+                    <p style={{ display: 'inline-block', maxWidth: '280px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>Branded T-Shirts</p>
                     <p
                       style={{
                         color: "#878a99",
@@ -793,7 +793,7 @@ function Dashboard() {
                       alignItems: "center",
                     }}
                   >
-                    <p style={{display: 'inline-block', maxWidth: '220px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis'}}>Phan Trọng Tính</p>
+                    <p style={{ display: 'inline-block', maxWidth: '220px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>Phan Trọng Tính</p>
                     <p
                       style={{
                         color: "#878a99",
@@ -845,10 +845,10 @@ function Dashboard() {
             })}
           </div>
         </div>
-        </div>
+      </div>
       {/* @2023 copyright */}
-      <div style={{display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
-        <span style={{textAlign: 'center', margin: '20px 0 30px'}}>2023 @copyright</span>
+      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+        <span style={{ textAlign: 'center', margin: '20px 0 30px' }}>2023 @copyright</span>
       </div>
     </div>
   );

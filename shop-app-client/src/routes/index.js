@@ -12,9 +12,9 @@ import Collection from "~/pages/user/Collection"
  
 import Info from "~/pages/user/Profile/Info"
 import Vouchers from "~/pages/user/Profile/Vouchers"
-import Orders from "~/pages/user/Profile/Orders"
+import OrdersUser from "~/pages/user/Profile/Orders"
 import Addresses from "~/pages/user/Profile/Addresses"
-import Reviews from "~/pages/user/Profile/Reviews"
+import ReviewsUser from "~/pages/user/Profile/Reviews"
 import Policies from "~/pages/user/Profile/Policies"
 import Payment from "~/pages/user/Payment"
 import { 
@@ -30,12 +30,10 @@ export const publicRoutes = [
     {path:'/user' , component: Home, layout:LayoutNoSidebar},
     {path:'/user-profile' , component: Profile, layout:LayoutSidebarUser},
     {path:'/user-profile/info' , component: Info, layout:LayoutSidebarUser},
-    {path:'/user-profile/orders' , component: Orders, layout:LayoutSidebarUser},
+    {path:'/user-profile/orders' , component: OrdersUser, layout:LayoutSidebarUser},
     {path:'/user-profile/vouchers' , component: Vouchers, layout:LayoutSidebarUser},
     {path:'/user-profile/addresses' , component: Addresses, layout:LayoutSidebarUser},
-    {path:'/user-profile/reviews' , component: Reviews, layout:LayoutSidebarUser},
-    {path:'/user-profile/policies' , component: Policies, layout:LayoutSidebarUser},
-    {path:'/user-profile/policies' , component: Policies, layout:LayoutSidebarUser},
+    {path:'/user-profile/reviews' , component: ReviewsUser, layout:LayoutSidebarUser},
     {path:'/user-profile/policies' , component: Policies, layout:LayoutSidebarUser},
     {path:'/cart' , component: Payment, layout: LayoutNoSidebar},
     {path:'/user-profile' , component: Profile, layout:LayoutNoSidebar},
