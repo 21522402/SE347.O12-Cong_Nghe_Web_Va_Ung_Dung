@@ -5,7 +5,7 @@ function LayoutSidebar({children}) {
         <div>
             <div style={{ display:'flex'}}>
                 <Sidebar />
-                <div style={{marginLeft:'250px', width: '100%'}}>{children}</div>
+                <div style={{marginLeft:'250px', width:'100%'}}>{children}</div>
             </div>
         </div>
     );
