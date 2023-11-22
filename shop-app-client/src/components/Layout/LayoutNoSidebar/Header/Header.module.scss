@@ -85,7 +85,6 @@
         font-size: 14px;
         width: 100%;
         font-weight: 500;
-        padding-bottom: 4px;
         border: none;
         outline: none;
         background-color: transparent;
@@ -98,15 +97,7 @@
     
 
     }
-    .line {
-        position: absolute;
-        width: 0px;
-        height: 0.9px;
-        background-color: #000;
-        left: 0;
-        bottom: 0;
-        transition: width .3s linear;
-    }
+   
     .input-search:focus ~ .line {
         width: 100%;
     }
