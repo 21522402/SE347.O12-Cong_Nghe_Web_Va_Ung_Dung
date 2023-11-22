@@ -14,6 +14,7 @@ import { TiCancel } from "react-icons/ti";
 import { BsPlusCircleFill } from "react-icons/bs";
 import { RiSubtractLine } from "react-icons/ri";
 import DropDown from "../DropDown";
+import { ChromePicker } from "react-color";
 
 import styles from './Modal.module.scss'
 
@@ -107,6 +108,7 @@ function Modal({ setModal, typeModal }) {
         setListColor(prev => [...prev,
         {
             color: '',
+            colorCode: '',
             listImage: [...listImageDefault],
             listSize: []
         }
@@ -128,6 +130,16 @@ function Modal({ setModal, typeModal }) {
             const nextState = prev.map((item, index) => {
                 if (index === indexChange) {
                     return { ...item, color: colorName }
+                } else return item;
+            })
+            return nextState;
+        })
+    }
+    const handleChangeColorCode = (color, indexChange) => {
+        setListColor(prev => {
+            const nextState = prev.map((item, index) => {
+                if (index === indexChange) {
+                    return { ...item, colorCode: color }
                 } else return item;
             })
             return nextState;
@@ -212,6 +224,10 @@ function Modal({ setModal, typeModal }) {
     const handleClickItemType = (item) => {
         setType(item)
     }
+
+    useEffect(() => {
+        console.log(listColor);
+    }, [listColor])
 
     return (
 
@@ -372,13 +388,24 @@ function Modal({ setModal, typeModal }) {
                                                         <div style={{ display: 'flex', alignItems: 'center' }}>
                                                             {
                                                                 listShowMore[indexA] === false ?
-                                                                    <span onClick={() => handleShowMore(indexA)} style={{ cursor: 'pointer', fontSize: '20px', marginBottom: '4px', marginRight: '8px' }}><AiFillCaretRight /></span>
+                                                                    <span onClick={() => handleShowMore(indexA)} style={{ cursor: 'pointer', fontSize: '20px', marginBottom: '4px', marginRight: '8px', alignSelf: 'flex-start' }}><AiFillCaretRight /></span>
                                                                     :
-                                                                    <span onClick={() => handleShowMore(indexA)} style={{ cursor: 'pointer', fontSize: '20px', marginBottom: '4px', marginRight: '8px' }}><AiFillCaretDown /></span>
+                                                                    <span onClick={() => handleShowMore(indexA)} style={{ cursor: 'pointer', fontSize: '20px', marginBottom: '4px', marginRight: '8px', alignSelf: 'flex-start' }}><AiFillCaretDown /></span>
                                                             }
                                                             <div className={cx('form-group2')}>
                                                                 <label>Màu</label>
                                                                 <input onChange={(e) => handleChangeColorName(e, indexA)} placeholder="Đen,..." type="text" style={{ width: '80px', textAlign: 'center', background: 'transparent' }} value={itemA.color} />
+
+
+                                                            </div>
+                                                            <div style={{ marginLeft: '16px', display: 'flex', alignItems: 'center', gap: '16px' }}>
+                                                                <label style={{fontWeight: '700'}}>Chọn màu:</label>
+                                                                <div style={{ width: '20px', height: '20px', borderRadius: '50%', background: itemA.colorCode || '#000', position: 'relative', cursor: 'pointer' }}>
+                                                                    <div style={{ position: 'absolute', zIndex: '1000', left: '120%' }}>
+                                                                        <ChromePicker onChange={newColor => handleChangeColorCode(newColor.hex, indexA)} color={itemA.colorCode || '#000'} disableAlpha />
+                                                                    </div>
+                                                                </div>
+
                                                             </div>
                                                             {
                                                                 listColor.length > 1 &&
@@ -396,7 +423,7 @@ function Modal({ setModal, typeModal }) {
                                                                 itemA.listImage.map((itemB, indexB) => {
                                                                     return (
                                                                         <div key={indexB} className={cx('img-wrapper')} style={{ marginRight: '32px' }}>
-                                                                            <img src={itemB.isImageDefault ? images.productImageDefault : itemB.url} width={100} height={88} crop='fill' style={{ cursor: 'pointer' }}>
+                                                                            <img src={itemB.isImageDefault ? images.productImageDefault : itemB.url} style={{ cursor: 'pointer', objectFit: 'cover', width: '100px', height: '88px' }}>
                                                                             </img>
                                                                             {
                                                                                 itemB.isImageDefault && <p>+ Thêm</p>
