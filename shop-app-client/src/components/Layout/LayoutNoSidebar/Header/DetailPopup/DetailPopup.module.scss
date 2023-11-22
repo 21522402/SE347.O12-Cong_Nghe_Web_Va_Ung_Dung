@@ -20,7 +20,7 @@
         padding-bottom: 90px;
         max-height: 400px;
         display: flex;
-        gap: 60px;
+        gap: 32px;
     }
 
     .title {
@@ -56,9 +56,11 @@
     }
     .product-list-img {
         display: flex;
+        flex: 1;
         gap: 16px;
       
         .product-list-1 {
+            flex: 1;
             display: flex;
             flex-direction: column;
             gap: 16px;
@@ -66,7 +68,6 @@
             .img-wrapper {
                 overflow: hidden;
                 cursor: pointer;
-                width: 250px;
                 flex: 1;
                 position: relative;
                 .overlay2 {
@@ -107,11 +108,12 @@
             
         }
         .product-list-2 {
+            flex: 1;
             .img-wrapper {
                 position: relative;
                 overflow: hidden;
                 cursor: pointer;
-                width: 250px;
+                flex: 1;
                 height: 100%;
                 &:hover img{
                         
