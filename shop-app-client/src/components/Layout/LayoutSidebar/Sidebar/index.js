@@ -23,7 +23,7 @@ function Sidebar() {
 
         <div class="d-flex flex-column flex-shrink-0 p-5 text-bg-dark" style={{ width: "250px", position: 'fixed', top:0, left: 0, bottom:0 }}>
             <div className={cx(`header-logo` )} >
-                    <Link to="/admin" style={{ color: 'white', fontWeight: 'bold', fontSize: '24px' }}>
+                    <Link to="/admin" style={{ color: 'white', fontWeight: 'bold', fontSize: '20px' }}>
                         Shop<span style={{ backgroundColor: 'white', color: 'black', borderRadius: '3px', padding: '0' }}>App</span>
                     </Link>
                 </div>
@@ -38,7 +38,7 @@ function Sidebar() {
                     </Link>
                 </div>
                 <div className={cx('sidebar-item')}>
-                    <Link to={'/admin'}  className={cx(`sidebar-item-link`, {
+                    <Link to={'/admin/orders'}  className={cx(`sidebar-item-link`, {
                         'active-item':activeItem==='Orders'
                     } )} onClick={()=>{handleClickItem('Orders')}}>
                         <MdOutlineAnalytics className={cx('sidebar-icon')}/>
@@ -54,7 +54,7 @@ function Sidebar() {
                     </Link>
                 </div>
                 <div className={cx('sidebar-item')}>
-                    <Link to={'/admin'}  className={cx('sidebar-item-link', {
+                    <Link to={'/admin/products'}  className={cx('sidebar-item-link', {
                         'active-item':activeItem==='Products'
                     } )} onClick={()=>{handleClickItem('Products')}}>
                         <PiShirtFolded className={cx('sidebar-icon')}/>
@@ -62,7 +62,7 @@ function Sidebar() {
                     </Link>
                 </div>
                 <div className={cx('sidebar-item')}>
-                    <Link to={'/admin'}  className={cx('sidebar-item-link', {
+                    <Link to={'/admin/customer-manage'}  className={cx('sidebar-item-link', {
                         'active-item':activeItem==='Customer'
                     } )} onClick={()=>{handleClickItem('Customer')}}>
                         <BsPeople className={cx('sidebar-icon')}/>
@@ -70,7 +70,7 @@ function Sidebar() {
                     </Link>
                 </div>
                 <div className={cx('sidebar-item')}>
-                    <Link to={'/admin'}  className={cx('sidebar-item-link', {
+                    <Link to={'/admin/vouchers-manage'}  className={cx('sidebar-item-link', {
                         'active-item':activeItem==='Vouchers'
                     })} onClick={()=>{handleClickItem('Vouchers')}}>
                         <AiOutlineTags className={cx('sidebar-icon')}/>
@@ -78,7 +78,7 @@ function Sidebar() {
                     </Link>
                 </div>
                 <div className={cx('sidebar-item')}>
-                    <Link to={'/admin'}  className={cx('sidebar-item-link', {
+                    <Link to={'/admin/reviews'}  className={cx('sidebar-item-link', {
                         'active-item':activeItem==='Reviews'
                     })} onClick={()=>{handleClickItem('Reviews')}}>
                         <MdOutlineRateReview className={cx('sidebar-icon')}/>
@@ -86,15 +86,15 @@ function Sidebar() {
                     </Link>
                 </div>
                 <div className={cx('sidebar-item')}>
-                    <Link to={'/admin'}  className={cx('sidebar-item-link', {
-                        'active-item':activeItem==='Ideas'
-                    })} onClick={()=>{handleClickItem('Ideas')}}>
+                    <Link to={'/admin/feedbacks'}  className={cx('sidebar-item-link', {
+                        'active-item':activeItem==='Feedback'
+                    })} onClick={()=>{handleClickItem('Feedback')}}>
                         <BiMessageError className={cx('sidebar-icon')}/>
-                        <div>Ideas</div>
+                        <div>Feedback</div>
                     </Link>
                 </div>
                 <div className={cx('sidebar-item')}>
-                    <Link to={'/admin'}  className={cx('sidebar-item-link', {
+                    <Link to={'/admin/history/bill'}  className={cx('sidebar-item-link', {
                         'active-item':activeItem==='History'
                     })} onClick={()=>{handleClickItem('History')}}>
                         <AiOutlineHistory className={cx('sidebar-icon')}/>

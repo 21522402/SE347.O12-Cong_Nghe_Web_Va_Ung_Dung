@@ -19,7 +19,7 @@
     width: 100%;
     display: flex;
     align-items: center;
-    font-size: 18px;
+    font-size: 16px;
     padding: 8px 22px ;
     border-radius: 8px;
 }
@@ -29,4 +29,7 @@
 .active-item {
     background-color: #a09a9a;
     color: #222e5b;
+}
+.cus-button:hover{
+    background-color:'#2f5acf';
 }
