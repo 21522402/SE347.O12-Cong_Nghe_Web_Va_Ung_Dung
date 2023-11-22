@@ -51,7 +51,8 @@ function Home() {
         </Carousel>
       </div>
       {/* List product */}
-      <div>
+      <div style={{paddingTop: '30px'}}>
+        <span className={cx('title-slider')}>SẢN PHẨM NỔI BẬT</span>
         <Carousel
           swipeable={true}
           draggable={false}
@@ -60,8 +61,7 @@ function Home() {
           ssr={true} // means to render carousel on server-side.
           infinite={true}
           autoPlaySpeed={3000}
-          transitionDuration={500}
-        >
+          transitionDuration={500}>
           <div
             style={{
               display: "flex",
@@ -71,7 +71,7 @@ function Home() {
           >
             {[1, 2, 3, 4].map(() => {
               return (
-                <div style={{ width: "280px", margin: "20px 10px" }}>
+                <div style={{ width: "300px", margin: "20px 10px" }}>
                   <ItemProduct />
                 </div>
               );
@@ -89,13 +89,14 @@ function Home() {
         }}
       >
         <img
-          style={{ width: "100%" }}
+          style={{ width: "96%", borderRadius: '4px' }}
           src="https://media.coolmate.me/cdn-cgi/image/quality=80,format=auto/uploads/October2023/mceclip0_74.png"
           alt="img"
         />
       </div>
 
       <div>
+      <span className={cx('title-slider')}>SẢN PHẨM COOLEXTRA</span>
         <Carousel
           swipeable={true}
           draggable={false}
@@ -115,7 +116,7 @@ function Home() {
           >
             {[1, 2, 3, 4].map(() => {
               return (
-                <div style={{ width: "301px", margin: "20px 10px" }}>
+                <div style={{ width: "300px", margin: "20px 10px" }}>
                   <ItemProduct />
                 </div>
               );
@@ -133,13 +134,14 @@ function Home() {
         }}
       >
         <img
-          style={{ width: "100%" }}
+          style={{ width: "96%", borderRadius: '4px' }}
           src="https://media.coolmate.me/cdn-cgi/image/quality=80,format=auto/uploads/October2023/mceclip0_87.png"
           alt="img"
         />
       </div>
 
       <div>
+      <span className={cx('title-slider')}>SẢN PHẨM THU ĐÔNG</span>
         <Carousel
           swipeable={true}
           draggable={false}
@@ -160,7 +162,7 @@ function Home() {
           >
             {[1, 2, 3, 4].map(() => {
               return (
-                <div style={{ width: "301px", margin: "20px 10px" }}>
+                <div style={{width: "300px", margin: "20px 10px"}}>
                   <ItemProduct />
                 </div>
               );
@@ -178,13 +180,14 @@ function Home() {
         }}
       >
         <img
-          style={{ width: "100%" }}
+          style={{ width: "96%", borderRadius: '4px' }}
           src="https://mcdn.coolmate.me/image/September2023/mceclip4_64.jpg"
           alt="img"
         />
       </div>
 
       <div>
+      <span className={cx('title-slider')}>SẢN PHẨM THỂ THAO</span>
         <Carousel
           swipeable={true}
           draggable={false}
@@ -204,7 +207,7 @@ function Home() {
           >
             {[1, 2, 3, 4].map(() => {
               return (
-                <div style={{ width: "301px", margin: "20px 10px" }}>
+                <div style={{width: "300px", margin: "20px 10px"}}>
                   <ItemProduct />
                 </div>
               );

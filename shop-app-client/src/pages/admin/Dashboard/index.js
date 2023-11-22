@@ -1,18 +1,11 @@
 import React from "react";
 import classNames from "classnames/bind";
 import styles from "./Dashboard.module.scss";
-import {
-  AiOutlineRise,
-  AiOutlineFall,
-  AiOutlineDollarCircle,
-  AiOutlineShopping,
-  AiOutlineShoppingCart,
-  AiFillStar,
-} from "react-icons/ai";
-import { BiUserCircle } from "react-icons/bi";
+import ReactStars from "react-stars";
 import Chart from "chart.js/auto";
 import { Bar, Doughnut } from "react-chartjs-2";
-import {item_product} from "~/assets/images";
+import { item_product } from "~/assets/images";
+import ItemDashboard from "./ItemDashboard";
 
 const cx = classNames.bind(styles);
 
@@ -94,8 +87,17 @@ function Dashboard() {
     ],
   };
 
+  const formatMoney = (monney) => {
+    const formatter = new Intl.NumberFormat("de-VN", {
+      style: "currency",
+      currency: "VND",
+    });
+
+    return formatter.format(monney);
+  };
+
   return (
-    <div style={{ backgroundColor: "#F9F9FD" }}>
+    <div style={{ backgroundColor: "#FAFAFF" }}>
       {/* Lọc theo thời gian */}
       <div className={cx("container-1")}>
         <span className={cx("title-report")}>THỐNG KÊ BÁO CÁO</span>
@@ -136,302 +138,39 @@ function Dashboard() {
         </div>
       </div>
       {/* Tổng Doanh Thu, Tổng nhập hàng, Số đơn hàng, Số Khách hàng  */}
-      <div
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          padding: "20px 0",
-          borderBottom: "1px solid #ccc",
-        }}
-      >
-        <span
-          style={{ fontSize: "16px", marginLeft: "50px", fontWeight: "500" }}
-        >
-          So với năm/tháng trước đó
-        </span>
-        <div
-          style={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-evenly",
-            margin: "16px 0",
-          }}
-        >
-          <div className={cx("container-item")}>
-            <div style={{ display: "flex", justifyContent: "space-between" }}>
-              <span
-                style={{
-                  marginRight: "10px",
-                  fontSize: "14px",
-                  color: "#9CA2B2",
-                  fontWeight: "600",
-                }}
-              >
-                DOANH THU (VND)
-              </span>
-              <div
-                style={{
-                  marginLeft: "10px",
-                  fontSize: "14px",
-                  color: "#1E7E63",
-                  fontWeight: "500",
-                  display: "flex",
-                  alignItems: "center",
-                }}
-              >
-                <AiOutlineRise
-                  style={{ marginRight: "4px", fontSize: "17px" }}
-                />
-                <span>16.69 %</span>
-              </div>
-            </div>
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "space-between",
-                marginTop: "10px",
-                alignItems: "center",
-              }}
-            >
-              <span
-                style={{
-                  color: "#495057",
-                  fontSize: "22px",
-                  fontWeight: "bold",
-                }}
-              >
-                14.000.999
-              </span>
-              <div
-                style={{
-                  padding: "10px 14px",
-                  backgroundColor: "#daf4f0",
-                  borderRadius: "6px",
-                }}
-              >
-                <AiOutlineDollarCircle
-                  style={{
-                    color: "#0ab39c",
-                    fontSize: "20px",
-                    fontWeight: "500",
-                  }}
-                />
-              </div>
-            </div>
-          </div>
-
-          <div className={cx("container-item")}>
-            <div style={{ display: "flex", justifyContent: "space-between" }}>
-              <span
-                style={{
-                  marginRight: "10px",
-                  fontSize: "14px",
-                  color: "#9CA2B2",
-                  fontWeight: "600",
-                }}
-              >
-                NHẬP HÀNG (VND)
-              </span>
-              <div
-                style={{
-                  marginLeft: "10px",
-                  fontSize: "14px",
-                  color: "#f07660",
-                  fontWeight: "500",
-                  display: "flex",
-                  alignItems: "center",
-                }}
-              >
-                <AiOutlineFall
-                  style={{ marginRight: "4px", fontSize: "17px" }}
-                />
-                <span>16.69 %</span>
-              </div>
-            </div>
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "space-between",
-                marginTop: "10px",
-                alignItems: "center",
-              }}
-            >
-              <span
-                style={{
-                  color: "#495057",
-                  fontSize: "22px",
-                  fontWeight: "bold",
-                }}
-              >
-                14.000.999
-              </span>
-              <div
-                style={{
-                  padding: "10px 14px",
-                  backgroundColor: "#dff0fa",
-                  borderRadius: "6px",
-                }}
-              >
-                <AiOutlineShoppingCart
-                  style={{
-                    color: "#299cdb",
-                    fontSize: "20px",
-                    fontWeight: "500",
-                  }}
-                />
-              </div>
-            </div>
-          </div>
-
-          <div className={cx("container-item")}>
-            <div style={{ display: "flex", justifyContent: "space-between" }}>
-              <span
-                style={{
-                  marginRight: "10px",
-                  fontSize: "14px",
-                  color: "#9CA2B2",
-                  fontWeight: "600",
-                }}
-              >
-                SỐ ĐƠN HÀNG
-              </span>
-              <div
-                style={{
-                  marginLeft: "10px",
-                  fontSize: "14px",
-                  color: "#f07660",
-                  fontWeight: "500",
-                  display: "flex",
-                  alignItems: "center",
-                }}
-              >
-                <AiOutlineFall
-                  style={{ marginRight: "4px", fontSize: "17px" }}
-                />
-                <span>16.69 %</span>
-              </div>
-            </div>
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "space-between",
-                marginTop: "10px",
-                alignItems: "center",
-              }}
-            >
-              <span
-                style={{
-                  color: "#495057",
-                  fontSize: "22px",
-                  fontWeight: "bold",
-                }}
-              >
-                149
-              </span>
-              <div
-                style={{
-                  padding: "10px 14px",
-                  backgroundColor: "#D4FFCD",
-                  borderRadius: "6px",
-                }}
-              >
-                <AiOutlineShopping
-                  style={{
-                    color: "#49E332",
-                    fontSize: "20px",
-                    fontWeight: "500",
-                  }}
-                />
-              </div>
-            </div>
-          </div>
-
-          <div className={cx("container-item")}>
-            <div style={{ display: "flex", justifyContent: "space-between" }}>
-              <span
-                style={{
-                  marginRight: "10px",
-                  fontSize: "14px",
-                  color: "#9CA2B2",
-                  fontWeight: "600",
-                }}
-              >
-                SỐ KHÁCH HÀNG
-              </span>
-              <div
-                style={{
-                  marginLeft: "10px",
-                  fontSize: "14px",
-                  color: "#1E7E63",
-                  fontWeight: "500",
-                  display: "flex",
-                  alignItems: "center",
-                }}
-              >
-                <AiOutlineRise
-                  style={{ marginRight: "4px", fontSize: "17px" }}
-                />
-                <span>16.69 %</span>
-              </div>
-            </div>
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "space-between",
-                marginTop: "10px",
-                alignItems: "center",
-              }}
-            >
-              <span
-                style={{
-                  color: "#495057",
-                  fontSize: "22px",
-                  fontWeight: "bold",
-                }}
-              >
-                19
-              </span>
-              <div
-                style={{
-                  padding: "10px 14px",
-                  backgroundColor: "#fef4e4",
-                  borderRadius: "6px",
-                }}
-              >
-                <AiOutlineDollarCircle
-                  style={{
-                    color: "#f9be4b",
-                    fontSize: "20px",
-                    fontWeight: "500",
-                  }}
-                />
-              </div>
-            </div>
-          </div>
+      <div className={cx('container-total')}>
+        <span className={cx('title-total')}>So với năm/tháng trước đó</span>
+        <div className={cx('container-item-board')}>
+          <ItemDashboard
+            title="DOANH THU (VND)"
+            percent={27.96}
+            value={formatMoney(14276000)}
+            isIncrease={true}
+          />
+          <ItemDashboard
+            title="NHẬP HÀNG (VND)"
+            percent={52.96}
+            value={formatMoney(12476000)}
+            isIncrease={false}
+          />
+          <ItemDashboard
+            title="SỐ ĐƠN HÀNG"
+            percent={17.96}
+            value={149}
+            isIncrease={false}
+          />
+          <ItemDashboard
+            title="SỐ KHÁCH HÀNG"
+            percent={28.96}
+            value={212}
+            isIncrease={true}
+          />
         </div>
       </div>
-      {/* Biểu đồ biểu thị theo thời gian: Số đơn hàng, Doah thu, tiền nhập */}
-      {/* Biểu đồ tròn thống kê doanh thu theo loại sản phẩm  */}
-      <div
-        style={{
-          boxShadow: "0px 0px 2px 1px rgba(0, 0, 0, 0.1)",
-          backgroundColor: "#fff",
-          display: "flex",
-          alignItems: "center",
-          margin: "30px",
-          justifyContent: "space-between",
-          borderRadius: "4px",
-        }}
-      >
+
+      <div className={cx('container-list-chart')}>
         <div style={{ width: "70%", padding: "20px" }}>
-          <div
-            style={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "space-around",
-              marginBottom: "20px",
-            }}
-          >
+          <div className={cx('container-big-chart')}>
             <span style={{ fontSize: "18px", fontWeight: "500" }}>
               Tổng thu: 29.850.000 (VND)
             </span>
@@ -451,227 +190,74 @@ function Dashboard() {
           <Doughnut data={dataProductType} />
         </div>
       </div>
-      {/* List table Top 5 sản phẩm best seller  */}
-      {/* list table Top 5 khách hàng chi tiêu */}
-      <div
-        style={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "space-between",
-          margin: "20px 30px",
-          gap: '20px'
-        }}
-      >
-        <div
-          style={{
-            width: "50%",
-            backgroundColor: "#fff",
-            padding: "10px 20px",
-            borderRadius: "4px",
-            boxShadow: "0px 0px 2px 1px rgba(0, 0, 0, 0.1)",
-          }}
-        >
-          <span
-            style={{
-              marginTop: "20px",
-              fontSize: "18px",
-              fontWeight: "bold",
-              color: "#282C30",
-            }}
-          >
+
+      <div className={cx('container-two-table')}>
+        <div className={cx('bg-table-small')}>
+          <span className={cx('title-table')}>
             Top 5 sản phẩm bán chạy
           </span>
-          <div
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              marginTop: "20px",
-            }}
-          >
+          <div className={cx('container-header-table')}>
+            <span>Hình ảnh</span>
+            <span style={{ marginLeft: '10px'}}>Tên sản phẩm</span>
+            <span style={{marginLeft: '18px'}}>Giá bán</span>
+            <span style={{marginRight: '10px'}}>Đã bán</span>
+            <span>Doanh số</span>
+          </div>
+          <div className={cx('layout-col')}>
             {[1, 2, 3, 4, 5].map(() => {
               return (
-                <div
-                  style={{
-                    display: "flex",
-                    alignItems: "flex-start",
-                    justifyContent: "space-between",
-                    color: "#42484f",
-                    fontSize: "15px",
-                    fontWeight: "500",
-                    borderTop: "1px solid #ccc",
-                    padding: "10px",
-                  }}
-                >
-                  <img
-                    style={{
-                      width: "70px",
-                      height: "75px",
-                      borderRadius: "6px",
-                    }}
-                    src={item_product}
-                    alt="img"
-                  />
+                <div className={cx('container-item-table')}>
+                  <img className={cx('img-item-table')} src={item_product} alt="img"/>
                   <div>
-                    <p style={{ margin: '0 10px', display: 'inline-block', maxWidth: '150px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>Branded T-Shirts</p>
-                    <p
-                      style={{
-                        color: "#878a99",
-                        fontWeight: "300",
-                        fontStyle: "italic",
-                        margin: '0 10px'
-                      }}
-                    >
-                      (4.5) <AiFillStar color="#ffb300" />
+                    <p className={cx('three-dot-text')}>
+                      Branded T-Shirts
                     </p>
+                    <div style={{display: 'flex', alignItems: 'center'}}>
+                    <p className={cx('text-rating')}>(4.5)</p>
+                    <ReactStars
+                        count={5}
+                        size={10}
+                        color1={"#ccc"}
+                        color2={"#ffd700"}
+                        edit={false}
+                        value={4.5}
+                      />
+                    </div>
                   </div>
-                  <div
-                    style={{
-                      display: "flex",
-                      flexDirection: "column",
-                      alignItems: "center",
-                    }}
-                  >
-                    <p>145.000 đ</p>
-                    <p
-                      style={{
-                        color: "#878a99",
-                        fontWeight: "300",
-                        fontStyle: "italic",
-                      }}
-                    >
-                      Giá
-                    </p>
-                  </div>
-                  <div
-                    style={{
-                      display: "flex",
-                      flexDirection: "column",
-                      alignItems: "center",
-                    }}
-                  >
-                    <p>162</p>
-                    <p
-                      style={{
-                        color: "#878a99",
-                        fontWeight: "300",
-                        fontStyle: "italic",
-                      }}
-                    >
-                      Đã bán
-                    </p>
-                  </div>
-                  <div
-                    style={{
-                      display: "flex",
-                      flexDirection: "column",
-                      alignItems: "center",
-                    }}
-                  >
-                    <p>300</p>
-                    <p
-                      style={{
-                        color: "#878a99",
-                        fontWeight: "300",
-                        fontStyle: "italic",
-                      }}
-                    >
-                      Tồn kho
-                    </p>
-                  </div>
-                  <div
-                    style={{
-                      display: "flex",
-                      flexDirection: "column",
-                      alignItems: "center",
-                    }}
-                  >
-                    <p>2.000.000 đ</p>
-                    <p
-                      style={{
-                        color: "#878a99",
-                        fontWeight: "300",
-                        fontStyle: "italic",
-                      }}
-                    >
-                      Doanh số
-                    </p>
-                  </div>
+                  <p>{formatMoney(149000)}</p>
+                  <p>162</p>
+                  <p>{formatMoney(2000000)}</p>
                 </div>
               );
             })}
           </div>
         </div>
 
-        <div
-          style={{
-            width: "50%",
-            backgroundColor: "#fff",
-            padding: "10px 20px",
-            borderRadius: "4px",
-            boxShadow: "0px 0px 2px 1px rgba(0, 0, 0, 0.1)",
-          }}
-        >
-          <span
-            style={{
-              marginTop: "20px",
-              fontSize: "18px",
-              fontWeight: "bold",
-              color: "#282C30",
-            }}
-          >
+        <div className={cx('bg-table-small')}>
+          <span className={cx('title-table')}>
             Top khách hàng chi tiêu
           </span>
+          <div className={cx('container-header-table')}>
+            <span>Hình ảnh</span>
+            <span style={{marginLeft: '10px'}}>Họ tên</span>
+            <span style={{marginLeft: '20px'}}>Số điện thoại</span>
+            <span>Địa chỉ email</span>
+            <span>Mức chi tiêu</span>
+          </div>
           <div
             style={{
               display: "flex",
               flexDirection: "column",
-              marginTop: "20px",
             }}
           >
             {[1, 2, 3, 4, 5].map(() => {
               return (
-                <div
-                  style={{
-                    display: "flex",
-                    alignItems: "flex-start",
-                    justifyContent: "space-between",
-                    color: "#42484f",
-                    fontSize: "15px",
-                    fontWeight: "500",
-                    borderTop: "1px solid #ccc",
-                    padding: "10px",
-                  }}
-                >
-                  <img
-                    style={{
-                      width: "70px",
-                      height: "75px",
-                      borderRadius: "6px",
-                    }}
-                    src={item_product}
-                    alt="img"
-                  />
-                  <p style={{ margin: '0 10px', display: 'inline-block', maxWidth: '150px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>Nguyễn Văn A</p>
+                <div className={cx('container-item-table')}>
+                  <img className={cx('img-item-table')} src={item_product} alt="img"/>
+                  <p className={cx('three-dot-text')}>Nguyễn Văn A</p>
                   <p>0379361210</p>
-                  <p style={{ margin: '0 10px', display: 'inline-block', maxWidth: '170px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>tinh@gmail.com</p>
-                  <div
-                    style={{
-                      display: "flex",
-                      flexDirection: "column",
-                      alignItems: "center",
-                    }}
-                  >
-                    <p>1.999.000 đ</p>
-                    <p
-                      style={{
-                        color: "#878a99",
-                        fontWeight: "300",
-                        fontStyle: "italic",
-                      }}
-                    >
-                      Chi tiêu
-                    </p>
-                  </div>
+                  <p className={cx('three-dot-text')}>tinh@gmail.com</p>
+                  <p>1.999.000 đ</p>
                 </div>
               );
             })}
@@ -680,175 +266,40 @@ function Dashboard() {
       </div>
       {/* List table đơn hàng gần đây  */}
       <div style={{ margin: "20px 30px" }}>
-        <div
-          style={{
-            backgroundColor: "#fff",
-            padding: "10px 20px",
-            borderRadius: "4px",
-            boxShadow: "0px 0px 2px 1px rgba(0, 0, 0, 0.1)",
-          }}
-        >
-          <span
-            style={{
-              marginTop: "20px",
-              fontSize: "18px",
-              fontWeight: "bold",
-              color: "#282C30",
-            }}
-          >
+        <div className={cx('border-table')}>
+          <span className={cx('title-table')}>
             Những đơn hàng gần đây
           </span>
-          <div
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              marginTop: "20px",
-              maxHeight: '500px',
-              height: '450px',
-              overflow: 'visible',
-              overflowY: 'scroll'
-            }}
-          >
+          <div className={cx('container-header-table')}>
+            <span style={{marginLeft: '20px'}}>Hình ảnh</span>
+            <span style={{marginLeft: '15px'}}>Mã đơn hàng</span>
+            <span style={{marginRight: '20px'}}>Mã sản phẩm</span>
+            <span style={{marginRight: '60px'}}>Tên sản phẩm</span>
+            <span style={{marginRight: '40px'}}>Tên khách hàng</span>
+            <span style={{marginRight: '25px'}}>Số điện thoại</span>
+            <span style={{marginRight: '20px'}}>Giá trị đơn hàng</span>
+          </div>
+          <div className={cx('container-order-recent')}>
             {[1, 2, 3, 4, 5, 6, 7, 8, 1, 2, 3, 4, 5, 6, 7].map(() => {
               return (
-                <div
-                  style={{
-                    display: "flex",
-                    alignItems: "flex-start",
-                    justifyContent: "space-between",
-                    color: "#42484f",
-                    fontSize: "15px",
-                    fontWeight: "500",
-                    borderTop: "1px solid #ccc",
-                    padding: "10px",
-                  }}
-                >
-                  <img
-                    style={{
-                      width: "70px",
-                      height: "75px",
-                      borderRadius: "6px",
-                    }}
-                    src={item_product}
-                    alt="img"
-                  />
-                  <div
-                    style={{
-                      display: "flex",
-                      flexDirection: "column",
-                      alignItems: "center",
-                    }}
-                  >
-                    <p>DH001</p>
-                    <p
-                      style={{
-                        color: "#878a99",
-                        fontWeight: "300",
-                        fontStyle: "italic",
-                      }}
-                    >
-                      Mã đơn hàng
-                    </p>
-                  </div>
-                  <div
-                    style={{
-                      display: "flex",
-                      flexDirection: "column",
-                      alignItems: "center",
-                    }}
-                  >
-                    <p>SP001</p>
-                    <p
-                      style={{
-                        color: "#878a99",
-                        fontWeight: "300",
-                        fontStyle: "italic",
-                      }}
-                    >
-                      Mã sản phẩm
-                    </p>
-                  </div>
-                  <div
-                    style={{
-                      display: "flex",
-                      flexDirection: "column",
-                      alignItems: "center",
-                    }}
-                  >
-                    <p style={{ display: 'inline-block', maxWidth: '280px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>Branded T-Shirts</p>
-                    <p
-                      style={{
-                        color: "#878a99",
-                        fontWeight: "300",
-                        fontStyle: "italic",
-                      }}
-                    >
-                      Tên sản phẩm
-                    </p>
-                  </div>
-                  <div
-                    style={{
-                      display: "flex",
-                      flexDirection: "column",
-                      alignItems: "center",
-                    }}
-                  >
-                    <p style={{ display: 'inline-block', maxWidth: '220px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>Phan Trọng Tính</p>
-                    <p
-                      style={{
-                        color: "#878a99",
-                        fontWeight: "300",
-                        fontStyle: "italic",
-                      }}
-                    >
-                      Tên khách hàng
-                    </p>
-                  </div>
-                  <div
-                    style={{
-                      display: "flex",
-                      flexDirection: "column",
-                      alignItems: "center",
-                    }}
-                  >
-                    <p>0379361210</p>
-                    <p
-                      style={{
-                        color: "#878a99",
-                        fontWeight: "300",
-                        fontStyle: "italic",
-                      }}
-                    >
-                      Số điện thoại
-                    </p>
-                  </div>
-                  <div
-                    style={{
-                      display: "flex",
-                      flexDirection: "column",
-                      alignItems: "center",
-                    }}
-                  >
-                    <p>2.000.999 đ</p>
-                    <p
-                      style={{
-                        color: "#878a99",
-                        fontWeight: "300",
-                        fontStyle: "italic",
-                      }}
-                    >
-                      Giá trị đơn hàng
-                    </p>
-                  </div>
+                <div className={cx('container-item-table')}>
+                  <img className={cx('img-item-table')} src={item_product} alt="img"/>
+                  <p>DH001</p>
+                  <p>SP001</p>
+                  <p className={cx('three-dot-text')}>Branded T-Shirts</p>
+                  <p className={cx('three-dot-text')}>Phan Trọng Tính</p>
+                  <p>0379361210</p>
+                  <p>2.000.999 đ</p>
                 </div>
               );
             })}
           </div>
         </div>
       </div>
-      {/* @2023 copyright */}
-      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-        <span style={{ textAlign: 'center', margin: '20px 0 30px' }}>2023 @copyright</span>
+      <div className={cx('one-row')}>
+        <span style={{ textAlign: "center", margin: "0 0 20px" }}>
+          2023 @copyright
+        </span>
       </div>
     </div>
   );
