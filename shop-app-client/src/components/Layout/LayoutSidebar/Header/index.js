@@ -12,7 +12,6 @@ function Header() {
                         Shop<span style={{ backgroundColor: 'white', color: 'black', borderRadius: '3px', padding: '0' }}>App</span>
                     </Link>
                 </div>
-                
             </div>
         </header>
     );

@@ -1,0 +1,20 @@
+.wrapper {
+    width: 60vw;
+    max-width: 900px;
+    background-color: #fff;
+    overflow-x: auto;
+    overflow-y: hidden;
+    padding: 2rem;
+    display: flex;
+    border-radius: 20px;
+}
+.col {
+    width: 50%;
+    
+}
+img{
+    border-style: none;
+    vertical-align: middle;
+    max-width: 100%;
+    height: auto;
+}

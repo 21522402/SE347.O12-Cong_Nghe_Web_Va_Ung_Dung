@@ -1,0 +1,24 @@
+{
+  "name": "shop-app-server",
+  "version": "1.0.0",
+  "description": "server backend for shop app course Web",
+  "main": "server.js",
+  "scripts": {
+    "start": "nodemon server.js",
+    "server": "nodemon server.js"
+  },
+  "author": "Group5_SE347.O12",
+  "license": "ISC",
+  "dependencies": {
+    "bcrypt": "^5.1.1",
+    "cloudinary": "^1.41.0",
+    "cors": "^2.8.5",
+    "crypto": "^1.0.1",
+    "dotenv": "^16.3.1",
+    "express": "^4.18.2",
+    "mongoose": "^7.6.4",
+    "multer": "^1.4.5-lts.1",
+    "nodemon": "^3.0.1",
+    "sharp": "^0.32.6"
+  }
+}
