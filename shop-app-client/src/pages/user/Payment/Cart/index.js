@@ -169,6 +169,9 @@ function Cart() {
             selectColor: 'Xanh biển',
         }
     ]
+
+    let i = 50;
+
     const vouchers = [{voucherCode: 'CMBAMBO259K', voucherDes: 'Tặng 01 Quần lót Trunk Cotton cho đơn hàng 259K (Không áp dụng cho sản phẩm SALE)', voucherStartDate: '20.10.2023', voucherOutDate: '31.10.2023', voucherCondition: 'Mã giảm giá không có giá trị quy đổi ra tiền mặt'}, {voucherCode: 'CMBAMBO259K', voucherDes: 'Tặng 01 Quần lót Trunk Cotton cho đơn hàng 259K (Không áp dụng cho sản phẩm SALE)', voucherStartDate: '20.10.2023', voucherOutDate: '31.10.2023', voucherCondition: 'Mã giảm giá không có giá trị quy đổi ra tiền mặt'}, {voucherCode: 'CMBAMBO259K', voucherDes: 'Tặng 01 Quần lót Trunk Cotton cho đơn hàng 259K (Không áp dụng cho sản phẩm SALE)', voucherStartDate: '20.10.2023', voucherOutDate: '31.10.2023', voucherCondition: 'Mã giảm giá không có giá trị quy đổi ra tiền mặt'}, {voucherCode: 'CMBAMBO259K', voucherDes: 'Tặng 01 Quần lót Trunk Cotton cho đơn hàng 259K (Không áp dụng cho sản phẩm SALE)', voucherStartDate: '20.10.2023', voucherOutDate: '31.10.2023', voucherCondition: 'Mã giảm giá không có giá trị quy đổi ra tiền mặt'}]
 
     let [preTotal, setPreTotal] = useState(0);
@@ -219,7 +222,7 @@ function Cart() {
                 {
                     orders.map((item, index) => {
                         return (
-                            <div>
+                            <div style={{position: 'relative', zIndex: i--}}>
                                 <ProductItem key={index} props={item} onQuantityChange={onQuantityChange}/>
                             </div>
                         )
@@ -249,7 +252,7 @@ function Cart() {
                     {
                         forUProduct.map((item, index) => {
                             return <>
-                                <div style={{borderRight: '1px solid #c9c9c9'}}>
+                                <div style={{borderRight: '1px solid #c9c9c9', position: 'relative', zIndex: 10}}>
                                     <ProductForUItem key={index} props={item} onSelect={() => selectItemToOrder(item)}/>
                                 </div>
                             </>
