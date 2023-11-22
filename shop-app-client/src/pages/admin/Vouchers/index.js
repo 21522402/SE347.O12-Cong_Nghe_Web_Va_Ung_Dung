@@ -11,6 +11,7 @@ import { MdAdd } from 'react-icons/md';
 import AddVoucher from './AddVoucher';
 import EditVoucher from './EditVoucher';
 import ViewVoucher from './ViewVoucher';
+import { ChangePass, Login, SignUp } from '~/pages/auth';
 const cx = classNames.bind(styles);
 function Vouchers() {
     const cbb = [

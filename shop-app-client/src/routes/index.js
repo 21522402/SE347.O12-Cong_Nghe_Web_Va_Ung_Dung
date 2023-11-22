@@ -1,7 +1,6 @@
 import Home from "~/pages/user/Home"
 import { LayoutNoSidebar,LayoutSidebar, LayoutSidebarUser } from "~/components/Layout"
 import Dashboard from "~/pages/admin/Dashboard"
-import Home from "~/pages/user/Home"
 import PageAllProduct from "~/pages/user/Home/PageAllProduct"
 import PageProductClothes from "~/pages/user/Home/PageProductClothes"
 import PageProductSport from "~/pages/user/Home/PageProductSport"
@@ -29,6 +28,7 @@ import Reviews from "~/pages/admin/Reviews"
 import DetailReview from "~/pages/admin/Reviews/DetailReview"
 import Feedbacks from "~/pages/admin/Feedbacks"
 import FeedbackDetail from "~/pages/admin/Feedbacks/FeedbackDetail"
+import Profile from "~/pages/user/Profile"
 export const publicRoutes = [
     // user: => path: '/user/[pageName]'
     {path:'/user' , component: Home, layout:LayoutNoSidebar},
@@ -36,7 +36,16 @@ export const publicRoutes = [
     {path:'/user/product-underwears' , component: PageProductUnderWear, layout:LayoutNoSidebar},
     {path:'/user/product-sports', component: PageProductSport, layout:LayoutNoSidebar},
     {path:'/user/product-clothes' , component: PageProductClothes, layout:LayoutNoSidebar},
-
+    {path:'/user-profile' , component: Profile, layout:LayoutSidebarUser},
+    {path:'/user-profile/info' , component: Info, layout:LayoutSidebarUser},
+    {path:'/user-profile/orders' , component: OrdersUser, layout:LayoutSidebarUser},
+    {path:'/user-profile/vouchers' , component: Vouchers, layout:LayoutSidebarUser},
+    {path:'/user-profile/addresses' , component: Addresses, layout:LayoutSidebarUser},
+    {path:'/user-profile/reviews' , component: ReviewsUser, layout:LayoutSidebarUser},
+    {path:'/user-profile/policies' , component: Policies, layout:LayoutSidebarUser},
+    {path:'/cart' , component: Payment, layout: LayoutNoSidebar},
+    {path:'/product/:id' , component: ProductDetail, layout:LayoutNoSidebar},
+    {path:'/collection/:id' , component: Collection, layout:LayoutNoSidebar},
 
     // admin: => path: '/admin/[pageName]'
     {path:'/admin/customer-manage' , component: CustomerManage, layout:LayoutSidebar},
@@ -45,10 +54,6 @@ export const publicRoutes = [
     {path:'/admin/reviews/:id/detail' , component: DetailReview, layout:LayoutSidebar},
     {path:'/admin/feedbacks' , component: Feedbacks, layout:LayoutSidebar},
     {path:'/admin/feedbacks/detail' , component: FeedbackDetail, layout:LayoutSidebar},
-
-
-
-
     {path:'/admin' , component: Dashboard, layout:LayoutSidebar},
     {path:'/admin/products' , component: Products, layout:LayoutSidebar},
     {path:'/admin/products/import' , component: ImportProducts, layout:LayoutSidebar},
