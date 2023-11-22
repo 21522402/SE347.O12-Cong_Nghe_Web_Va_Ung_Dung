@@ -6,6 +6,7 @@ import { IoSearch, IoBagHandle } from "react-icons/io5";
 import { IoMdClose } from "react-icons/io";
 import { FaRegUserCircle } from "react-icons/fa";
 import DetailPopup from './DetailPopup';
+import SearchPopup from './SearchPopup';
 import removeViTones from '~/utils/removeViTones';
 const cx = classNames.bind(styles);
 
@@ -13,6 +14,7 @@ function Header() {
     const navigate = useNavigate();
     const [indexCategoryActive, setIndexCategoryActive] = useState(-1);
     const [showDetailPopUp, setShowDetailPopup] = useState(false)
+    const [showSearchPopUp, setShowSearchPopup] = useState(false)
     const [valueSearch, setValueSearch] = useState('');
     const categories = [
         {
@@ -133,6 +135,7 @@ function Header() {
 
 
         <div className={cx('wrapper')}>
+
             <a href='/user' className={cx('logo-wrapper')}>
                 <div>SHOP</div>
                 <div className={cx('child2')}>APP</div>
@@ -162,19 +165,25 @@ function Header() {
                     <DetailPopup category={categories[indexCategoryActive]} onMouseLeave={() => setShowDetailPopup(false)} />
                 }
             </div>
+   
+            <div onMouseLeave={() => setShowSearchPopup(false)} className={cx('search-wrapper')}>
+                <div  className={cx('search')}>
+                    <div style={{ padding: '0 12px', cursor: 'pointer' }}>
+                        <IoSearch style={{ color: '#000', fontSize: '24px' }} />
+                    </div>
+                    <div className={cx('input-wrapper')}>
+                        <input onClick={() => setShowSearchPopup(prev => !prev)} onChange={(e) => setValueSearch(e.target.value.trim())} className={cx('input-search')} type='text' value={valueSearch} placeholder='Tìm kiếm sản phẩm...' />
 
-            <div className={cx('search')}>
-                <div style={{ padding: '0 12px', cursor: 'pointer' }}>
-                    <IoSearch style={{ color: '#000', fontSize: '24px' }} />
-                </div>
-                <div className={cx('input-wrapper')}>
-                    <input onChange={(e) => setValueSearch(e.target.value.trim())} className={cx('input-search')} type='text' value={valueSearch} placeholder='Tìm kiếm sản phẩm...' />
+                    </div>
+                    <div onClick={() => setValueSearch('')} style={{ padding: '0 12px', cursor: 'pointer' }}>
+                        <IoMdClose style={{ color: '#000', fontSize: '24px' }} />
+                    </div>
+                    {
+                        showSearchPopUp &&
+                        <SearchPopup onMouseLeave={() => setShowSearchPopup(false)} />
+                    }
 
                 </div>
-                <div onClick={() => setValueSearch('')} style={{ padding: '0 12px', cursor: 'pointer' }}>
-                    <IoMdClose style={{ color: '#000', fontSize: '24px' }} />
-                </div>
-
             </div>
 
             <div className={cx('user')}>

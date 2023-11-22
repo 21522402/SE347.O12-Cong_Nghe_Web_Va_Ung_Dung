@@ -1,7 +1,7 @@
 import classNames from "classnames/bind";
 import styles from './Collection.module.scss'
 import { useEffect, useState } from "react";
-
+import ItemCollection from "./ItemCollection";
 const cx = classNames.bind(styles)
 function Collection() {
     const [category, setCategory] = useState(() => {
@@ -154,6 +154,20 @@ function Collection() {
 
 
     }
+    const handleRemoveFilter = () => {
+        setConditions({
+            size: [],
+            color: '',
+            type: []
+        });
+        setCategory(prev => {
+            return {
+                ...prev,
+                size: prev.size.map(item => ({ ...item, checked: false })),
+                type: prev.type.map(item => ({ ...item, checked: false })),
+            }
+        })
+    }
     useEffect(() => {
         setCondititonsSelected(prev => {
             let nextState = [];
@@ -174,56 +188,58 @@ function Collection() {
 
     return (
         <div className={cx('wrapper')}>
-            <div className={cx('left-side')}>
-                <div className={cx('quantity')}>
-                    21 kết quả
-                </div>
-                <div className={cx('filter')}>
-                    <div className={cx('filter-item')}>
-                        <h5 className={cx('filter-heading')}>Kích cỡ</h5>
-                        <ul className={cx('filter-size')}>
-                            {
-                                category.size.map((item, index) => {
-                                    return <li key={index} style={{ position: 'relative', marginTop: '8px' }}>
-                                        <div onClick={() => handleClickSize(item.name, index)} className={cx('filter-size-item', { checked: item.checked })}>
-                                            {item.name}
-                                        </div>
-                                    </li>
-                                })
-                            }
-                        </ul>
+            <div className={cx('left-side-wrapper')}>
+                <div className={cx('left-side')}>
+                    <div className={cx('quantity')}>
+                        21 kết quả
                     </div>
-                    <div className={cx('filter-item')}>
-                        <h5 className={cx('filter-heading')}>Màu sắc</h5>
-                        <ul className={cx('filter-color')}>
-                            {
-                                category.color.map((item, index) => {
-                                    return <li key={index} style={{ position: 'relative', marginTop: '8px' }}>
-                                        <div className={cx('filter-color-item')}>
-                                            <div onClick={() => handleClickColor(item.colorName)} className={cx('filter-select-color__button')} style={{ backgroundColor: `${item.colorCode}` }}>
-
+                    <div className={cx('filter')}>
+                        <div className={cx('filter-item')}>
+                            <h5 className={cx('filter-heading')}>Kích cỡ</h5>
+                            <ul className={cx('filter-size')}>
+                                {
+                                    category.size.map((item, index) => {
+                                        return <li key={index} style={{ position: 'relative', marginTop: '8px' }}>
+                                            <div onClick={() => handleClickSize(item.name, index)} className={cx('filter-size-item', { checked: item.checked })}>
+                                                {item.name}
                                             </div>
-                                            <label className={cx('filter-select-color__label')}>{item.colorName}</label>
-                                        </div>
-                                    </li>
-                                })
-                            }
-                        </ul>
-                    </div>
-                    <div className={cx('filter-item')}>
-                        <h5 className={cx('filter-heading')} style={{ marginBottom: '16px' }}>Loại sản phẩm</h5>
-                        <ul className={cx('filter-type')}>
-                            {
-                                category.type.map((item, index) => {
-                                    return <li key={index} style={{ position: 'relative', marginBottom: '6px', cursor: 'pointer' }}>
-                                        <div onClick={() => handleClickType(item.name, index)} className={cx('filter-type-item')}>
-                                            <div className={cx('filter-type-checkbox', { checked: item.checked })}></div>
-                                            <label className={cx('filter-type-label')}>{item.name}</label>
-                                        </div>
-                                    </li>
-                                })
-                            }
-                        </ul>
+                                        </li>
+                                    })
+                                }
+                            </ul>
+                        </div>
+                        <div className={cx('filter-item')}>
+                            <h5 className={cx('filter-heading')}>Màu sắc</h5>
+                            <ul className={cx('filter-color')}>
+                                {
+                                    category.color.map((item, index) => {
+                                        return <li key={index} style={{ position: 'relative', marginTop: '8px' }}>
+                                            <div className={cx('filter-color-item')}>
+                                                <div onClick={() => handleClickColor(item.colorName)} className={cx('filter-select-color__button')} style={{ backgroundColor: `${item.colorCode}` }}>
+
+                                                </div>
+                                                <label className={cx('filter-select-color__label')}>{item.colorName}</label>
+                                            </div>
+                                        </li>
+                                    })
+                                }
+                            </ul>
+                        </div>
+                        <div className={cx('filter-item')}>
+                            <h5 className={cx('filter-heading')} style={{ marginBottom: '16px' }}>Loại sản phẩm</h5>
+                            <ul className={cx('filter-type')}>
+                                {
+                                    category.type.map((item, index) => {
+                                        return <li key={index} style={{ position: 'relative', marginBottom: '6px', cursor: 'pointer' }}>
+                                            <div onClick={() => handleClickType(item.name, index)} className={cx('filter-type-item')}>
+                                                <div className={cx('filter-type-checkbox', { checked: item.checked })}></div>
+                                                <label className={cx('filter-type-label')}>{item.name}</label>
+                                            </div>
+                                        </li>
+                                    })
+                                }
+                            </ul>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -240,9 +256,22 @@ function Collection() {
                                         style={{ fontSize: '12px', marginLeft: '5px', opacity: '1', fontWeight: '600', cursor: 'pointer', padding: '0 2px' }}>x</span></span>
                             })
                         }
+
+
                     </div>
+                    {
+                        condititonsSelected.length > 0 &&
+                        <div onClick={handleRemoveFilter} className={cx('delete-filter')}>Xóa lọc</div>
+                    }
 
+                </div>
 
+                <div className={cx('list-product-filter')}>
+                    {
+                        [1, 2, 3, 4, 5, 6, 7, 8].map((item, index) => {
+                            return <ItemCollection key={index} />
+                        })
+                    }
                 </div>
             </div>
 
