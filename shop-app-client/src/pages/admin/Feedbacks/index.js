@@ -206,18 +206,10 @@ function Feedbacks() {
 
   return (
     <div className={cx('wrapper')} style={{ fontSize: '14px' }}>
-      <div className={cx('top-navbar')}>
-      </div>
-      {/* {isOpen && (
-            <FeedbackDetail
-              close={handleClose}
-              itemFeedbackActive={itemFeedbackActive}
-              send={handleSendFeeback}
-            />
-          )} */}
+      
       <div className={cx('container')}>
         <div>
-          <h1>Manage Feedbacks!</h1>
+          <h1>QUẢN LÝ GÓP Ý KHÁCH HÀNG</h1>
           <div style={{ color: '#05CD99' }}>Lalitpur Branch</div>
         </div>
         <div className={cx('content')}>
@@ -232,16 +224,16 @@ function Feedbacks() {
                 className={cx('combobox')} />
             </div>
           </div>
-          <div style={{ padding: '10px 32px 40px', width: '100%', minHeight: '620px' }}>
+          <div style={{ padding: '10px 32px 40px', width: '100%', minHeight: '550px' }}>
             <table style={{ width: '100%', borderRadius: '10px', borderColor: 'transparent', border: 'none', position: 'relative' }}>
-              <thead style={{ width: '100%', borderRadius: '10px', borderColor: 'transparent', border: 'none', }} >
-                <tr style={{ width: '100%', backgroundColor: '#a4c4e9', color: 'black', borderRadius: '10px' }}>
+              <thead className={cx('thead')} style={{ width: '100%', borderRadius: '10px', borderColor: 'transparent', border: 'none', }} >
+                <tr style={{ width: '100%', backgroundColor: '#e6f1fe', color: 'black', borderRadius: '10px' }}>
                   <th className={cx('col-tbl')} style={{ paddingLeft: '20px' }}>Feedback</th>
                   <th className={cx('col-tbl')}>Tình trạng</th>
                   <th className={cx('col-tbl')} style={{ paddingLeft: '20px' }}>Tác vụ</th>
                 </tr>
               </thead>
-              <tbody >
+              <tbody className={cx('tbody')}>
                 {listItemFeedback.map((item, index) => {
                   return (
                     <React.Fragment >

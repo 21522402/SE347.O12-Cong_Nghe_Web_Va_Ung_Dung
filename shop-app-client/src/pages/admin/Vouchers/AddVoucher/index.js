@@ -43,7 +43,7 @@ function AddVoucher() {
                 <div style={{ paddingLeft: '4rem', marginBottom: '8px' }}>
                     <img src={img ?? dfImgVoucher} alt='avtVoucher' style={{ width: '300px', height: '200px' }} />
                 </div>
-                <input type='file' id='fileImg' hidden title='Choose Image' accept='image/*'  onChange={onImageChange} />
+                <input type='file' id='fileImg' hidden title='Choose Image' accept='image/*' onChange={onImageChange} />
                 <label htmlFor='fileImg' style={{ border: '1px dashed #ccc', marginBottom: '8px', borderRadius: '10px', height: '30px', display: 'flex', justifyContent: 'center', alignItems: 'end', padding: '4px', marginLeft: '12px', cursor: 'pointer', justifySelf: 'end' }}>Choose Image</label>
             </div>
             <form onSubmit={handleSubmit(onSubmit)} style={{ padding: '2rem 4rem 2.5rem 4rem', width: '100%' }}>
@@ -65,11 +65,9 @@ function AddVoucher() {
                     </div>
                 </div>
                 <div className={cx('row-input')} >
-                    <div style={{ width: '45%', display: 'flex', flexDirection: 'column' }}>
-                        <div className={cx('input-field-left')}  >
-                            <label htmlFor='isPercent' className={cx('label-input')}>Giảm theo % <HiOutlineInformationCircle fontSize={'18px'} /> </label>
-                            <input name='isPercent' value={isPc} onChange={onChangeCheckBox} id='isPercent' type='checkbox' style={{ marginLeft: '30px' }} className={cx('input')} />
-                        </div>
+                    <div style={{ width: '55%', display: 'flex', flexDirection: 'row' , alignItems:'center', marginTop:'-10px'}}>
+                        <label htmlFor='isPercent' className={cx('label-input')}>Giảm theo % <HiOutlineInformationCircle fontSize={'18px'} /> </label>
+                        <input name='isPercent' style={{marginLeft:'-28px'}} value={isPc} onChange={onChangeCheckBox} id='isPercent' type='checkbox'  />
                     </div>
                 </div>
                 <div className={cx('row-input')} >
@@ -117,7 +115,7 @@ function AddVoucher() {
                     </div>
                 </div>
                 <div style={{ display: 'flex', justifyContent: 'right' }}>
-                    <CustomeButton type={'Submit'} className={cx('cus-button')} title={'Xác nhận'} icon={<MdAdd fontSize={20} />} isLeft={true} bgHover={'#2f5acf'} textColorHover={'white'} containStyles={{ width: '120px', backgroundColor: 'black', color: 'white', borderRadius: '8px', padding: '20px 10px', marginTop: '16px' }} />
+                    <CustomeButton type={'Submit'} className={cx('cus-button')} title={'Xác nhận'} icon={<MdAdd fontSize={20} />} isLeft={true} bgHover={'#2f5acf'} textColorHover={'white'} containStyles={{ width: '120px', backgroundColor: 'black', color: 'white', borderRadius: '8px', padding: '10px 10px', marginTop: '16px' }} />
                 </div>
 
             </form>

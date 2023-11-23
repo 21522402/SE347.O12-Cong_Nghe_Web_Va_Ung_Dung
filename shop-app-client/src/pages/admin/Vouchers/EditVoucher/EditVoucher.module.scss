@@ -54,3 +54,20 @@
 .mt{
     margin-bottom: 0;
 }
+.expired-item {
+    border-radius: 12px;
+    width: 100%;
+    color: red;
+    padding: 5px 16px;
+    align-items: center;
+    padding-left: 70px;
+}
+.unExpired-item {
+    border-radius: 12px;
+    width: fit-content;
+    color: green;
+    padding: 5px 16px;
+    align-items: center;
+    width: 100%;
+    padding-left: 70px;
+}

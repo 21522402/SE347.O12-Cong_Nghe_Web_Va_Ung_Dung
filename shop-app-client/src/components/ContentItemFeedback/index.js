@@ -8,8 +8,9 @@ function ContentItemFeedback({contentFeedback}) {
   const {text, listImage} = contentFeedback;
   return (
     <div className={cx("container-rieview")}>
-      <i className={cx("title-review")}>*** Nội dung feedback ***</i>
-      <div className={cx("container-images")}>
+      <div style={{ marginTop: '10px', color: '#909090',marginBottom:'10px' }}>Góp ý: </div>
+      <div className={cx("message-review")}>{text}</div>
+      <div className={cx("container-images")} style={{marginLeft:'-8px', marginTop:'6px'}}>
         {listImage.map((item, index) => {
           return (
             <div className={cx("images-list")} key={index}>
@@ -18,7 +19,6 @@ function ContentItemFeedback({contentFeedback}) {
           );
         })}
 
-        <span className={cx("message-review")}>{text}</span>
       </div>
     </div>
   );

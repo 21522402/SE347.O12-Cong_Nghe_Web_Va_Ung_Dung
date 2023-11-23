@@ -1,11 +1,7 @@
 .container-rieview {
-    width: 80%;
+    width: 95%;
     height: auto;
-    background-color:#fff;
-    margin: 0px 0px 10px 30px;
-    padding: 4px 10px 10px 10px;
-    border-radius: 10px;
-   
+    margin: 10px 90px;
 }
 
 .title-review {
@@ -18,10 +14,6 @@
     align-items: flex-start;
     justify-content: flex-start;
     flex-wrap: wrap;
-    margin-top: 4px;
-    padding: 10px;
-    border: 1px solid #8c8c8c;
-    border-radius: 4px;
 }
 .images-list {
     width: 80px;
@@ -36,10 +28,8 @@
     border: 1px solid #ccc;
 }
 .message-review {
-    width: 100%;
+    width: 90%;
     font-size: 14px;
     height: auto;
     text-align: justify;
-    margin-left: 8px;
-    margin-right: 10px;
 }

@@ -67,10 +67,16 @@ function EditVoucher({item}) {
                     </div>
                 </div>
                 <div className={cx('row-input')} >
-                    <div style={{ width: '45%', display: 'flex', flexDirection: 'column', marginBottom:0 }}>
-                        <div className={cx('input-field-left')}  >
-                            <label htmlFor='isPercent' className={cx('label-input')}>Giảm theo % <HiOutlineInformationCircle fontSize={'18px'} /> </label>
-                            <input  name='isPercent' checked={isPc} onChange={onChangeCheckBox} id='isPercent' type='checkbox' style={{ marginLeft: '30px' }} className={cx('input')} />
+                    <div style={{ width: '45%', display: 'flex', flexDirection: 'row' , alignItems:'center', marginTop:'-10px'}}>
+                        <label htmlFor='isPercent' className={cx('label-input')}>Giảm theo % <HiOutlineInformationCircle fontSize={'18px'} /> </label>
+                        <input name='isPercent' style={{marginLeft:'10px'}} checked={isPc} onChange={onChangeCheckBox} id='isPercent' type='checkbox'  />
+                    </div>
+                    <div style={{width:'45%'}}>
+                        <div className={cx('input-field-right')} >
+                            <label htmlFor='statusVoucher' className={cx('label-input')}>Trạng thái <HiOutlineInformationCircle fontSize={'18px'} /> </label>
+                            <div className={cx({ 'expired-item': item.status === 'Expired' }, { 'unExpired-item': item.status === 'UnExpired' })}>
+                                {item.status}
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -114,7 +120,7 @@ function EditVoucher({item}) {
                     </div>
                 </div>
                 <div style={{ display: 'flex', justifyContent: 'right' }}>
-                    <CustomeButton type={'Submit'}  className={cx('cus-button')} title={'Xác nhận'} icon={<MdAdd fontSize={20} />} isLeft={true} bgHover={'#2f5acf'} textColorHover={'white'} containStyles={{ width: '120px', backgroundColor: 'black', color: 'white', borderRadius: '8px', padding: '20px 10px', marginTop: '16px' }} />
+                    <CustomeButton type={'Submit'}  className={cx('cus-button')} title={'Xác nhận'} icon={<MdAdd fontSize={20} />} isLeft={true} bgHover={'#2f5acf'} textColorHover={'white'} containStyles={{ width: '120px', backgroundColor: 'black', color: 'white', borderRadius: '8px', padding: '10px 10px', marginTop: '16px' }} />
                 </div>
 
             </form>

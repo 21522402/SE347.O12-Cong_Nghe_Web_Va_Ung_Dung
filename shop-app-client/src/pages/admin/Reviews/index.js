@@ -275,11 +275,9 @@ function Reviews() {
 
   return (
     <div className={cx('wrapper')} style={{ fontSize: '14px' }}>
-      <div className={cx('top-navbar')}>
-      </div>
       <div className={cx('container')}>
         <div>
-          <h1>Manage Reviews Products!</h1>
+          <h1>QUẢN LÝ ĐÁNH GIÁ CỦA SẢN PHẨM</h1>
           <div style={{ color: '#05CD99' }}>Lalitpur Branch</div>
         </div>
 

@@ -62,46 +62,59 @@ function ItemReview({ item }) {
 
   return (
 
-    <div className={cx("p-4", "container-item")}>
-      {/* {isOpenRes && <ModalResponse close={handleClose} />} */}
-      <div className={cx("name-star")}>
-        <img className={cx("avt")} src={item.userAvt} alt="avt" />
+    <div className={cx("container-item")}>
+      <div className={cx("avt-img")}>
+        <img src={item.userAvt} alt="avt" />
+      </div>
+      <div className={cx("container-rieview")}>
         <div >
-          <div style={{ margin: '0px 0px 0px 10px' }}>{item.userName}</div>
-          <div style={{ display: 'flex' }}>
-            <div style={{ marginLeft: '10px', marginRight: '10px' }}>{item.colorSize} </div>
-            <div >
-              <ReactStars
-                count={5}
-                size={12}
-                value={item.quantityStar}
-                color1="#C4C4C4"
-                color2="#ffb21d"
-                edit={false}
-                className={cx("star-product")}
-              />
+          <div style={{ fontWeight: '600', marginBottom: '6px' }}>{item.userName}</div>
+          <div >
+            <ReactStars
+              count={5}
+              size={12}
+              value={item.quantityStar}
+              color1="#C4C4C4"
+              color2="#ffb21d"
+              edit={false}
+            />
+          </div>
+          <div style={{ display: 'flex', marginTop: '6px', fontWeight: '300', fontSize: '13px', color: '#909090' }}>
+            <div >{item.dateReview}</div>
+            <div style={{ marginLeft: '4px' }}>
+              | Phân loại hàng: {item.colorSize}
             </div>
           </div>
         </div>
-      </div>
-
-      <div className={cx("container-rieview")}>
         <div className={cx("container-images")}>
+          <div style={{ marginTop: '8px', color: '#909090' }}>Đánh giá: </div>
+          <span className={cx("message-review")}>{item.contentReview}</span>
           <div className={cx("images-list")}>
             <img
-              className={cx("image")}
+              src={item.reviewImg}
+              alt="imgReview"
+            />
+            <img
+              src={item.reviewImg}
+              alt="imgReview"
+            />
+            <img
               src={item.reviewImg}
               alt="imgReview"
             />
           </div>
-          <span className={cx("message-review")}>{item.contentReview}</span>
         </div>
-        <i className={cx("text-date")}>{item.dateReview}</i>
+
         {
           typeof (item.contentResponse) !== 'undefined' &&
           <div className={cx("container-reply")}>
-            <i >*** Nội dung phản hồi ***</i>
             <div className={cx("container-res")}>
+              <div style={{ display: 'flex' }}>Phản hồi vào ngày
+                <div style={{ marginLeft: '4px' }}>{item.dateResponse}</div>
+              </div>
+              <span className={cx("message-review")}>
+                {item.contentResponse}
+              </span>
               <div className={cx("images-list")}>
                 <img
                   className={cx("image")}
@@ -109,21 +122,28 @@ function ItemReview({ item }) {
                   alt="imgRes"
                 />
               </div>
-              <span className={cx("message-review")}>
-                {item.contentResponse}
-              </span>
             </div>
-            <i className={cx("text-date")}>{item.dateResponse}</i>
           </div>
         }
         {
           !isOpenRes && typeof (item.contentResponse) === 'undefined' ?
-            <CustomeButton onClick={handleOpen} title={'Phản hồi'} isLeft={true} bgHover={'#2f5acf'} textColorHover={'white'} containStyles={{ width: '150px', backgroundColor: 'black', color: 'white', borderRadius: '8px', padding: '22px 10px', marginTop: '6px', float: 'right' }} />
+            <div className={cx("container-reply")}>
+              <div className={cx("container-res")}>
+                <div style={{ width: '100%', display: 'flex', flexDirection: 'row-reverse' }}>
+                  <CustomeButton onClick={handleOpen} title={'Phản hồi'} isLeft={true} bgHover={'#2f5acf'} textColorHover={'white'} containStyles={{ width: '110px', backgroundColor: 'black', color: 'white', borderRadius: '8px', padding: '10px 0px 10px 25px', border: 0, display: 'flex', alignSelf: 'flex-end' }} />
+                </div>
+              </div>
+            </div>
             : isOpenRes && typeof (item.contentResponse) === 'undefined' ? <>
               {isSent ? (
                 <div className={cx("container-reply")}>
-                  <i className={cx("title-reply")}>*** Nội dung phản hồi ***</i>
                   <div className={cx("container-res")}>
+                    <div style={{ display: 'flex' }}>Phản hồi vào ngày
+                      <div style={{ marginLeft: '4px' }}>{item.dateResponse}</div>
+                    </div>
+                    <span className={cx("message-review")}>
+                      {text}
+                    </span>
                     {images.map((image, index) => (
                       <div className={cx("images-list")} key={index}>
                         <img
@@ -133,15 +153,17 @@ function ItemReview({ item }) {
                         />
                       </div>
                     ))}
-                    <span className={cx("message-review")}>{text}</span>
-                    <i className={cx("text-date")}>{item.dateResponse}</i>
                   </div>
                 </div>
               ) : (
-                <div style={{ display: 'flex', flexDirection: 'row-reverse', alignItems: 'center', width: '100%' }}>
-                  <div style={{ display: 'flex', alignSelf: 'flex-end' }}>
-                    <button onClick={sendFeedback} style={{ width: '36px', backgroundColor: 'black', marginRight: '10px', color: 'white', padding: '10px', borderRadius: '50%', alignContent: 'center', height: '36px', }}><BsFillSendFill size={40} /></button>
-                    <button onClick={selectFiles} style={{ width: '36px', backgroundColor: 'black', color: 'white', padding: '10px', borderRadius: '50%', alignContent: 'center', height: '36px', }}><BsFillImageFill size={40} /></button>
+                <div style={{ display: 'flex', flexDirection: 'row-reverse', alignItems: 'center', width: '100%', marginTop: '18px' }}>
+                  <div style={{ display: 'flex', alignSelf: 'flex-end', marginBottom: '12px', cursor: 'pointer' }}>
+                    <div onClick={sendFeedback}>
+                      <BsFillSendFill size={24} style={{ marginRight: '10px' }} />
+                    </div>
+                    <div onClick={selectFiles}>
+                      <BsFillImageFill size={24} />
+                    </div>
                     <input
                       type="file"
                       name="file"
@@ -151,7 +173,7 @@ function ItemReview({ item }) {
                       onChange={onFileSelect}
                     />
                   </div>
-                  <div style={{ width: '80%' }}>
+                  <div style={{ width: '85%' }}>
                     <div style={{
                       width: '98%',
                       height: 'auto',
@@ -160,7 +182,7 @@ function ItemReview({ item }) {
                       justifyContent: 'flex-start',
                       flexWrap: 'wrap',
                       padding: '12px',
-                      border: '1px solid #8c8c8c',
+                      border: '0.5px solid #8c8c8c',
                       borderRadius: '4px 4px 0 4px'
                     }}>
                       {images.map((image, index) => (
@@ -185,7 +207,7 @@ function ItemReview({ item }) {
                       />
                     </div>
                   </div>
-                    <MdClose style={{marginRight:'20px', fontSize:'26px', display:'flex', alignSelf:'flex-end', marginBottom:'10px', cursor:'pointer'}} onClick={handleClose}/>
+                  <MdClose style={{ marginRight: '20px', fontSize: '26px', display: 'flex', alignSelf: 'flex-end', marginBottom: '10px', cursor: 'pointer' }} onClick={handleClose} />
 
                 </div>
               )}
