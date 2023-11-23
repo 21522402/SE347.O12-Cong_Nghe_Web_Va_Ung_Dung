@@ -1,7 +1,7 @@
 // Home.jsx
 import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
-import ItemProduct from "~/components/ItemProduct/ItemProduct";
+import ItemCollection from "../Collection/ItemCollection";
 import styles from "./Home.module.scss";
 import classNames from "classnames/bind";
 
@@ -14,21 +14,32 @@ function Home() {
     "https://media.coolmate.me/cdn-cgi/image/width=1920,quality=90,format=auto/uploads/November2023/cc1920x788-ver-3_68.jpg",
   ];
 
-  const responsive = {
+  const responsiveBanner = {
     desktop: {
       breakpoint: { max: 3000, min: 1024 },
       items: 1,
-      slidesToSlide: 1, // optional, default to 1.
     },
     tablet: {
       breakpoint: { max: 1024, min: 464 },
       items: 1,
-      slidesToSlide: 1, // optional, default to 1.
     },
     mobile: {
       breakpoint: { max: 464, min: 0 },
       items: 1,
-      slidesToSlide: 1, // optional, default to 1.
+    },
+  };
+  const responsive = {
+    desktop: {
+      breakpoint: { max: 3000, min: 1024 },
+      items: 4,
+    },
+    tablet: {
+      breakpoint: { max: 1024, min: 464 },
+      items: 2,
+    },
+    mobile: {
+      breakpoint: { max: 464, min: 0 },
+      items: 1,
     },
   };
   return (
@@ -38,7 +49,7 @@ function Home() {
         <Carousel
           swipeable={true}
           draggable={false}
-          responsive={responsive}
+          responsive={responsiveBanner}
           autoPlay
           ssr={true} // means to render carousel on server-side.
           infinite={true}
@@ -51,32 +62,21 @@ function Home() {
         </Carousel>
       </div>
       {/* List product */}
-      <div>
-        <Carousel
+      <div style={{paddingTop: '30px', margin: '0 80px'}}>
+        <span className={cx('title-slider')}>SẢN PHẨM NỔI BẬT</span>
+        <Carousel 
+        itemClass={cx('carousel-item')}
           swipeable={true}
           draggable={false}
           responsive={responsive}
-          autoPlay
-          ssr={true} // means to render carousel on server-side.
-          infinite={true}
-          autoPlaySpeed={3000}
-          transitionDuration={500}
-        >
-          <div
-            style={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-            }}
-          >
-            {[1, 2, 3, 4].map(() => {
+          ssr={true}>
+          {[1, 2, 3, 4, 1, 2, 3, 4, 1, 2].map(() => {
               return (
-                <div style={{ width: "280px", margin: "20px 10px" }}>
-                  <ItemProduct />
+                <div style={{ width: "100%"}} >
+                  <ItemCollection />
                 </div>
               );
             })}
-          </div>
         </Carousel>
       </div>
 
@@ -89,38 +89,27 @@ function Home() {
         }}
       >
         <img
-          style={{ width: "100%" }}
+          style={{ width: "96%", borderRadius: '4px' }}
           src="https://media.coolmate.me/cdn-cgi/image/quality=80,format=auto/uploads/October2023/mceclip0_74.png"
           alt="img"
         />
       </div>
 
-      <div>
-        <Carousel
+      <div style={{paddingTop: '30px', margin: '0 80px'}}>
+        <span className={cx('title-slider')}>SẢN PHẨM COOLEXTRA</span>
+        <Carousel 
+        itemClass={cx('carousel-item')}
           swipeable={true}
           draggable={false}
           responsive={responsive}
-          autoPlay
-          ssr={true} // means to render carousel on server-side.
-          infinite={true}
-          autoPlaySpeed={3000}
-          transitionDuration={500}
-        >
-          <div
-            style={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-            }}
-          >
-            {[1, 2, 3, 4].map(() => {
+          ssr={true}>
+          {[1, 2, 3, 4, 1, 2, 3, 4, 1, 2].map(() => {
               return (
-                <div style={{ width: "301px", margin: "20px 10px" }}>
-                  <ItemProduct />
+                <div style={{ width: "100%"}} >
+                  <ItemCollection />
                 </div>
               );
             })}
-          </div>
         </Carousel>
       </div>
 
@@ -133,39 +122,27 @@ function Home() {
         }}
       >
         <img
-          style={{ width: "100%" }}
+          style={{ width: "96%", borderRadius: '4px' }}
           src="https://media.coolmate.me/cdn-cgi/image/quality=80,format=auto/uploads/October2023/mceclip0_87.png"
           alt="img"
         />
       </div>
 
-      <div>
-        <Carousel
+      <div style={{paddingTop: '30px', margin: '0 80px'}}>
+        <span className={cx('title-slider')}>SẢN PHẨM THU ĐÔNG</span>
+        <Carousel 
+        itemClass={cx('carousel-item')}
           swipeable={true}
           draggable={false}
           responsive={responsive}
-          autoPlay
-          ssr={true} // means to render carousel on server-side.
-          infinite={true}
-          autoPlaySpeed={3000}
-          transitionDuration={500}
-        >
-          <div
-            style={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              borderTop: "1px solid #ccc",
-            }}
-          >
-            {[1, 2, 3, 4].map(() => {
+          ssr={true}>
+          {[1, 2, 3, 4, 1, 2, 3, 4, 1, 2].map(() => {
               return (
-                <div style={{ width: "301px", margin: "20px 10px" }}>
-                  <ItemProduct />
+                <div style={{ width: "100%"}} >
+                  <ItemCollection />
                 </div>
               );
             })}
-          </div>
         </Carousel>
       </div>
 
@@ -178,38 +155,27 @@ function Home() {
         }}
       >
         <img
-          style={{ width: "100%" }}
+          style={{ width: "96%", borderRadius: '4px' }}
           src="https://mcdn.coolmate.me/image/September2023/mceclip4_64.jpg"
           alt="img"
         />
       </div>
 
-      <div>
-        <Carousel
+      <div style={{paddingTop: '30px', margin: '0 80px'}}>
+        <span className={cx('title-slider')}>SẢN PHẨM THỂ THAO</span>
+        <Carousel 
+        itemClass={cx('carousel-item')}
           swipeable={true}
           draggable={false}
           responsive={responsive}
-          autoPlay
-          ssr={true} // means to render carousel on server-side.
-          infinite={true}
-          autoPlaySpeed={3000}
-          transitionDuration={500}
-        >
-          <div
-            style={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-            }}
-          >
-            {[1, 2, 3, 4].map(() => {
+          ssr={true}>
+          {[1, 2, 3, 4, 1, 2, 3, 4, 1, 2].map(() => {
               return (
-                <div style={{ width: "301px", margin: "20px 10px" }}>
-                  <ItemProduct />
+                <div style={{ width: "100%"}} >
+                  <ItemCollection />
                 </div>
               );
             })}
-          </div>
         </Carousel>
       </div>
 
@@ -222,7 +188,7 @@ function Home() {
         }}
       >
         <img
-          style={{ width: "100%" }}
+          style={{ width: "96%", borderRadius: '4px' }}
           src="https://mcdn.coolmate.me/image/March2023/mceclip0_137.jpg"
           alt="img"
         />
@@ -233,7 +199,7 @@ function Home() {
           display: "flex",
           alignItems: "center",
           justifyContent: "space-evenly",
-          margin: "10px 30px",
+          margin: "10px 20px",
         }}
       >
         <div className={cx("container-item")}>

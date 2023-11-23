@@ -19,8 +19,8 @@ function DetailPopup({ onMouseLeave, category }) {
         }
     }, [])
     return (
-        <div ref={wrapper} className={cx('wrapper', { sticky: isSticky })}>
-            <div  onMouseLeave={() => onMouseLeave()} className={cx('inner')}>
+        <div   ref={wrapper} className={cx('wrapper', { sticky: isSticky })}>
+            <div onMouseLeave={() => onMouseLeave()} className={cx('inner')}>
                 <div style={{ borderRight: '1px solid #ccc', paddingRight: '60px' }}>
                     <div className={cx('title')}>Theo sản phẩm
                         <div style={{ width: '100%', height: '2px', backgroundColor: '#000', position: 'absolute', top: '30px' }}></div>

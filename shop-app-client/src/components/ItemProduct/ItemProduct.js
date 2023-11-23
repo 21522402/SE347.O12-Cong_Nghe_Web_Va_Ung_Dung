@@ -33,7 +33,7 @@ function ItemProduct() {
   return (
     <div className={cx("container-item")}>
         <img
-          style={{ width: "100%", height: "300px", borderTopLeftRadius: "4px", borderTopRightRadius: '4px' }}
+          style={{ width: "100%", height: "350px", borderTopLeftRadius: "4px", borderTopRightRadius: '4px' }}
           src={imageColor}
           alt="abc"
         />

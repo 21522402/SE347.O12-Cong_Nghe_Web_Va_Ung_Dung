@@ -5,7 +5,7 @@ function LayoutNoSidebar({children}) {
     return ( 
         <>
             <Header/>
-            <div style={{paddingTop:'30px', overflowX: 'hidden'}}>{children}</div>
+            <div style={{paddingTop:'30px'}}>{children}</div>
             <Footer/>
         </>
         );
