@@ -13,9 +13,9 @@ function ChangePass() {
                     <h1 className={cx('account-page__title')}>Thay đổi mật khẩu</h1>
                 </div>
                 <div style={{gap: '14px', display: 'flex', flexDirection: 'column'}}>
-                    <TextInput placeHolder="Mật khẩu cũ" icon={<IoMdLock/>} secure/>
-                    <TextInput placeHolder="Mật khẩu mới" icon={<IoMdLock/>} secure/>
-                    <TextInput placeHolder="Nhập lại mật khẩu mới" icon={<IoMdLock/>} secure/>
+                    <TextInput placeHolder="Mật khẩu cũ" type="type_2" icon={<IoMdLock/>} secure/>
+                    <TextInput placeHolder="Mật khẩu mới" type="type_2" icon={<IoMdLock/>} secure/>
+                    <TextInput placeHolder="Nhập lại mật khẩu mới" type="type_2" icon={<IoMdLock/>} secure/>
                 </div>
                 <div style={{display: 'flex', width: '100%', justifyContent: 'end'}}>
                     <div className={cx('account-info__btn')}>

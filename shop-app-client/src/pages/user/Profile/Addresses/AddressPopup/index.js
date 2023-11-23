@@ -23,10 +23,10 @@ function AddressPopup({props, onClose, isAdd} ) {
     return ( 
         <>
             <div className={cx('container')}>
+                <h1 className={cx('account-popup__title')}>{isAdd ? "Thêm địa chỉ" : "Cập nhật địa chỉ"}</h1>
                 <div className={cx('btnClose')} onClick={onClose}>
                     <AiOutlineClose/>
                 </div>
-                <button onClick={() => console.log(selected)}>clickme</button>
                 <div className={cx('outer')}>
                     <div style={{display: 'flex', flexDirection: 'row', alignItems: 'center', gap: '15px'}}>
                         <div style={{width: '50%'}}>

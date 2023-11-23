@@ -7,6 +7,10 @@
 .main__sideBar{
     flex: 2;
     margin-top: 10px;
+    position: -webkit-sticky;
+    position: sticky;
+    top: 10px;
+    height: 480px;
 }
 
 .tab_container{
@@ -16,6 +20,7 @@
     align-items: center;
     justify-content: space-between;
     background-color: white;
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0px rgba(0, 0, 0, 0.1);
     padding: 14px 12px;
     border-radius: 8px;
     animation: 0.3s linear;

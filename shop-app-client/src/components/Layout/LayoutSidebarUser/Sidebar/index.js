@@ -12,7 +12,7 @@ function Sidebar() {
         setActiveItem(item)
     }
     return (
-        <div className={cx('main__sideBar')}>
+        <div className={cx('main__sideBar')} onClick={() =>  window.scrollTo({top: 0, behavior: 'smooth'})}>
             <Link to={'/user-profile/info'} className={cx(`sidebar-item-link`)} onClick={()=>{handleClickItem('info')}}>
                 <div className={cx('tab_container', {
                         'active-item':activeItem==='info'

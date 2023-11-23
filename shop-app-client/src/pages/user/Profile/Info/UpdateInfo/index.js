@@ -85,9 +85,9 @@ function UpdateInfo(){
         <>
            <div className={cx('container')}>
                 <div style={{display: 'flex', width: '100%', justifyContent: 'center'}}>
-                    <h1 className={cx('account-page__title')}>Thông tin tài khoản</h1>
+                    <span className={cx('account-page__title')}>Thông tin tài khoản</span>
                 </div>
-                <TextInput placeHolder="Họ và tên" icon={<FaUser/>}/>
+                <TextInput placeHolder="Họ và tên" type="type_1" icon={<FaUser/>}/>
                 <div className={cx('date_info')}>
                     <div className={cx('date_item')}>
                         <ComboBox placeHolder="Ngày" type={'table'} icon={<BsFillCalendarFill/>} listItems={days} filterValueSelected={filterDate}/>
@@ -100,13 +100,13 @@ function UpdateInfo(){
                     </div>
                 </div>
                 <RadioButton listItems={gender} filterValueChecked={() => {}}/>
-                <TextInput placeHolder="Số điện thoại" icon={<ImPhone/>}/>
+                <TextInput placeHolder="Số điện thoại" type="type_1" icon={<ImPhone/>}/>
                 <div className={cx('outer-weight-height')}>
                     <div className={cx('body-item')}>
-                        <TextInput placeHolder="Chiều cao (cm)" icon={<IoIosBody/>}/>
+                        <TextInput placeHolder="Chiều cao (cm)" type="type_1" icon={<IoIosBody/>}/>
                     </div>
                     <div className={cx('body-item')}>
-                        <TextInput placeHolder="Cân nặng (kg)" icon={<GiWeight/>}/>
+                        <TextInput placeHolder="Cân nặng (kg)" type="type_1" icon={<GiWeight/>}/>
                     </div>
                 </div>
                 <div style={{display: 'flex', width: '100%', justifyContent: 'end'}}>
