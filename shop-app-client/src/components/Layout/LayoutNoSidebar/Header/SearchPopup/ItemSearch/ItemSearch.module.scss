@@ -6,12 +6,18 @@
         height: 240px;
         border-radius: 8px;
         cursor: pointer;
+        overflow: hidden;
+
+        &:hover img {
+            scale: 1.1;
+        }
         img {
  
             width: 100%;
             height: 100%;
             object-fit: cover;
             border-radius: 8px;
+            transition: scale .2s;
         }
 
 
