@@ -48,7 +48,7 @@ function SettingPopup({closeBtn}) {
                         </div>
                     </div>
                 </div>
-                <Link to={'/user-profile'}>
+                <Link to={'/user-profile/info'}>
                     <label for={closeBtn}>
                         <div className={cx('btnToProfile')}>
                             <span className={cx('textToProfile')}>Đi đến tài khoản</span>

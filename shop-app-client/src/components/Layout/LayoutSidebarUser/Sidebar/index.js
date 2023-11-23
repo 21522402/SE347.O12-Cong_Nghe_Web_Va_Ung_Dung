@@ -7,14 +7,16 @@ import { useState } from 'react';
 import { VoucherIcon, LocationIcon, AccountIcon, OrderIcon, RatingIcon, QuestionIcon, LogOutIcon } from '~/assets/icons';
 const cx = classNames.bind(styles);
 function Sidebar() {
-    const [activeItem , setActiveItem ] = useState(null)
+    const [activeItem , setActiveItem ] = useState('info')
     const handleClickItem = (item) =>{
         setActiveItem(item)
     }
     return (
         <div className={cx('main__sideBar')}>
-            <Link to={'/user-profile/info'}>
-                <div className={cx('tab_container')}>
+            <Link to={'/user-profile/info'} className={cx(`sidebar-item-link`)} onClick={()=>{handleClickItem('info')}}>
+                <div className={cx('tab_container', {
+                        'active-item':activeItem==='info'
+                    })}>
                     <div className={cx('tab_container_info')}>
                         <img src={AccountIcon} className={cx('tab_icon')}></img>
                         <span className={cx('tab_info')}>Thông tin tài khoản</span>
@@ -22,8 +24,10 @@ function Sidebar() {
                     <BsArrowRight className={cx('tab_arrowRight')}/>
                 </div>
             </Link>
-            <Link to={'/user-profile/orders'}>
-                <div className={cx('tab_container')}>
+            <Link to={'/user-profile/orders'} className={cx(`sidebar-item-link` )} onClick={()=>{handleClickItem('order')}}>
+                <div className={cx('tab_container', {
+                        'active-item':activeItem==='order'
+                    })}>
                     <div className={cx('tab_container_info')}>
                         <img src={OrderIcon} className={cx('tab_icon')}></img>
                         <span className={cx('tab_info')}>Lịch sử đơn hàng</span>
@@ -31,8 +35,10 @@ function Sidebar() {
                     <BsArrowRight className={cx('tab_arrowRight')}/>
                 </div>
             </Link>
-            <Link to={'/user-profile/vouchers'}>
-                <div className={cx('tab_container')}>
+            <Link to={'/user-profile/vouchers'} className={cx(`sidebar-item-link`)} onClick={()=>{handleClickItem('voucher')}}>
+                <div className={cx('tab_container', {
+                        'active-item':activeItem==='voucher'
+                    })}>
                     <div className={cx('tab_container_info')}>
                         <img src={VoucherIcon} className={cx('tab_icon')}></img>
                         <span className={cx('tab_info')}>Ví voucher</span>
@@ -41,8 +47,10 @@ function Sidebar() {
                 </div>
             </Link>
             
-            <Link to={'/user-profile/addresses'}>
-                <div className={cx('tab_container')}>
+            <Link to={'/user-profile/addresses'} className={cx(`sidebar-item-link`)} onClick={()=>{handleClickItem('address')}}>
+                <div className={cx('tab_container', {
+                        'active-item':activeItem==='address'
+                    })}>
                     <div className={cx('tab_container_info')}>
                         <img src={LocationIcon} className={cx('tab_icon')}></img>
                         <span className={cx('tab_info')}>Sổ địa chỉ</span>
@@ -50,8 +58,10 @@ function Sidebar() {
                     <BsArrowRight className={cx('tab_arrowRight')}/>
                 </div>
             </Link>
-            <Link to={'/user-profile/reviews'}>
-                <div className={cx('tab_container')}>
+            <Link to={'/user-profile/reviews'} className={cx(`sidebar-item-link` )} onClick={()=>{handleClickItem('review')}}>
+                <div className={cx('tab_container', {
+                        'active-item':activeItem==='review'
+                    })}>
                     <div className={cx('tab_container_info')}>
                         <img src={RatingIcon} className={cx('tab_icon')}></img>
                         <span className={cx('tab_info')}>Đánh giá và phản hồi</span>
@@ -59,8 +69,10 @@ function Sidebar() {
                     <BsArrowRight className={cx('tab_arrowRight')}/>
                 </div>
             </Link>
-            <Link to={'/user-profile/policies'}>
-                <div className={cx('tab_container')}>
+            <Link to={'/user-profile/policies'} className={cx(`sidebar-item-link`)} onClick={()=>{handleClickItem('policies')}}>
+                <div className={cx('tab_container', {
+                        'active-item':activeItem==='policies'
+                    })}>
                     <div className={cx('tab_container_info')}>
                         <img src={QuestionIcon} className={cx('tab_icon')}></img>
                         <span className={cx('tab_info')}>Chính sách và câu hỏi thường gặp</span>
@@ -68,7 +80,7 @@ function Sidebar() {
                     <BsArrowRight className={cx('tab_arrowRight')}/>
                 </div>
             </Link>
-            <div className={cx('tab_container')}>
+            <div className={cx('tab_container')} >
                 <div className={cx('tab_container_info')}>
                     <img src={LogOutIcon} className={cx('tab_icon')}></img>
                     <span className={cx('tab_info')}>Đăng xuất</span>

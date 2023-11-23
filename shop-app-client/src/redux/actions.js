@@ -25,3 +25,10 @@ export const filterChange = (data) => {
         payload: data
     }
 }
+
+export const importItemToOrder = (data) => {
+    return {
+        type: 'cart/importItemToOrder',
+        payload: data
+    }
+}

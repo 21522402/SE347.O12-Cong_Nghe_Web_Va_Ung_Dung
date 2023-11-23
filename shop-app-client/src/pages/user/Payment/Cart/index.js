@@ -8,167 +8,7 @@ import { VoucherIcon2 } from '~/assets/icons';
 import { useSelector } from 'react-redux';
 const cx = classNames.bind(styles);
 function Cart() {
-    const orders = useSelector(state => state.orders)
-
-    const forUProducts = [
-        {
-            productId: '3',
-            productavatar: 'https://media.coolmate.me/cdn-cgi/image/width=320,height=362,quality=80/image/September2023/graphic.spec.2_4.jpg',
-            productName: 'T-Shirt chạy bộ Graphic Special',
-            importPrice: 399000,
-		    exportPrice: 499000,
-            colors:[
-                {
-                    colorCode: '#1',
-                    colorName: "Trắng",
-                    images: 'https://media.coolmate.me/cdn-cgi/image/width=320,height=362,quality=80/image/September2023/trang189_2.jpg',
-                    size:{
-                        S: {
-                            quantity: 20,
-                        },
-                        M: {
-                            quantity: 30,
-                        },
-                        L: {
-                            quantity: 12,
-                        },
-                        XL: {
-                            quantity: 10,
-                        },
-                        XXL: {
-                            quantity: 100,
-                        },
-                        XXXL: {
-                            quantity: 90,
-                        },
-                    }
-                },
-                {
-                    colorCode: '#2',
-                    colorName: "Xanh biển",
-                    images: 'https://media.coolmate.me/cdn-cgi/image/width=320,height=362,quality=80/image/August2023/AT220-2582-6.jpg',
-                    size:{
-                        S: {
-                            quantity: 20,
-                        },
-                        M: {
-                            quantity: 30,
-                        },
-                        L: {
-                            quantity: 12,
-                        }
-                    }
-                },
-                {
-                    colorCode: '#3',
-                    colorName: "Vàng",
-                    images: 'https://media.coolmate.me/cdn-cgi/image/width=320,height=362,quality=80/image/September2023/at220xpt-2-1.jpg',
-                    size:{
-                    }
-                },
-                {
-                    colorCode: '#4',
-                    colorName: "Nâu",
-                    images: 'https://media.coolmate.me/cdn-cgi/image/width=320,height=362,quality=80/image/August2023/AT220-1.jpg',
-                    size:{
-                        S: {
-                            quantity: 20,
-                        },
-                        M: {
-                            quantity: 30,
-                        },
-                    }
-                }
-            ],
-            discountPerc: 0.2,
-            pBuy: 2,
-            selectSize: 'M',
-            selectColor: 'Trắng',
-        },
-        {
-            productId: '4',
-            productavatar: 'https://media.coolmate.me/cdn-cgi/image/width=320,height=362,quality=80/image/November2023/combo4dt.1.jpg',
-            productName: 'T-Shirt Cotton 220GSM',
-            importPrice: 500000,
-		    exportPrice: 537000,
-            colors:[
-                {
-                    colorCode: '#1',
-                    colorName: "Trắng",
-                    images: 'https://media.coolmate.me/cdn-cgi/image/width=320,height=362,quality=80/image/September2023/trang189_2.jpg',
-                    size:{
-                        S: {
-                            quantity: 20,
-                        },
-                        M: {
-                            quantity: 30,
-                        },
-                        L: {
-                            quantity: 12,
-                        },
-                        XL: {
-                            quantity: 10,
-                        },
-                        XXL: {
-                            quantity: 100,
-                        },
-                        XXXL: {
-                            quantity: 90,
-                        },
-                    }
-                },
-                {
-                    colorCode: '#2',
-                    colorName: "Xanh biển",
-                    images: 'https://media.coolmate.me/cdn-cgi/image/width=320,height=362,quality=80/image/August2023/AT220-2582-6.jpg',
-                    size:{
-                        S: {
-                            quantity: 20,
-                        },
-                        M: {
-                            quantity: 30,
-                        },
-                        L: {
-                            quantity: 12,
-                        },
-                        XL: {
-                            quantity: 10,
-                        },
-                        XXL: {
-                            quantity: 100,
-                        },
-                        XXXL: {
-                            quantity: 90,
-                        },
-                    }
-                },
-                {
-                    colorCode: '#3',
-                    colorName: "Xanh biển",
-                    images: 'https://media.coolmate.me/cdn-cgi/image/width=320,height=362,quality=80/image/September2023/at220xpt-2-1.jpg',
-                    size:{
-                    }
-                },
-                {
-                    colorCode: '#4',
-                    colorName: "Nâu",
-                    images: 'https://media.coolmate.me/cdn-cgi/image/width=320,height=362,quality=80/image/August2023/AT220-1.jpg',
-                    size:{
-                        S: {
-                            quantity: 20,
-                        },
-                        M: {
-                            quantity: 30,
-                        },
-                    }
-                }
-            ],
-            discountPerc: 0.2,
-            pBuy: 2,
-            selectSize: 'M',
-            selectColor: 'Xanh biển',
-        }
-    ]
+    let {cart, forUProducts} = useSelector(state => state)
 
     let i = 50;
 
@@ -177,14 +17,14 @@ function Cart() {
     let [preTotal, setPreTotal] = useState(0);
     let [discount, setDiscount] = useState(0);
     let [delivery, setDelivery] = useState(0);
-    let [forUProduct, setForUProduct] = useState(forUProducts);
+    let [discountCode, setDiscountCode] = useState(0);
 
     useEffect(() => {
         calculateTotal()
-    }, [orders])
+    }, [cart])
 
     function calculateTotal(){
-        preTotal = orders.reduce((total, item) => total + item.exportPrice * item.pBuy, 0)
+        preTotal = cart.reduce((total, item) => total + item.exportPrice * (1 - item.discountPerc) * item.quantity, 0)
         setPreTotal(preTotal)
     }
 
@@ -213,17 +53,15 @@ function Cart() {
             return 0;
     }
 
-    function selectItemToOrder(product){
-    }
-
     return ( 
         <>
+            <button onClick={() => console.log(cart)}>clickme</button>
             <div>
                 {
-                    orders.map((item, index) => {
+                    cart.map((item, index) => {
                         return (
                             <div style={{position: 'relative', zIndex: i--}}>
-                                <ProductItem key={index} props={item} onQuantityChange={onQuantityChange}/>
+                                <ProductItem key={index} props={item}/>
                             </div>
                         )
                     })       
@@ -250,10 +88,10 @@ function Cart() {
                 </div>
                 <div className={cx('outerForUProducts')}>
                     {
-                        forUProduct.map((item, index) => {
+                        forUProducts.map((item, index) => {
                             return <>
                                 <div style={{borderRight: '1px solid #c9c9c9', position: 'relative', zIndex: 10}}>
-                                    <ProductForUItem key={index} props={item} onSelect={() => selectItemToOrder(item)}/>
+                                    <ProductForUItem key={index} props={item}/>
                                 </div>
                             </>
                         })
@@ -283,7 +121,7 @@ function Cart() {
             </div>
 
             <div className={cx('discount-box')}>
-                <input type="text" placeholder='Nhập mã giảm giá'/>
+                <input type="text" placeholder='Nhập mã giảm giá' />
                 <button datavoucher disabled>Áp dụng</button>
             </div>
 

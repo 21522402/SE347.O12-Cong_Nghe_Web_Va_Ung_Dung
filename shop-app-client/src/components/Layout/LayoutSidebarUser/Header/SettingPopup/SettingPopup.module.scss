@@ -1,15 +1,3 @@
-.outerVouchers::-webkit-scrollbar {
-    height: 2px;
-}
-
-.outerVouchers::-webkit-scrollbar-thumb {
-    background: #888;
-}
-
-.outerVouchers::-webkit-scrollbar-corner{
-    border-radius: 4px;
-}
-
 .container{
     display: flex;
     flex-direction: column;
@@ -38,8 +26,6 @@
     flex-direction: row;
     overflow-x: auto;
     padding-bottom: 10px;
-    padding-left: -25px;
-    gap: 10px;
 }
 
 .greetHeader{

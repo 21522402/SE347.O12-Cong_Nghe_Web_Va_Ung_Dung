@@ -1,16 +1,21 @@
 import { Link, useNavigate } from 'react-router-dom';
 import styles from './Header.module.scss'
 import classNames from 'classnames/bind';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { IoSearch, IoBagHandle } from "react-icons/io5";
 import { IoMdClose } from "react-icons/io";
 import { FaRegUserCircle } from "react-icons/fa";
 import DetailPopup from './DetailPopup';
 import removeViTones from '~/utils/removeViTones';
+import SettingPopup from './SettingPopup';
 const cx = classNames.bind(styles);
 
 function Header() {
     const navigate = useNavigate();
+    const overLay = useRef();
+    const hideOverLay = () => {
+        overLay.current.checked = false
+    }
     const [indexCategoryActive, setIndexCategoryActive] = useState(-1);
     const [showDetailPopUp, setShowDetailPopup] = useState(false)
     const [valueSearch,setValueSearch] = useState('');
@@ -173,8 +178,18 @@ function Header() {
             </div>
 
             <div className={cx('user')}>
-                <div style={{cursor: 'pointer'}}><img src='https://mcdn.coolmate.me/image/October2023/mceclip3_72.png' /></div>
-                <div style={{cursor: 'pointer'}}><IoBagHandle style={{ color: '#fff', fontSize: '28px' }} /></div>
+                <input ref={overLay} type="checkbox" hidden className={cx("main__header-navBar-hide-open")} id={cx("main__header-navBar-hide-open")}/>
+                <div className={cx("main__header-navBar")}>
+                    <SettingPopup closeBtn={hideOverLay}/>
+                </div>
+                <label for={cx("main__header-navBar-hide-open")} className={cx("main__header-navbar-overlay")}>
+                </label>
+                <label for={cx("main__header-navBar-hide-open")}>
+                    <div style={{cursor: 'pointer'}}><img src='https://mcdn.coolmate.me/image/October2023/mceclip3_72.png' /></div>
+                </label>
+                <Link to='/cart'>
+                    <div style={{cursor: 'pointer'}}><IoBagHandle style={{ color: '#fff', fontSize: '28px' }} /></div>
+                </Link>
             </div>
             {
                 showDetailPopUp && 

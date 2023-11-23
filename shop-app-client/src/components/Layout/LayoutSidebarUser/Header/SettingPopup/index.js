@@ -21,8 +21,9 @@ function SettingPopup({closeBtn}) {
                             {
                                 vouchers.map((item, index) => {
                                     return (
-                                        <div>
+                                        <div style={{margin: '0 10px'}}>
                                             <VoucherItem key={index} voucherCode={item.voucherCode} voucherDes={item.voucherDes} voucherOutDate={item.voucherOutDate}/>
+
                                         </div>
                                     )
                                 })
@@ -47,9 +48,9 @@ function SettingPopup({closeBtn}) {
                         </div>
                     </div>
                 </div>
-                <Link to={'/user-profile/info'}>
+                <Link to={'/user-profile'}>
                     <label for={closeBtn}>
-                        <div className={cx('btnToProfile')} onClick={closeBtn}>
+                        <div className={cx('btnToProfile')}>
                             <span className={cx('textToProfile')}>Đi đến tài khoản</span>
                         </div>
                     </label>  
