@@ -1,8 +1,22 @@
 .wrapper {
-    padding: 20px 60px 0 60px;
-    font-size: 13px;
+    background-color: #F4F7FE;
+    min-height: 100vh;
     width: 100%;
-    margin-bottom: 32px;
+    font-size: 14px;
+}
+
+
+.container {
+    padding: 30px;
+    width: 100%;
+}
+
+.content-total {
+    min-height: max-content;
+    width: 100%;
+    border-radius:4px;
+    background-color: #fff;
+    box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
 }
 
 .tabpanel {
@@ -22,12 +36,13 @@
     }
     &.active {
         border-bottom: 3px solid #00b63e;
+        background-color: rgba(154, 148, 148, 0.2);
     }
     transition: background-color .2s linear;
 }
 
 .content {
-    margin-top: 32px;
+    padding: 32px;
 }
 
 .wrapper-body {

@@ -182,11 +182,9 @@ function Vouchers() {
 
     return (
         <div className={cx('wrapper')} style={{fontSize:'14px'}}>
-            <div className={cx('top-navbar')}>
-            </div>
             <div className={cx('container')}>
                 <div>
-                    <h1>Manage Vouchers!</h1>
+                    <h1>QUẢN LÝ KHUYẾN MÃI</h1>
                     <div style={{ color: '#05CD99' }}>Lalitpur Branch</div>
                 </div>
                 <div className={cx('content')}>
@@ -201,13 +199,13 @@ function Vouchers() {
                                 className={cx('combobox')} />
                         </div>
                         <div  onClick={()=>setModalAddVoucher(true)}>
-                            <CustomeButton className={cx('cus-button')} title={'Thêm Voucher'} icon={<MdAdd fontSize={20} />} isLeft={true} bgHover={'#2f5acf'} textColorHover={'white'} containStyles={{ width: '150px', backgroundColor: 'black', color: 'white', borderRadius: '8px', padding: '22px 10px', marginTop: '6px' }} />
+                            <CustomeButton className={cx('cus-button')} title={'Thêm Voucher'} icon={<MdAdd fontSize={20} />} isLeft={true} bgHover={'#2f5acf'} textColorHover={'white'} containStyles={{ width: '150px', backgroundColor: 'black', color: 'white', borderRadius: '8px', padding: '10px 10px', marginTop: '6px', marginRight:'12px' }} />
                         </div>
                     </div>
-                    <div style={{ padding: '10px 32px 40px', width: '100%', minHeight: '620px' }}>
+                    <div style={{ padding: '10px 32px 40px', width: '100%', minHeight: '550px' }}>
                         <table style={{ width: '100%', borderRadius: '10px', borderColor: 'transparent', border: 'none', position: 'relative' }}>
-                            <thead style={{ width: '100%', borderRadius: '10px', borderColor: 'transparent', border: 'none', }} >
-                                <tr style={{ width: '100%', backgroundColor: '#a4c4e9', color: 'black', borderRadius: '10px' }}>
+                            <thead className={cx('thead')} style={{ width: '100%', borderRadius: '10px', borderColor: 'transparent', border: 'none', }} >
+                                <tr style={{ width: '100%', backgroundColor: '#e6f1fe', color: 'black', borderRadius: '10px' }}>
                                     <th className={cx('col-tbl')} style={{ paddingLeft: '20px' }}>VoucherID</th>
                                     <th className={cx('col-tbl')}>Mã Voucher</th>
                                     <th className={cx('col-tbl')}>Gía giảm</th>
@@ -218,7 +216,7 @@ function Vouchers() {
                                     <th className={cx('col-tbl')}>Tác vụ</th>
                                 </tr>
                             </thead>
-                            <tbody>
+                            <tbody className={cx('tbody')}>
                                 {
                                     records.map((item, index) => {
                                         return (

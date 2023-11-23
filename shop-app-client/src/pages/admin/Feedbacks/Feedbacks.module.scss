@@ -3,23 +3,21 @@
     min-height: 100vh;
     width: 100%;
 }
-.top-navbar{
-    height: 30px;
-}
+
 .container{
-    padding: 40px;
+    padding: 30px;
     width: 100%;
 }
 .content {
     min-height: max-content;
     width: 100%;
-    border-radius: 16px;
+    border-radius:4px;
     background-color: #fff;
     margin-top: 28px;
-    
+    box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
 }
 .header-content{
-    padding: 28px;
+    padding: 20px;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -32,10 +30,9 @@
 }
 .search-input{
     padding-left: 32px;
-    border-radius: 8px;
-    height: 40px;
+    border-radius: 2px;
+    height: 36px;
     border: 1px solid #ccc;
-    background-color: #F4F7FE;
     width: 320px;
 }
 .combobox{
@@ -43,30 +40,31 @@
     height: 40px;
     width: 200px;
 }
-.col-tbl{
+.col-tbl {
     position: relative;
     font-weight: 600;
-    padding: 20px 0px;
+    padding: 10px 0px;
     text-align: left;
 }
-.row-item{
-    min-height: 70px;
-    position: relative;
-    border-bottom: 1px solid #ccc;
-    width: 100%;
 
+.row-item {
+    position: relative;
+    border: 0.5px solid #ccc;
+    width: 100%;
+    cursor: pointer;
+    &:hover{
+        background-color: #f2fbf5;
+    }
 }
-td{
-    padding: 10px 0;
+
+.thead {
+    tr {
+        border: 0.5px solid rgb(212, 231, 249);
+    }
 }
-button{
-    border: 1px solid transparent;
-    align-items: center;
-    justify-content: center;
-    display: flex;
-    height: 30px;
-    width: 30px;
-    border-radius: 4px;
-    padding: 1px;
-    background-color: #fff;
+
+.tbody {
+    td {
+        padding: 10px 0;
+    }
 }

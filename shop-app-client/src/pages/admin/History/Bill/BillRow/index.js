@@ -43,7 +43,7 @@ function BillRow({ index, open, onClick, onClickRemoveItem, product }) {
                 openDetail &&
                 <tr className={cx('product-detail')}>
                     <td colSpan={8} style={{ padding: '0' }}>
-                        <BillDetail />
+                        <BillDetail/>
                     </td>
                 </tr>
             }

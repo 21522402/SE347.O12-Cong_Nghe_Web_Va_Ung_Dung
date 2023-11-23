@@ -63,38 +63,43 @@ function Bill() {
     })
     return (
 
-        <div className={cx('wrapper')}>
-            <div className={cx('tabpanel')}>
-                <div className={cx('tabpanel-item', 'active')}>
-                    Hóa đơn
+        <div className={cx('wrapper')} >
+            <div className={cx('container')}>
+                <div>
+                    <h1>QUẢN LÝ LỊCH SỬ</h1>
+                    <div style={{ color: '#05CD99' }}>Lalitpur Branch</div>
                 </div>
-                <div className={cx('tabpanel-item')}>
-                    <Link to="/admin/history/import">Nhập hàng</Link>
+                <div className={cx('tabpanel')}>
+                    <div className={cx('tabpanel-item', 'active')}>
+                        Hóa đơn
+                    </div>
+                    <div className={cx('tabpanel-item')}>
+                        <Link to="/admin/history/import">Nhập hàng</Link>
+                    </div>
                 </div>
-            </div>
+                <div className={cx('content-total')}>
+                    <div className={cx('content')}>
+                        <div className={cx('wrapper-body')}>
+                            <div className={cx('toolbox')}>
+                                {/* Filter */}
+                                <div className={cx('filter-box')}>
+                                    <div className={cx('search-box', {
+                                        'input-focus': inputFocus
+                                    })}>
+                                        <AiOutlineSearch className={cx('icon')} />
+                                        <input onFocus={() => setInputFocus(true)} onBlur={() => setInputFocus(false)} type="text" placeholder="Theo mã, tên khách hàng, ngày" className={cx('search-input')} />
+                                        <AiFillCaretDown className={cx('icon')} />
+                                    </div>
 
-            <div className={cx('content')}>
-                <div className={cx('wrapper-body')}>
-                    <div className={cx('toolbox')}>
-                        {/* Filter */}
-                        <div className={cx('filter-box')}>
-                            <div className={cx('search-box', {
-                                'input-focus': inputFocus
-                            })}>
-                                <AiOutlineSearch className={cx('icon')} />
-                                <input onFocus={() => setInputFocus(true)} onBlur={() => setInputFocus(false)} type="text" placeholder="Theo mã, tên khách hàng, ngày" className={cx('search-input')} />
-                                <AiFillCaretDown className={cx('icon')} />
-                            </div>
 
+                                    {/* Loại hàng */}
+                                    <div className={cx('product-type')} onClick={handleMouseOverDateFilter}>
+                                        <div className={cx('function-button')}>
+                                            <span className={cx('btn', 'btn-succeed')} >{dateFilter}<AiFillCaretDown style={{ marginLeft: '4px' }} /></span>
+                                        </div>
+                                        <input onChange={handleChangeDateInput} ref={dateInputElement} type="month" style={{ opacity: '0', top: '6px', left: '6px', right: '0', position: 'absolute' }} />
 
-                            {/* Loại hàng */}
-                            <div className={cx('product-type')} onClick={handleMouseOverDateFilter}>
-                                <div className={cx('function-button')}>
-                                    <span className={cx('btn', 'btn-succeed')} >{dateFilter}<AiFillCaretDown style={{ marginLeft: '4px' }} /></span>
-                                </div>
-                                <input onChange={handleChangeDateInput} ref={dateInputElement} type="month" style={{ opacity: '0', top: '6px', left: '6px', right: '0', position: 'absolute' }} />
-
-                                {/* <ul className={cx('product-type-list')}>
+                                        {/* <ul className={cx('product-type-list')}>
                             <li>
                                 <span>Tất cả</span>
                             </li>
@@ -108,63 +113,66 @@ function Bill() {
                                 <span>Quần short</span>
                             </li>
                         </ul> */}
-                                {showType && <DropDown items={listProductType} />}
+                                        {showType && <DropDown items={listProductType} />}
 
+                                    </div>
+                                </div>
+
+                                {/* function */}
+                                <div className={cx('function-box')}>
+
+                                    {/* thêm */}
+                                    <div className={cx('function-button')}>
+                                        <span onClick={() => { setTypeModal('add'); setShowModal(true) }} className={cx('btn', 'btn-succeed')}><AiOutlinePlus className={cx('icon')} /> Thêm mới</span>
+                                    </div>
+
+
+
+                                    {/* import */}
+                                    <div className={cx('function-button')}>
+
+                                        <span className={cx('btn', 'btn-succeed')}><FaFileImport className={cx('icon')} /> Import</span>
+                                    </div>
+                                    {/* export */}
+                                    <div className={cx('function-button')}>
+
+                                        <span className={cx('btn', 'btn-succeed')}><FaFileExport className={cx('icon')} /> Xuất file</span>
+                                    </div>
+                                </div>
                             </div>
-                        </div>
 
-                        {/* function */}
-                        <div className={cx('function-box')}>
+                            <div className={cx('tableView')}>
+                                <table className={cx('table')}>
+                                    <thead className={cx('thead')}>
+                                        <tr>
+                                            {/* <th className={cx('delete')}></th> */}
+                                            <th className={cx('code')}>Mã hóa đơn</th>
+                                            <th className={cx('date')}>Thời gian</th>
+                                            <th className={cx('payMethod')}>Phương thức thanh toán</th>
+                                            <th className={cx('customerName')}>Tên khách hàng</th>
+                                            <th className={cx('customerPhone')}>Số điện thoại</th>
+                                            <th className={cx('totalPrice')}>Tổng tiền</th>
 
-                            {/* thêm */}
-                            <div className={cx('function-button')}>
-                                <span onClick={() => { setTypeModal('add'); setShowModal(true) }} className={cx('btn', 'btn-succeed')}><AiOutlinePlus className={cx('icon')} /> Thêm mới</span>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+
+                                        {[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12].map((item, index) => {
+                                            return (
+                                                <BillRow key={index} />
+                                            )
+                                        })}
+
+                                    </tbody>
+                                </table>
                             </div>
 
-
-
-                            {/* import */}
-                            <div className={cx('function-button')}>
-
-                                <span className={cx('btn', 'btn-succeed')}><FaFileImport className={cx('icon')} /> Import</span>
-                            </div>
-                            {/* export */}
-                            <div className={cx('function-button')}>
-
-                                <span className={cx('btn', 'btn-succeed')}><FaFileExport className={cx('icon')} /> Xuất file</span>
-                            </div>
                         </div>
                     </div>
 
-                    <div className={cx('tableView')}>
-                        <table className={cx('table')}>
-                            <thead className={cx('thead')}>
-                                <tr>
-                                    {/* <th className={cx('delete')}></th> */}
-                                    <th className={cx('code')}>Mã hóa đơn</th>
-                                    <th className={cx('date')}>Thời gian</th>
-                                    <th className={cx('payMethod')}>Phương thức thanh toán</th>
-                                    <th className={cx('customerName')}>Tên khách hàng</th>
-                                    <th className={cx('customerPhone')}>Số điện thoại</th>
-                                    <th className={cx('totalPrice')}>Tổng tiền</th>
-                                 
-                                </tr>
-                            </thead>
-                            <tbody>
-
-                                {[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12].map((item, index) => {
-                                    return (
-                                        <BillRow key={index} />
-                                    )
-                                })}
-
-                            </tbody>
-                        </table>
-                    </div>
 
                 </div>
             </div>
-
 
         </div>
     );

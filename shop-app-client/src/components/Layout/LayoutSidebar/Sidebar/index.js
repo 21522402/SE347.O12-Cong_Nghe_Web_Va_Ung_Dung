@@ -15,7 +15,7 @@ import {BiMessageError} from 'react-icons/bi'
 import { useState } from 'react';
 const cx = classNames.bind(styles);
 function Sidebar() {
-    const [activeItem , setActiveItem ] = useState(null)
+    const [activeItem , setActiveItem ] = useState('Dashboard')
     const handleClickItem = (item) =>{
         setActiveItem(item)
     }
@@ -23,7 +23,7 @@ function Sidebar() {
 
         <div class="d-flex flex-column flex-shrink-0 p-5 text-bg-dark" style={{ width: "250px", position: 'fixed', top:0, left: 0, bottom:0 }}>
             <div className={cx(`header-logo` )} >
-                    <Link to="/admin" style={{ color: 'white', fontWeight: 'bold', fontSize: '20px' }}>
+                    <Link onClick={()=>{handleClickItem('Dashboard')}} to="/admin" style={{ color: 'white', fontWeight: 'bold', fontSize: '20px' }}>
                         Shop<span style={{ backgroundColor: 'white', color: 'black', borderRadius: '3px', padding: '0' }}>App</span>
                     </Link>
                 </div>
@@ -43,14 +43,6 @@ function Sidebar() {
                     } )} onClick={()=>{handleClickItem('Orders')}}>
                         <MdOutlineAnalytics className={cx('sidebar-icon')}/>
                         <div>Orders</div>
-                    </Link>
-                </div>
-                <div className={cx('sidebar-item')}>
-                    <Link to={'/admin'}  className={cx('sidebar-item-link', {
-                        'active-item':activeItem==='Storage'
-                    } )} onClick={()=>{handleClickItem('Storage')}}>
-                        <AiOutlineApartment className={cx('sidebar-icon')}/>
-                        <div>Storage</div>
                     </Link>
                 </div>
                 <div className={cx('sidebar-item')}>

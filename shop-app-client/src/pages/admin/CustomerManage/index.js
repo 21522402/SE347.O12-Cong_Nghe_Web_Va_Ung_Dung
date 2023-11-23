@@ -3,8 +3,9 @@ import styles from './style.module.scss'
 import classNames from 'classnames/bind';
 import Select from 'react-select';
 import { BsEye } from 'react-icons/bs';
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
+import BillDetailCus from './BillDetailCus';
 
 const cx = classNames.bind(styles);
 const cbb = [
@@ -95,16 +96,17 @@ function CustomerManage() {
     const records = cusList.slice(firstIndex, lastIndex);
     const npage = Math.ceil(cusList.length / recordPerPages);
     const numbers = [...Array(npage + 1).keys()].slice(1);
-
+    const [openDetail, setOpenDetail] = useState(false);
+    const handleClickProducItem = () => {
+        setOpenDetail(prev => !prev);
+    }
 
     return (
-        <div className={cx('wrapper')} style={{fontSize:'14px'}}>
-            <div className={cx('top-navbar')}>
-            </div>
+        <div className={cx('wrapper')} >
             <div className={cx('container')}>
                 <div>
-                    <h1>Manage Customer!</h1>
-                    <div style={{color:'#05CD99'}}>Lalitpur Branch</div>
+                    <h1>QUẢN LÝ KHÁCH HÀNG</h1>
+                    <div style={{ color: '#05CD99' }}>Lalitpur Branch</div>
                 </div>
                 <div className={cx('content')}>
                     <div className={cx('header-content')}>
@@ -112,15 +114,14 @@ function CustomerManage() {
                             <BiSearch fontSize={20} style={{ position: 'absolute', top: '0', left: 0, marginTop: '20px', marginLeft: '18px' }} />
                             <input type='text' name='searchField' id='searchField' className={cx('search-input')} placeholder='Tìm kiếm' />
                         </form>
-                        <Select options={cbb} 
-                                
-                                defaultValue={cbb[0]}
-                                className={cx('combobox')} />
+                        <Select options={cbb}
+                            defaultValue={cbb[0]}
+                            className={cx('combobox')} />
                     </div>
-                    <div style={{ padding: '10px 32px 40px', width: '100%', minHeight:'620px' }}>
+                    <div style={{ padding: '10px 32px 40px', width: '100%', minHeight: '550px' }}>
                         <table style={{ width: '100%', borderRadius: '10px', borderColor: 'transparent', border: 'none', position: 'relative' }}>
-                            <thead style={{ width: '100%', borderRadius: '10px', borderColor: 'transparent', border: 'none', }} >
-                                <tr style={{ width: '100%', backgroundColor: '#a4c4e9', color: 'black', borderRadius: '10px' }}>
+                            <thead className={cx('thead')} style={{ width: '100%', borderRadius: '10px', borderColor: 'transparent', border: 'none', }} >
+                                <tr style={{ width: '100%', backgroundColor: '#e6f1fe', color: 'black', borderRadius: '10px' }}>
                                     <th className={cx('col-tbl')} style={{ paddingLeft: '20px' }}>CusID</th>
                                     <th className={cx('col-tbl')}>Tên khách hàng</th>
                                     <th className={cx('col-tbl')}>Địa chỉ</th>
@@ -129,28 +130,38 @@ function CustomerManage() {
                                     <th className={cx('col-tbl')}>Tác vụ</th>
                                 </tr>
                             </thead>
-                            <tbody>
+                            <tbody className={cx('tbody')}>
                                 {
                                     records.map((item, index) => {
                                         return (
-                                            <tr key={index} className={cx('row-item')}>
-                                                <td style={{ paddingLeft: '25px', width: '10%' }}>KH{index + (currentPage-1)*recordPerPages+1}</td>
-                                                <td style={{ width: '25%' }}>{item.cusName}</td>
-                                                <td style={{ width: '25%' }}>{item.address}</td>
-                                                <td style={{ width: '15%' }}>{item.registerDate}</td>
-                                                <td style={{ width: '15%' }}>{item.totalAmount}</td>
-                                                <td>
-                                                    <div style={{ display: 'flex' }}>
-                                                        <button style={{ marginRight: '4px' }}>
-                                                            <BsEye fontSize={20} color='blue' />
-                                                        </button>
-                                                        <button>
-                                                            <BiTrash fontSize={20} color='red' />
-                                                        </button>
-                                                    </div>
-                                                </td>
+                                            <React.Fragment>
+                                                <tr key={index} className={cx('row-item')} onClick={handleClickProducItem}>
+                                                    <td style={{ paddingLeft: '25px', width: '10%' }}>KH{index + (currentPage - 1) * recordPerPages + 1}</td>
+                                                    <td style={{ width: '25%' }}>{item.cusName}</td>
+                                                    <td style={{ width: '25%' }}>{item.address}</td>
+                                                    <td style={{ width: '15%' }}>{item.registerDate}</td>
+                                                    <td style={{ width: '15%' }}>{item.totalAmount}</td>
+                                                    <td>
+                                                        <div style={{ display: 'flex' }}>
+                                                            <button style={{ marginRight: '4px' }}>
+                                                                <BsEye fontSize={20} color='blue' />
+                                                            </button>
+                                                            <button>
+                                                                <BiTrash fontSize={20} color='red' />
+                                                            </button>
+                                                        </div>
+                                                    </td>
 
-                                            </tr>
+                                                </tr>
+                                                {
+                                                    openDetail &&
+                                                    <tr className={cx('bill-detail-cus')}>
+                                                        <td colSpan={6} style={{ padding: '0' }}>
+                                                            <BillDetailCus />
+                                                        </td>
+                                                    </tr>
+                                                }
+                                            </React.Fragment>
                                         );
                                     })
                                 }
@@ -180,7 +191,7 @@ function CustomerManage() {
                             </ul>
                         </nav>
                     </div>
-                    
+
                 </div>
             </div>
             <footer className={cx("sticky-footer")}>

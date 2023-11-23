@@ -23,10 +23,10 @@ function ViewVoucher({ item }) {
                     </div>
                 </div>
                 <div className={cx('row-input')} >
-                        <div className={cx('input-field-left')}  >
-                            <label htmlFor='isPercent' className={cx('label-input')}>Giảm theo % <HiOutlineInformationCircle fontSize={'18px'} /> </label>
-                            <input  name='isPercent' checked={item.isPercent} id='isPercent' type='checkbox' style={{ marginLeft: '30px' }} className={cx('input')} />
-                        </div>
+                    <div style={{ width: '55%', display: 'flex', flexDirection: 'row' , alignItems:'center'}}>
+                        <label htmlFor='isPercent' className={cx('label-input')}>Giảm theo % <HiOutlineInformationCircle fontSize={'18px'} /> </label>
+                        <input name='isPercent' style={{marginLeft:'-28px'}} checked={item.isPercent} id='isPercent' type='checkbox'  />
+                    </div>
                 </div>
                 <div className={cx('row-input')} >
                     <div className={cx('input-field-left')} >
