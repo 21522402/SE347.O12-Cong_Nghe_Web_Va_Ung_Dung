@@ -2,8 +2,35 @@
 import { CustomeButton } from '~/components';
 import styles from './SignUp.module.scss';
 import classNames from 'classnames/bind';
+import { useState } from 'react';
+import axios from 'axios';
 const cx = classNames.bind(styles)
 function SignUp() {
+    const [values, setValues] = useState({
+        fullName: '',
+        phoneNumber: '',
+        email: '',
+        password: '',
+        repassword: ''
+    });
+
+    const handleChange = name => (e) => {
+        setValues({...values, [name]: e.target.value})
+    }
+
+    const handleSubmit = async (e) => {
+        e.preventDefault()
+        try{
+            const signUser = await axios.post('http://localhost:3001/api/users/register', values)
+            if(signUser.data.success === false){
+                console.log("oke m")
+            }
+        }
+        catch (err){
+            console.log("Lỗi", err)
+        }
+    }
+
     return (
         <div className={cx('wrapper')} style={{animation:'dropTop .3s linear'}}>
             <div className={cx('col')}>
@@ -27,14 +54,14 @@ function SignUp() {
                         <div style={{margin:'0 4px'}}>Hoặc</div>
                         <div style={{width:'70%', height:'0.5px' , backgroundColor:'#ccc'}}></div>
                     </div>
-                    <form style={{width:'100%', marginTop:'16px', display:'flex', flexDirection:'column'}}>
+                    <form onSubmit={handleSubmit} style={{width:'100%', marginTop:'16px', display:'flex', flexDirection:'column'}}>
                         <div style={{display:'flex', width:'100%',justifyContent:'space-between'}}>
-                            <input placeholder='Tên của bạn' type='text' name='fullName' autoFocus='autoFocus' style={{border:'1px solid #ccc',height:'48px', borderRadius:'100vmax', width:'48%',boxSizing:'border-box', padding:'5px 20px',transition: 'all .2s', marginBottom:'16px'}}/>
-                            <input placeholder='SĐT (Username)' type='text' name='username' autoFocus='autoFocus' style={{border:'1px solid #ccc',height:'48px', borderRadius:'100vmax', width:'48%',boxSizing:'border-box', padding:'5px 20px',transition: 'all .2s', marginBottom:'16px'}}/>
+                            <input onChange={handleChange("fullName")} placeholder='Tên của bạn' type='text' name='fullName' autoFocus='autoFocus' style={{border:'1px solid #ccc',height:'48px', borderRadius:'100vmax', width:'48%',boxSizing:'border-box', padding:'5px 20px',transition: 'all .2s', marginBottom:'16px'}}/>
+                            <input onChange={handleChange("phoneNumber")} placeholder='SĐT (Username)' type='text' name='username' autoFocus='autoFocus' style={{border:'1px solid #ccc',height:'48px', borderRadius:'100vmax', width:'48%',boxSizing:'border-box', padding:'5px 20px',transition: 'all .2s', marginBottom:'16px'}}/>
                         </div>
-                        <input placeholder='Email của bạn' type='email' name='email' autoFocus='autoFocus' style={{border:'1px solid #ccc',height:'48px', borderRadius:'100vmax', width:'100%',boxSizing:'border-box', padding:'5px 20px',transition: 'all .2s', marginBottom:'16px'}}/>
-                        <input placeholder='Mật khẩu'  type='password' name='password' autoFocus='autoFocus' style={{border:'1px solid #ccc',height:'48px', borderRadius:'100vmax', width:'100%',boxSizing:'border-box', padding:'5px 20px',transition: 'all .2s', marginBottom:'16px'}}/>
-                        <input placeholder='Nhập lại mật khẩu'  type='password' name='repassword' autoFocus='autoFocus' style={{border:'1px solid #ccc',height:'48px', borderRadius:'100vmax', width:'100%',boxSizing:'border-box', padding:'5px 20px',transition: 'all .2s', marginBottom:'16px'}}/>
+                        <input onChange={handleChange("email")} placeholder='Email của bạn' type='email' name='email' autoFocus='autoFocus' style={{border:'1px solid #ccc',height:'48px', borderRadius:'100vmax', width:'100%',boxSizing:'border-box', padding:'5px 20px',transition: 'all .2s', marginBottom:'16px'}}/>
+                        <input onChange={handleChange("password")} placeholder='Mật khẩu'  type='password' name='password' autoFocus='autoFocus' style={{border:'1px solid #ccc',height:'48px', borderRadius:'100vmax', width:'100%',boxSizing:'border-box', padding:'5px 20px',transition: 'all .2s', marginBottom:'16px'}}/>
+                        <input onChange={handleChange("repassword")} placeholder='Nhập lại mật khẩu'  type='password' name='repassword' autoFocus='autoFocus' style={{border:'1px solid #ccc',height:'48px', borderRadius:'100vmax', width:'100%',boxSizing:'border-box', padding:'5px 20px',transition: 'all .2s', marginBottom:'16px'}}/>
                         <CustomeButton title={'Đăng ký'} type={'submit'} containStyles={{backgroundColor:'black', color:'white', width:'100%', height:'48px', borderRadius:'100vmax'}} bgHover={'#ccc'}/>
                     </form>
                     <div style={{display:'flex', justifyContent:'space-between',marginTop:'4px' }}>

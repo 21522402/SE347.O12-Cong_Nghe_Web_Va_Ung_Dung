@@ -9,9 +9,11 @@ import DetailPopup from './DetailPopup';
 import SearchPopup from './SearchPopup';
 import removeViTones from '~/utils/removeViTones';
 import SettingPopup from './SettingPopup';
+import Modal from '~/components/Modal';
+import { Login, SignUp } from '~/pages/auth';
 const cx = classNames.bind(styles);
-
 function Header() {
+    let [login, setLogin] = useState(false)
     const navigate = useNavigate();
     const overLay = useRef();
     const hideOverLay = () => {
@@ -140,7 +142,9 @@ function Header() {
 
 
         <div className={cx('wrapper')}>
-
+            <Modal visible={login} setModal={setLogin}>
+                <SignUp/>
+            </Modal>
             <a href='/user' className={cx('logo-wrapper')}>
                 <div>SHOP</div>
                 <div className={cx('child2')}>APP</div>
@@ -192,14 +196,15 @@ function Header() {
             </div>
 
             <div className={cx('user')}>
-                <input ref={overLay} type="checkbox" hidden className={cx("main__header-navBar-hide-open")} id={cx("main__header-navBar-hide-open")}/>
+                {/* <input ref={overLay} type="checkbox" hidden className={cx("main__header-navBar-hide-open")} id={cx("main__header-navBar-hide-open")}/> */}
                 <div className={cx("main__header-navBar")}>
                     <SettingPopup closeBtn={hideOverLay}/>
                 </div>
-                <label for={cx("main__header-navBar-hide-open")} className={cx("main__header-navbar-overlay")}>
-                </label>
+                {/* <label for={cx("main__header-navBar-hide-open")} className={cx("main__header-navbar-overlay")}>
+                </label> */}
                 <label for={cx("main__header-navBar-hide-open")}>
-                    <div style={{cursor: 'pointer'}}><img src='https://mcdn.coolmate.me/image/October2023/mceclip3_72.png' /></div>
+                    
+                    <div style={{cursor: 'pointer'}} onClick={() => {setLogin(true)}}><img src='https://mcdn.coolmate.me/image/October2023/mceclip3_72.png' alt='' /></div>
                 </label>
                 <Link to='/cart'>
                     <div style={{cursor: 'pointer'}}><IoBagHandle style={{ color: '#fff', fontSize: '28px' }} /></div>
