@@ -16,7 +16,7 @@ voucherRoutes.get('/', getAllVouchersCtrl);
 
 voucherRoutes.post('/addVoucher', PhotoUpload.single("image") , voucherImgResizing ,addVoucherCtrl );
 
-voucherRoutes.put('/updateVoucher/:id',PhotoUpload.single("image") , voucherImgResizing, updateVoucherCtrl)
+voucherRoutes.put('/updateVoucher/:id', PhotoUpload.single("image") , voucherImgResizing, updateVoucherCtrl)
 
 voucherRoutes.delete('/deleteVoucher/:id', deleteVoucherCtrl)
 

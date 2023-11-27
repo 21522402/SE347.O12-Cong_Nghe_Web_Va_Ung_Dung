@@ -6,20 +6,59 @@ import { MdAdd } from 'react-icons/md';
 import { useForm } from 'react-hook-form';
 import { dfImgVoucher } from '~/assets/images';
 import { useState } from 'react';
+import axios from 'axios';
+import baseUrl from '~/utils/baseUrl';
 const cx = classNames.bind(styles);
-function AddVoucher() {
+function AddVoucher({closeFunc, setVoucherList}) {
     const [isPc, setIsPc] = useState(false)
     const [file, setFile] = useState(null)
     const [img, setImage] = useState(null)
-
+    const [err, setErr] = useState(null)
     const {
         register,
         handleSubmit,
         getValues,
         formState: { errors },
     } = useForm({ mode: 'onChange' });
-    const onSubmit = (data) => {
-        console.log(data)
+    const onSubmit = async (dt) => {
+        console.log(dt)
+        const formData = new FormData();
+        formData.append('image', file);
+        formData.append('voucherPrice', dt.priceDiscount);
+        formData.append('isPercent', isPc);
+        formData.append('voucherCode', dt.voucherCode);
+        formData.append('expiredDate', dt.endDate);
+        formData.append('startDate', dt.startDate);
+        formData.append('minPrice', dt.minPrice);
+        formData.append('quanlity', dt.quanlity);
+        formData.append('description', dt.description);
+        setErr(null)
+        const sd = new Date(dt.startDate)
+        const ed = new Date(dt.endDate)
+        if (sd > ed) {
+            setErr('Ngày hết hạn phải lơn hơn ngày bắt đầu')
+            return
+        }
+        if (!file) {
+            setErr('Bạn chưa chọn file ảnh voucher!')
+            return
+        }
+        const config = {
+            headers: {
+                'Content-Type': 'multipart/form-data'
+            },
+        }
+
+        try {
+            const { data } = await axios.post(`${baseUrl}/api/vouchers/addVoucher`, formData, config);
+            setVoucherList(prev=>[prev, {...data.result}])
+            
+            closeFunc(false)
+
+        } catch (error) {
+            setErr(error.response.data.error.message)
+        }
+
     }
     const onChangeCheckBox = () => {
         setIsPc(prev => !prev)
@@ -36,6 +75,8 @@ function AddVoucher() {
             reader.readAsDataURL(file);
         }
     }
+
+
     return (
         <div className={cx('wrapper')} style={{ animation: 'dropTop .3s linear' }}>
             <div style={{ fontWeight: 500, fontSize: '20px', marginBottom: '20px', backgroundColor: 'black', color: 'white', padding: '8px', width: '20%', borderRadius: '4px' }}>Thêm Voucher mới</div>
@@ -46,6 +87,7 @@ function AddVoucher() {
                 <input type='file' id='fileImg' hidden title='Choose Image' accept='image/*' onChange={onImageChange} />
                 <label htmlFor='fileImg' style={{ border: '1px dashed #ccc', marginBottom: '8px', borderRadius: '10px', height: '30px', display: 'flex', justifyContent: 'center', alignItems: 'end', padding: '4px', marginLeft: '12px', cursor: 'pointer', justifySelf: 'end' }}>Choose Image</label>
             </div>
+            {err && <div className={cx('error')} style={{ marginLeft: '40px' }}>{err}</div>}
             <form onSubmit={handleSubmit(onSubmit)} style={{ padding: '2rem 4rem 2.5rem 4rem', width: '100%' }}>
                 <div className={cx('row-input')} >
                     <div style={{ width: '45%', display: 'flex', flexDirection: 'column' }}>
@@ -65,9 +107,9 @@ function AddVoucher() {
                     </div>
                 </div>
                 <div className={cx('row-input')} >
-                    <div style={{ width: '55%', display: 'flex', flexDirection: 'row' , alignItems:'center', marginTop:'-10px'}}>
+                    <div style={{ width: '55%', display: 'flex', flexDirection: 'row', alignItems: 'center', marginTop: '-10px' }}>
                         <label htmlFor='isPercent' className={cx('label-input')}>Giảm theo % <HiOutlineInformationCircle fontSize={'18px'} /> </label>
-                        <input name='isPercent' style={{marginLeft:'-28px'}} value={isPc} onChange={onChangeCheckBox} id='isPercent' type='checkbox'  />
+                        <input name='isPercent' style={{ marginLeft: '-28px' }} value={isPc} onChange={onChangeCheckBox} id='isPercent' type='checkbox' />
                     </div>
                 </div>
                 <div className={cx('row-input')} >
@@ -111,7 +153,7 @@ function AddVoucher() {
                 <div  >
                     <div style={{ width: '100%', display: 'flex', flexDirection: 'column' }} >
                         <label htmlFor='description' className={cx('label-input')}>Mô tả <HiOutlineInformationCircle fontSize={'18px'} /> </label>
-                        <textarea rows={4} name='description' id='description' type='text' placeholder='Sale ngày phụ nữ việt nam. Áp dụng để giảm tiền trực tiếp cho đơn hàng!' style={{ marginTop: '12px', border: '1px solid #ccc', padding: '8px' }} />
+                        <textarea rows={4} name='description' {...register('description')} id='description' type='text' placeholder='Sale ngày phụ nữ việt nam. Áp dụng để giảm tiền trực tiếp cho đơn hàng!' style={{ marginTop: '12px', border: '1px solid #ccc', padding: '8px' }} />
                     </div>
                 </div>
                 <div style={{ display: 'flex', justifyContent: 'right' }}>
