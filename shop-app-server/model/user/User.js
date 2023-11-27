@@ -98,7 +98,10 @@ const userSchema = new mongoose.Schema(
                 }
             ]
         },
-
+        isActive:{
+            type:Boolean,
+            default:true
+        }
         // isAccountVerified: {
         //     type: Boolean,
         //     default: false
