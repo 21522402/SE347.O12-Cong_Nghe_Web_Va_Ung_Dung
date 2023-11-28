@@ -1,18 +1,37 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { Link } from 'react-router-dom';
+import { Link, Navigate, useNavigate } from 'react-router-dom';
 import styles from './Sidebar.module.scss'
 import classNames from 'classnames/bind';
 import { BsArrowRight } from "react-icons/bs";
 import { useState } from 'react';
 import { VoucherIcon, LocationIcon, AccountIcon, OrderIcon, RatingIcon, QuestionIcon, LogOutIcon } from '~/assets/icons';
+import axios from 'axios';
+import baseUrl from '~/utils/baseUrl';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 const cx = classNames.bind(styles);
 function Sidebar() {
     const [activeItem , setActiveItem ] = useState('info')
     const handleClickItem = (item) =>{
         setActiveItem(item)
     }
+    const navigate = useNavigate()
+    const handleLogout = async () => {
+        try{
+            const logoutUser = await axios.post(baseUrl + '/api/users/logout')
+            if(logoutUser.data.success){
+                notify("success", "Đăng xuất thành công")
+                navigate("/user")
+            }
+        }
+        catch (err){
+            notify("error", err)
+        }
+    }
+    const notify = (type, message) => toast(message, {type: type});
     return (
         <div className={cx('main__sideBar')} onClick={() =>  window.scrollTo({top: 0, behavior: 'smooth'})}>
+            <ToastContainer/>
             <Link to={'/user-profile/info'} className={cx(`sidebar-item-link`)} onClick={()=>{handleClickItem('info')}}>
                 <div className={cx('tab_container', {
                         'active-item':activeItem==='info'
@@ -80,7 +99,7 @@ function Sidebar() {
                     <BsArrowRight className={cx('tab_arrowRight')}/>
                 </div>
             </Link>
-            <div className={cx('tab_container')} >
+            <div className={cx('tab_container')} onClick={handleLogout}>
                 <div className={cx('tab_container_info')}>
                     <img src={LogOutIcon} className={cx('tab_icon')}></img>
                     <span className={cx('tab_info')}>Đăng xuất</span>

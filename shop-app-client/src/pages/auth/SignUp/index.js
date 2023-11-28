@@ -2,10 +2,19 @@
 import { CustomeButton } from '~/components';
 import styles from './SignUp.module.scss';
 import classNames from 'classnames/bind';
+import baseUrl from '../../../utils/baseUrl';
 import { useState } from 'react';
 import axios from 'axios';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import { registerUser } from '~/redux/api/authRequest';
+import { useDispatch, useSelector } from 'react-redux';
+import { Navigate, useNavigate } from 'react-router-dom';
 const cx = classNames.bind(styles)
-function SignUp() {
+
+function SignUp({navLogin}) {
+    const dispatch = useDispatch()
+    const navigate = useNavigate()
     const [values, setValues] = useState({
         fullName: '',
         phoneNumber: '',
@@ -21,18 +30,21 @@ function SignUp() {
     const handleSubmit = async (e) => {
         e.preventDefault()
         try{
-            const signUser = await axios.post('http://localhost:3001/api/users/register', values)
-            if(signUser.data.success === false){
-                console.log("oke m")
-            }
+            console.log(values)
+            registerUser(values, dispatch, navigate, navLogin("login"))
+            //notify("success", "Chúc mừng bạn đăng ký thành công!")
+
         }
         catch (err){
-            console.log("Lỗi", err)
+            notify("error", err)
         }
     }
 
+    const notify = (type, message) => toast(message, {type: type});
+
     return (
         <div className={cx('wrapper')} style={{animation:'dropTop .3s linear'}}>
+            <ToastContainer/>
             <div className={cx('col')}>
                 <img src='https://mcdn.coolmate.me/image/September2023/mceclip0_49.jpg' alt='img'/>
             </div>
@@ -65,7 +77,7 @@ function SignUp() {
                         <CustomeButton title={'Đăng ký'} type={'submit'} containStyles={{backgroundColor:'black', color:'white', width:'100%', height:'48px', borderRadius:'100vmax'}} bgHover={'#ccc'}/>
                     </form>
                     <div style={{display:'flex', justifyContent:'space-between',marginTop:'4px' }}>
-                        <CustomeButton title={'Đăng nhập'} containStyles={{backgroundColor:'white', color:'#2f5acf', width:'fit-content', fontSize:'14px'}}/>
+                        <CustomeButton title={'Đăng nhập'} onClick={(e) => navLogin("login")} containStyles={{backgroundColor:'white', color:'#2f5acf', width:'fit-content', fontSize:'14px'}}/>
                     </div>
                     <div style={{fontSize:'13px', borderLeft:'2px solid #ccc', paddingLeft:'20px', marginTop:'12px', lineHeight:'16px' }}>Nếu đã từng mua hàng trên Website trước đây, bạn có thể dùng tính năng <CustomeButton title={'"Lấy mật khẩu"'} containStyles={{backgroundColor:'white', color:'#2f5acf', width:'fit-content', fontSize:'13px', textDecoration:'underline', height:'12px', padding:0}}/> để có thể truy cập vào Coolmate.</div>
                 </div>

@@ -1,18 +1,17 @@
 const express = require('express');
 const { 
-    userRegisterCtrl,
-    userLoginCtrl,
-    logout
+    getAllUser,
+    addAddressCtrl,
+    deleteUser
 } = require('../../controller/userController/UserController');
+const verify = require('../../middlewares/auth/verify');
 
 const userRoutes = express.Router();
 
-userRoutes.post('/register', userRegisterCtrl);
+userRoutes.get('/', verify.verifyToken, getAllUser);
 
-userRoutes.post('/login', userLoginCtrl);
+userRoutes.delete('/:id', verify.verifyTokenAndAdmin, deleteUser);
 
-userRoutes.get('/logout', logout);
-
-userRoutes.put('/addresses/addAddress/:id', logout);
+userRoutes.put('/addresses/addAddress/:id', addAddressCtrl);
 
 module.exports = userRoutes;

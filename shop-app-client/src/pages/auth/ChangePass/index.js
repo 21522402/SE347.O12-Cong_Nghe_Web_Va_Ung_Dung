@@ -2,7 +2,7 @@ import { CustomeButton } from '~/components';
 import styles from './ChangePass.module.scss';
 import classNames from 'classnames/bind';
 const cx = classNames.bind(styles)
-function ChangePass() {
+function ChangePass({navLogin}) {
     return (
         <div className={cx('wrapper')} style={{animation:'dropTop .3s linear'}}>
             <div className={cx('col')}>
@@ -18,7 +18,7 @@ function ChangePass() {
                         <CustomeButton title={'Kiểm tra'} type={'submit'} containStyles={{backgroundColor:'black', color:'white', width:'100%', height:'48px', borderRadius:'100vmax'}} bgHover={'#ccc'}/>
                     </form>
                     <div style={{display:'flex', justifyContent:'space-between',marginTop:'4px' }}>
-                        <CustomeButton title={'Đăng nhập'} containStyles={{backgroundColor:'white', color:'#2f5acf', width:'fit-content', fontSize:'14px'}}/>
+                        <CustomeButton onClick={() => navLogin("login")} title={'Đăng nhập'} containStyles={{backgroundColor:'white', color:'#2f5acf', width:'fit-content', fontSize:'14px'}}/>
                     </div>
                 </div>
             </div>

@@ -7,7 +7,8 @@ const { errorHandler, notFound } = require('./middlewares/error/errorHandler');
 const cors = require('cors');
 const cookieParser = require('cookie-parser')
 const voucherRoutes = require('./routes/voucher/VoucherRoutes');
-const addressRoutes = require('./routes/address/AddressRoutes')
+const addressRoutes = require('./routes/address/AddressRoutes');
+const authRoutes = require('./routes/auth/AuthRoute');
 // declaire app express
 const app = express();
 
@@ -25,6 +26,7 @@ app.use(cors());
 app.use('/api/users', userRoutes);
 app.use('/api/vouchers', voucherRoutes);
 app.use('/api/addresses', addressRoutes);
+app.use('/api/auth', authRoutes);
 
 
 
