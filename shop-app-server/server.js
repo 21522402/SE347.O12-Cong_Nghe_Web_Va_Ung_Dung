@@ -6,6 +6,7 @@ const userRoutes = require('./routes/user/UserRoutes');
 const { errorHandler, notFound } = require('./middlewares/error/errorHandler');
 const cors = require('cors');
 const voucherRoutes = require('./routes/voucher/VoucherRoutes');
+const feedbackRoutes = require('./routes/feedback/FeedbackRoutes');
 // declaire app express
 const app = express();
 
@@ -21,7 +22,7 @@ app.use(cors());
 // User Route
 app.use('/api/users', userRoutes);
 app.use('/api/vouchers', voucherRoutes);
-
+app.use('/api/feedbacks', feedbackRoutes);
 
 
 // Error handler
