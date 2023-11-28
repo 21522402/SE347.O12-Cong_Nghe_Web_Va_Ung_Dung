@@ -39,9 +39,9 @@ const userSchema = new mongoose.Schema(
                     district: String,
                     ward: String,
                     detail: String,
-                    default: Boolean,
                     name: String,
-                    phoneNumber: String
+                    phoneNumber:String,
+                    default: Boolean
                 }
             ]
         },
@@ -101,7 +101,11 @@ const userSchema = new mongoose.Schema(
                 }
             ]
         },
-
+        isActive:{
+            type:Boolean,
+            default:true
+        },
+        
         // isAccountVerified: {
         //     type: Boolean,
         //     default: false

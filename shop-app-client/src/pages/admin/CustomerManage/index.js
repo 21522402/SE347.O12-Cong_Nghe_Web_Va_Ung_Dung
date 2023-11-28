@@ -1,105 +1,50 @@
-import { BiSearch, BiTrash } from 'react-icons/bi';
+import { BiSearch } from 'react-icons/bi';
 import styles from './style.module.scss'
 import classNames from 'classnames/bind';
 import Select from 'react-select';
-import { BsEye } from 'react-icons/bs';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import BillDetailCus from './BillDetailCus';
+import baseUrl from '~/utils/baseUrl';
+import axios from 'axios';
+import CusRow from './CusRow';
 
 const cx = classNames.bind(styles);
 const cbb = [
     { value: 'All', label: 'All' },
-    { value: 'Last 3 months', label: '3 tháng cuối' },
-    { value: 'Last 6 months', label: '6 tháng cuối' }
+    { value: 'Active', label: 'Đang hoạt động' },
+    { value: 'Block', label: 'Đang bị khóa' }
 
 ]
-const cusList = [
-    {
-        cusName: 'Nguyen Van Phat',
-        address: 'Binh Son, Quang Ngai',
-        registerDate: '20/10/2022',
-        totalAmount: 10000000,
-    },
-    {
-        cusName: 'Nguyen Van Phat',
-        address: 'Binh Son, Quang Ngai',
-        registerDate: '20/10/2022',
-        totalAmount: 10000000,
-    },
-    {
-        cusName: 'Nguyen Van Phat',
-        address: 'Binh Son, Quang Ngai',
-        registerDate: '20/10/2022',
-        totalAmount: 10000000,
-    },
-    {
-        cusName: 'Nguyen Van Phat',
-        address: 'Binh Son, Quang Ngai',
-        registerDate: '20/10/2022',
-        totalAmount: 10000000,
-    },
-    {
-        cusName: 'Nguyen Van Phat',
-        address: 'Binh Son, Quang Ngai',
-        registerDate: '20/10/2022',
-        totalAmount: 10000000,
-    },
-    {
-        cusName: 'Nguyen Van Phat',
-        address: 'Binh Son, Quang Ngai',
-        registerDate: '20/10/2022',
-        totalAmount: 10000000,
-    },
-    {
-        cusName: 'Nguyen Van Phat',
-        address: 'Binh Son, Quang Ngai',
-        registerDate: '20/10/2022',
-        totalAmount: 10000000,
-    },
-    {
-        cusName: 'Nguyen Van Phat',
-        address: 'Binh Son, Quang Ngai',
-        registerDate: '20/10/2022',
-        totalAmount: 10000000,
-    },
-    {
-        cusName: 'Nguyen Van Phat',
-        address: 'Binh Son, Quang Ngai',
-        registerDate: '20/10/2022',
-        totalAmount: 10000000,
-    },
-    {
-        cusName: 'Nguyen Van Phat',
-        address: 'Binh Son, Quang Ngai',
-        registerDate: '20/10/2022',
-        totalAmount: 10000000,
-    },
-    {
-        cusName: 'Nguyen Van Phat',
-        address: 'Binh Son, Quang Ngai',
-        registerDate: '20/10/2022',
-        totalAmount: 10000000,
-    },
-    {
-        cusName: 'Nguyen Van Phat',
-        address: 'Binh Son, Quang Ngai',
-        registerDate: '20/10/2022',
-        totalAmount: 10000000,
-    },
-]
+
 function CustomerManage() {
     const [currentPage, setCurrentPage] = useState(1);
+    const [customerList, setCustomerList] = useState([]);
+    const [selectedTextFilter, setSelectedTextFilter] = useState('')
+    const [selectedFilter, setSelectedFilter] = useState('All')
     const recordPerPages = 10;
     const lastIndex = currentPage * recordPerPages;
     const firstIndex = lastIndex - recordPerPages;
-    const records = cusList.slice(firstIndex, lastIndex);
-    const npage = Math.ceil(cusList.length / recordPerPages);
+    const npage = Math.ceil(customerList.length / recordPerPages);
     const numbers = [...Array(npage + 1).keys()].slice(1);
-    const [openDetail, setOpenDetail] = useState(false);
-    const handleClickProducItem = () => {
-        setOpenDetail(prev => !prev);
+
+    const getAllBuyers = async () => {
+        try {
+            const config = {}
+            const { data } = await axios.get(`${baseUrl}/api/users/get-all-buyers`, config)
+            setCustomerList([...data.result])
+        } catch (error) {
+            console.log(error)
+        }
     }
+    const handleChangeSearchField = (e) => {
+        setSelectedTextFilter(e.target.value)
+    }
+    const handleChangeCombobox = (selectedOption) => {
+        setSelectedFilter(selectedOption.value)
+    }
+    useEffect(() => {
+        getAllBuyers()
+    }, [customerList])
 
     return (
         <div className={cx('wrapper')} >
@@ -110,12 +55,13 @@ function CustomerManage() {
                 </div>
                 <div className={cx('content')}>
                     <div className={cx('header-content')}>
-                        <form className={cx('search-field')}>
+                        <div className={cx('search-field')}>
                             <BiSearch fontSize={20} style={{ position: 'absolute', top: '0', left: 0, marginTop: '20px', marginLeft: '18px' }} />
-                            <input type='text' name='searchField' id='searchField' className={cx('search-input')} placeholder='Tìm kiếm' />
-                        </form>
+                            <input onChange={e => handleChangeSearchField(e)} type='text' name='searchField' id='searchField' className={cx('search-input')} placeholder='Tìm kiếm' />
+                        </div>
                         <Select options={cbb}
                             defaultValue={cbb[0]}
+                            onChange={handleChangeCombobox}
                             className={cx('combobox')} />
                     </div>
                     <div style={{ padding: '10px 32px 40px', width: '100%', minHeight: '550px' }}>
@@ -124,44 +70,26 @@ function CustomerManage() {
                                 <tr style={{ width: '100%', backgroundColor: '#e6f1fe', color: 'black', borderRadius: '10px' }}>
                                     <th className={cx('col-tbl')} style={{ paddingLeft: '20px' }}>CusID</th>
                                     <th className={cx('col-tbl')}>Tên khách hàng</th>
-                                    <th className={cx('col-tbl')}>Địa chỉ</th>
+                                    <th className={cx('col-tbl')}>Số điện thoại</th>
                                     <th className={cx('col-tbl')}>Ngày đăng ký</th>
                                     <th className={cx('col-tbl')}>Tổng giao dịch</th>
+                                    <th className={cx('col-tbl')}>Tình trạng</th>
                                     <th className={cx('col-tbl')}>Tác vụ</th>
                                 </tr>
                             </thead>
                             <tbody className={cx('tbody')}>
                                 {
-                                    records.map((item, index) => {
+                                    ((customerList.slice(firstIndex, lastIndex).filter(item => {
+                                        if (selectedFilter === 'All') return true
+                                        if (selectedFilter === 'Active') return item.isActive
+                                        if (selectedFilter === 'Block') return !item.isActive
+                                        return true
+                                    })).filter(i => {
+                                        if (selectedTextFilter.length === 0) return true;
+                                        else return (i.fullName.toLowerCase()).includes(selectedTextFilter.toLowerCase()) ||(i.phoneNumber.toLowerCase()).includes(selectedTextFilter.toLowerCase()) 
+                                    })).map((item, index) => {
                                         return (
-                                            <React.Fragment>
-                                                <tr key={index} className={cx('row-item')} onClick={handleClickProducItem}>
-                                                    <td style={{ paddingLeft: '25px', width: '10%' }}>KH{index + (currentPage - 1) * recordPerPages + 1}</td>
-                                                    <td style={{ width: '25%' }}>{item.cusName}</td>
-                                                    <td style={{ width: '25%' }}>{item.address}</td>
-                                                    <td style={{ width: '15%' }}>{item.registerDate}</td>
-                                                    <td style={{ width: '15%' }}>{item.totalAmount}</td>
-                                                    <td>
-                                                        <div style={{ display: 'flex' }}>
-                                                            <button style={{ marginRight: '4px' }}>
-                                                                <BsEye fontSize={20} color='blue' />
-                                                            </button>
-                                                            <button>
-                                                                <BiTrash fontSize={20} color='red' />
-                                                            </button>
-                                                        </div>
-                                                    </td>
-
-                                                </tr>
-                                                {
-                                                    openDetail &&
-                                                    <tr className={cx('bill-detail-cus')}>
-                                                        <td colSpan={6} style={{ padding: '0' }}>
-                                                            <BillDetailCus />
-                                                        </td>
-                                                    </tr>
-                                                }
-                                            </React.Fragment>
+                                            <CusRow key={index} item={item} index={index} currentPage={currentPage} setCustomerList={setCustomerList}/>
                                         );
                                     })
                                 }
@@ -169,7 +97,7 @@ function CustomerManage() {
                         </table>
                     </div>
                     <div style={{ display: 'flex', padding: '0 32px 20px', justifyContent: 'space-between' }}>
-                        <div>Showing: <span>{recordPerPages}</span> of {cusList.length} entries</div>
+                        <div>Showing: <span>{recordPerPages}</span> of {customerList.length} entries</div>
                         <nav >
                             <ul className={cx('pagination')} >
                                 <li className={cx('page-item')}>

@@ -11,9 +11,9 @@ import { MdAdd } from 'react-icons/md';
 import AddVoucher from './AddVoucher';
 import EditVoucher from './EditVoucher';
 import ViewVoucher from './ViewVoucher';
-import { ChangePass, Login, SignUp } from '~/pages/auth';
 import axios from 'axios';
 import baseUrl from '~/utils/baseUrl';
+import convertDate from '~/utils/convertDate';
 const cx = classNames.bind(styles);
 function Vouchers() {
     const cbb = [
@@ -41,30 +41,19 @@ function Vouchers() {
         try {
             const config = {}
             const { data } = await axios.get(`${baseUrl}/api/vouchers`, config)
+            console.log(data)
             setVoucherList([...data.result])
         } catch (error) {
             console.log(error)
         }
     }
     const handleChangeCombobox = (selectedOption) => {
-        console.log(selectedOption)
         setSelectedFilter(selectedOption.value)
     }
     const handleChangeSearchField = (e)=>{
         setSelectedTextFilter(e.target.value)
     }
-    const convertDate = (d) => {
-        const date = new Date(d);
-
-        // Lấy thông tin ngày, tháng, năm
-        const day = String(date.getDate()).padStart(2, '0');
-        const month = String(date.getMonth() + 1).padStart(2, '0'); // Tháng bắt đầu từ 0
-        const year = date.getFullYear();
-
-        // Tạo chuỗi ngày tháng định dạng 'DD-MM-YYYY'
-        const formattedDate = `${day}/${month}/${year}`;
-        return formattedDate;
-    }
+    
     const checkStatus = (item) => {
         if (item.quanlity <= 0) return false;
         const expirationDate = new Date(item.expiredDate);
@@ -121,8 +110,9 @@ function Vouchers() {
                                         if (selectedFilter === 'All') return true
                                         if (selectedFilter === 'Expired') return checkStatus(item)
                                         if (selectedFilter === 'UnExpired') return !checkStatus(item)
+                                        return true
                                     })).filter(i => {
-                                        if(selectedTextFilter.length==0) return true;
+                                        if(selectedTextFilter.length===0) return true;
                                         else return (i.voucherCode.toLowerCase()).includes(selectedTextFilter.toLowerCase()) 
                                     })).map((item, index) => {
                                             return (

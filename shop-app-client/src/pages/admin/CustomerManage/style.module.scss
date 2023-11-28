@@ -59,17 +59,6 @@
     text-align: left;
 }
 
-.row-item {
-    position: relative;
-    border: 0.5px solid #ccc;
-    width: 100%;
-    cursor: pointer;
-
-    &:hover {
-        background-color: #f2fbf5;
-    }
-}
-
 .thead {
     tr {
         border: 0.5px solid rgb(212, 231, 249);
@@ -80,12 +69,4 @@
     td {
         padding: 6px 0;
     }
-}
-
-.bill-detail-cus {
-
-    border-left: 2px solid #4cb050;
-    border-right: 1px solid #4cb050;
-    border-bottom: 1px solid #4cb050;
-
 }

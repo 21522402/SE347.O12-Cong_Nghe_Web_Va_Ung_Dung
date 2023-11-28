@@ -16,7 +16,7 @@ const addVoucherCtrl = async (req, res) => {
         const localPath = `public/images/vouchers/${req.file.filename}`;
         const imgUpload = await cloudinaryUploadImage(localPath)
         const voucher = await Voucher.create({
-            ...req?.body, voucherImage:imgUpload?.url
+            ...req?.body, voucherImage: imgUpload?.url
         })
         fs.unlinkSync(localPath)
         return successTemplate(res, voucher, "Thêm voucher mới thành công!", 200)
@@ -30,22 +30,22 @@ const updateVoucherCtrl = async (req, res) => {
         validationId(updVoucherId)
         const existedVoucher = await Voucher.findOne({ voucherCode: req?.body?.voucherCode });
         const currentDate = new Date();
-        if (existedVoucher && existedVoucher.expiredDate > currentDate && existedVoucher.id!==updVoucherId) throw new Error('Mã giảm giá đã tồn tại và đang được phát hành. Thử lại mã mới!');
-        
+        if (existedVoucher && existedVoucher.expiredDate > currentDate && existedVoucher.id !== updVoucherId) throw new Error('Mã giảm giá đã tồn tại và đang được phát hành. Thử lại mã mới!');
+
         if (typeof (req.file) !== 'undefined') {
             const localPath = `public/images/vouchers/${req.file.filename}`;
             const imgUpload = await cloudinaryUploadImage(localPath)
             const updateVoucher = await Voucher.findByIdAndUpdate(updVoucherId, {
-                ...req?.body, voucherImage:imgUpload?.url
+                ...req?.body, voucherImage: imgUpload?.url
             })
             fs.unlinkSync(localPath)
             return successTemplate(res, updateVoucher, "Cập nhật voucher thành công!", 200)
         }
-        else{
+        else {
             const updateVoucher = await Voucher.findByIdAndUpdate(updVoucherId, {
                 ...req?.body
             })
-            return successTemplate(res, {...req?.body}, "Cập nhật voucher thành công!", 200)
+            return successTemplate(res, { ...req?.body }, "Cập nhật voucher thành công!", 200)
         }
     } catch (error) {
         return errorTemplate(res, error.message)
