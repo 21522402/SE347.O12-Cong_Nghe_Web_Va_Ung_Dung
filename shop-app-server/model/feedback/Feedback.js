@@ -19,7 +19,7 @@ const feedbackSchema = new mongoose.Schema({
     },
     images: {
         type: [
-            {imgLink: String}
+            String
         ]
     },
     isResponsed:{
