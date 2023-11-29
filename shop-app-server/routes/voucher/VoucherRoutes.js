@@ -1,5 +1,5 @@
 const express = require('express');
-const { 
+const {
     getAllVouchersCtrl,
     addVoucherCtrl,
     updateVoucherCtrl,
@@ -14,11 +14,11 @@ const voucherRoutes = express.Router();
 
 voucherRoutes.get('/', getAllVouchersCtrl);
 
-voucherRoutes.post('/addVoucher', PhotoUpload.single("image") , voucherImgResizing ,addVoucherCtrl );
+voucherRoutes.post('/addVoucher', PhotoUpload.single("image"), voucherImgResizing, addVoucherCtrl);
 
-voucherRoutes.put('/updateVoucher/:id',PhotoUpload.single("image") , voucherImgResizing, updateVoucherCtrl)
+voucherRoutes.put('/updateVoucher/:id', PhotoUpload.single("image"), voucherImgResizing, updateVoucherCtrl);
 
-voucherRoutes.delete('/deleteVoucher/:id', deleteVoucherCtrl)
+voucherRoutes.delete('/deleteVoucher/:id', deleteVoucherCtrl);
 
 
 module.exports = voucherRoutes;

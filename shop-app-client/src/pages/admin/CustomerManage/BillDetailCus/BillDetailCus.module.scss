@@ -412,17 +412,21 @@
     }
 
     th.customerName {
-        width: 100%;
+        width: 18%;
         padding: 10px 10px 10px 30px;
     }
 
     th.customerPhone {
-        width: 150px;
+        width: 130px;
         padding: 10px 0px 10px 10px;
         text-align: right;
     }
 
-
+    th.status {
+        width: 130px;
+        padding: 10px 0px 10px 20px;
+        text-align: center;
+    }
 
 
     th.totalPrice {
@@ -483,7 +487,11 @@
 
     }
 
-    td.status {}
+    td.status {
+        
+        padding: 10px 0px 10px 40px;
+        text-align: center;
+    }
 
     border: 1px solid #ddd;
     border-top: none;

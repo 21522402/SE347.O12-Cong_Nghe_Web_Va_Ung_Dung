@@ -2,27 +2,69 @@ import styles from './EditVoucher.module.scss';
 import { HiOutlineInformationCircle } from 'react-icons/hi'
 import classNames from 'classnames/bind';
 import { CustomeButton } from '~/components';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { MdAdd } from 'react-icons/md';
+import baseUrl from '~/utils/baseUrl';
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 const cx = classNames.bind(styles)
-function EditVoucher({item}) {
-    const getDateValue = (date)=>{
-        const part = date.split('/')
-        const formatDate = part[2]+'-'+part[1]+'-'+part[0]
-        return formatDate
-    }
+function EditVoucher({item, closeFunc, setVoucherList}) {
+
     const [isPc , setIsPc] =useState(item.isPercent)
     const [file, setFile] = useState(null)
     const [img, setImage] = useState(item.voucherImage)
+    const [status, setStatus] = useState(true)
+    const [err, setErr] = useState(null)
     const {
         register,
         handleSubmit,
         getValues,
+        setValue,
         formState: { errors },
     } = useForm({ mode: 'onChange' });
-    const onSubmit = (data) => {
-        console.log(data)
+    const onSubmit = async (dt) => {
+        const formData = new FormData();
+        if(file){
+            formData.append('image', file);
+        }
+        formData.append('voucherPrice', dt.priceDiscount);
+        formData.append('isPercent', isPc);
+        formData.append('voucherCode', dt.voucherCode);
+        formData.append('expiredDate', dt.endDate);
+        formData.append('startDate', dt.startDate);
+        formData.append('minPrice', dt.minPrice);
+        formData.append('quanlity', dt.quanlity);
+        formData.append('description', dt.description);
+        setErr(null)
+        const sd = new Date(dt.startDate)
+        const ed = new Date(dt.endDate)
+        if (sd > ed) {
+            setErr('Ngày hết hạn phải lơn hơn ngày bắt đầu')
+            return
+        }
+        const config = {
+            headers: {
+                'Content-Type': 'multipart/form-data'
+            },
+        }
+
+        try {
+            const { data } = await axios.put(`${baseUrl}/api/vouchers/updateVoucher/${item.id}`, formData, config);
+            setVoucherList(prev=>{
+                const arr = [...prev]
+                arr.forEach(i=>{
+                    if(i.id === item.id){
+                        i = {...data.result}
+                    }
+                })
+                return arr
+            })
+            
+            closeFunc(false)
+        } catch (error) {
+            setErr(error.response.data.error.message)
+        }
     }
     const onChangeCheckBox=()=>{
         setIsPc(prev=>!prev)
@@ -39,6 +81,22 @@ function EditVoucher({item}) {
             reader.readAsDataURL(file);
         }
     }
+    
+    const checkStatus = (quanlity,expiredDate) => {
+        if (quanlity <= 0) return false;
+        const expirationDate = new Date(expiredDate);
+
+        // Lấy ngày hôm nay
+        const today = new Date();
+        if (today > expirationDate) return false;
+        return true;
+    }
+    const handleChangeQuanOrDate = ()=>{
+        setStatus(checkStatus(getValues('quanlity'), getValues('endDate')))
+    }
+    useEffect(()=>{
+        setStatus(checkStatus(getValues('quanlity'), getValues('endDate')))
+    },[getValues('quanlity'), getValues('endDate')])
     return (
         <div className={cx('wrapper')} style={{ animation: 'dropTop .3s linear' }}>
             <div style={{ fontWeight: 500, fontSize: '20px', marginBottom: '20px', backgroundColor: 'black', color: 'white', padding: '8px', width: '20%', borderRadius: '4px' }}>Cập nhật voucher</div>
@@ -49,6 +107,7 @@ function EditVoucher({item}) {
                 <input type='file' id='fileImg' hidden title='Choose Image' accept='image/*' onChange={onImageChange}/>
                 <label htmlFor='fileImg' style={{ border: '1px dashed #ccc', marginBottom: '8px', borderRadius: '10px', height: '30px', display: 'flex', justifyContent: 'center', alignItems: 'end', padding: '4px', marginLeft: '12px', cursor: 'pointer', justifySelf: 'end' }}>Choose Image</label>
             </div>
+            {err && <div className={cx('error')} style={{ marginLeft: '40px' }}>{err}</div>}
             <form onSubmit={handleSubmit(onSubmit)} style={{ padding: '2rem 4rem 2.5rem 4rem', width: '100%' }}>
                 <div className={cx('row-input')} >
                     <div style={{ width: '45%', display: 'flex', flexDirection: 'column' }}>
@@ -61,7 +120,7 @@ function EditVoucher({item}) {
                     <div style={{ width: '45%', display: 'flex', flexDirection: 'column' }}>
                         <div className={cx('input-field-right')} >
                             <label htmlFor='quanlity' className={cx('label-input')}>Số lượng <HiOutlineInformationCircle fontSize={'18px'} /> </label>
-                            <input defaultValue={item.amount} name='quanlity' aria-invalid={errors.quanlity ? "true" : "false"} style={errors.quanlity?{borderBottom:'1px solid red' }:{}} {...register('quanlity', { required: 'Số lượng chưa được nhập!', valueAsNumber:{value:true, message:'Số lượng phải là một số'} , min:{value:0, message:'Số lượng không được âm'}})} id='quanlity' type='number' placeholder='1000' className={cx('input')} />
+                            <input  defaultValue={item.quanlity} name='quanlity' aria-invalid={errors.quanlity ? "true" : "false"} style={errors.quanlity?{borderBottom:'1px solid red' }:{}} {...register('quanlity', { required: 'Số lượng chưa được nhập!', valueAsNumber:{value:true, message:'Số lượng phải là một số'} , min:{value:0, message:'Số lượng không được âm'}})} id='quanlity' type='number' placeholder='1000' className={cx('input')} />
                         </div>
                         {errors.quanlity && <div className={cx('error')}>{errors.quanlity.message}</div>}
                     </div>
@@ -74,8 +133,8 @@ function EditVoucher({item}) {
                     <div style={{width:'45%'}}>
                         <div className={cx('input-field-right')} >
                             <label htmlFor='statusVoucher' className={cx('label-input')}>Trạng thái <HiOutlineInformationCircle fontSize={'18px'} /> </label>
-                            <div className={cx({ 'expired-item': item.status === 'Expired' }, { 'unExpired-item': item.status === 'UnExpired' })}>
-                                {item.status}
+                            <div className={cx({ 'expired-item': !status }, { 'unExpired-item': status })}>
+                                {!status?'Hết hạn':'Còn hạn'}
                             </div>
                         </div>
                     </div>
@@ -84,7 +143,7 @@ function EditVoucher({item}) {
                     <div style={{ width: '45%', display: 'flex', flexDirection: 'column' }}>
                         <div className={cx('input-field-left')} >
                             <label htmlFor='priceDiscount' className={cx('label-input')}>Giá được giảm <HiOutlineInformationCircle fontSize={'18px'} /> </label>
-                            <input defaultValue={item.price} name='priceDiscount' aria-invalid={errors.priceDiscount ? "true" : "false"} style={errors.priceDiscount?{borderBottom:'1px solid red' }:{}} {...register('priceDiscount', { required: 'Giá giảm chưa được nhập!', valueAsNumber:{value:true, message:'Giá giảm phải là một số'} , min:{value:0, message:'Giá giảm không được âm'} })} id='priceDiscount' type='number' 
+                            <input defaultValue={item.voucherPrice} name='priceDiscount' aria-invalid={errors.priceDiscount ? "true" : "false"} style={errors.priceDiscount?{borderBottom:'1px solid red' }:{}} {...register('priceDiscount', { required: 'Giá giảm chưa được nhập!', valueAsNumber:{value:true, message:'Giá giảm phải là một số'} , min:{value:0, message:'Giá giảm không được âm'} })} id='priceDiscount' type='number' 
                             placeholder={isPc?'10 (%)':'50.000 (VND)'} className={cx('input')} />
                         </div>
                         {errors.priceDiscount && <div className={cx('error')}>{errors.priceDiscount.message}</div>}
@@ -101,14 +160,14 @@ function EditVoucher({item}) {
                     <div style={{ width: '45%', display: 'flex', flexDirection: 'column' }}>
                         <div className={cx('input-field-left')} >
                             <label htmlFor='startDate' className={cx('label-input')}>Ngày bắt đầu <HiOutlineInformationCircle fontSize={'18px'} /> </label>
-                            <input defaultValue={getDateValue(item.startDate)} name='startDate' aria-invalid={errors.startDate ? "true" : "false"} style={errors.startDate?{borderBottom:'1px solid red' }:{}} {...register('startDate', { required: 'Ngày bắt đầu chưa được nhập!' })} type='date' className={cx('input')} />
+                            <input  defaultValue={item.startDate.split('T')[0]} name='startDate' aria-invalid={errors.startDate ? "true" : "false"} style={errors.startDate?{borderBottom:'1px solid red' }:{}} {...register('startDate', { required: 'Ngày bắt đầu chưa được nhập!' })} type='date' className={cx('input')} />
                         </div>
                         {errors.startDate && <div className={cx('error')}>{errors.startDate.message}</div>}
                     </div>
                     <div style={{ width: '45%', display: 'flex', flexDirection: 'column' }}>
                         <div className={cx('input-field-right')} >
                             <label htmlFor='endDate' className={cx('label-input')}>Ngày kết thúc <HiOutlineInformationCircle fontSize={'18px'} /> </label>
-                            <input defaultValue={getDateValue(item.expiredDate)} name='endDate' aria-invalid={errors.endDate ? "true" : "false"} style={errors.endDate?{borderBottom:'1px solid red' }:{}} {...register('endDate', { required: 'Ngày kết thúc chưa được nhập!' })} id='endDate' type='date' className={cx('input')} />
+                            <input  defaultValue={item.expiredDate.split('T')[0]} name='endDate' aria-invalid={errors.endDate ? "true" : "false"} style={errors.endDate?{borderBottom:'1px solid red' }:{}} {...register('endDate', { required: 'Ngày kết thúc chưa được nhập!' })} id='endDate' type='date' className={cx('input')} />
                         </div>
                         {errors.endDate && <div className={cx('error')}>{errors.endDate.message}</div>}
                     </div>
@@ -116,7 +175,7 @@ function EditVoucher({item}) {
                 <div  >
                     <div style={{ width: '100%', display: 'flex', flexDirection: 'column' }} >
                         <label htmlFor='description' className={cx('label-input')}>Mô tả <HiOutlineInformationCircle fontSize={'18px'} /> </label>
-                        <textarea defaultValue={item.description} rows={4} name='description' id='description' type='text' placeholder='Sale ngày phụ nữ việt nam. Áp dụng để giảm tiền trực tiếp cho đơn hàng!' style={{ marginTop: '12px', border: '1px solid #ccc', padding: '8px' }} />
+                        <textarea {...register('description')} defaultValue={item.description} rows={4} name='description' id='description' type='text' placeholder='Sale ngày phụ nữ việt nam. Áp dụng để giảm tiền trực tiếp cho đơn hàng!' style={{ marginTop: '12px', border: '1px solid #ccc', padding: '8px' }} />
                     </div>
                 </div>
                 <div style={{ display: 'flex', justifyContent: 'right' }}>

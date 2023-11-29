@@ -17,10 +17,8 @@ const feedbackSchema = new mongoose.Schema({
         type: Date,
         require: [true, 'Date of feedback is required.']
     },
-    images: {
-        type: [
-            String
-        ]
+    imagesRv: {
+        type: [String]
     },
     isResponsed:{
         type: Boolean,
@@ -30,7 +28,7 @@ const feedbackSchema = new mongoose.Schema({
         type: {
             content: String, 
             date: Date,
-            images: [String]
+            imagesRsp: [String]
         }
     }
 

@@ -38,6 +38,8 @@ const userSchema = new mongoose.Schema(
                     district: String,
                     ward: String,
                     detail: String,
+                    name: String,
+                    phoneNumber:String,
                     default: Boolean
                 }
             ]
@@ -98,6 +100,17 @@ const userSchema = new mongoose.Schema(
                 }
             ]
         },
+        isActive:{
+            type:Boolean,
+            default:true
+        },
+        
+        // isAccountVerified: {
+        //     type: Boolean,
+        //     default: false
+        // },
+        // accountVerificationToken: String,
+        // accountVerificationTokenExpired: Date,
     },
     {
         toJSON: {

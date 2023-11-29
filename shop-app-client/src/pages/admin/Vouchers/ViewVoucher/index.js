@@ -3,6 +3,27 @@ import { HiOutlineInformationCircle } from 'react-icons/hi'
 import classNames from 'classnames/bind';
 const cx = classNames.bind(styles)
 function ViewVoucher({ item }) {
+    const convertDate = (d) => {
+        const date = new Date(d);
+
+        // Lấy thông tin ngày, tháng, năm
+        const day = String(date.getDate()).padStart(2, '0');
+        const month = String(date.getMonth() + 1).padStart(2, '0'); // Tháng bắt đầu từ 0
+        const year = date.getFullYear();
+
+        // Tạo chuỗi ngày tháng định dạng 'DD-MM-YYYY'
+        const formattedDate = `${day}/${month}/${year}`;
+        return formattedDate;
+    }
+    const checkStatus = (item) => {
+        if (item.quanlity <= 0) return false;
+        const expirationDate = new Date(item.expiredDate);
+
+        // Lấy ngày hôm nay
+        const today = new Date();
+        if (today < expirationDate) return false;
+        return true;
+    }
     return (
         <div className={cx('wrapper')} style={{ animation: 'dropTop .3s linear' }}>
             <div style={{ fontWeight: 500, fontSize: '20px', marginBottom: '20px', backgroundColor: 'black', color: 'white', padding: '8px', width: '15%', borderRadius: '4px' }}>Xem Voucher</div>
@@ -19,7 +40,7 @@ function ViewVoucher({ item }) {
                     </div>
                     <div className={cx('input-field-right')} >
                         <div className={cx('label-input')}>Số lượng <HiOutlineInformationCircle fontSize={'18px'} /> </div>
-                        <div className={cx('input')}>{item.amount}</div>
+                        <div className={cx('input')}>{item.quanlity}</div>
                     </div>
                 </div>
                 <div className={cx('row-input')} >
@@ -31,7 +52,7 @@ function ViewVoucher({ item }) {
                 <div className={cx('row-input')} >
                     <div className={cx('input-field-left')} >
                         <div className={cx('label-input')}>Giá được giảm <HiOutlineInformationCircle fontSize={'18px'} /> </div>
-                        <div className={cx('input')}>{item.price}</div>
+                        <div className={cx('input')}>{item.isPercent}</div>
                     </div>
                     <div className={cx('input-field-right')} >
                         <div className={cx('label-input')}>Giá trị tối thiểu <HiOutlineInformationCircle fontSize={'18px'} /> </div>
@@ -41,18 +62,18 @@ function ViewVoucher({ item }) {
                 <div className={cx('row-input')} >
                     <div className={cx('input-field-left')} >
                         <div className={cx('label-input')}>Ngày bắt đầu <HiOutlineInformationCircle fontSize={'18px'} /> </div>
-                        <div className={cx('input')}>{item.startDate}</div>
+                        <div className={cx('input')}>{convertDate(item.startDate)}</div>
                     </div>
                     <div className={cx('input-field-right')} >
                         <div className={cx('label-input')}>Ngày kết thúc <HiOutlineInformationCircle fontSize={'18px'} /> </div>
-                        <div className={cx('input')}>{item.expiredDate}</div>
+                        <div className={cx('input')}>{convertDate(item.expiredDate)}</div>
                     </div>
                 </div>
                 <div className={cx('row-input')} >
                     <div className={cx('input-field-left')} >
                         <label htmlFor='statusVoucher' className={cx('label-input')}>Trạng thái <HiOutlineInformationCircle fontSize={'18px'} /> </label>
-                        <div className={cx({ 'expired-item': item.status === 'Expired' }, { 'unExpired-item': item.status === 'UnExpired' })}>
-                            {item.status}
+                        <div className={cx({ 'expired-item': checkStatus(item) }, { 'unExpired-item': !checkStatus(item) })}>
+                            {checkStatus(item)?'Hết hạn':"Còn hạn"}
                         </div>
                     </div>
 

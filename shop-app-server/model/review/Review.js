@@ -21,10 +21,8 @@ const reviewSchema = new mongoose.Schema({
         type: Date,
         require: [true, 'Date of review is required.']
     },
-    images: {
-        type: [
-            {imgLink: String}
-        ]
+    imagesRv: {
+        type: [String]
     },
     isResponsed:{
         type: Boolean,
@@ -34,7 +32,7 @@ const reviewSchema = new mongoose.Schema({
         type: {
             content: String, 
             date: Date,
-            images: [String]
+            imagesRsp: [String]
         }
     }
 }, {
@@ -46,6 +44,6 @@ const reviewSchema = new mongoose.Schema({
     },
     timestamps: true
 });
-const Review = mongoose.model('Review', feedbackSchema);
+const Review = mongoose.model('Review', reviewSchema);
 
 module.exports = Review;
