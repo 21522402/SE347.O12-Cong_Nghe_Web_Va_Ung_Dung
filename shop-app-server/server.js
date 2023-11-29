@@ -14,7 +14,9 @@ const app = express();
 dbConnect();
 
 // use middlewares
-app.use(express.json());
+app.use(express.json({
+    limit: '500mb'
+}));
 app.use(express.urlencoded({ extended: true }));
 app.use(cors());
 

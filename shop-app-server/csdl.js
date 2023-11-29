@@ -16,7 +16,7 @@ const user= {
         },
         {}
     ],
-    reviews:[reviewIds],
+    reviews:[reviewId],
     cart: [
         {
             productId: {type: String},

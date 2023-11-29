@@ -44,7 +44,8 @@
 .combobox {
     padding: 10px;
     height: 40px;
-    width: 200px;
+    width: 220px;
+    text-align: center;
 }
 
 .container-reviews {
@@ -61,8 +62,8 @@
 }
 
 .container-list {
-    margin: 0px 20px 10px 20px;
+    margin: 0px 20px;
     display: grid;
-    grid-template-columns: repeat(5, 1fr);
+    grid-template-columns: repeat(4, 1fr);
     justify-items: center;
 }

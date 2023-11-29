@@ -12,15 +12,12 @@ const cx = classNames.bind(styles);
 function Reviews() {
   const cbb = [
     { value: 'All', label: 'Tất cả' },
-    { value: 'UnResponse', label: 'Đã phản hồi' },
-    { value: 'Responsed', label: 'Chưa phản hồi' }
+    { value: 'Increase', label: 'Giá từ thấp đến cao' },
+    { value: 'Reduce', label: 'Giá từ cao xuống thấp' }
   ]
   const [listAllItemReview, setListAllItemReview] = useState([]);
 
   const getAllReviews = async () => {
-    // let listAllReviewProduct = await axios.get();
-    // if (listAllReviewProduct) setListItemReview(listAllReviewProduct);
-    // return listAllReviewProduct;
     let listAllReviewProduct = [
       {
         idProduct: 'SP001',
@@ -292,7 +289,6 @@ function Reviews() {
                 defaultValue={cbb[0]}
                 className={cx('combobox')} />
             </div>
-
           </div>
           <div className={cx("container-list", "row")}>
             {listAllItemReview.map((item, index) => {
@@ -303,29 +299,6 @@ function Reviews() {
                 />
               );
             })}
-          </div>
-          <div style={{ display: 'flex', padding: '0 32px 20px', justifyContent: 'space-between' }}>
-            <div>Showing: <span>10</span> of 53 entries</div>
-            <nav >
-              <ul className={cx('pagination')} >
-                <li className={cx('page-item')}>
-                  <Link href='#'
-                    className={cx('page-link')}>Prev</Link>
-                </li>
-                {
-                  [1, 2, 3].map((item, index) => (
-                    <li key={index} className={cx(`page-item`, { 'active': 1 === item })}>
-                      <Link href='#'
-                        className={cx('page-link')}>{item}</Link>
-                    </li>
-                  ))
-                }
-                <li className={cx('page-item')}>
-                  <Link href='#'
-                    className={cx('page-link')}>Next</Link>
-                </li>
-              </ul>
-            </nav>
           </div>
         </div>
       </div>

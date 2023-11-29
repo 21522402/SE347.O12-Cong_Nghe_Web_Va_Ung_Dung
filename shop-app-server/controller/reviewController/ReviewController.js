@@ -18,7 +18,7 @@ const responseReview = async (req, res) => {
 
         const arrImageLink = [];
         req.files.forEach(async (item, index) => {
-            var localPath = `public/images/feedbacks/${item.filename}`;
+            var localPath = `public/images/reviews/${item.filename}`;
             let imgUpload = await cloudinaryUploadImage(localPath);
             arrImageLink.push(imgUpload.url);
             fs.unlinkSync(localPath)
@@ -31,11 +31,11 @@ const responseReview = async (req, res) => {
                 ...req?.body.response,
                 content: req?.body.content,
                 date: req?.body.date,
-                images: arrImageLink
+                imagesRsp: arrImageLink
             }
         })
         
-        return successTemplate(res, feedback, "Responsed feedback successfully!", 200)
+        return successTemplate(res, review, "Responsed review successfully!", 200)
     } catch (error) {
         return errorTemplate(res, error.message)
     }
