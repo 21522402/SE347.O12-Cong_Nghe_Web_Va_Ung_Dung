@@ -3,25 +3,24 @@
 import classNames from "classnames/bind";
 import React, { useEffect, useRef } from "react";
 import { useState } from "react";
-import ProductDetail from "../ProductDetail";
-import { IoSquareOutline, IoCheckboxSharp, IoInformationCircleOutline } from "react-icons/io5";
-import { AiFillCaretDown, AiFillCaretUp, AiFillCaretRight, AiOutlineClose } from "react-icons/ai";
+import {  IoInformationCircleOutline } from "react-icons/io5";
+import { AiFillCaretDown, AiFillCaretUp } from "react-icons/ai";
 
 import { GrFormClose } from "react-icons/gr";
 import { BsSave } from "react-icons/bs";
-import { MdPublish } from "react-icons/md";
 import { TiCancel } from "react-icons/ti";
 import { BsPlusCircleFill } from "react-icons/bs";
-import { RiSubtractLine } from "react-icons/ri";
+
 import DropDown from "../DropDown";
-import { ChromePicker } from "react-color";
+import AdvanceDropdown from "../AdvanceDropdown";
+import ItemColor from "./ItemColor";
 
 import styles from './Modal.module.scss'
 
 import 'react-quill/dist/quill.snow.css'
 import ReactQuill from "react-quill";
-import images from "~/assets/img";
-
+import { useDispatch, useSelector } from "react-redux";
+import { handleChangeInputText, handleAddNewColor } from "~/redux/Product/action";
 
 
 
@@ -31,14 +30,24 @@ import images from "~/assets/img";
 
 const cx = classNames.bind(styles)
 
-function Modal({ setModal, typeModal }) {
+function Modal({ setModal, typeModal}) {
+    let product = useSelector(state => state.productReducer.currentUpdateProduct)
+    const dispatch = useDispatch()
+    useEffect(() => {
+        console.log(product)
+    },[product])
+    
+    
     const listProductCategory = ['Áo', 'Quần', 'Đồ lót']
-    const listProductType = ['Quần dài', 'Quần thể thao', 'Quần short']
+    const [listProductType,setListProductType] = useState(() => {
+        return ['Quần dài', 'Quần thể thao', 'Quần short']
+    })
     const [showCategory, setShowCategory] = useState(false)
     const [showType, setShowType] = useState(false)
     const [category, setCategory] = useState('')
     const [type, setType] = useState('')
-    const [value, setValue] = useState('');
+    const [description, setDescription] = useState('');
+
     const [indexTabpanel, setIndexTabPanel] = useState(1);
 
     // Begin: Other info
@@ -50,6 +59,14 @@ function Modal({ setModal, typeModal }) {
             else return false;
         })
     });
+    const handleChangeInput = (e) => {
+        const name = e.target.name;
+        const value = e.target.value.trim()
+        const data = {
+            name,value
+        }
+        dispatch(handleChangeInputText(data))
+    }
     const handleShowMore = (indexShowMore) => {
         setListShowMore(prev => {
             const nextState = prev.map((item, index) => {
@@ -109,7 +126,7 @@ function Modal({ setModal, typeModal }) {
         {
             color: '',
             colorCode: '',
-            listImage: [...listImageDefault],
+            listImage: [],
             listSize: []
         }
         ])
@@ -205,18 +222,6 @@ function Modal({ setModal, typeModal }) {
     }
 
     // End: Other Info
-    const handleClickCategory = () => {
-        setShowCategory(prev => !prev);
-        setShowType(false);
-    }
-    const handleClickType = () => {
-        setShowType(prev => !prev);
-        setShowCategory(false);
-    }
-    const handleClickInput = () => {
-        setShowType(false)
-        setShowCategory(false)
-    }
     const handleClickItemCategory = (item) => {
         setCategory(item)
     }
@@ -224,10 +229,51 @@ function Modal({ setModal, typeModal }) {
     const handleClickItemType = (item) => {
         setType(item)
     }
-
+    const handleClickAddType = (item) => {
+        setListProductType(prev => {
+            return [item,...prev]
+        })
+    }
+    const handleCliclRemoveType = (item) => {
+        if (item===type) setType('')
+        setListProductType(prev => {
+            return [...prev].filter(item2 => item2!==item);
+        })
+    }
     useEffect(() => {
         console.log(listColor);
     }, [listColor])
+    useEffect(() => {
+        const data = {
+            name: 'description',
+            value: description
+        }
+        dispatch(handleChangeInputText(data))
+    },[description])
+    const elementCategory = useRef(null);
+    const elementProductType = useRef(null);
+    useEffect(() => {
+        function handleClickOutside(event) {
+            if (elementCategory.current && !elementCategory.current.contains(event.target)) {
+                setShowCategory(false);
+            }
+        }
+        document.addEventListener("mousedown", handleClickOutside);
+        return () => {
+            document.removeEventListener("mousedown", handleClickOutside);
+        };
+    }, [elementCategory]);
+    useEffect(() => {
+        function handleClickOutside(event) {
+            if (elementProductType.current && !elementProductType.current.contains(event.target)) {
+                setShowType(false);
+            }
+        }
+        document.addEventListener("mousedown", handleClickOutside);
+        return () => {
+            document.removeEventListener("mousedown", handleClickOutside);
+        };
+    }, [elementProductType]);
 
     return (
 
@@ -239,7 +285,9 @@ function Modal({ setModal, typeModal }) {
 
                 {/* Header */}
                 <div className={cx('header')}>
-                    Thêm hàng
+                    {
+                        typeModal==='update' ? 'Cập nhật' : 'Thêm hàng'
+                    }
                 </div>
 
                 {/* Tabpanel */}
@@ -263,28 +311,28 @@ function Modal({ setModal, typeModal }) {
                                     {/* Form group */}
                                     <div className={cx('form-group')}>
                                         <label>Mã sản phẩm  <IoInformationCircleOutline style={{ fontSize: '18px', marginLeft: '4px' }} /></label>
-                                        <input onFocus={handleClickInput} type="text" placeholder="Mã sản phẩm tự động" disabled style={{ background: 'transparent' }} />
+                                        <input  type="text" placeholder="Mã sản phẩm tự động" disabled style={{ background: 'transparent' }} />
                                     </div>
                                     <div className={cx('form-group')}>
                                         <label>Tên sản phẩm  <IoInformationCircleOutline style={{ fontSize: '18px', marginLeft: '4px' }} /></label>
-                                        <input onFocus={handleClickInput} type="text" />
+                                        <input  type="text" onChange={(e) => handleChangeInput(e)}  value={product.productName} name="productName"/>
                                     </div>
                                     <div className={cx('form-group')}>
                                         <label>Nhóm hàng  <IoInformationCircleOutline style={{ fontSize: '18px', marginLeft: '4px' }} /></label>
-                                        {/* <input onFocus={handleClickInput} type="text"/> */}
-                                        <div className={cx('product-category-select', { active: showCategory })} onClick={handleClickCategory}>
-                                            <span>{category}</span>
+                                        {/* <input  type="text"/> */}
+                                        <div ref={elementCategory} className={cx('product-category-select', { active: showCategory })} onClick={() => setShowCategory(prev=> !prev)}>
+                                            <span>{product.productCategory}</span>
                                             <span> {!showCategory ? <AiFillCaretDown /> : <AiFillCaretUp />}</span>
-                                            {showCategory && <DropDown items={listProductCategory} style={{ width: '100%', left: '0', top: '35px' }} onClick={handleClickItemCategory} />}
+                                            {showCategory && <DropDown items={listProductCategory} style={{ width: '100%', left: '0', top: '35px' }} onClick={(item) => dispatch(handleChangeInputText({name: 'productCategory', value: item}))} />}
                                         </div>
                                     </div>
                                     <div className={cx('form-group')}>
-                                        <label>Nhóm hàng  <IoInformationCircleOutline style={{ fontSize: '18px', marginLeft: '4px' }} /></label>
-                                        {/* <input onFocus={handleClickInput} type="text"/> */}
-                                        <div className={cx('product-category-select', { active: showType })} onClick={handleClickType}>
-                                            <span>{type}</span>
+                                        <label>Loại hàng  <IoInformationCircleOutline style={{ fontSize: '18px', marginLeft: '4px' }} /></label>
+                                        {/* <input  type="text"/> */}
+                                        <div ref={elementProductType} className={cx('product-category-select', { active: showType })} onClick={() => setShowType(prev=> !prev)}>
+                                            <span>{product.productType}</span>
                                             <span> {!showType ? <AiFillCaretDown /> : <AiFillCaretUp />}</span>
-                                            {showType && <DropDown items={listProductType} style={{ width: '100%', left: '0', top: '35px' }} onClick={handleClickItemType} />}
+                                            {showType && <AdvanceDropdown items={listProductType} style={{ width: '100%', left: '0', top: '35px' }} onClick={(item) => dispatch(handleChangeInputText({name: 'productType', value: item}))} addNewItem={handleClickAddType} removeItem={handleCliclRemoveType}/>}
                                         </div>
                                     </div>
                                 </div>
@@ -293,19 +341,19 @@ function Modal({ setModal, typeModal }) {
                                     {/* Form group */}
                                     <div className={cx('form-group')}>
                                         <label>Giá vốn  <IoInformationCircleOutline style={{ fontSize: '18px', marginLeft: '4px' }} /></label>
-                                        <input onFocus={handleClickInput} type="text" />
+                                        <input  type="text" onChange={(e) => handleChangeInput(e)}  value={product.importPrice} name="importPrice" />
                                     </div>
                                     <div className={cx('form-group')}>
                                         <label>Giá bán  <IoInformationCircleOutline style={{ fontSize: '18px', marginLeft: '4px' }} /></label>
-                                        <input onFocus={handleClickInput} type="text" />
+                                        <input  type="text" onChange={(e) => handleChangeInput(e)}  value={product.exportPrice} name="exportPrice"/>
                                     </div>
                                     <div className={cx('form-group')}>
                                         <label>Tồn kho  <IoInformationCircleOutline style={{ fontSize: '18px', marginLeft: '4px' }} /></label>
-                                        <input onFocus={handleClickInput} type="text" value={0} disabled style={{ background: 'transparent' }} />
+                                        <input  type="text" value={0} disabled style={{ background: 'transparent' }} />
                                     </div>
                                     <div className={cx('form-group')}>
                                         <label>Trạng thái  <IoInformationCircleOutline style={{ fontSize: '18px', marginLeft: '4px' }} /></label>
-                                        <input onFocus={handleClickInput} type="text" value={'Chưa đăng bán'} disabled style={{ background: 'transparent' }} />
+                                        <input  type="text" value={'Chưa đăng bán'} disabled style={{ background: 'transparent' }} />
                                     </div>
 
 
@@ -358,7 +406,8 @@ function Modal({ setModal, typeModal }) {
                                             ]}
 
 
-                                            theme="snow" value={value} onChange={setValue} onFocus={handleClickInput} style={{ height: '150px' }} />
+                                            theme="snow" value={description} onChange={setDescription}  style={{ height: '150px' }}
+                                             />
 
                                     </div>
                                 </div>
@@ -369,9 +418,9 @@ function Modal({ setModal, typeModal }) {
                         indexTabpanel === 2 &&
                         <div className={cx('body-other-infor')}>
                             <div>
-                                <label style={{ fontWeight: '700' }}>Bảng màu ({listColor.length}): <span onClick={handleClickAddColor} className={cx('icon-plus')}><BsPlusCircleFill /></span></label>
+                                <label style={{ fontWeight: '700' }}>Bảng màu ({product.colors.length}): <span onClick={() => dispatch(handleAddNewColor())} className={cx('icon-plus')}><BsPlusCircleFill /></span></label>
                                 {
-                                    listColor.length === 0 &&
+                                    product.colors.length === 0 &&
                                     <div style={{ padding: '36px 24px 24px 24px', display: 'flex', alignItems: 'center', flexDirection: 'column' }}>
                                         <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ8vxcXbyvy5JHHV_7wMO_HQv-j6aZxX0I5MA&usqp=CAU" />
                                         <div style={{ marginTop: '16px', fontSize: '20px', fontWeight: '600', letterSpacing: '1.6px', color: '#ccc' }}>EMPTY</div>
@@ -379,115 +428,12 @@ function Modal({ setModal, typeModal }) {
                                 }
                                 {/* Color */}
                                 {
-                                    listColor.length > 0 &&
+                                    product.colors.length > 0 &&
                                     <div>
                                         {
-                                            listColor.map((itemA, indexA) => {
+                                            product.colors.map((item, index) => {
                                                 return (
-                                                    <div key={indexA} style={{ marginTop: '8px', height: listShowMore[indexA] === false ? '40px' : 'auto', overflow: 'hidden', transition: 'height 0.3s linear' }}>
-                                                        <div style={{ display: 'flex', alignItems: 'center' }}>
-                                                            {
-                                                                listShowMore[indexA] === false ?
-                                                                    <span onClick={() => handleShowMore(indexA)} style={{ cursor: 'pointer', fontSize: '20px', marginBottom: '4px', marginRight: '8px', alignSelf: 'flex-start' }}><AiFillCaretRight /></span>
-                                                                    :
-                                                                    <span onClick={() => handleShowMore(indexA)} style={{ cursor: 'pointer', fontSize: '20px', marginBottom: '4px', marginRight: '8px', alignSelf: 'flex-start' }}><AiFillCaretDown /></span>
-                                                            }
-                                                            <div className={cx('form-group2')}>
-                                                                <label>Màu</label>
-                                                                <input onChange={(e) => handleChangeColorName(e, indexA)} placeholder="Đen,..." type="text" style={{ width: '80px', textAlign: 'center', background: 'transparent' }} value={itemA.color} />
-
-
-                                                            </div>
-                                                            <div style={{ marginLeft: '16px', display: 'flex', alignItems: 'center', gap: '16px' }}>
-                                                                <label style={{fontWeight: '700'}}>Chọn màu:</label>
-                                                                <div style={{ width: '20px', height: '20px', borderRadius: '50%', background: itemA.colorCode || '#000', position: 'relative', cursor: 'pointer' }}>
-                                                                    <div style={{ position: 'absolute', zIndex: '1000', left: '120%' }}>
-                                                                        <ChromePicker onChange={newColor => handleChangeColorCode(newColor.hex, indexA)} color={itemA.colorCode || '#000'} disableAlpha />
-                                                                    </div>
-                                                                </div>
-
-                                                            </div>
-                                                            {
-                                                                listColor.length > 1 &&
-                                                                <div style={{ marginLeft: '24px', marginTop: '10px' }}>
-                                                                    <span onClick={() => handleRemoveColor(indexA)} style={{ cursor: 'pointer', padding: '4px 4px', borderRadius: '50%', display: 'inline-flex', backgroundColor: 'red', fontSize: '16px' }}><RiSubtractLine style={{ color: '#fff' }} /></span>
-                                                                </div>
-                                                            }
-
-
-                                                        </div>
-
-                                                        {/* Image */}
-                                                        <div style={{ padding: '28px' }}>
-                                                            {
-                                                                itemA.listImage.map((itemB, indexB) => {
-                                                                    return (
-                                                                        <div key={indexB} className={cx('img-wrapper')} style={{ marginRight: '32px' }}>
-                                                                            <img src={itemB.isImageDefault ? images.productImageDefault : itemB.url} style={{ cursor: 'pointer', objectFit: 'cover', width: '100px', height: '88px' }}>
-                                                                            </img>
-                                                                            {
-                                                                                itemB.isImageDefault && <p>+ Thêm</p>
-                                                                            }
-
-
-                                                                            <input type="file" onChange={(event) => handlePreviewImage(event, indexA, indexB)} accept="image/jpg, image/jpeg, image/png" />
-                                                                            {
-                                                                                !itemB.isImageDefault &&
-                                                                                <span onClick={() => handleClickRemoveImage(indexA, indexB)} className={cx('icon-remove-img')} >
-                                                                                    <AiOutlineClose style={{ fontSize: '14px', color: 'red' }} /></span>
-                                                                            }
-                                                                        </div>
-                                                                    )
-                                                                })
-                                                            }
-                                                        </div>
-
-                                                        {/* Sỉze */}
-                                                        <div style={{ padding: '28px', paddingTop: '0px' }}>
-                                                            <label style={{ fontWeight: '700' }}>Bảng size ({itemA.listSize.length}): <span onClick={() => handleClickAddSize(indexA)} className={cx('icon-plus')}><BsPlusCircleFill /></span></label>
-                                                            {
-                                                                itemA.listSize.length === 0 &&
-                                                                <div>
-                                                                    <div style={{ padding: '36px 24px 24px 24px', display: 'inline-flex', alignItems: 'center', flexDirection: 'column' }}>
-                                                                        <img width={250} height={125} src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ8vxcXbyvy5JHHV_7wMO_HQv-j6aZxX0I5MA&usqp=CAU" />
-                                                                        <div style={{ marginTop: '16px', fontSize: '16px', fontWeight: '600', letterSpacing: '1.6px', color: '#ccc' }}>EMPTY</div>
-                                                                    </div>
-                                                                </div>
-                                                            }
-                                                            <div style={{ marginTop: '16px', display: 'flex', flexDirection: 'column', gap: '16px' }}>
-                                                                {
-                                                                    itemA.listSize.map((itemB, indexB) => {
-                                                                        return (
-
-                                                                            <div key={indexB} className={cx('wrap-size')}>
-                                                                                <div className={cx('size')}>
-                                                                                    <div className={cx('form-group2')} style={{ marginRight: '48px' }}>
-                                                                                        <label>Size:</label>
-                                                                                        <input onChange={(e) => handleChangeSizeName(e, indexA, indexB)} value={itemB.sizeName} type="text" style={{ width: '80px', textAlign: 'center', background: 'transparent' }} placeholder="S,M,..." />
-                                                                                    </div>
-                                                                                    <div className={cx('form-group2')}>
-                                                                                        <label>Số lượng:</label>
-                                                                                        <input value={itemB.quantity} type="text" style={{ width: '80px', textAlign: 'center', background: 'transparent' }} disabled />
-                                                                                    </div>
-
-
-                                                                                </div>
-                                                                                {
-                                                                                    itemA.listSize.length > 1 &&
-                                                                                    <div>
-                                                                                        <span onClick={(e) => handleRemoveSize(indexA, indexB)} style={{ cursor: 'pointer', padding: '4px 4px', borderRadius: '50%', display: 'inline-flex', backgroundColor: 'red', fontSize: '16px' }}><RiSubtractLine style={{ color: '#fff' }} /></span>
-                                                                                    </div>
-                                                                                }
-
-
-                                                                            </div>
-                                                                        )
-                                                                    })
-                                                                }
-
-                                                            </div>
-                                                        </div>
-                                                    </div>
+                                                   <ItemColor key={index} index={index}/>
                                                 )
                                             })
                                         }

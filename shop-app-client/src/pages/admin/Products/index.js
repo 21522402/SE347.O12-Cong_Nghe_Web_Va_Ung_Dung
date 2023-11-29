@@ -48,21 +48,7 @@ function Products() {
                                         <span className={cx('btn', 'btn-succeed')}>Nhóm hàng <AiFillCaretDown /></span>
                                     </div>
 
-                                    {/* <ul className={cx('product-category-list')}>
-                            <li>
-                                <span>Tất cả</span>
-                            </li>
-                            <li>
-                                <span>Áo</span>
-                            </li>
-                            <li>
-                                <span>Quần</span>
-                            </li>
-                            <li>
-                                <span>Đồ lót</span>
-                            </li>
-                        </ul> */}
-
+                       
                                     {showCategory && <DropDown items={listProductCategory} />}
                                 </div>
 
@@ -72,20 +58,6 @@ function Products() {
                                         <span className={cx('btn', 'btn-succeed')}>Loại hàng <AiFillCaretDown /></span>
                                     </div>
 
-                                    {/* <ul className={cx('product-type-list')}>
-                            <li>
-                                <span>Tất cả</span>
-                            </li>
-                            <li>
-                                <span>Quần dài</span>
-                            </li>
-                            <li>
-                                <span>Quần thể thao</span>
-                            </li>
-                            <li>
-                                <span>Quần short</span>
-                            </li>
-                        </ul> */}
                                     {showType && <DropDown items={listProductType} />}
 
                                 </div>
