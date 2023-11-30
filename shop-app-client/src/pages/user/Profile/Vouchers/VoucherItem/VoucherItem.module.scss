@@ -87,6 +87,8 @@
     font-weight: 500;
     overflow: hidden;
     display: -webkit-box;
+    min-height: 60px;
+    min-width: 200px;
    -webkit-line-clamp: 3; /* number of lines to show */
            line-clamp: 23; 
    -webkit-box-orient: vertical;

@@ -5,12 +5,16 @@ import { FaArrowDown, FaArrowUp } from "react-icons/fa";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import baseUrl from "~/utils/baseUrl";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { ToastContainer, toast } from 'react-toastify';
+import { loginSuccess } from "~/redux/slices/authSlice";
 
 function LayoutNoSidebar({ children }) {
     const [openGridVoucher, setOpenGridVoucher] = useState(false);
     const [voucherList, setVoucherList] = useState([])
-
+    const notify = (type, message) => toast(message, {type: type});
+    let currentUser = useSelector((state) => state.auth.login.currentUser)
+    const dispatch = useDispatch()
     const handleClose = (e) => {
         if (e.target.id === 'xsngxWrapperOverlayVoucherOpen') setOpenGridVoucher(false)
     }
@@ -18,10 +22,9 @@ function LayoutNoSidebar({ children }) {
         try {
             const config = {}
             const { data } = await axios.get(`${baseUrl}/api/vouchers`, config)
-            console.log(data)
             setVoucherList([...data.result])
         } catch (error) {
-            console.log(error)
+            notify("error", error)
         }
     }
     const checkStatus = (item) => {
@@ -33,6 +36,34 @@ function LayoutNoSidebar({ children }) {
         if (today > expirationDate) return false;
         return true;
     }
+    const handleSaveVoucherBuyer = async (id)=>{
+        let isWrong = false;
+        currentUser.vouchers.forEach(item=>{
+            if((item.id).toString() === id.toString()){
+                isWrong = true
+                return;
+            }
+        })
+        if(isWrong) {
+            notify("success",'Mã voucher này đã đựợc lưu!' )
+            return;
+        }
+        try {
+            const d = {
+                id: currentUser._id,
+                voucherId: id
+            }
+            const config = {}
+            const { data } = await axios.post(`${baseUrl}/api/users/save-voucher-buyer`,d, {
+                headers: {token: "Bearer " + currentUser.accessToken}
+            })
+            dispatch(loginSuccess({...currentUser, vouchers: [...data.result.vouchers]}))
+            notify("success",data.message )
+            
+        } catch (error) {
+            notify("error", error)
+        }
+    }
     const {login} = useSelector(store => store.auth)
     useEffect(() => {
         getAllVouchers()
@@ -40,6 +71,7 @@ function LayoutNoSidebar({ children }) {
     return (
         <>
             <Header />
+            <ToastContainer/>
             <div style={{ paddingTop: '30px' }}>{children}</div>
             <div style={{ position: 'fixed', bottom: 0, left: 0, width: '100%', zIndex: openGridVoucher ? 14 : 11, transition: 'all 0.3s', transform: openGridVoucher ? 'translatey(0)' : 'translatey(100%)' }}>
                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', position: 'absolute', bottom: '100%', left: '50%', transform: 'translateX(-50%)', backgroundColor: '#2f5acf', color: 'white', width: '100%', maxWidth: '563px', padding: '0 1.5rem', height: '50px', fontSize: '16px', borderRadius: '0.5rem 0.5rem 0 0', textTransform: 'uppercase', fontWeight: 'bold', letterSpacing: '0.1em' }}>
@@ -61,7 +93,7 @@ function LayoutNoSidebar({ children }) {
                                 <div style={{zIndex:'10'}}>Cho đơn hàng từ {item.minPrice}K</div>
                                 <div style={{ borderTop: '1px solid #efefef', marginTop: '20px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingTop: '10px', zIndex:'10' }}>
                                     <div style={{zIndex:'10'}}>{item.voucherCode}</div>
-                                    <button onClick={()=>{console.log(login)}} style={{ border: 'none', backgroundColor: 'white', borderRadius: '20px', padding: '4px 14px', cursor:'pointer', zIndex:'10' }}>Lưu mã</button>
+                                    <button onClick={()=>{handleSaveVoucherBuyer(item.id)}} style={{ border: 'none', backgroundColor: 'white', borderRadius: '20px', padding: '4px 14px', cursor:'pointer', zIndex:'10' }}>Lưu mã</button>
                                 </div>
                                 {/* <img src={item.voucherImage} style={{width:'380px', height:'210px', position:'absolute', opacity:'0.5', top:0, left:0, borderRadius:'12px', zIndex:'3'}}/> */}
                             </div>)}

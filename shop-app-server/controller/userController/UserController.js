@@ -36,28 +36,28 @@ const addAddressCtrl = async (req, res) => {
     }
 }
 
-const getAllUser = async(req, res) => {
-    try{
+const getAllUser = async (req, res) => {
+    try {
         const user = await User.find();
         return res.status(200).json(user)
     }
-    catch(err){
+    catch (err) {
         return res.status(500).json(err)
     }
 }
 
-const getUserInfo = async(req, res) => {
-    try{
+const getUserInfo = async (req, res) => {
+    try {
         const user = await User.findById(req?.params?.id);
         return res.status(200).json(user)
     }
-    catch(err){
+    catch (err) {
         return res.status(500).json(err)
     }
 }
 
-const updateUserInfo = async(req, res) => {
-    try{
+const updateUserInfo = async (req, res) => {
+    try {
         const id = req?.params?.id;
 
         validationId(id)
@@ -66,33 +66,33 @@ const updateUserInfo = async(req, res) => {
 
         if (!existedUser) throw new Error('User id không tồn tại. Hãy thử lại!')
 
-        let updatObj = {...req?.body}
+        let updatObj = { ...req?.body }
         console.log(updatObj)
-        if(updatObj?.password) {
+        if (updatObj?.password) {
             const salt = bcrypt.genSaltSync(10);
             const hashed = bcrypt.hashSync(updatObj?.password, salt)
-            updatObj = {...updatObj, password: hashed}
+            updatObj = { ...updatObj, password: hashed }
         }
 
-        const updUser = await User.findByIdAndUpdate(id, updatObj, {new: true})
+        const updUser = await User.findByIdAndUpdate(id, updatObj, { new: true })
         return successTemplate(res, updUser, "Cập nhật thành công!", 200)
     }
-    catch(err){
+    catch (err) {
         return res.status(500).json(err)
     }
 }
 
-const deleteUser = async(req, res) => {
-    try{
+const deleteUser = async (req, res) => {
+    try {
         const user = await User.findById(req.params.id);
 
-        if(!user){
+        if (!user) {
             return res.status(404).json("Don't have user in database")
         }
 
         return res.status(200).json("Delete successfully!")
     }
-    catch(err){
+    catch (err) {
         return res.status(500).json(err)
     }
 }
@@ -113,7 +113,7 @@ const userLoginCtrl = async (req, res) => {
 }
 const getAllBuyer = async (req, res) => {
     try {
-        const buyers = await User.find({ role: 'Buyer' }).populate('vouchers');
+        const buyers = await User.find({ role: 'Buyer' }).populate('orders');
         return successTemplate(res, buyers, "Lấy tất cả khách hàng thành công!", 200)
     } catch (error) {
         return errorTemplate(res, error.message)
@@ -134,12 +134,23 @@ const updateActiveBuyer = async (req, res) => {
         return errorTemplate(res, error.message)
     }
 }
-const saveVoucherBuyer = async(req, res)=>{
+const saveVoucherBuyer = async (req, res) => {
     try {
-        const user = await User.findByIdAndUpdate(req?.body?.id, {
-            $push: { vouchers: req?.body?.voucherId}
-        }, {new: true})
-        return successTemplate(res, user, "Lưu mã voucher thành công!", 200)
+        validationId(req?.body?.id)
+        validationId(req?.body?.voucherId)
+        const founduser = await User.findById(req?.body?.id).populate('vouchers');
+        const isAdded = founduser.vouchers.find(voucher => voucher.id.toString() === (req?.body?.voucherId).toString());
+        console.log(isAdded)
+        if (isAdded) {
+            return successTemplate(res, founduser, "Mã voucher này đã đựợc lưu!", 200)
+        }
+        else {
+            const user = await User.findByIdAndUpdate(req?.body?.id, {
+                $push: { vouchers: req?.body?.voucherId }
+            }, { new: true }).populate('vouchers')
+            return successTemplate(res, user, "Lưu mã voucher thành công!", 200)
+        }
+
 
     } catch (error) {
         return errorTemplate(res, error.message)

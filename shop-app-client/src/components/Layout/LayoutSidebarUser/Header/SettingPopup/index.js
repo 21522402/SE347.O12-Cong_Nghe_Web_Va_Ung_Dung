@@ -4,11 +4,24 @@ import classNames from 'classnames/bind';
 import {AiOutlineClose} from 'react-icons/ai';
 import { VoucherIcon, LocationIcon, AccountIcon, OrderIcon, RatingIcon, QuestionIcon } from '~/assets/icons';
 import VoucherItem from './VoucherItem/VoucherItem';
+import { useSelector } from 'react-redux';
 const cx = classNames.bind(styles);
 
 function SettingPopup({closeBtn}) {
+    let currentUser = useSelector((state) => state.auth.login.currentUser)
+    const convertDate = (d) => {
+        const date = new Date(d);
+
+        // Lấy thông tin ngày, tháng, năm
+        const day = String(date.getDate()).padStart(2, '0');
+        const month = String(date.getMonth() + 1).padStart(2, '0'); // Tháng bắt đầu từ 0
+        const year = date.getFullYear();
+
+        // Tạo chuỗi ngày tháng định dạng 'DD-MM-YYYY'
+        const formattedDate = `${day}/${month}/${year}`;
+        return formattedDate;
+    }
     const settingItems = [{icon: VoucherIcon, label: 'Ví Voucher'}, {icon: OrderIcon, label: 'Lịch sử đơn hàng'}, {icon: LocationIcon, label: 'Sổ địa chỉ'}, {icon: AccountIcon, label: 'Cài đặt tài khoản'}, {icon: RatingIcon, label: 'Đánh giá và phản hồi'}, {icon: QuestionIcon, label: 'FAQ & Chính sách'}];
-    const vouchers = [{voucherCode: 'CMBAMBO259K', voucherDes: 'Tặng 01 Quần lót Trunk Cotton cho đơn hàng 259K (Không áp dụng cho sản phẩm SALE)', voucherOutDate: '31.10.2023'}, {voucherCode: 'CMBAMBO259K', voucherDes: 'Tặng 01 Quần lót Trunk Cotton cho đơn hàng 259K (Không áp dụng cho sản phẩm SALE)', voucherOutDate: '31.10.2023'}, {voucherCode: 'CMBAMBO259K', voucherDes: 'Tặng 01 Quần lót Trunk Cotton cho đơn hàng 259K (Không áp dụng cho sản phẩm SALE)', voucherOutDate: '31.10.2023'}, {voucherCode: 'CMBAMBO259K', voucherDes: 'Tặng 01 Quần lót Trunk Cotton cho đơn hàng 259K (Không áp dụng cho sản phẩm SALE)', voucherOutDate: '31.10.2023'}]
     return (
         <>
             <div className={cx('container')}>
@@ -19,10 +32,10 @@ function SettingPopup({closeBtn}) {
                         <div className={cx('outerVouchers')}>
                             {/* List Vouchers */}
                             {
-                                vouchers.map((item, index) => {
+                                currentUser.vouchers.map((item, index) => {
                                     return (
-                                        <div style={{margin: '0 10px'}}>
-                                            <VoucherItem key={index} voucherCode={item.voucherCode} voucherDes={item.voucherDes} voucherOutDate={item.voucherOutDate}/>
+                                        <div key={index} style={{margin: '0 10px'}}>
+                                            <VoucherItem  voucherCode={item.voucherCode} voucherDes={item.description} voucherOutDate={convertDate(item.expiredDate)}/>
 
                                         </div>
                                     )

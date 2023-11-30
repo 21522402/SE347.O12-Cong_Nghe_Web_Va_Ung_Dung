@@ -4,6 +4,7 @@ import classNames from 'classnames/bind';
 const cx = classNames.bind(styles);
 
 function VoucherItem({voucherCode, voucherDes, voucherOutDate} ) {
+    
     return (
         <>
             <div className={cx('outerVoucher')}>
