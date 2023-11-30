@@ -5,6 +5,8 @@ const {
     deleteUser,
     getAllBuyer,
     updateActiveBuyer,
+    updateUserInfo,
+    getUserInfo,
     saveVoucherBuyer
 } = require('../../controller/userController/UserController');
 const verify = require('../../middlewares/auth/verify');
@@ -20,6 +22,10 @@ userRoutes.put('/addresses/addAddress/:id', addAddressCtrl);
 userRoutes.get('/get-all-buyers', getAllBuyer);
 
 userRoutes.post('/update-active-buyer/:id', updateActiveBuyer);
+
+userRoutes.get('/:id', getUserInfo);
+
+userRoutes.post('/updateUser/:id', updateUserInfo);
 
 userRoutes.post('/save-voucher-buyer', saveVoucherBuyer);
 

@@ -5,24 +5,27 @@ import classNames from 'classnames/bind';
 import { BsArrowRight } from "react-icons/bs";
 import { useState } from 'react';
 import { VoucherIcon, LocationIcon, AccountIcon, OrderIcon, RatingIcon, QuestionIcon, LogOutIcon } from '~/assets/icons';
-import axios from 'axios';
-import baseUrl from '~/utils/baseUrl';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { logoutUser } from '~/redux/api/authRequest';
+import { useDispatch, useSelector } from 'react-redux';
+import { createAxios } from '~/redux/api/createInstance';
+import { loginSuccess, logoutSuccess } from '~/redux/slices/authSlice';
 const cx = classNames.bind(styles);
 function Sidebar() {
     const [activeItem , setActiveItem ] = useState('info')
     const handleClickItem = (item) =>{
         setActiveItem(item)
     }
+
+    let currentUser = useSelector((state) => state.auth.login.currentUser)
     const navigate = useNavigate()
+    const dispatch = useDispatch()
+    //let axiosJWT = createAxios(currentUser, dispatch, logoutSuccess)
     const handleLogout = async () => {
         try{
-            const logoutUser = await axios.post(baseUrl + '/api/users/logout')
-            if(logoutUser.data.success){
-                notify("success", "Đăng xuất thành công")
-                navigate("/user")
-            }
+            console.log(currentUser?._id, dispatch, currentUser?.accessToken, navigate)
+            logoutUser(currentUser?._id, dispatch, currentUser?.accessToken, navigate)
         }
         catch (err){
             notify("error", err)

@@ -12,6 +12,10 @@ const authSlice = createSlice({
             isLoading: false,
             error: false,
             success: false
+        },
+        logout: {
+            isLoading: false,
+            error: false
         }
     },
     reducers: {
@@ -41,7 +45,23 @@ const authSlice = createSlice({
         registerFailed: (state) => {
             state.register.isLoading = false;
             state.register.error = true;
-            state.register.success = true;
+            state.register.success = false;
+        },
+
+        logoutStart: (state) => {
+            state.logout.isLoading = true;
+            state.logout.error = false;
+        },
+
+        logoutSuccess: (state, action) => {
+            state.logout.isLoading = false;
+            state.login.currentUser = null;
+            state.logout.error = false
+        },
+
+        logoutFailed: (state) => {
+            state.logout.isLoading = false;
+            state.logout.error = true;
         }
     }
 })
@@ -52,7 +72,10 @@ export const {
     loginFailed,
     registerStart,
     registerSuccess,
-    registerFailed
+    registerFailed,
+    logoutStart,
+    logoutSuccess,
+    logoutFailed
 } = authSlice.actions;
 
 export default authSlice.reducer;
