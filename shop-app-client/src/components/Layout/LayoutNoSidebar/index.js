@@ -5,6 +5,7 @@ import { FaArrowDown, FaArrowUp } from "react-icons/fa";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import baseUrl from "~/utils/baseUrl";
+import { useSelector } from "react-redux";
 
 function LayoutNoSidebar({ children }) {
     const [openGridVoucher, setOpenGridVoucher] = useState(false);
@@ -32,6 +33,7 @@ function LayoutNoSidebar({ children }) {
         if (today > expirationDate) return false;
         return true;
     }
+    const {login} = useSelector(store => store.auth)
     useEffect(() => {
         getAllVouchers()
     }, [])
@@ -59,7 +61,7 @@ function LayoutNoSidebar({ children }) {
                                 <div style={{zIndex:'10'}}>Cho đơn hàng từ {item.minPrice}K</div>
                                 <div style={{ borderTop: '1px solid #efefef', marginTop: '20px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingTop: '10px', zIndex:'10' }}>
                                     <div style={{zIndex:'10'}}>{item.voucherCode}</div>
-                                    <button style={{ border: 'none', backgroundColor: 'white', borderRadius: '20px', padding: '4px 14px', cursor:'pointer', zIndex:'10' }}>Lưu mã</button>
+                                    <button onClick={()=>{console.log(login)}} style={{ border: 'none', backgroundColor: 'white', borderRadius: '20px', padding: '4px 14px', cursor:'pointer', zIndex:'10' }}>Lưu mã</button>
                                 </div>
                                 {/* <img src={item.voucherImage} style={{width:'380px', height:'210px', position:'absolute', opacity:'0.5', top:0, left:0, borderRadius:'12px', zIndex:'3'}}/> */}
                             </div>)}
