@@ -1,3 +1,4 @@
+const bcrypt = require('bcrypt');
 const User = require("../../model/user/User")
 const successTemplate = require('../../templates/succesTemplate');
 const errorTemplate = require("../../templates/errorTemplate");
@@ -39,6 +40,42 @@ const getAllUser = async(req, res) => {
     try{
         const user = await User.find();
         return res.status(200).json(user)
+    }
+    catch(err){
+        return res.status(500).json(err)
+    }
+}
+
+const getUserInfo = async(req, res) => {
+    try{
+        const user = await User.findById(req?.params?.id);
+        return res.status(200).json(user)
+    }
+    catch(err){
+        return res.status(500).json(err)
+    }
+}
+
+const updateUserInfo = async(req, res) => {
+    try{
+        const id = req?.params?.id;
+
+        validationId(id)
+
+        const existedUser = await User.findById(id);
+
+        if (!existedUser) throw new Error('User id không tồn tại. Hãy thử lại!')
+
+        let updatObj = {...req?.body}
+        console.log(updatObj)
+        if(updatObj?.password) {
+            const salt = bcrypt.genSaltSync(10);
+            const hashed = bcrypt.hashSync(updatObj?.password, salt)
+            updatObj = {...updatObj, password: hashed}
+        }
+
+        const updUser = await User.findByIdAndUpdate(id, updatObj, {new: true})
+        return successTemplate(res, updUser, "Cập nhật thành công!", 200)
     }
     catch(err){
         return res.status(500).json(err)
@@ -105,5 +142,7 @@ module.exports = {
     updateActiveBuyer,
     getAllUser,
     addAddressCtrl,
-    deleteUser
+    deleteUser,
+    getUserInfo,
+    updateUserInfo
 }

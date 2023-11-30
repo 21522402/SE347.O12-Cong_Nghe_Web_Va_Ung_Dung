@@ -5,11 +5,11 @@ let refreshTokens = []
 const authController = {
     registerUser: async (req, res) => {
         try{
-            // const salt = await bcrypt.genSalt(10);
-            const hashed = await bcrypt.hash(req.body.password, 10)
+            const salt = bcrypt.genSaltSync(10);
+            const hashed = bcrypt.hashSync(req.body.password, salt)
 
             // create usser
-            const newuser = await new User({
+            const newuser = new User({
                 fullName: req?.body?.fullName,
                 phoneNumber: req?.body?.phoneNumber,
                 email: req?.body?.email,
@@ -35,7 +35,7 @@ const authController = {
                 role: user.role,
             }, 
             process.env.JWT_ACCESS_KEY,
-            {expiresIn: '20s'}
+            {expiresIn: '30d'}
         )
     },
 
@@ -58,11 +58,10 @@ const authController = {
                 return res.status(404).json("User is not exist");
             }
             
-            const validPassword = bcrypt.compare(
+            const validPassword = bcrypt.compareSync(
                 req.body.password, 
                 user.password
             )
-            console.log(req.body.password, user.password, validPassword)
 
             if(!validPassword){
                 return res.status(404).json("Wrong password!");
