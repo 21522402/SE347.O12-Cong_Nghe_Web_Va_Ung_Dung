@@ -37,7 +37,7 @@ const userLoginCtrl = async (req, res) => {
 }
 const getAllBuyer = async (req, res) => {
     try {
-        const buyers = await User.find({ role: 'Buyer' });
+        const buyers = await User.find({ role: 'Buyer' }).populate('vouchers');
         return successTemplate(res, buyers, "Lấy tất cả khách hàng thành công!", 200)
     } catch (error) {
         return errorTemplate(res, error.message)
@@ -58,10 +58,21 @@ const updateActiveBuyer = async (req, res) => {
         return errorTemplate(res, error.message)
     }
 }
+const saveVoucherBuyer = async(req, res)=>{
+    try {
+        const user = await User.findByIdAndUpdate(req?.body?.id, {
+            $push: { vouchers: req?.body?.voucherId}
+        }, {new: true})
+        return successTemplate(res, user, "Lưu mã voucher thành công!", 200)
 
+    } catch (error) {
+        return errorTemplate(res, error.message)
+    }
+}
 module.exports = {
     userLoginCtrl,
     userRegisterCtrl,
     getAllBuyer,
-    updateActiveBuyer
+    updateActiveBuyer,
+    saveVoucherBuyer
 }
