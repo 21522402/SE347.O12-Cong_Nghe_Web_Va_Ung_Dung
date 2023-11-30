@@ -3,7 +3,8 @@ const successTemplate = (res, result, message, status, bools, token) => {
         message: message,
         result: result,
         logged: bools,
-        token: token
+        token: token,
+        success: true,
     })
 }
 module.exports = successTemplate;

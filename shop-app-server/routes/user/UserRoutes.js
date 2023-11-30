@@ -1,17 +1,21 @@
 const express = require('express');
 const { 
-    userRegisterCtrl,
-    userLoginCtrl,
+    getAllUser,
+    addAddressCtrl,
+    deleteUser,
     getAllBuyer,
     updateActiveBuyer,
     saveVoucherBuyer
 } = require('../../controller/userController/UserController');
+const verify = require('../../middlewares/auth/verify');
 
 const userRoutes = express.Router();
 
-userRoutes.post('/register', userRegisterCtrl);
+userRoutes.get('/', verify.verifyToken, getAllUser);
 
-userRoutes.post('/login', userLoginCtrl);
+userRoutes.delete('/:id', verify.verifyTokenAndAdmin, deleteUser);
+
+userRoutes.put('/addresses/addAddress/:id', addAddressCtrl);
 
 userRoutes.get('/get-all-buyers', getAllBuyer);
 
