@@ -5,7 +5,9 @@
   "main": "server.js",
   "scripts": {
     "start": "nodemon server.js",
-    "server": "nodemon server.js"
+    "server": "nodemon server.js",
+    "debug": "node inspect server.js"
+
   },
   "author": "Group5_SE347.O12",
   "license": "ISC",

@@ -19,3 +19,6 @@ const cloudinaryUploadImage = async(fileToUpload)=>{
 
 
 module.exports=cloudinaryUploadImage
+module.exports= {
+    cloudinary: cloudinary.v2
+}
