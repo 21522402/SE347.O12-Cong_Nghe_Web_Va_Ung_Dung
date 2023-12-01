@@ -21,10 +21,8 @@ function Sidebar() {
     let currentUser = useSelector((state) => state.auth.login.currentUser)
     const navigate = useNavigate()
     const dispatch = useDispatch()
-    //let axiosJWT = createAxios(currentUser, dispatch, logoutSuccess)
     const handleLogout = async () => {
         try{
-            console.log(currentUser?._id, dispatch, currentUser?.accessToken, navigate)
             logoutUser(currentUser?._id, dispatch, currentUser?.accessToken, navigate)
         }
         catch (err){
