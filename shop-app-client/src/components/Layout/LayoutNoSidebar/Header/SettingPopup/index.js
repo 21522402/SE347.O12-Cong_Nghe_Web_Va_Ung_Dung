@@ -1,10 +1,9 @@
-import { Link } from 'react-router-dom';
-import styles from './SettingPopup.module.scss';
 import classNames from 'classnames/bind';
-import {AiOutlineClose} from 'react-icons/ai';
-import { VoucherIcon, LocationIcon, AccountIcon, OrderIcon, RatingIcon, QuestionIcon } from '~/assets/icons';
-import VoucherItem from './VoucherItem/VoucherItem';
 import { useSelector } from 'react-redux';
+import { Link } from 'react-router-dom';
+import { AccountIcon, LocationIcon, OrderIcon, QuestionIcon, RatingIcon, VoucherIcon } from '~/assets/icons';
+import styles from './SettingPopup.module.scss';
+import VoucherItem from './VoucherItem/VoucherItem';
 const cx = classNames.bind(styles);
 
 function SettingPopup({closeBtn}) {
@@ -32,7 +31,7 @@ function SettingPopup({closeBtn}) {
                         <div className={cx('outerVouchers')}>
                             {/* List Vouchers */}
                             {
-                                currentUser.vouchers.map((item, index) => {
+                                currentUser?.vouchers?.map((item, index) => {
                                     return (
                                         <div style={{margin: '0 10px'}}>
                                             <VoucherItem key={index} voucherCode={item.voucherCode} voucherDes={item.description} voucherOutDate={convertDate(item.expiredDate)}/>
