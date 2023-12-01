@@ -3,7 +3,7 @@
 import classNames from "classnames/bind";
 import React, { useEffect, useRef } from "react";
 import { useState } from "react";
-import {  IoInformationCircleOutline } from "react-icons/io5";
+import { IoInformationCircleOutline } from "react-icons/io5";
 import { AiFillCaretDown, AiFillCaretUp } from "react-icons/ai";
 
 import { GrFormClose } from "react-icons/gr";
@@ -20,9 +20,10 @@ import styles from './Modal.module.scss'
 import 'react-quill/dist/quill.snow.css'
 import ReactQuill from "react-quill";
 import { useDispatch, useSelector } from "react-redux";
-import { handleChangeInputText, handleAddNewColor } from "~/redux/Product/action";
+import { handleChangeInputText, handleAddNewColor, filterListProductsState } from "~/redux/Product/action";
 
-
+import axios from 'axios';
+import baseUrl from '~/utils/baseUrl';
 
 
 
@@ -30,226 +31,47 @@ import { handleChangeInputText, handleAddNewColor } from "~/redux/Product/action
 
 const cx = classNames.bind(styles)
 
-function Modal({ setModal, typeModal}) {
+function Modal({ setModal, typeModal, getAllProducts, getAllProductCaterogies, filter }) {
     let product = useSelector(state => state.productReducer.currentUpdateProduct)
+    const listCategories = useSelector(state => state.productReducer.listCategories)
     const dispatch = useDispatch()
     useEffect(() => {
         console.log(product)
-    },[product])
-    
-    
+    }, [product])
+
+
     const listProductCategory = ['Áo', 'Quần', 'Đồ lót']
-    const [listProductType,setListProductType] = useState(() => {
-        return ['Quần dài', 'Quần thể thao', 'Quần short']
-    })
+    const listProductType= listCategories.find(item => item.productCategoryName === product.productCategory).listProductType;
+
     const [showCategory, setShowCategory] = useState(false)
     const [showType, setShowType] = useState(false)
     const [category, setCategory] = useState('')
     const [type, setType] = useState('')
-    const [description, setDescription] = useState('');
+    const [description, setDescription] = useState(product.description);
 
     const [indexTabpanel, setIndexTabPanel] = useState(1);
 
     // Begin: Other info
-    const listImageDefault = [1, 2, 3, 4, 5].map((item, index) => { return { url: '', isImageDefault: true, } })
-    const [listColor, setListColor] = useState([]);
-    const [listShowMore, setListShowMore] = useState(() => {
-        return listColor.map((item, index) => {
-            if (index === 0) return true;
-            else return false;
-        })
-    });
     const handleChangeInput = (e) => {
         const name = e.target.name;
-        const value = e.target.value.trim()
+        const value = e.target.value;
         const data = {
-            name,value
+            name, value
         }
         dispatch(handleChangeInputText(data))
     }
-    const handleShowMore = (indexShowMore) => {
-        setListShowMore(prev => {
-            const nextState = prev.map((item, index) => {
-
-                if (indexShowMore === index) {
-                    item = !item;
-                }
-                return item
-            })
-            return nextState;
-        })
-    }
-    const handlePreviewImage = (event, indexA, indexB) => {
-        if (event.target.files[0]) {
-            const file = event.target.files[0]
-            const url = URL.createObjectURL(file)
-            setListColor(prev => {
-                const nextState = prev.map((item, index) => {
-                    if (index === indexA) {
-                        return {
-                            ...item,
-                            listImage: item.listImage.map((item2, index2) => {
-                                if (index2 === indexB) {
-                                    return { ...item2, isImageDefault: false, url: url }
-                                }
-                                else return item2;
-                            })
-                        }
-                    }
-                    else return item;
-                })
-                return nextState;
-            })
-        }
-    }
-    const handleClickRemoveImage = (indexA, indexB) => {
-        setListColor(prev => {
-            const nextState = prev.map((item, index) => {
-                if (index === indexA) {
-                    return {
-                        ...item,
-                        listImage: item.listImage.map((item2, index2) => {
-                            if (index2 === indexB) {
-                                return { ...item2, isImageDefault: true, url: '' }
-                            }
-                            else return item2;
-                        })
-                    }
-                }
-                else return item;
-            })
-            return nextState;
-        })
-    }
-    const handleClickAddColor = () => {
-        setListColor(prev => [...prev,
-        {
-            color: '',
-            colorCode: '',
-            listImage: [],
-            listSize: []
-        }
-        ])
-        setListShowMore(prev => [...prev, true]);
-    }
-    const handleRemoveColor = (indexRemove) => {
-        setListColor(prev => {
-            const nextState = [...prev];
-            nextState.splice(indexRemove, 1);
-            return nextState;
-        })
-
-
-    }
-    const handleChangeColorName = (e, indexChange) => {
-        const colorName = e.target.value;
-        setListColor(prev => {
-            const nextState = prev.map((item, index) => {
-                if (index === indexChange) {
-                    return { ...item, color: colorName }
-                } else return item;
-            })
-            return nextState;
-        })
-    }
-    const handleChangeColorCode = (color, indexChange) => {
-        setListColor(prev => {
-            const nextState = prev.map((item, index) => {
-                if (index === indexChange) {
-                    return { ...item, colorCode: color }
-                } else return item;
-            })
-            return nextState;
-        })
-    }
-    const handleClickAddSize = (indexAdd) => {
-        setListColor(prev => {
-            const nextState = prev.map((item, index) => {
-                if (index === indexAdd) {
-
-                    return { ...item, listSize: [...item.listSize, { sizeName: '', quantity: 0 }] }
-                }
-                else return item;
-
-
-            })
-
-            return nextState;
-        })
-    }
-    const handleRemoveSize = (indexA, indexB) => {
-
-        setListColor(prev => {
-            const nextState = prev.map((item, index) => {
-                if (index === indexA) {
-                    const newListSize = [...item.listSize];
-                    newListSize.splice(indexB, 1);
-                    return {
-                        ...item,
-                        listSize: [...newListSize]
-                    }
-                }
-                else return item;
-            })
-            return nextState;
-        })
 
 
 
-
-
-    }
-    const handleChangeSizeName = (e, indexA, indexB) => {
-        const newSizeName = e.target.value
-        setListColor(prev => {
-            const nextState = prev.map((item, index) => {
-                if (index === indexA) {
-                    return {
-                        ...item,
-                        listSize: item.listSize.map((item2, index2) => {
-                            if (index2 === indexB) {
-                                return { ...item2, sizeName: newSizeName }
-                            }
-                            else return item2;
-                        })
-                    }
-                } else return item
-
-
-            })
-            return nextState;
-        })
-    }
-
-    // End: Other Info
-    const handleClickItemCategory = (item) => {
-        setCategory(item)
-    }
-
-    const handleClickItemType = (item) => {
-        setType(item)
-    }
-    const handleClickAddType = (item) => {
-        setListProductType(prev => {
-            return [item,...prev]
-        })
-    }
-    const handleCliclRemoveType = (item) => {
-        if (item===type) setType('')
-        setListProductType(prev => {
-            return [...prev].filter(item2 => item2!==item);
-        })
-    }
-    useEffect(() => {
-        console.log(listColor);
-    }, [listColor])
+    
+    
     useEffect(() => {
         const data = {
             name: 'description',
             value: description
         }
         dispatch(handleChangeInputText(data))
-    },[description])
+    }, [description])
     const elementCategory = useRef(null);
     const elementProductType = useRef(null);
     useEffect(() => {
@@ -275,6 +97,73 @@ function Modal({ setModal, typeModal}) {
         };
     }, [elementProductType]);
 
+    const handleClickSaveProduct = async () => {
+        const body = {
+            ...product,
+            importPrice: Number(product.importPrice),
+            exportPrice: Number(product.exportPrice),
+            discountPerc: Number(product.discountPerc),
+        }
+        if (typeModal === 'add') {
+            try {
+                const res = await axios.post(`${baseUrl}/api/products/addProduct`, body)
+                console.log(res.data)
+                getAllProducts()
+           
+                setModal(false)
+            } catch (error) {
+                console.log(error.message)
+            }
+        }
+        else if (typeModal === 'update'){
+            try {
+                const res = await axios.patch(`${baseUrl}/api/products/editProduct`, body)
+                console.log(res.data)
+                getAllProducts()
+       
+                setModal(false)
+            } catch (error) {
+                console.log(error.message)
+            }
+        }
+    }
+    const handleAddNewProductType = async (productTypeName) => {
+        try {
+            const productCategoryId = listCategories.find(item => item.productCategoryName === product.productCategory).productCategoryId;
+            const res = await axios.post(`${baseUrl}/api/productType/addProductType`, {productTypeName, productCategoryId})
+            console.log(res.data)
+            getAllProductCaterogies()
+        } catch (error) {
+            console.log(error.message)
+        }
+    }
+    const handleRemoveProductType = async (id, item) => {
+        try {
+            const res = await axios.delete(`${baseUrl}/api/productType/deleteProductType/${id}`)
+            console.log(res.data.message)
+            await getAllProductCaterogies()
+            if (item === product.productType) {
+                dispatch(handleChangeInputText({ name: 'productType', value: '' }))
+            }
+        } catch (error) {
+            console.log(error.response.data.message)
+        }
+    }
+    const handleEditProductType = async (id, item, oldItem) => {
+        try {
+            const res = await axios.patch(`${baseUrl}/api/productType/editProductType`,{productTypeId: id, productTypeName: item})
+            console.log(res.data.message)
+            await getAllProductCaterogies()
+            if (oldItem === product.productType) {
+                dispatch(handleChangeInputText({ name: 'productType', value: item }))
+                await axios.patch(`${baseUrl}/api/products/editProductByType`, {id: product._id, productTypeName: item})
+                getAllProducts();
+            }
+        } catch (error) {
+            console.log(error.response.data.message)
+        }
+    }
+  
     return (
 
         <div className={cx('overlay')}>
@@ -286,7 +175,7 @@ function Modal({ setModal, typeModal}) {
                 {/* Header */}
                 <div className={cx('header')}>
                     {
-                        typeModal==='update' ? 'Cập nhật' : 'Thêm hàng'
+                        typeModal === 'update' ? 'Cập nhật' : 'Thêm hàng'
                     }
                 </div>
 
@@ -311,28 +200,39 @@ function Modal({ setModal, typeModal}) {
                                     {/* Form group */}
                                     <div className={cx('form-group')}>
                                         <label>Mã sản phẩm  <IoInformationCircleOutline style={{ fontSize: '18px', marginLeft: '4px' }} /></label>
-                                        <input  type="text" placeholder="Mã sản phẩm tự động" disabled style={{ background: 'transparent' }} />
+                                        {
+                                            typeModal === 'add' &&
+                                            <input type="text" placeholder="Mã sản phẩm tự động" disabled style={{ background: 'transparent' }} />
+                                        }
+                                        {
+                                            typeModal === 'update' &&
+                                            <input type="text" value={product.productCode} disabled style={{ background: 'transparent' }} />
+                                        }
                                     </div>
                                     <div className={cx('form-group')}>
                                         <label>Tên sản phẩm  <IoInformationCircleOutline style={{ fontSize: '18px', marginLeft: '4px' }} /></label>
-                                        <input  type="text" onChange={(e) => handleChangeInput(e)}  value={product.productName} name="productName"/>
+                                        <input type="text" onChange={(e) => handleChangeInput(e)} value={product.productName} name="productName" />
                                     </div>
                                     <div className={cx('form-group')}>
                                         <label>Nhóm hàng  <IoInformationCircleOutline style={{ fontSize: '18px', marginLeft: '4px' }} /></label>
                                         {/* <input  type="text"/> */}
-                                        <div ref={elementCategory} className={cx('product-category-select', { active: showCategory })} onClick={() => setShowCategory(prev=> !prev)}>
+                                        <div ref={elementCategory} className={cx('product-category-select', { active: showCategory })} onClick={() => setShowCategory(prev => !prev)}>
                                             <span>{product.productCategory}</span>
                                             <span> {!showCategory ? <AiFillCaretDown /> : <AiFillCaretUp />}</span>
-                                            {showCategory && <DropDown items={listProductCategory} style={{ width: '100%', left: '0', top: '35px' }} onClick={(item) => dispatch(handleChangeInputText({name: 'productCategory', value: item}))} />}
+                                            {showCategory && <DropDown items={listProductCategory} style={{ width: '100%', left: '0', top: '35px' }}  onClick={(item) => {dispatch(handleChangeInputText({ name: 'productCategory', value: item })); dispatch(handleChangeInputText({ name: 'productType', value: '' }))}} />}
                                         </div>
                                     </div>
                                     <div className={cx('form-group')}>
                                         <label>Loại hàng  <IoInformationCircleOutline style={{ fontSize: '18px', marginLeft: '4px' }} /></label>
                                         {/* <input  type="text"/> */}
-                                        <div ref={elementProductType} className={cx('product-category-select', { active: showType })} onClick={() => setShowType(prev=> !prev)}>
+                                        <div ref={elementProductType} className={cx('product-category-select', { active: showType })} onClick={() => setShowType(prev => !prev)}>
                                             <span>{product.productType}</span>
                                             <span> {!showType ? <AiFillCaretDown /> : <AiFillCaretUp />}</span>
-                                            {showType && <AdvanceDropdown items={listProductType} style={{ width: '100%', left: '0', top: '35px' }} onClick={(item) => dispatch(handleChangeInputText({name: 'productType', value: item}))} addNewItem={handleClickAddType} removeItem={handleCliclRemoveType}/>}
+                                            {showType && <AdvanceDropdown items={listProductType} keyProperty={'productTypeName'} keyId={'productTypeId'} style={{ width: '100%', left: '0', top: '35px' }} onClick={(item) => {dispatch(handleChangeInputText({ name: 'productType', value: item }))}} 
+                                                addNewItem={handleAddNewProductType}
+                                                removeItem={handleRemoveProductType}
+                                                editItem={handleEditProductType}
+                                            /> }
                                         </div>
                                     </div>
                                 </div>
@@ -341,19 +241,19 @@ function Modal({ setModal, typeModal}) {
                                     {/* Form group */}
                                     <div className={cx('form-group')}>
                                         <label>Giá vốn  <IoInformationCircleOutline style={{ fontSize: '18px', marginLeft: '4px' }} /></label>
-                                        <input  type="text" onChange={(e) => handleChangeInput(e)}  value={product.importPrice} name="importPrice" />
+                                        <input type="text" onChange={(e) => handleChangeInput(e)} value={product.importPrice} name="importPrice" />
                                     </div>
                                     <div className={cx('form-group')}>
                                         <label>Giá bán  <IoInformationCircleOutline style={{ fontSize: '18px', marginLeft: '4px' }} /></label>
-                                        <input  type="text" onChange={(e) => handleChangeInput(e)}  value={product.exportPrice} name="exportPrice"/>
+                                        <input type="text" onChange={(e) => handleChangeInput(e)} value={product.exportPrice} name="exportPrice" />
                                     </div>
                                     <div className={cx('form-group')}>
                                         <label>Tồn kho  <IoInformationCircleOutline style={{ fontSize: '18px', marginLeft: '4px' }} /></label>
-                                        <input  type="text" value={0} disabled style={{ background: 'transparent' }} />
+                                        <input type="text" value={0} disabled style={{ background: 'transparent' }} />
                                     </div>
                                     <div className={cx('form-group')}>
                                         <label>Trạng thái  <IoInformationCircleOutline style={{ fontSize: '18px', marginLeft: '4px' }} /></label>
-                                        <input  type="text" value={'Chưa đăng bán'} disabled style={{ background: 'transparent' }} />
+                                        <input type="text" value={product.status} disabled style={{ background: 'transparent' }} />
                                     </div>
 
 
@@ -406,8 +306,8 @@ function Modal({ setModal, typeModal}) {
                                             ]}
 
 
-                                            theme="snow" value={description} onChange={setDescription}  style={{ height: '150px' }}
-                                             />
+                                            theme="snow" value={description} onChange={setDescription} style={{ height: '150px' }}
+                                        />
 
                                     </div>
                                 </div>
@@ -433,7 +333,7 @@ function Modal({ setModal, typeModal}) {
                                         {
                                             product.colors.map((item, index) => {
                                                 return (
-                                                   <ItemColor key={index} index={index}/>
+                                                    <ItemColor key={index} index={index} />
                                                 )
                                             })
                                         }
@@ -445,14 +345,8 @@ function Modal({ setModal, typeModal}) {
 
                 </div>
 
-
-
-
-
-
-
                 <div className={cx('footer')}>
-                    <span className={cx('btn', 'btn-succeed')}><BsSave style={{ marginRight: '6px', fontSize: '16px' }} />   Lưu</span>
+                    <span onClick={handleClickSaveProduct} className={cx('btn', 'btn-succeed')}><BsSave style={{ marginRight: '6px', fontSize: '16px' }} />   Lưu</span>
                     {/* <span className={cx('btn', 'btn-succeed')}><MdPublish style={{ marginRight: '6px', fontSize: '16px' }} />   Lưu và đăng bán</span> */}
                     <span onClick={() => setModal(false)} className={cx('btn', 'btn-failed')}><TiCancel style={{ marginRight: '6px', fontSize: '16px' }} />   Hủy</span>
 

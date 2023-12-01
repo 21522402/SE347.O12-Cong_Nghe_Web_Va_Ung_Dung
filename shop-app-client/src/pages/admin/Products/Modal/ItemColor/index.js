@@ -1,6 +1,6 @@
 import classNames from "classnames/bind";
 import styles from './ItemColor.module.scss'
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { useEffect } from "react";
 import images from "~/assets/img";
 import { ChromePicker } from "react-color";
@@ -9,17 +9,19 @@ import { RiSubtractLine } from "react-icons/ri";
 import { BsPlusCircleFill } from "react-icons/bs";
 import { useDispatch, useSelector } from "react-redux";
 import {
+    handleRemoveColor,
     handleChangeColorCode, handleChangeColorName, handleColorAddImage, handleColorChangeImage,
-    handleColorRemoveImage, handleColorAddSize
+    handleColorRemoveImage, handleColorAddSize, handleColorChangeSizeName, handleColorRemoveSize
 } from "~/redux/Product/action";
 const cx = classNames.bind(styles)
 
-function ItemColor({ index, handleRemoveColor }) {
+function ItemColor({ index }) {
     let color = useSelector(state => state.productReducer.currentUpdateProduct.colors[index])
     let colorsLength = useSelector(state => state.productReducer.currentUpdateProduct.colors.length)
     const dispatch = useDispatch()
-    const [showMore, setShowMore] = useState(false);
-    const [listImage, setListImage] = useState([])
+    const [showMore, setShowMore] = useState(index === 0);
+    const [showColorPicker, setShowColorPicker] = useState(false)
+    const elemenChromePicker = useRef(null)
 
     const handleChangeInputImage = (e, indexColor, indexImage) => {
         if (e.target.files[0]) {
@@ -35,9 +37,18 @@ function ItemColor({ index, handleRemoveColor }) {
                 }))
             }
         }
-
-
     }
+    useEffect(() => {
+        function handleClickOutside(event) {
+            if (elemenChromePicker.current && !elemenChromePicker.current.contains(event.target)) {
+                setShowColorPicker(false);
+            }
+        }
+        document.addEventListener("mousedown", handleClickOutside);
+        return () => {
+            document.removeEventListener("mousedown", handleClickOutside);
+        };
+    }, [elemenChromePicker]);
 
     return (
         <div className={cx('wrapper')}>
@@ -57,17 +68,20 @@ function ItemColor({ index, handleRemoveColor }) {
                     </div>
                     <div style={{ marginLeft: '16px', display: 'flex', alignItems: 'center', gap: '16px' }}>
                         <label style={{ fontWeight: '700' }}>Chọn màu:</label>
-                        <div style={{ width: '20px', height: '20px', borderRadius: '50%', background: color.colorCode || '#000', position: 'relative', cursor: 'pointer' }}>
-                            <div style={{ position: 'absolute', zIndex: '1000', left: '120%' }}>
-                                <ChromePicker onChange={newColor => dispatch(handleChangeColorCode({ index, colorCode: newColor.hex }))} color={color.colorCode || '#000'} disableAlpha />
-                            </div>
+                        <div onClick={() => setShowColorPicker(true)} style={{ width: '20px', height: '20px', borderRadius: '50%', background: color.colorCode || '#000', position: 'relative', cursor: 'pointer' }}>
+                            {
+                                showColorPicker &&
+                                <div ref={elemenChromePicker} style={{ position: 'absolute', zIndex: '1000', left: '120%' }}>
+                                    <ChromePicker onChange={newColor => dispatch(handleChangeColorCode({ index, colorCode: newColor.hex }))} color={color.colorCode || '#000'} disableAlpha />
+                                </div>
+                            }
                         </div>
 
                     </div>
                     {
                         colorsLength > 1 &&
-                        <div style={{ marginLeft: '24px', marginTop: '10px' }}>
-                            <span onClick={() => handleRemoveColor(index)} style={{ cursor: 'pointer', padding: '4px 4px', borderRadius: '50%', display: 'inline-flex', backgroundColor: 'red', fontSize: '16px' }}><RiSubtractLine style={{ color: '#fff' }} /></span>
+                        <div style={{ marginLeft: '24px' }}>
+                            <span onClick={() => dispatch(handleRemoveColor({index}))} style={{ cursor: 'pointer', padding: '4px 4px', borderRadius: '50%', display: 'inline-flex', backgroundColor: 'red', fontSize: '16px' }}><RiSubtractLine style={{ color: '#fff' }} /></span>
                         </div>
                     }
 
@@ -83,10 +97,10 @@ function ItemColor({ index, handleRemoveColor }) {
                                 color.images.map((item, index2) => {
                                     return (
                                         <div key={index2} className={cx('img-wrapper')} style={{ marginRight: '32px' }}>
-                                            <img src={item.base64 || images.productImageDefault} style={{ cursor: 'pointer', objectFit: 'cover', width: '100px', height: '88px' }}>
+                                            <img src={item || images.productImageDefault} style={{ cursor: 'pointer', objectFit: 'cover', width: '100px', height: '88px' }}>
                                             </img>
                                             {
-                                                !item.base64 && <p>+ Thêm</p>
+                                                !item && <p>+ Thêm</p>
                                             }
 
 
@@ -119,19 +133,19 @@ function ItemColor({ index, handleRemoveColor }) {
                                 </div>
                             }
                             <div style={{ marginTop: '16px', display: 'flex', flexDirection: 'column', gap: '16px' }}>
-                                {/* {
-                                    color.sizes.map((itemB, indexB) => {
+                                {
+                                    color.sizes.map((item, index2) => {
                                         return (
 
-                                            <div key={indexB} className={cx('wrap-size')}>
+                                            <div key={index2} className={cx('wrap-size')}>
                                                 <div className={cx('size')}>
                                                     <div className={cx('form-group2')} style={{ marginRight: '48px' }}>
                                                         <label>Size:</label>
-                                                        <input onChange={(e) => handleChangeSizeName(e, indexA, indexB)} value={itemB.sizeName} type="text" style={{ width: '80px', textAlign: 'center', background: 'transparent' }} placeholder="S,M,..." />
+                                                        <input onChange={(e) => dispatch(handleColorChangeSizeName({ indexColor: index, indexSize: index2, sizeName: e.target.value }))} value={item.sizeName} type="text" style={{ width: '80px', textAlign: 'center', background: 'transparent' }} placeholder="S,M,..." />
                                                     </div>
                                                     <div className={cx('form-group2')}>
                                                         <label>Số lượng:</label>
-                                                        <input value={itemB.quantity} type="text" style={{ width: '80px', textAlign: 'center', background: 'transparent' }} disabled />
+                                                        <input value={item.quantity} type="text" style={{ width: '80px', textAlign: 'center', background: 'transparent' }} disabled />
                                                     </div>
 
 
@@ -139,7 +153,7 @@ function ItemColor({ index, handleRemoveColor }) {
                                                 {
                                                     color.sizes.length > 1 &&
                                                     <div>
-                                                        <span onClick={(e) => handleRemoveSize(indexA, indexB)} style={{ cursor: 'pointer', padding: '4px 4px', borderRadius: '50%', display: 'inline-flex', backgroundColor: 'red', fontSize: '16px' }}><RiSubtractLine style={{ color: '#fff' }} /></span>
+                                                        <span onClick={() => dispatch(handleColorRemoveSize({ indexColor: index, indexSize: index2 }))} style={{ cursor: 'pointer', padding: '4px 4px', borderRadius: '50%', display: 'inline-flex', backgroundColor: 'red', fontSize: '16px' }}><RiSubtractLine style={{ color: '#fff' }} /></span>
                                                     </div>
                                                 }
 
@@ -147,7 +161,7 @@ function ItemColor({ index, handleRemoveColor }) {
                                             </div>
                                         )
                                     })
-                                } */}
+                                }
 
                             </div>
                         </div>
