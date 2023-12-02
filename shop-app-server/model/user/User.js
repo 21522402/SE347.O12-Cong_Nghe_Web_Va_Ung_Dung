@@ -90,11 +90,11 @@ const userSchema = new mongoose.Schema(
                 }
             ]
         },
-        feedback: {
+        feedbacks: {
             type: [
                 {
                     type: mongoose.Schema.Types.ObjectId,
-                    ref: 'Feeback'
+                    ref: 'Feedback'
                 }
             ]
         },
@@ -129,7 +129,6 @@ const userSchema = new mongoose.Schema(
             virtuals: true
         },
         timestamps: true
-
     }
 );
 userSchema.pre("save", async function(next){

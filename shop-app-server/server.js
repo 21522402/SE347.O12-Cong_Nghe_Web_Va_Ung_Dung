@@ -10,6 +10,8 @@ const voucherRoutes = require('./routes/voucher/VoucherRoutes');
 const addressRoutes = require('./routes/address/AddressRoutes');
 const authRoutes = require('./routes/auth/AuthRoute');
 const orderRoutes = require('./routes/order/OrderRoutes');
+const feedbackRoutes = require('./routes/feedback/FeedbackRoutes');
+const reviewRoutes = require('./routes/review/ReviewRouters');
 // declaire app express
 const app = express();
 
@@ -17,7 +19,9 @@ const app = express();
 dbConnect();
 
 // use middlewares
-app.use(express.json());
+app.use(express.json({
+    limit: '500mb'
+}));
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(cors());
@@ -31,6 +35,8 @@ app.use('/api/auth', authRoutes);
 app.use('/api/orders', orderRoutes);
 
 
+app.use('/api/feedbacks', feedbackRoutes);
+app.use('/api/reviews', reviewRoutes);
 
 // Error handler
 app.use(notFound);

@@ -1,39 +1,38 @@
 import React from "react";
 import classNames from "classnames/bind";
 import styles from "./ProductReviewItem.module.scss";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import ReactStars from "react-stars";
 
 const cx = classNames.bind(styles);
 
-function ProductReview({ item }) {
+function ProductReview({ item, numberReview}) {
   const navigate = useNavigate();
   const handleNavReviewProduct = ()=>{
-    navigate(`/admin/reviews/${item.idProduct}/detail`, {state:item})
+    navigate(`/admin/reviews/${item.orderItem.productId._id}/detail`, {state:item})
   }
   return (
     <div onClick={handleNavReviewProduct}  className={cx("item-list")}>
       <div className={cx("item-product")}>
         <img
           className={cx("item-img")}
-          src={item.productImg}
+          src={item.orderItem.image}
           alt="product"
         />
-        <div className={cx("item-name")}>{item.nameProduct}</div>
-        <div className={cx("item-price")}>{item.productPrice} đ</div>
+        <div className={cx("item-name")}>{item.orderItem.productName}</div>
+        <div className={cx("item-price")}>{item.orderItem.price} đ</div>
         <div >
           <div style={{padding:'0 10px'}}>
             <ReactStars
               count={5}
               size={10}
-              value={item.averageStar}
+              value={4}
               edit={false}
               color1="#C4C4C4"
               color2="#ffb21d"
-              
             />
           </div>
-          <div style={{padding:'0 10px'}}>Number of reviews: {item.numberOfReview}</div>
+          <div style={{padding:'0 10px'}}>Number of reviews: {numberReview}</div>
         </div>
 
       </div>
