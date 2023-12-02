@@ -287,46 +287,46 @@ const createOrderCtrl = async (req, res) => {
         if(!user){
             throw new Error('User is not existed. Please log in!');
         }
-        const {orderItem, ...other} = req?.body
-        const order = await Order.create({
-            ...other
-        })
+        // const {orderItem, ...other} = req?.body
+        // const order = await Order.create({
+        //     ...other
+        // })
 
-        const orderIds = user.orders
-        orderIds ? orderIds.push(order.id): orderIds = []
-        await User.findByIdAndUpdate(userId, {orders: orderIds})
+        // const orderIds = user.orders
+        // orderIds ? orderIds.push(order.id): orderIds = []
+        // await User.findByIdAndUpdate(userId, {orders: orderIds})
 
-        const promise = (item) => new Promise(async resolve => {
-            const orderItem = await OrderItem.create({
-                "productName": item.productName,
-                "image": item.image,
-                "size": item.size,
-                "color": item.color,
-                "quanlity": item.quantity,
-                "price": item.price,
-                "discountPerc": item.discountPerc
-            })
+        // const promise = (item) => new Promise(async resolve => {
+        //     const orderItem = await OrderItem.create({
+        //         "productName": item.productName,
+        //         "image": item.image,
+        //         "size": item.size,
+        //         "color": item.color,
+        //         "quantity": item.quantity,
+        //         "price": item.price,
+        //         "discountPerc": item.discountPerc
+        //     })
             
-            resolve(orderItem.id)
-        });
+        //     resolve(orderItem.id)
+        // });
 
-        let p = promise(req?.body?.orderItem[0])
+        // let p = promise(req?.body?.orderItem[0])
 
-        for (let i = 1; i < req?.body?.orderItem.length; i++) {
-            p = p.then(async (data) => {
+        // for (let i = 1; i < req?.body?.orderItem.length; i++) {
+        //     p = p.then(async (data) => {
                 
-                await updateOrderItem(order.id,data)
-                console.log(["i"], data)
-                return promise(req?.body?.orderItem[i]);
-            })
-        }
+        //         await updateOrderItem(order.id,data)
+        //         console.log(["i"], data)
+        //         return promise(req?.body?.orderItem[i]);
+        //     })
+        // }
 
-        p.then(async data => {
-            await await updateOrderItem(order.id,data)
-            console.log(["i"], data)
-        })
+        // p.then(async data => {
+        //     await updateOrderItem(order.id,data)
+        //     console.log(["i"], data)
+        // })
 
-        return successTemplate(res, "listOrderId", "Create address successfully!", 200)
+        return successTemplate(res, user, "Create address successfully!", 200)
 
     } catch (error) {
         return errorTemplate(res, error.message)
@@ -371,7 +371,7 @@ const getAllReviewCtrl = async (req, res) => {
             throw new Error('User is not existed. Please log in!');
         }
 
-        return successTemplate(res, user, "Create address successfully!", 200)
+        return successTemplate(res, user.orders, "Create address successfully!", 200)
 
 
     } catch (error) {

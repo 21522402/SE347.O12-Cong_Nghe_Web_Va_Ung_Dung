@@ -66,8 +66,8 @@ function ComboBox({placeHolder, icon, listItems, filterValueSelected, type, sele
                                     listItems ? listItems.map((item, index) => {
                                         return (
                                             <>
-                                                <div className={cx(`${type}_item-outer`)} key={index} onClick={(e) => {setSelected(item);}} style={{backgroundColor: `${selected.id === item.id ? '#999': ''}`}}>
-                                                    <span className={cx(`${type}_item-content`)} style={{ color: `${selected.id === item.id ? 'white': ''}`}}>{item.name}</span>
+                                                <div className={cx(`${type}_item-outer`)} key={index} onClick={(e) => {setSelected(item);}} style={{backgroundColor: `${selected.name === item.name ? '#999': ''}`}}>
+                                                    <span className={cx(`${type}_item-content`)} style={{ color: `${selected.name === item.name ? 'white': ''}`}}>{item.name}</span>
                                                 </div>
                                             </> 
                                         )

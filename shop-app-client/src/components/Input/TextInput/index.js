@@ -4,7 +4,7 @@ import classNames from 'classnames/bind';
 import {AiOutlineEye, AiOutlineEyeInvisible} from 'react-icons/ai';
 const cx = classNames.bind(styles);
 
-function TextInput({placeHolder, icon, secure, type, value}) {
+function TextInput({placeHolder, icon, secure, type, value, handleChange}) {
     const [hide, setHide] = useState(true);
     return (
         <>
@@ -28,7 +28,7 @@ function TextInput({placeHolder, icon, secure, type, value}) {
                 type === 'type_2' ? 
                 (
                     <div className={cx(`${type}_form-field`)}>
-                        <input type={`${secure && hide ? 'password': 'text'}`} className={cx(`${type}_form-input`)} placeholder='   ' defaultValue={value}/>
+                        <input type={`${secure && hide ? 'password': 'text'}`} className={cx(`${type}_form-input`)} placeholder='   ' value={value} onChange={handleChange}/>
                         <label for="name" className={cx(`${type}_form-label`)}>{placeHolder}</label>
                         {
                             secure ? 

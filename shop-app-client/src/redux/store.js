@@ -1,6 +1,8 @@
 import {combineReducers, configureStore} from '@reduxjs/toolkit'
 import authReducer from './slices/authSlice'
+import userReducer from './slices/userSlice'
 import storage from 'redux-persist/lib/storage'
+import autoMergeLevel2 from 'redux-persist/lib/stateReconciler/autoMergeLevel2';
 import {
     persistStore,
     persistReducer,
@@ -16,6 +18,7 @@ import {
 
 const rootReducer = combineReducers({
     auth: authReducer,
+    user: userReducer,
 })
 
 //------------------------------------------------------------//
@@ -23,7 +26,9 @@ const rootReducer = combineReducers({
 const persistConfig = {
     key: 'root',
     version: 1,
+    whitelist: ['auth'],
     storage,
+    stateReconciler: autoMergeLevel2
 }
 
 const persistedReducer = persistReducer(persistConfig, rootReducer)
