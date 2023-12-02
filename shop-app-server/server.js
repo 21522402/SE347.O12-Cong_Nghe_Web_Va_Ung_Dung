@@ -7,6 +7,7 @@ const { errorHandler, notFound } = require('./middlewares/error/errorHandler');
 const cors = require('cors');
 const voucherRoutes = require('./routes/voucher/VoucherRoutes');
 const feedbackRoutes = require('./routes/feedback/FeedbackRoutes');
+const reviewRoutes = require('./routes/review/ReviewRouters');
 // declaire app express
 const app = express();
 
@@ -25,7 +26,7 @@ app.use(cors());
 app.use('/api/users', userRoutes);
 app.use('/api/vouchers', voucherRoutes);
 app.use('/api/feedbacks', feedbackRoutes);
-
+app.use('/api/reviews', reviewRoutes);
 
 // Error handler
 app.use(notFound);

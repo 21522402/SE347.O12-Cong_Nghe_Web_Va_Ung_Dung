@@ -49,7 +49,7 @@ const responseFeedback = async (req, res) => {
             })
             imageBuffer.push(result.secure_url)
         }
-        debugger
+
         const fb = await Feedback.findById(req.body._id).exec();
         fb.response.content = req.body.response.content;
         fb.response.imagesRsp = imageBuffer;
