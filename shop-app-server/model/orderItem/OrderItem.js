@@ -9,7 +9,11 @@ const orderItemSchema = new mongoose.Schema(
         color: String,
         quanlity: Number,
         price: Number,
-        discountPerc: Number
+        discountPerc: Number,
+        review: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "Review"
+        }
     }
 )
 const OrderItem = mongoose.model('OrderItem', orderItemSchema);
