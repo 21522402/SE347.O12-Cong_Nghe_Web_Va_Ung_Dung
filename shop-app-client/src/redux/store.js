@@ -22,7 +22,7 @@ const rootReducer = combineReducers({
     auth: authReducer,
     user: userReducer,
     product: productReducer,
-    importProducts: importProductsReducer
+    importProduct: importProductsReducer
 })
 
 //------------------------------------------------------------//

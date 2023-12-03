@@ -5,7 +5,8 @@ const router = express.Router();
 
 
 
-router.get('/getProductsByKey',importProductController.getProductsByKey)
+router.post('/getProductsByKey',importProductController.getProductsByKey)
+router.post('/addImport',importProductController.addImport)
 router.get('/', (req, res) => {
     res.send('Welcome to product!')
 })
