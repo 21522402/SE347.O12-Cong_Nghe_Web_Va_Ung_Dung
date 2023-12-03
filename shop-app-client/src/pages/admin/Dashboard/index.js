@@ -178,10 +178,10 @@ function Dashboard() {
               <div style={{ width: "70%", padding: "20px" }}>
                 <div className={cx('container-big-chart')}>
                   <span style={{ fontSize: "18px", fontWeight: "500" }}>
-                    Tổng thu: 29.850.000 (VND)
+                    Tổng thu: {formatMoney(29850000)}
                   </span>
                   <span style={{ fontSize: "18px", fontWeight: "500" }}>
-                    Tổng chi: 29.850.000 (VND)
+                    Tổng chi: {formatMoney(29850000)}
                   </span>
                 </div>
                 <Bar

@@ -4,14 +4,16 @@ import classNames from 'classnames/bind';
 import { useRef, useState } from 'react';
 import { IoSearch, IoBagHandle } from "react-icons/io5";
 import { IoMdClose } from "react-icons/io";
-import { FaRegUserCircle } from "react-icons/fa";
 import DetailPopup from './DetailPopup';
 import SearchPopup from './SearchPopup';
-import removeViTones from '~/utils/removeViTones';
 import SettingPopup from './SettingPopup';
+import Modal from '~/components/Modal';
+import { Login, SignUp, ChangePass } from '~/pages/auth';
+import { useSelector } from 'react-redux';
 const cx = classNames.bind(styles);
-
 function Header() {
+    let [login, setLogin] = useState(false)
+    let currentUser = useSelector((state) => state.auth.login.currentUser)
     const navigate = useNavigate();
     const overLay = useRef();
     const hideOverLay = () => {
@@ -21,6 +23,7 @@ function Header() {
     const [showDetailPopUp, setShowDetailPopup] = useState(false)
     const [showSearchPopUp, setShowSearchPopup] = useState(false)
     const [valueSearch, setValueSearch] = useState('');
+    const [popup, setPopup] = useState("login")
     const categories = [
         {
             category: 'Áo',
@@ -136,11 +139,26 @@ function Header() {
         setIndexCategoryActive(index)
         setShowDetailPopup(true)
     }
+
+    const handleNav = (e) => {
+        if(e === "login")
+            setPopup("login")
+        else 
+            if(e === "signup")
+                setPopup("signup")
+            else 
+                setPopup("forgot")
+    }
     return (
-
-
         <div className={cx('wrapper')}>
-
+            <Modal visible={login} setModal={setLogin}>
+                {
+                    popup === "login" ? <Login navSignup={handleNav} navForgot={handleNav}/> :
+                    popup === "signup" ? <SignUp navLogin={handleNav}/> : 
+                    <ChangePass navLogin={handleNav}/>
+                }
+                
+            </Modal>
             <a href='/user' className={cx('logo-wrapper')}>
                 <div>SHOP</div>
                 <div className={cx('child2')}>APP</div>
@@ -198,8 +216,12 @@ function Header() {
                 </div>
                 <label for={cx("main__header-navBar-hide-open")} className={cx("main__header-navbar-overlay")}>
                 </label>
-                <label for={cx("main__header-navBar-hide-open")}>
-                    <div style={{cursor: 'pointer'}}><img src='https://mcdn.coolmate.me/image/October2023/mceclip3_72.png' /></div>
+                <label for={cx(currentUser ? "main__header-navBar-hide-open" : '')}>
+                    <div onClick={() => {!currentUser && setLogin(true)}} style={{display: 'flex', flexDirection: 'row', alignItems: 'center', cursor: 'pointer'}}>
+                        <div style={{cursor: 'pointer'}}><img src='https://mcdn.coolmate.me/image/October2023/mceclip3_72.png' alt='' /></div>
+                        {currentUser ? <div style={{marginLeft: '5px', marginTop: '5px'}}>{`Hi, ${currentUser.fullName.split(' ')[currentUser.fullName.split(' ').length - 1]}`}</div> : null}
+                    </div>
+                   
                 </label>
                 <Link to='/cart'>
                     <div style={{cursor: 'pointer'}}><IoBagHandle style={{ color: '#fff', fontSize: '28px' }} /></div>

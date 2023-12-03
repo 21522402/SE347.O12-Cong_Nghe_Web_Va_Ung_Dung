@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 const bcrypt = require('bcrypt')
 const crypyo = require('crypto')
+const jwt = require('jsonwebtoken')
 
 //create schema
 const userSchema = new mongoose.Schema(
@@ -16,6 +17,14 @@ const userSchema = new mongoose.Schema(
         email: {
             type: String,
             required: [true, "Email is required"]
+        },
+        gender: {
+            type: String,
+            required: [true, "Gender is required"]
+        },
+        dob: {
+            type: Date,
+            required: [true, "Date of birth is required"]
         },
         phoneNumber: {
             type: String,
@@ -81,11 +90,11 @@ const userSchema = new mongoose.Schema(
                 }
             ]
         },
-        feedback: {
+        feedbacks: {
             type: [
                 {
                     type: mongoose.Schema.Types.ObjectId,
-                    ref: 'Feeback'
+                    ref: 'Feedback'
                 }
             ]
         },
@@ -120,7 +129,6 @@ const userSchema = new mongoose.Schema(
             virtuals: true
         },
         timestamps: true
-
     }
 );
 userSchema.pre("save", async function(next){
@@ -135,6 +143,14 @@ userSchema.pre("save", async function(next){
 userSchema.methods.checkPassword = async function(enteredPassword){
     return await bcrypt.compare(enteredPassword, this.password);
 };
+//generate token
+
+userSchema.methods.generateTokenJWT = function () {
+    return jwt.sign({id: this.id}, process.env.JWT_SECRET_KEY, {
+        expiresIn: 3600
+    })
+}
+
 const User = mongoose.model('User', userSchema);
 
 module.exports = User;

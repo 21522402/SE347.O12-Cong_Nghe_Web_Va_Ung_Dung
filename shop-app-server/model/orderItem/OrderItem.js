@@ -2,14 +2,21 @@ const mongoose = require('mongoose');
 
 const orderItemSchema = new mongoose.Schema(
     {
-        productId: mongoose.Schema.Types.ObjectId,
+        productId: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "Product",
+        },
         productName: String,
         image: String,
         size: String,
         color: String,
-        quanlity: Number,
+        quantity: Number,
         price: Number,
-        discountPerc: Number
+        discountPerc: Number,
+        review: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "Review"
+        }
     }
 )
 const OrderItem = mongoose.model('OrderItem', orderItemSchema);

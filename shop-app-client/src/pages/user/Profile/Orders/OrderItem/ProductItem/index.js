@@ -10,7 +10,7 @@ function ProductItem({props}) {
             orderItemId: "1",
             productId: "1",
             productName: 'Shorts thể thao 7" Movement',
-            images: 'https://media.coolmate.me/cdn-cgi/image/width=320,height=362,quality=80/image/August2023/AT220-1.jpg',
+            image: 'https://media.coolmate.me/cdn-cgi/image/width=320,height=362,quality=80/image/August2023/AT220-1.jpg',
             size: "S",
             color: "Nâu",
             quantity: 2,
@@ -23,7 +23,7 @@ function ProductItem({props}) {
         <>
             <div className={cx('container')}>
                 <div className={cx('image')}>
-                    <img className={cx('image')} src={item.images} alt=''/>
+                    <img className={cx('image')} src={item.image} alt=''/>
                 </div>
                 <div className={cx('rightContent')}>
                     <div>

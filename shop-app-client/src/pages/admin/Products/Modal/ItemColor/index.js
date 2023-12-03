@@ -12,12 +12,12 @@ import {
     handleRemoveColor,
     handleChangeColorCode, handleChangeColorName, handleColorAddImage, handleColorChangeImage,
     handleColorRemoveImage, handleColorAddSize, handleColorChangeSizeName, handleColorRemoveSize
-} from "~/redux/Product/action";
+} from "~/redux/slices/productSlice";
 const cx = classNames.bind(styles)
 
 function ItemColor({ index }) {
-    let color = useSelector(state => state.productReducer.currentUpdateProduct.colors[index])
-    let colorsLength = useSelector(state => state.productReducer.currentUpdateProduct.colors.length)
+    let color = useSelector(state => state.product.currentUpdateProduct.colors[index])
+    let colorsLength = useSelector(state => state.product.currentUpdateProduct.colors.length)
     const dispatch = useDispatch()
     const [showMore, setShowMore] = useState(index === 0);
     const [showColorPicker, setShowColorPicker] = useState(false)

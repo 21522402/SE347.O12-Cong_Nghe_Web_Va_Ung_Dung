@@ -9,13 +9,13 @@ const cx = classNames.bind(styles);
 function OrderItem({props}) {
     let [detail, setDetail] = useState(false)
     function calculateTotal(items){
-        return items.reduce((total, item) => total + (item.price * item.discountPerc * item.quantity), 0);
+        return items.reduce((total, item) => total + (item.price * (1 - item.discountPerc) * item.quantity), 0);
     }
     return ( <>
         <div className={cx('container')}>
             <div className={cx('header')}>
                 <div>
-                    <span className={cx('title')}>Order place:</span> <br></br>{props.orderDate}
+                    <span className={cx('title')}>Order place:</span> <br></br>{(new Date(props.orderDate)).getDate() + '/ ' + ((new Date(props.orderDate)).getMonth() + 1) +'/ ' + (new Date(props.orderDate)).getFullYear()}
                 </div>
                 <div>
                     <span className={cx('title')}>Order total:</span> <br></br>{new Intl.NumberFormat('vi-VN', {style: 'currency', currency: 'VND'}).format(calculateTotal(props.orderItem))}
@@ -28,24 +28,24 @@ function OrderItem({props}) {
             <div className={cx('body')}>
                 <div className={cx(detail ? 'address-active' : 'address')}>
                     <div style={{ fontSize: '16px', fontWeight: 'bold', color: '#4bac4d' }}>
-                        Đơn đặt hàng #100072367 <span style={{ color: '#000' }}/>/ <span style={{color: '#ED232F', marginLeft: '5px'}}>Đang giao</span>
+                        Đơn đặt hàng #DH_{props._id} <span style={{ color: '#000' }}/>/ <span style={{color: '#ED232F', marginLeft: '5px'}}>{props.status}</span>
                     </div>
                     <div style={{ display: 'flex', gap: '48px', marginTop: '8px' }}>
                         <div style={{ width: '30%' }}>
                             <div className={cx('form-group')}>
                                 <label>Ngày đặt: </label>
-                                <div className={cx('info-value')}>15/02/203</div>
+                                <div className={cx('info-value')}>{(new Date(props.orderDate)).getDate() + '/ ' + ((new Date(props.orderDate)).getMonth() + 1) +'/ ' + (new Date(props.orderDate)).getFullYear()}</div>
                             </div>
                             <div className={cx('form-group')}>
                                 <label>Số sản phẩm: </label>
-                                <div className={cx('info-value')}>4</div>
+                                <div className={cx('info-value')}>{props.orderItem.length}</div>
                             </div>
 
                         </div>
                         <div style={{ width: '30%' }}>
                             <div className={cx('form-group')}>
                                 <label>Tiền hàng: </label>
-                                <div className={cx('info-value')}>4,000,000 VNĐ</div>
+                                <div className={cx('info-value')}>{new Intl.NumberFormat('vi-VN', {style: 'currency', currency: 'VND'}).format(calculateTotal(props.orderItem))}</div>
                             </div>
                             <div className={cx('form-group')}>
                                 <label>Phí ship:
@@ -59,7 +59,7 @@ function OrderItem({props}) {
                     <div style={{ width: '60%' }}>
                         <div className={cx('form-group', 'single')} style={{ width: 'calc(100% + 48px)' }}>
                             <label>Tổng tiền: </label>
-                            <div className={cx('info-value')}>4,200,000 VNĐ</div>
+                            <div className={cx('info-value')}>{new Intl.NumberFormat('vi-VN', {style: 'currency', currency: 'VND'}).format(calculateTotal(props.orderItem))}</div>
                         </div>
                     </div>
                 </div>
@@ -85,38 +85,38 @@ function OrderItem({props}) {
                                         <span style={{ display: 'inline-block', width: '150px', fontWeight: '600' }}>
                                             <span><IoPersonOutline style={{ marginRight: '6px' }} /></span>
                                             Người nhận:</span>
-                                        <span >Nguyễn Văn A</span>
+                                        <span >{props.address.name}</span>
                                     </div>
 
                                     <div style={{ display: 'flex', alignItems: 'center' }}>
                                         <span style={{ display: 'inline-block', width: '150px', fontWeight: '600' }}>
                                             <span><BiPhoneCall style={{ marginRight: '6px' }} /></span>
                                             SĐT:</span>
-                                        <span >0868208744</span>
+                                        <span >{props.address.phoneNumber}</span>
                                     </div>
                                     <div style={{ display: 'flex', alignItems: 'center' }}>
                                         <span style={{ display: 'inline-block', width: '150px', fontWeight: '600' }}>
                                             <span><BiMap style={{ marginRight: '6px' }} /></span>
                                             Tỉnh / TP:</span>
-                                        <span >Quảng Ngãi</span>
+                                        <span >{props.address.province}</span>
                                     </div>
                                     <div style={{ display: 'flex', alignItems: 'center' }}>
                                         <span style={{ display: 'inline-block', width: '150px', fontWeight: '600' }}>
                                             <span><BiMapPin style={{ marginRight: '6px' }} /></span>
                                             Quận / Huyện:</span>
-                                        <span >Bình Sơn</span>
+                                        <span >{props.address.district}</span>
                                     </div>
                                     <div style={{ display: 'flex', alignItems: 'center' }}>
                                         <span style={{ display: 'inline-block', width: '150px', fontWeight: '600' }}>
                                             <span><BiSitemap style={{ marginRight: '6px' }} /></span>
                                             Xã / Thị trấn:</span>
-                                        <span >Bình Thuận</span>
+                                        <span >{props.address.ward}</span>
                                     </div>
                                     <div style={{ display: 'flex', alignItems: 'center' }}>
                                         <span style={{ display: 'inline-block', width: '150px', fontWeight: '600' }}>
                                             <span><BiMessageSquareDetail style={{ marginRight: '6px' }} /></span>
                                             Chi tiết:</span>
-                                        <span >Thôn tuyết diêm 2</span>
+                                        <span >{props.address.detail}</span>
                                     </div>
 
                                 </div>

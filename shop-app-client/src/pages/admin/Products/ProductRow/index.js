@@ -11,7 +11,7 @@ const cx = classNames.bind(styles)
 
 function ProductRow({ index}) {
 
-    const product = useSelector(state => state.productReducer.listProductsState[index])
+    const product = useSelector(state => state.product.listProductsState[index])
     const element = useRef(null)
     const imageProductDefault = "https://cdn-app.kiotviet.vn/sample/fashion/38.png";
     const img = product.colors[0]?.images[0] ?? imageProductDefault

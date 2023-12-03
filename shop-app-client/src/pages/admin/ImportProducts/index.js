@@ -17,12 +17,12 @@ import DropDownImport from "./DropDownImport";
 import ImportProductRow from "./ImportProductRow";
 import Modal from "./Modal";
 import { useDispatch, useSelector } from "react-redux";
-import { addIntoListImportProducts, setListImportProducts } from "~/redux/ImportProduct/action";
+import { addIntoListImportProducts, setListImportProducts } from "~/redux/slices/importProductsSlice";
 
 const cx = classNames.bind(styles)
 
 function ImportProducts() {
-    const listImportProducts = useSelector(state => state.importProductsReducer.listImportProducts)
+    const listImportProducts = useSelector(state => state.importProducts.listImportProducts)
     const location = useLocation();
     console.log(location.state)
     const dispatch = useDispatch();
@@ -89,8 +89,9 @@ function ImportProducts() {
     const handleChangeSearch = async (e) => {
         setInputFocus(true);
         const value = e.target.value.trim();
+        console.log(value)
         try {
-            const res =  await axios.get(`${baseUrl}/api/importProducts/getProductsByKey`)
+            const res =  await axios.get(`${baseUrl}/api/importProduct/getProductsByKey`,{key: value})
             if (res) {
                 setListSearchProducts(res.data.data)
             }

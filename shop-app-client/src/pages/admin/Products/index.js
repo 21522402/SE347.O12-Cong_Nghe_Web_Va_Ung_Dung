@@ -4,7 +4,7 @@ import { FaFileImport, FaFileExport } from "react-icons/fa";
 import { IoSquareOutline, IoCheckboxSharp } from "react-icons/io5";
 import React, { useEffect, useState, createContext } from "react";
 import { resetCurrentProduct, setListProducts, filterListProductsState, setListProductsState,
-setListProductCategories} from "~/redux/Product/action";
+setListProductCategories} from "~/redux/slices/productSlice";
 
 import ProductRow from "./ProductRow";
 import styles from './Products.module.scss'
@@ -19,9 +19,9 @@ const cx = classNames.bind(styles)
 export const ModalContext = createContext();
 function Products() {
     const dispatch = useDispatch();
-    const listProducts =  useSelector(state => state.productReducer.listProducts)
-    const listProductsState = useSelector(state => state.productReducer.listProductsState)
-    const listCategories = useSelector(state => state.productReducer.listCategories)
+    const listProducts =  useSelector(state => state.product.listProducts)
+    const listProductsState = useSelector(state => state.product.listProductsState)
+    const listCategories = useSelector(state => state.product.listCategories)
     const [inputFocus, setInputFocus] = useState(false);
     const [listStatus,setListStatus] = useState(['Tất cả','Bán trực tiếp','Chưa đăng bán','Ngừng kinh doanh'])
     const listProductCategory = ['Tất cả', 'Áo', 'Quần', 'Đồ lót']

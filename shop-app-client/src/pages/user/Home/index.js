@@ -4,6 +4,7 @@ import "react-multi-carousel/lib/styles.css";
 import ItemCollection from "../Collection/ItemCollection";
 import styles from "./Home.module.scss";
 import classNames from "classnames/bind";
+import images from '~/assets/img'
 
 const cx = classNames.bind(styles);
 
@@ -31,7 +32,7 @@ function Home() {
   const responsive = {
     desktop: {
       breakpoint: { max: 3000, min: 1024 },
-      items: 4,
+      items: 5,
     },
     tablet: {
       breakpoint: { max: 1024, min: 464 },
@@ -89,7 +90,7 @@ function Home() {
         }}
       >
         <img
-          style={{ width: "96%", borderRadius: '4px' }}
+          style={{ width: "96%", borderRadius: '4px', marginTop: '20px'}}
           src="https://media.coolmate.me/cdn-cgi/image/quality=80,format=auto/uploads/October2023/mceclip0_74.png"
           alt="img"
         />
@@ -122,7 +123,7 @@ function Home() {
         }}
       >
         <img
-          style={{ width: "96%", borderRadius: '4px' }}
+          style={{ width: "96%", borderRadius: '4px', marginTop: '20px'}}
           src="https://media.coolmate.me/cdn-cgi/image/quality=80,format=auto/uploads/October2023/mceclip0_87.png"
           alt="img"
         />
@@ -155,7 +156,7 @@ function Home() {
         }}
       >
         <img
-          style={{ width: "96%", borderRadius: '4px' }}
+          style={{ width: "96%", borderRadius: '4px', marginTop: '20px'}}
           src="https://mcdn.coolmate.me/image/September2023/mceclip4_64.jpg"
           alt="img"
         />
@@ -205,44 +206,44 @@ function Home() {
         <div className={cx("container-item")}>
           <img
             className={cx("itemIMG")}
-            src="https://media.coolmate.me/cdn-cgi/image/width=1069,height=1575,quality=80,format=auto/uploads/October2023/mceclip1_36.png"
+            src={images.TatCaSP}
             alt="all"
           />
           <div className={cx("btn-item")}>
-            <a href="./user/all-products">Xem chi tiết</a>
+            <a href="./collection/1">Xem chi tiết</a>
           </div>
         </div>
 
         <div className={cx("container-item")}>
           <img
             className={cx("itemIMG")}
-            src="https://media.coolmate.me/cdn-cgi/image/width=1069,height=1575,quality=80,format=auto/uploads/October2023/mceclip4_7.png"
-            alt="all"
+            src={images.Ao}
+            alt="ao"
           />{" "}
           <div className={cx("btn-item")}>
-            <a href="./user/product-underwears">Xem chi tiết</a>
+            <a href="./collection/1">Xem chi tiết</a>
           </div>
         </div>
 
         <div className={cx("container-item")}>
           <img
             className={cx("itemIMG")}
-            src="https://media.coolmate.me/cdn-cgi/image/width=1069,height=1575,quality=80,format=auto/uploads/October2023/mceclip3_86.png"
-            alt="all"
+            src={images.Quan}
+            alt="quan"
           />
           <div className={cx("btn-item")}>
-            <a href="./user/product-clothes">Xem chi tiết</a>
+            <a href="./collection/1">Xem chi tiết</a>
           </div>
         </div>
 
         <div className={cx("container-item")}>
           <img
             className={cx("itemIMG")}
-            src="https://media.coolmate.me/cdn-cgi/image/width=1069,height=1575,quality=80,format=auto/uploads/October2023/mceclip0_40.png"
-            alt="all"
-          />{" "}
+            src={images.DoLot}
+            alt="dolot"
+          />
           <div className={cx("btn-item")}>
-            <a href="./user/product-sports">Xem chi tiết</a>
+            <a href="./collection/1">Xem chi tiết</a>
           </div>
         </div>
       </div>

@@ -11,7 +11,7 @@ import { useContext } from "react";
 import { PiWarehouseFill } from "react-icons/pi";
 import { ModalContext } from "..";
 import {  useDispatch, useSelector } from "react-redux";
-import { setCurrentProduct } from "~/redux/Product/action";
+import { setCurrentProduct } from "~/redux/slices/productSlice";
 import ColorSize from "../ColorSize";
 
 import { useState } from "react";
@@ -28,7 +28,7 @@ function ProductDetail({index}) {
     const dispatch = useDispatch()
     const navigate = useNavigate()
     const {setShowModal, setTypeModal} = useContext(ModalContext);
-    const product = useSelector(state => state.productReducer.listProductsState[index])
+    const product = useSelector(state => state.product.listProductsState[index])
     const listImage = product.colors.reduce((accumulator, currentValue) => {
         return accumulator.concat(currentValue.images)
     }, [])

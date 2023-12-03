@@ -1,10 +1,6 @@
 import Home from "~/pages/user/Home"
 import { LayoutNoSidebar,LayoutSidebar, LayoutSidebarUser } from "~/components/Layout"
 import Dashboard from "~/pages/admin/Dashboard"
-import PageAllProduct from "~/pages/user/Home/PageAllProduct"
-import PageProductClothes from "~/pages/user/Home/PageProductClothes"
-import PageProductSport from "~/pages/user/Home/PageProductSport"
-import PageProductUnderWear from "~/pages/user/Home/PageProductUnderWear"
 import Products from "~/pages/admin/Products"
 import ImportProducts from "~/pages/admin/ImportProducts"
 import Orders from "~/pages/admin/Orders"
@@ -32,10 +28,6 @@ import Profile from "~/pages/user/Profile"
 export const publicRoutes = [
     // user: => path: '/user/[pageName]'
     {path:'/user' , component: Home, layout:LayoutNoSidebar},
-    {path:'/user/all-products' , component: PageAllProduct, layout:LayoutNoSidebar},
-    {path:'/user/product-underwears' , component: PageProductUnderWear, layout:LayoutNoSidebar},
-    {path:'/user/product-sports', component: PageProductSport, layout:LayoutNoSidebar},
-    {path:'/user/product-clothes' , component: PageProductClothes, layout:LayoutNoSidebar},
     {path:'/user-profile' , component: Profile, layout:LayoutSidebarUser},
     {path:'/user-profile/info' , component: Info, layout:LayoutSidebarUser},
     {path:'/user-profile/orders' , component: OrdersUser, layout:LayoutSidebarUser},

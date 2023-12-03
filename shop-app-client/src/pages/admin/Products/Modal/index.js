@@ -20,7 +20,7 @@ import styles from './Modal.module.scss'
 import 'react-quill/dist/quill.snow.css'
 import ReactQuill from "react-quill";
 import { useDispatch, useSelector } from "react-redux";
-import { handleChangeInputText, handleAddNewColor, filterListProductsState } from "~/redux/Product/action";
+import { handleChangeInputText, handleAddNewColor, filterListProductsState } from "~/redux/slices/productSlice";
 
 import axios from 'axios';
 import baseUrl from '~/utils/baseUrl';
@@ -32,8 +32,8 @@ import baseUrl from '~/utils/baseUrl';
 const cx = classNames.bind(styles)
 
 function Modal({ setModal, typeModal, getAllProducts, getAllProductCaterogies, filter }) {
-    let product = useSelector(state => state.productReducer.currentUpdateProduct)
-    const listCategories = useSelector(state => state.productReducer.listCategories)
+    let product = useSelector(state => state.product.currentUpdateProduct)
+    const listCategories = useSelector(state => state.product.listCategories)
     const dispatch = useDispatch()
     useEffect(() => {
         console.log(product)
