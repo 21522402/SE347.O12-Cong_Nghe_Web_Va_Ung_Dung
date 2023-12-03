@@ -82,15 +82,15 @@ function ImportProducts() {
         }
     },[dropElement])
     const handleClickAcceptImport = async () => {
-        console.log(Import)
-        // try {
-        //     const res = await axios.post('${baseUrl}/api/importProduct/addImport',Import)
-        //     if (res) {
-        //         console.log(res.data)
-        //     }
-        // } catch (error) {
+        // console.log(Import)
+        try {
+            const res = await axios.post(`${baseUrl}/api/importProduct/addImport`,Import)
+            if (res) {
+                console.log(res.data)
+            }
+        } catch (error) {
             
-        // }
+        }
     }
    
     return (
