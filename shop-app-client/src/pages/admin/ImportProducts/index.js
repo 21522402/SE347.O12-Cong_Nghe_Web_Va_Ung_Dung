@@ -4,13 +4,11 @@ import { AiOutlineSearch, AiFillCaretDown, AiOutlinePlus } from "react-icons/ai"
 import { IoArrowBack } from "react-icons/io5";
 import { FaAngleRight } from "react-icons/fa";
 import { BsCheckLg } from "react-icons/bs";
-
-
-import { RiDeleteBin6Line } from "react-icons/ri";
-
-
+import React from "react";
+import axios from "axios";
+import baseUrl from '~/utils/baseUrl';
 import { useEffect, useRef, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
 
 
@@ -18,10 +16,17 @@ import styles from './ImportProducts.module.scss'
 import DropDownImport from "./DropDownImport";
 import ImportProductRow from "./ImportProductRow";
 import Modal from "./Modal";
+import { useDispatch, useSelector } from "react-redux";
+import { addIntoListImportProducts, setListImportProducts } from "~/redux/ImportProduct/action";
 
 const cx = classNames.bind(styles)
 
 function ImportProducts() {
+    const listImportProducts = useSelector(state => state.importProductsReducer.listImportProducts)
+    const location = useLocation();
+    console.log(location.state)
+    const dispatch = useDispatch();
+
 
     const [inputFocus, setInputFocus] = useState(false);
     const [openModelImport, setOpenModalImport] = useState(false)
@@ -30,8 +35,8 @@ function ImportProducts() {
     const [isClickFromDropDown, setClickFromDropDown] = useState(false);
     const inputElement = useRef(null);
     const dropElement = useRef(null);
-
-    const listSearchProducts = [
+    
+    const [listSearchProducts, setListSearchProducts] = useState([
         {
             productName: 'Áo vest nữ màu hồng chìm',
             productId: 'NU001',
@@ -67,63 +72,52 @@ function ImportProducts() {
             quantity: 170,
             productImage: 'https://cdn-app.kiotviet.vn/sample/fashion/25.png'
         }
-    ]
-    // const listTableProducts = [
-    //     {
-    //         productId: 'CM015',
-    //         productName: 'Áo vest nữ màu hồng nổi 015'
-    //     },
-    //     {
-    //         productId: 'CM016',
-    //         productName: 'Áo vest nữ màu hồng nổi 016'
-    //     },
-    //     {
-    //         productId: 'CM017',
-    //         productName: 'Áo vest nữ màu hồng nổi 017'
-    //     },
-    //     {
-    //         productId: 'CM018',
-    //         productName: 'Áo vest nữ màu hồng nổi 018'
-    //     },
-    //     {
-    //         productId: 'CM019',
-    //         productName: 'Áo vest nữ màu hồng nổi 019'
-    //     }
-    // ]
-    const [listImportProducts, setListImportProducts] = useState([])
+    ])
     const handleClickItemSearch = (item) => {
-        inputElement.current.focus();
-        setListImportProducts(prev => [...prev, item])
-        setInputFocus(prev => !prev);
+        // inputElement.current.focus();
+        // setListImportProducts(prev => [...prev, item])
+        // setInputFocus(prev => !prev);
 
     }
     const handleRemoveItem = (index) => {
-        setListImportProducts(prev => {
-            const nextState = [...prev];
-            nextState.splice(index, 1);
-            return nextState;
-        })
+        // setListImportProducts(prev => {
+        //     const nextState = [...prev];
+        //     nextState.splice(index, 1);
+        //     return nextState;
+        // })
+    }
+    const handleChangeSearch = async (e) => {
+        setInputFocus(true);
+        const value = e.target.value.trim();
+        try {
+            const res =  await axios.get(`${baseUrl}/api/importProducts/getProductsByKey`)
+            if (res) {
+                setListSearchProducts(res.data.data)
+            }
+        } catch (error) {
+            
+        }
     }
 
     useEffect(() => {
         console.log(listImportProducts)
     }, [listImportProducts])
+    useEffect(() => {
+        dispatch(setListImportProducts(location.state))
+    },[])
+    useEffect(() => {
+        function handleClickOutside(e) {
+            if (dropElement.current && !dropElement.current.contains(e.target)) {
+                setInputFocus(false)
+            }
+        }
+        document.addEventListener("mousedown",handleClickOutside )
 
-    // useEffect(() => {
-    //     const handleOutsideClick = (e) => {
-    //         if (!inputElement.current?.contains(e.target)) {
-    //             setInputFocus(false)
-    //         }
-    //     };
-
-    //     const timeoutId = setTimeout(() => {
-    //         document.addEventListener("click", handleOutsideClick, false);
-    //     }, 0);
-    //     return () => {
-    //         clearTimeout(timeoutId);
-    //         document.removeEventListener("click", handleOutsideClick, false);
-    //     };
-    // });
+        return () => {
+        document.removeEventListener("mousedown",handleClickOutside )
+        }
+    },[dropElement])
+   
     return (
         <div className={cx('wrapper')}>
             <div style={{ flex: '1' }}>
@@ -139,7 +133,7 @@ function ImportProducts() {
                             'input-focus': inputFocus
                         })}>
                             <AiOutlineSearch className={cx('icon')} />
-                            <input onClick={() => setInputFocus(true)} ref={inputElement} type="text" placeholder="Theo mã, tên hàng" className={cx('search-input')} />
+                            <input onChange={handleChangeSearch} ref={inputElement} type="text" placeholder="Theo mã, tên hàng" className={cx('search-input')} />
                             <AiFillCaretDown className={cx('icon')} />
                         </div>
                         {inputFocus &&

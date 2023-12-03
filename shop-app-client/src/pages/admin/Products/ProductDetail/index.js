@@ -20,11 +20,13 @@ import { useState } from "react";
 import styles from './ProductDetail.module.scss'
 import { useRef } from "react";
 import { useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
 
 const cx = classNames.bind(styles)
 
 function ProductDetail({index}) {
     const dispatch = useDispatch()
+    const navigate = useNavigate()
     const {setShowModal, setTypeModal} = useContext(ModalContext);
     const product = useSelector(state => state.productReducer.listProductsState[index])
     const listImage = product.colors.reduce((accumulator, currentValue) => {
@@ -172,7 +174,9 @@ function ProductDetail({index}) {
                 {/* Chức năng */}
                 <div className={cx('product-fucntion')}>
                     <span className={cx('btn', 'btn-succeed')} onClick={() => { dispatch(setCurrentProduct(product)) ; setTypeModal('update'); setShowModal(true)}}><AiOutlineEdit style={{ marginRight: '6px', fontSize: '16px' }} />   Cập nhật </span>
-                    <a href="/admin/products/import" className={cx('btn', 'btn-succeed')}><BiImport style={{ marginRight: '6px', fontSize: '18px' }} />   Nhập hàng </a>
+                    <a onClick={() => navigate('/admin/products/import', {
+                        state: product
+                    })} className={cx('btn', 'btn-succeed')}><BiImport style={{ marginRight: '6px', fontSize: '18px' }} />   Nhập hàng </a>
                     <span className={cx('btn', 'btn-error')}><BiSolidLockAlt style={{ marginRight: '6px', fontSize: '16px' }} />   Ngừng kinh doanh</span>
                     <span className={cx('btn', 'btn-succeed')}><MdPublish style={{ marginRight: '6px', fontSize: '16px' }} />   Đăng bán</span>
                 </div>
