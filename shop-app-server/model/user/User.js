@@ -19,12 +19,16 @@ const userSchema = new mongoose.Schema(
             required: [true, "Email is required"]
         },
         gender: {
-            type: String,
-            required: [true, "Gender is required"]
+            type: Number,
         },
         dob: {
             type: Date,
-            required: [true, "Date of birth is required"]
+        },
+        heightUser: {
+            type: Number,
+        },
+        weightUser: {
+            type: Number,
         },
         phoneNumber: {
             type: String,

@@ -49,7 +49,7 @@ const getUserInfo = async (req, res) => {
 const updateUserInfo = async (req, res) => {
     try {
         const id = req?.params?.id;
-
+        
         validationId(id)
 
         const existedUser = await User.findById(id);
@@ -57,7 +57,6 @@ const updateUserInfo = async (req, res) => {
         if (!existedUser) throw new Error('User id không tồn tại. Hãy thử lại!')
 
         let updatObj = {...req?.body}
-
         if(updatObj?.password) {
             const validPassword = bcrypt.compareSync(
                 updatObj.password,
@@ -70,11 +69,11 @@ const updateUserInfo = async (req, res) => {
                 updatObj = {...updatObj, password: hashed}
             }
             else{
-                return res.status(401).json("Mật khẩu không đúng")
+                return errorTemplate(res, "Mật khẩu không đúng", 500)
             }
         }
 
-        const updUser = await User.findByIdAndUpdate(id, updatObj, { new: true })
+        const updUser = await User.findByIdAndUpdate(id, {...updatObj}, { new: true }).populate('vouchers')
         return successTemplate(res, updUser, "Cập nhật thành công!", 200)
     }
     catch (err) {

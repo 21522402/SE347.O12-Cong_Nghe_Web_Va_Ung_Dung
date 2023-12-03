@@ -1,7 +1,6 @@
 import { Link } from 'react-router-dom';
 import styles from './SettingPopup.module.scss';
 import classNames from 'classnames/bind';
-import {AiOutlineClose} from 'react-icons/ai';
 import { VoucherIcon, LocationIcon, AccountIcon, OrderIcon, RatingIcon, QuestionIcon } from '~/assets/icons';
 import VoucherItem from './VoucherItem/VoucherItem';
 import { useSelector } from 'react-redux';
@@ -21,7 +20,7 @@ function SettingPopup({closeBtn}) {
         const formattedDate = `${day}/${month}/${year}`;
         return formattedDate;
     }
-    const settingItems = [{icon: VoucherIcon, label: 'Ví Voucher'}, {icon: OrderIcon, label: 'Lịch sử đơn hàng'}, {icon: LocationIcon, label: 'Sổ địa chỉ'}, {icon: AccountIcon, label: 'Cài đặt tài khoản'}, {icon: RatingIcon, label: 'Đánh giá và phản hồi'}, {icon: QuestionIcon, label: 'FAQ & Chính sách'}];
+    const settingItems = [{icon: VoucherIcon, label: 'Ví Voucher', to:'/user-profile/vouchers'}, {icon: OrderIcon, label: 'Lịch sử đơn hàng', to:'/user-profile/orders'}, {icon: LocationIcon, label: 'Sổ địa chỉ', to:'/user-profile/addresses'}, {icon: AccountIcon, label: 'Cài đặt tài khoản', to:'/user-profile/info'}, {icon: RatingIcon, label: 'Đánh giá và phản hồi', to:'/user-profile/reviews'}, {icon: QuestionIcon, label: 'FAQ & Chính sách', to:'/user-profile/policies'}];
     return (
         <>
             <div className={cx('container')}>
@@ -32,10 +31,10 @@ function SettingPopup({closeBtn}) {
                         <div className={cx('outerVouchers')}>
                             {/* List Vouchers */}
                             {
-                                currentUser.vouchers.map((item, index) => {
+                                currentUser?.vouchers.map((item, index) => {
                                     return (
-                                        <div style={{margin: '0 10px'}}>
-                                            <VoucherItem key={index} voucherCode={item.voucherCode} voucherDes={item.description} voucherOutDate={convertDate(item.expiredDate)}/>
+                                        <div key={index} style={{margin: '0 10px'}}>
+                                            <VoucherItem  voucherCode={item.voucherCode} voucherDes={item.description} voucherOutDate={convertDate(item.expiredDate)}/>
 
                                         </div>
                                     )
@@ -49,12 +48,12 @@ function SettingPopup({closeBtn}) {
                             {
                                 settingItems.map((item, index) => {
                                     return (
-                                        <div key={index} style={{cursor: 'pointer', width: '128px', borderRadius: '10px', padding: '15px 20px', margin: '7px', backgroundColor: '#f1f1f1', display: 'flex', flexDirection: 'column', justifyContent: 'flex-start', alignItems: 'center'}}>
+                                        <Link to={item.to} key={index} style={{cursor: 'pointer', width: '128px', borderRadius: '10px', padding: '15px 20px', margin: '7px', backgroundColor: '#f1f1f1', display: 'flex', flexDirection: 'column', justifyContent: 'flex-start', alignItems: 'center'}}>
                                             <div style={{width: '40px', height: '40px'}}>
-                                                <img style={{width: '100%', height: '100%'}} src={item.icon}/>
+                                                <img style={{width: '100%', height: '100%'}} src={item.icon} alt='img'/>
                                             </div>
                                             <span style={{color: 'black', textAlign: 'center'}}>{item.label}</span>
-                                        </div>
+                                        </Link>
                                     )
                                 })
                             }
