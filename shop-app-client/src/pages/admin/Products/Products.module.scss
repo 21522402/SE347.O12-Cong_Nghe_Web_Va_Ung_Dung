@@ -168,7 +168,7 @@
     }
     
     th.img {
-        width: 44px;
+        width: 60px;
     }
     
     th.code {
@@ -176,7 +176,7 @@
     }
     
     th.name {
-        width: 403px;
+        width: 100%
     }
     
     th.price-buy {
@@ -212,9 +212,10 @@
     }
     
     td.img {
+        width: 100%;
+        text-align: center;
         img {
-            width: 24px;
-            height: 24px;
+            width: 100%;
             object-fit: cover;
         }
     }

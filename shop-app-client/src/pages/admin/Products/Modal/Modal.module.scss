@@ -139,10 +139,7 @@
         justify-content: space-between;
         cursor: pointer;
 
-        span {
-            color: #15171a;
-            padding-left: 7px;
-        }
+      
 
         &.active {
             border-bottom: 2px solid #00b63e;
@@ -151,30 +148,6 @@
     }
 }
 
-.form-group2 {
-    display: flex;
-    align-items: flex-start;
-    label {
-        padding-top: 7px;
-        font-weight: 700;
-        margin-right: 24px;
-    }
-
-    input {
-        padding: 7px 10px;
-        outline: none;
-        border: none;
-        border-bottom: 1px solid #c2c7ce;
-        width: 100%;
-        height: 32px;
-        color: #15171a;
-
-        &:focus {
-            border-bottom: 2px solid #00b63e;
-            padding-bottom: 6px;
-        }
-    }
-}
 
 .img-wrapper {
     position: relative;

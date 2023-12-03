@@ -1,6 +1,8 @@
 import {combineReducers, configureStore} from '@reduxjs/toolkit'
 import authReducer from './slices/authSlice'
 import userReducer from './slices/userSlice'
+import productReducer from './slices/productSlice'
+import importProductsReducer from './slices/importProductsSlice'
 import storage from 'redux-persist/lib/storage'
 import autoMergeLevel2 from 'redux-persist/lib/stateReconciler/autoMergeLevel2';
 import {
@@ -19,6 +21,8 @@ import {
 const rootReducer = combineReducers({
     auth: authReducer,
     user: userReducer,
+    product: productReducer,
+    importProducts: importProductsReducer
 })
 
 //------------------------------------------------------------//
