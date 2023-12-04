@@ -29,6 +29,7 @@ const slice = createSlice({
             state.listImportProducts = [{
                 productCode: action.payload.productCode,
                 productName: action.payload.productName,
+                productType: action.payload.productType,
                 unitPriceImport: '',
                 quantity: 0,
                 colors: [{
@@ -54,6 +55,7 @@ const slice = createSlice({
             state.listImportProducts = [...state.listImportProducts, {
                 productCode: action.payload.productCode,
                 productName: action.payload.productName,
+                productType: action.payload.productType,
                 unitPriceImport: '',
                 quantity: 0,
                 colors: [{

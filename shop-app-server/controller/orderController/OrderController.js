@@ -39,6 +39,26 @@ const orderController = {
             return errorTemplate(res, error.message)
         }
     },
+
+
+
+    // admin
+    adminGetAllOrder: async (req, res) => {
+        try {
+            const orders = await Order.find({}).populate({
+                path: 'orderItem',
+                populate: {
+                    path: 'productId'
+                }
+            }).exec();
+            res.status(200).json({
+                message: "Lấy tất cả orders thành công!",
+                data: orders
+            })
+        } catch (error) {
+            return errorTemplate(res, error.message)
+        }
+    },
 }
 
 module.exports = orderController;

@@ -3,6 +3,7 @@ import authReducer from './slices/authSlice'
 import userReducer from './slices/userSlice'
 import productReducer from './slices/productSlice'
 import importProductsReducer from './slices/importProductsSlice'
+import orderAdminReducer from './slices/orderAdminSlice'
 import storage from 'redux-persist/lib/storage'
 import autoMergeLevel2 from 'redux-persist/lib/stateReconciler/autoMergeLevel2';
 import {
@@ -22,7 +23,8 @@ const rootReducer = combineReducers({
     auth: authReducer,
     user: userReducer,
     product: productReducer,
-    importProduct: importProductsReducer
+    importProduct: importProductsReducer,
+    orderAdmin: orderAdminReducer
 })
 
 //------------------------------------------------------------//

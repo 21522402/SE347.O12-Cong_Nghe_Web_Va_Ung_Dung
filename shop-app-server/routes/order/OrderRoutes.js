@@ -4,6 +4,8 @@ const verify = require('../../middlewares/auth/verify');
 
 const orderRoutes = express.Router();
 
+orderRoutes.get('/adminGetAllOrder',OrderController.adminGetAllOrder)
+
 
 
 

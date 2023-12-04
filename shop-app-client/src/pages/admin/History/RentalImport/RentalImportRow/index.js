@@ -10,14 +10,11 @@ import { RiDeleteBin6Line } from "react-icons/ri";
 import styles from './RentalImportRow.module.scss'
 const cx = classNames.bind(styles)
 
-function RentalImportRow({ index, open, onClick, onClickRemoveItem, product }) {
+function RentalImportRow({ itemImport }) {
     const element = useRef(null)
     const [openDetail, setOpenDetail] = useState(false);
     const handleClickProducItem = () => {
         setOpenDetail(prev => !prev);
-    }
-    const handleClickDeleteItem = (index) => {
-        onClickRemoveItem(index)
     }
     useEffect(() => {
         if (openDetail) {
@@ -28,12 +25,12 @@ function RentalImportRow({ index, open, onClick, onClickRemoveItem, product }) {
     return (
         <React.Fragment >
             <tr onClick={handleClickProducItem} className={cx('product-item', { showDetail: openDetail })} ref={element}>
-                {/* <td className={cx('delete')} ><span onClick={() => handleClickDeleteItem(index)}><RiDeleteBin6Line className={cx('icon-delete')} /></span></td> */}
-                <td className={cx('code')}>HD00001</td>
-                <td className={cx('date')}>15/08/2019 11:05</td>
-                <td className={cx('productQuantity')}>5</td>
-                <td className={cx('itemQuantity')}>200</td>
-                <td className={cx('totalPrice')}>12,000,000</td>
+            
+                <td className={cx('code')}>{'#' + itemImport._id}</td>
+                <td className={cx('date')}>{itemImport.date}</td>
+                <td className={cx('productQuantity')}>{itemImport.productQuantity}</td>
+                <td className={cx('itemQuantity')}>{itemImport.itemQuantity}</td>
+                <td className={cx('totalPrice')}>{itemImport.finalMoney}</td>
 
 
             </tr>
@@ -42,7 +39,7 @@ function RentalImportRow({ index, open, onClick, onClickRemoveItem, product }) {
                 openDetail &&
                 <tr className={cx('product-detail')}>
                     <td colSpan={8} style={{ padding: '0' }}>
-                        <RentalImportDetail />
+                        <RentalImportDetail itemImport={itemImport}/>
                     </td>
                 </tr>
             }

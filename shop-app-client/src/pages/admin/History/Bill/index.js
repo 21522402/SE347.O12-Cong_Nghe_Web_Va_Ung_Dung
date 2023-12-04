@@ -99,46 +99,12 @@ function Bill() {
                                         </div>
                                         <input onChange={handleChangeDateInput} ref={dateInputElement} type="month" style={{ opacity: '0', top: '6px', left: '6px', right: '0', position: 'absolute' }} />
 
-                                        {/* <ul className={cx('product-type-list')}>
-                            <li>
-                                <span>Tất cả</span>
-                            </li>
-                            <li>
-                                <span>Quần dài</span>
-                            </li>
-                            <li>
-                                <span>Quần thể thao</span>
-                            </li>
-                            <li>
-                                <span>Quần short</span>
-                            </li>
-                        </ul> */}
                                         {showType && <DropDown items={listProductType} />}
 
                                     </div>
                                 </div>
 
-                                {/* function */}
-                                <div className={cx('function-box')}>
-
-                                    {/* thêm */}
-                                    <div className={cx('function-button')}>
-                                        <span onClick={() => { setTypeModal('add'); setShowModal(true) }} className={cx('btn', 'btn-succeed')}><AiOutlinePlus className={cx('icon')} /> Thêm mới</span>
-                                    </div>
-
-
-
-                                    {/* import */}
-                                    <div className={cx('function-button')}>
-
-                                        <span className={cx('btn', 'btn-succeed')}><FaFileImport className={cx('icon')} /> Import</span>
-                                    </div>
-                                    {/* export */}
-                                    <div className={cx('function-button')}>
-
-                                        <span className={cx('btn', 'btn-succeed')}><FaFileExport className={cx('icon')} /> Xuất file</span>
-                                    </div>
-                                </div>
+                             
                             </div>
 
                             <div className={cx('tableView')}>

@@ -1,34 +1,32 @@
 import classNames from "classnames/bind";
-import { AiOutlineSearch, AiFillCaretDown, AiOutlinePlus } from "react-icons/ai";
-import { FaFileImport, FaFileExport } from "react-icons/fa";
-import { IoSquareOutline, IoCheckboxSharp } from "react-icons/io5";
-import React, { useEffect, useState, createContext, useRef } from "react";
+import { AiOutlineSearch, AiFillCaretDown } from "react-icons/ai";
+import React, { useEffect, useState, useRef } from "react";
 import { Link } from "react-router-dom";
-
-
+import baseUrl from '~/utils/baseUrl';
+import axios from "axios";
+import convertDate from "~/utils/convertDate";
 import styles from './RentalImport.module.scss'
-import DropDown from "../../Products/DropDown";
 import RentalImportRow from "./RentalImportRow";
 
 const cx = classNames.bind(styles)
 
 function RentalImport() {
     const [inputFocus, setInputFocus] = useState(false);
-    const listProductCategory = ['Tất cả', 'Áo', 'Quần', 'Đồ lót']
-    const listProductType = ['Tất cả', 'Quần dài', 'Quần thể thao', 'Quần short']
-    const [showCategory, setShowCategory] = useState(false)
-    const [showType, setShowType] = useState(false)
-    const [showModal, setShowModal] = useState(false)
-    const [typeModal, setTypeModal] = useState('');
-
-
+    const [listImport,setListImport] = useState([])
+    const [listImportOrigin,setListImportOrigin] = useState([])
     const dateInputElement = useRef(null);
-    const [dateFilter, setDateFilter] = useState('')
+    const nowDate = convertDate(new Date()).substring(3);
+
+    const [filter,setFilter] = useState({
+        textSearch: '',
+        date: null,
+
+    }) 
 
     const handleMouseOverDateFilter = () => {
         dateInputElement.current?.showPicker();
     }
-    const convertDate = (value) => {
+    const convertDate2 = (value) => {
         const tmpArr = value.split('-');
         let date = [];
         for (let i = tmpArr.length - 1; i >= 0; i--) date = [...date, tmpArr[i]];
@@ -38,29 +36,72 @@ function RentalImport() {
     const handleChangeDateInput = (e) => {
         let value = e.target.value;
         if (!value) {
-            dateInputElement.current.valueAsDate = new Date();
-            const nowDate = convertDate(dateInputElement.current.value);
-            setDateFilter(nowDate)
+            setFilter(prev => ({...prev, date: ''}))
             return;
         }
-        const res = convertDate(value);
+        const res = convertDate2(value);
 
-        setDateFilter(res);
-    }
+        setFilter(prev => ({...prev, date: res}))
 
-    const handleClickItemCategory = (item) => {
-        console.log(item)
-        setShowCategory(prev => !prev);
     }
+    const getAllImports = async () => {
+        try {
+            const res = await axios.get(`${baseUrl}/api/importProduct/getAllImports`)
+            if (res) {
+                const list = res.data.data.map((item,index) => {
+                    console.log(item.date)
+                    const date = convertDate(item.date)
+                    return {
+                        ...item,
+                        date,
+                        productQuantity: item.listImportProducts.length,
+                        itemQuantity: item.listImportProducts.reduce((acc,cur) => acc + cur.quantity,0),
+                        listImportProducts: [...item.listImportProducts].reduce((acc,cur) => {
+                            const tmp = cur.colors.reduce((acc2,cur2) => {
+                                const tmp2 = cur2.sizes.reduce((acc3,cur3) => {
+                                    return acc3.concat({
+                                        productName: cur.productName,
+                                        productCode: cur.productCode,
+                                        productType: cur.productType,
+                                        color: cur2.colorName,
+                                        size: cur3.sizeName,
+                                        quantity: cur3.quantity,
+                                        unitPriceImport: cur.unitPriceImport,
+                                    })
+                                },[])
+                                return acc2.concat(tmp2)
+                            },[])
+                            return acc.concat(tmp)
+                        },[])
+
+                    }
+                })
+                console.log(res.data.data)
+                setListImport([...list])
+                setListImportOrigin([...list])
+                
+            }
+        } catch (error) {
+            
+        }
+    }
+    useEffect(() => {
+        getAllImports()
+    },[])
 
     useEffect(() => {
-        dateInputElement.current.valueAsDate = new Date();
-        const nowDate = convertDate(dateInputElement.current.value);
-        setDateFilter(nowDate)
+        setFilter(prev => ({...prev, date: ''}))
     }, [])
     useEffect(() => {
-        console.log(showCategory)
-    })
+        let tmp = [...listImportOrigin]
+        if (filter.date!=='') {
+            tmp = tmp.filter(item => item.date.substring(3) === filter.date)
+        }
+        if (filter.textSearch.trim()!=='') {
+            tmp = tmp.filter(item => ('#' + item._id).includes(filter.textSearch.trim()))
+        }
+        setListImport([...tmp])
+    },[filter])
     return (
 
         <div className={cx('wrapper')} >
@@ -87,58 +128,22 @@ function RentalImport() {
                                         'input-focus': inputFocus
                                     })}>
                                         <AiOutlineSearch className={cx('icon')} />
-                                        <input onFocus={() => setInputFocus(true)} onBlur={() => setInputFocus(false)} type="text" placeholder="Theo mã, tên khách hàng, ngày" className={cx('search-input')} />
+                                        <input onChange={(e) => setFilter(prev => ({...prev,textSearch: e.target.value }))} onFocus={() => setInputFocus(true)} onBlur={() => setInputFocus(false)} type="text" placeholder="Theo mã phiếu nhập" className={cx('search-input')} />
                                         <AiFillCaretDown className={cx('icon')} />
                                     </div>
 
 
-                                    {/* Loại hàng */}
+        
                                     <div className={cx('product-type')} onClick={handleMouseOverDateFilter}>
                                         <div className={cx('function-button')}>
-                                            <span className={cx('btn', 'btn-succeed')} >{dateFilter}<AiFillCaretDown style={{ marginLeft: '4px' }} /></span>
+                                            <span className={cx('btn', 'btn-succeed')} >{filter.date || nowDate}<AiFillCaretDown style={{ marginLeft: '4px' }} /></span>
                                         </div>
                                         <input onChange={handleChangeDateInput} ref={dateInputElement} type="month" style={{ opacity: '0', top: '6px', left: '6px', right: '0', position: 'absolute' }} />
 
-                                        {/* <ul className={cx('product-type-list')}>
-                            <li>
-                                <span>Tất cả</span>
-                            </li>
-                            <li>
-                                <span>Quần dài</span>
-                            </li>
-                            <li>
-                                <span>Quần thể thao</span>
-                            </li>
-                            <li>
-                                <span>Quần short</span>
-                            </li>
-                        </ul> */}
-                                        {showType && <DropDown items={listProductType} />}
-
                                     </div>
                                 </div>
 
-                                {/* function */}
-                                <div className={cx('function-box')}>
-
-                                    {/* thêm */}
-                                    <div className={cx('function-button')}>
-                                        <span onClick={() => { setTypeModal('add'); setShowModal(true) }} className={cx('btn', 'btn-succeed')}><AiOutlinePlus className={cx('icon')} /> Thêm mới</span>
-                                    </div>
-
-
-
-                                    {/* import */}
-                                    <div className={cx('function-button')}>
-
-                                        <span className={cx('btn', 'btn-succeed')}><FaFileImport className={cx('icon')} /> Import</span>
-                                    </div>
-                                    {/* export */}
-                                    <div className={cx('function-button')}>
-
-                                        <span className={cx('btn', 'btn-succeed')}><FaFileExport className={cx('icon')} /> Xuất file</span>
-                                    </div>
-                                </div>
+                           
                             </div>
 
                             <div className={cx('tableView')}>
@@ -156,9 +161,9 @@ function RentalImport() {
                                     </thead>
                                     <tbody>
 
-                                        {[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12].map((item, index) => {
+                                        {listImport.map((item, index) => {
                                             return (
-                                                <RentalImportRow key={index} />
+                                                <RentalImportRow key={index} itemImport={item}/>
                                             )
                                         })}
 

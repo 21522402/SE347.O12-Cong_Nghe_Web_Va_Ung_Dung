@@ -48,7 +48,22 @@ const addImport = async (req, res) => {
         })
     }
 }
+
+const getAllImports = async (req, res) => {
+    try {
+        const allImports = await ImportProduct.find().exec();
+        res.status(200).json({
+            message: 'Get all imports successfully',
+            data: allImports
+        })
+    } catch (error) {
+        res.status(400).json({
+            message: 'Get all imports failed'
+        })
+    }
+}
 module.exports = {
     getProductsByKey,
-    addImport
+    addImport,
+    getAllImports
 }
