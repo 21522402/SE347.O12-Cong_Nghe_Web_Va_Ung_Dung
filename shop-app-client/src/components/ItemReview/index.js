@@ -8,10 +8,13 @@ import TextareaAutosize from "react-textarea-autosize";
 import { BsFillImageFill, BsFillSendFill } from "react-icons/bs";
 import { AiFillCloseCircle } from "react-icons/ai";
 import { MdClose } from "react-icons/md";
+import axios from "axios";
+import baseUrl from "~/utils/baseUrl";
+import convertDate from "~/utils/convertDate";
 
 const cx = classNames.bind(styles);
 
-function ItemReview({ item }) {
+function ItemReview({ item , getReviewsById}) {
   const [isSent, setIsSent] = useState(false);
   const [isOpenRes, setIsOpen] = useState(false);
   function handleOpen() {
@@ -49,84 +52,96 @@ function ItemReview({ item }) {
     setImages((prevImages) => prevImages.filter((_, i) => i !== index));
   }
 
-  function sendFeedback() {
-    if (text.length > 0) {
-      setIsSent(true);
+  const handleSendReview = async () => {
+    const newListImage = images.map((itemp) => {
+      return itemp.imageBase64;
+    });
+    item.response = {
+      content: text,
+      imagesRsp: [...newListImage]
     }
-    else {
-      if (images.length > 0) {
+    item = {...item}
+    try {
+      if (text.length > 0) {
+        await axios.patch(`${baseUrl}/api/reviews/responseReview`, item)
+        getReviewsById();
         setIsSent(true);
       }
+      else {
+        if (images.length > 0) {
+          await axios.patch(`${baseUrl}/api/reviews/responseReview`, item)
+          getReviewsById();
+          setIsSent(true);
+        }
+      }
+    } catch (error) {
+      console.log(error.message);
     }
-  }
+  };
 
   return (
 
     <div className={cx("container-item")}>
       <div className={cx("avt-img")}>
-        <img src={item.userAvt} alt="avt" />
+        <img src={item.user.profilePhoto} alt="avt" />
       </div>
       <div className={cx("container-rieview")}>
         <div >
-          <div style={{ fontWeight: '600', marginBottom: '6px' }}>{item.userName}</div>
+          <div style={{ fontWeight: '600', marginBottom: '6px' }}>{item.user.fullName}</div>
           <div >
             <ReactStars
               count={5}
               size={12}
-              value={item.quantityStar}
+              value={item.star === false ? 0 : item.star}
               color1="#C4C4C4"
               color2="#ffb21d"
               edit={false}
             />
           </div>
           <div style={{ display: 'flex', marginTop: '6px', fontWeight: '300', fontSize: '13px', color: '#909090' }}>
-            <div >{item.dateReview}</div>
+            <div >{item.reviewDate}</div>
             <div style={{ marginLeft: '4px' }}>
-              | Phân loại hàng: {item.colorSize}
+              | Phân loại hàng: colorSize
             </div>
           </div>
         </div>
         <div className={cx("container-images")}>
           <div style={{ marginTop: '8px', color: '#909090' }}>Đánh giá: </div>
-          <span className={cx("message-review")}>{item.contentReview}</span>
+          <span className={cx("message-review")}>{item.content}</span>
           <div className={cx("images-list")}>
-            <img
-              src={item.reviewImg}
-              alt="imgReview"
-            />
-            <img
-              src={item.reviewImg}
-              alt="imgReview"
-            />
-            <img
-              src={item.reviewImg}
-              alt="imgReview"
-            />
+            {
+              item.imagesRv.map(i => (<img
+                src={i}
+                alt="imgReview"
+              />))
+            }
           </div>
         </div>
 
         {
-          typeof (item.contentResponse) !== 'undefined' &&
+          (item.isResponsed === true) &&
           <div className={cx("container-reply")}>
             <div className={cx("container-res")}>
               <div style={{ display: 'flex' }}>Phản hồi vào ngày
-                <div style={{ marginLeft: '4px' }}>{item.dateResponse}</div>
+                <div style={{ marginLeft: '4px' }}>{convertDate(item.response?.date)}</div>
               </div>
               <span className={cx("message-review")}>
-                {item.contentResponse}
+                {item.response?.content}
               </span>
               <div className={cx("images-list")}>
-                <img
-                  className={cx("image")}
-                  src={item.imageResponse}
-                  alt="imgRes"
-                />
+                {
+                  item.response?.imagesRsp.map(i => (<img
+                    className={cx("image")}
+                    src={i}
+                    alt="imgRes"
+                  />))
+                }
               </div>
             </div>
           </div>
         }
         {
-          !isOpenRes && typeof (item.contentResponse) === 'undefined' ?
+          !isOpenRes && (item.isResponsed === false) ?
             <div className={cx("container-reply")}>
               <div className={cx("container-res")}>
                 <div style={{ width: '100%', display: 'flex', flexDirection: 'row-reverse' }}>
@@ -134,12 +149,12 @@ function ItemReview({ item }) {
                 </div>
               </div>
             </div>
-            : isOpenRes && typeof (item.contentResponse) === 'undefined' ? <>
+            : isOpenRes && (item.isResponsed === false) ? <>
               {isSent ? (
                 <div className={cx("container-reply")}>
                   <div className={cx("container-res")}>
                     <div style={{ display: 'flex' }}>Phản hồi vào ngày
-                      <div style={{ marginLeft: '4px' }}>{item.dateResponse}</div>
+                      <div style={{ marginLeft: '4px' }}>{convertDate(item.response?.date)}</div>
                     </div>
                     <span className={cx("message-review")}>
                       {text}
@@ -158,7 +173,7 @@ function ItemReview({ item }) {
               ) : (
                 <div style={{ display: 'flex', flexDirection: 'row-reverse', alignItems: 'center', width: '100%', marginTop: '18px' }}>
                   <div style={{ display: 'flex', alignSelf: 'flex-end', marginBottom: '12px', cursor: 'pointer' }}>
-                    <div onClick={sendFeedback}>
+                    <div onClick={handleSendReview}>
                       <BsFillSendFill size={24} style={{ marginRight: '10px' }} />
                     </div>
                     <div onClick={selectFiles}>
@@ -203,12 +218,10 @@ function ItemReview({ item }) {
                         placeholder="Nhập nội dung"
                         onChange={(e) => setText(e.target.value)}
                         value={text}
-
                       />
                     </div>
                   </div>
                   <MdClose style={{ marginRight: '20px', fontSize: '26px', display: 'flex', alignSelf: 'flex-end', marginBottom: '10px', cursor: 'pointer' }} onClick={handleClose} />
-
                 </div>
               )}
             </> : <></>
