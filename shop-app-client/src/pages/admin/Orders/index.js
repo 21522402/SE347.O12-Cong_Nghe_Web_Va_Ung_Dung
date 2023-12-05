@@ -2,57 +2,93 @@ import classNames from "classnames/bind";
 import { AiOutlineSearch, AiFillCaretDown, AiOutlinePlus } from "react-icons/ai";
 import { FaFileImport, FaFileExport } from "react-icons/fa";
 import { IoSquareOutline, IoCheckboxSharp } from "react-icons/io5";
-import React, { useEffect, useState, createContext, useRef } from "react";
+import React, { useEffect, useState, useRef } from "react";
 
-
+import convertDate from "~/utils/convertDate";
 import styles from './Order.module.scss'
 import DropDown from "../Products/DropDown";
 import OrderRow from "./OrderRow";
+import { useDispatch, useSelector } from "react-redux";
+import baseUrl from '~/utils/baseUrl';
+import axios from "axios";
+import { setListOrders, filterListOrder } from "~/redux/slices/orderAdminSlice";
+
 
 const cx = classNames.bind(styles)
 
 function Orders() {
+    const dispatch = useDispatch()
+    const listOrders = useSelector(state => state.orderAdmin.listOrders)
     const [inputFocus, setInputFocus] = useState(false);
-    const listProductCategory = ['Tất cả', 'Áo', 'Quần', 'Đồ lót']
-    const listProductType = ['Tất cả', 'Quần dài', 'Quần thể thao', 'Quần short']
-    const [showCategory, setShowCategory] = useState(false)
-    const [showType, setShowType] = useState(false)
-    const [showModal, setShowModal] = useState(false)
-    const [typeModal, setTypeModal] = useState('');
-
-
+    const listStatus = ['Tất cả', 'Đã xác nhận', 'Đang giao hàng', 'Giao thành công','Đã hủy']
+    const [showStatus, setShowStatus] = useState(false)
+    const filterStatus = useRef(null)
     const dateInputElement = useRef(null);
-    const [dateFilter, setDateFilter] = useState('')
+    const [filter,setFilter] = useState({
+        status: '',
+        textSearch: '',
+        date: null,
+
+    }) 
 
     const handleMouseOverDateFilter = () => {
         dateInputElement.current?.showPicker();
     }
-    const convertDate = (value) => {
+    const convertDate2 = (value) => {
         const tmpArr = value.split('-');
         let date = [];
         for (let i = tmpArr.length - 1; i >= 0; i--) date = [...date, tmpArr[i]];
         const res = date.join('/');
         return res;
     }
+    const nowDate = convertDate(new Date());
     const handleChangeDateInput = (e) => {
         let value = e.target.value;
         if (!value) {
-            dateInputElement.current.valueAsDate = new Date();
-            const nowDate = convertDate(dateInputElement.current.value);
-            setDateFilter(nowDate)
+            setFilter(prev => ({...prev, date: ''}))
             return;
         }
-        const res = convertDate(value);
+        const res = convertDate2(value);
 
-        setDateFilter(res);
+        setFilter(prev => ({...prev, date: res}))
+
     }
 
     useEffect(() => {
-        dateInputElement.current.valueAsDate = new Date();
-        const nowDate = convertDate(dateInputElement.current.value);
-        setDateFilter(nowDate)
-    }, [])
+        setFilter(prev => ({...prev, date: ''}))
 
+    }, [])
+    useEffect(() => {
+        const handleClickOutSide = (e) => {
+            if (filterStatus.current && !filterStatus.current.contains(e.target)) {
+                setShowStatus(false)
+            }
+        }
+        document.addEventListener("mousedown", handleClickOutSide)
+        return () => {
+        document.removeEventListener("mousedown", handleClickOutSide)
+
+        }
+    },[filterStatus])
+    const getAllOrders = async () => {
+        try {
+            const res = await axios.get(`${baseUrl}/api/orders/adminGetAllOrder`)
+            if (res) {
+                console.log(res.data)
+                dispatch(setListOrders(res.data.data))
+                
+            }
+        } catch (error) {
+            
+        }
+    }
+
+    useEffect(() => {
+        getAllOrders();
+    }, [])
+    useEffect(() => {
+        dispatch(filterListOrder(filter))
+    },[filter])
     return (
         <div className={cx('wrapper')}>
             <div className={cx('container')}>
@@ -68,81 +104,35 @@ function Orders() {
                                 'input-focus': inputFocus
                             })}>
                                 <AiOutlineSearch className={cx('icon')} />
-                                <input onFocus={() => setInputFocus(true)} onBlur={() => setInputFocus(false)} type="text" placeholder="Theo mã, tên khách hàng" className={cx('search-input')} />
+                                <input onChange={(e) => setFilter(prev => ({...prev, textSearch: e.target.value}))} onFocus={() => setInputFocus(true)} onBlur={() => setInputFocus(false)} type="text" placeholder="Theo mã, tên khách hàng" className={cx('search-input')} />
                                 <AiFillCaretDown className={cx('icon')} />
                             </div>
 
                             {/* nhóm hàng */}
-                            <div className={cx('product-category')} onMouseOver={() => setShowCategory(true)} onMouseOut={() => setShowCategory(false)}>
+                            <div  ref={filterStatus} className={cx('product-category')} onClick={() => setShowStatus(prev => !prev)}>
                                 <div className={cx('function-button')}>
-                                    <span className={cx('btn', 'btn-succeed')}>Trạng thái <AiFillCaretDown /></span>
+                                    <span className={cx('btn', 'btn-succeed')}>{filter.status || 'Trạng thái'} <AiFillCaretDown /></span>
                                 </div>
 
-                                {/* <ul className={cx('product-category-list')}>
-                            <li>
-                                <span>Tất cả</span>
-                            </li>
-                            <li>
-                                <span>Áo</span>
-                            </li>
-                            <li>
-                                <span>Quần</span>
-                            </li>
-                            <li>
-                                <span>Đồ lót</span>
-                            </li>
-                        </ul> */}
 
-                                {showCategory && <DropDown items={listProductCategory} />}
+                                {showStatus && <DropDown items={listStatus} onClick={(item) => setFilter(prev => ({...prev, status: item}))}/>}
                             </div>
 
                             {/* Loại hàng */}
                             <div className={cx('product-type')} onClick={handleMouseOverDateFilter}>
                                 <div className={cx('function-button')}>
-                                    <span className={cx('btn', 'btn-succeed')} >{dateFilter}<AiFillCaretDown style={{ marginLeft: '4px' }} /></span>
+                                    <span className={cx('btn', 'btn-succeed')} >{filter.date || nowDate}<AiFillCaretDown style={{ marginLeft: '4px' }} /></span>
                                 </div>
                                 <input onChange={handleChangeDateInput} ref={dateInputElement} type="date" style={{ opacity: '0', top: '6px', left: '6px', right: '0', position: 'absolute' }} />
 
-                                {/* <ul className={cx('product-type-list')}>
-                            <li>
-                                <span>Tất cả</span>
-                            </li>
-                            <li>
-                                <span>Quần dài</span>
-                            </li>
-                            <li>
-                                <span>Quần thể thao</span>
-                            </li>
-                            <li>
-                                <span>Quần short</span>
-                            </li>
-                        </ul> */}
-                                {showType && <DropDown items={listProductType} />}
+                              
+                        
 
                             </div>
                         </div>
 
                         {/* function */}
-                        <div className={cx('function-box')}>
-
-                            {/* thêm */}
-                            <div className={cx('function-button')}>
-                                <span onClick={() => { setTypeModal('add'); setShowModal(true) }} className={cx('btn', 'btn-succeed')}><AiOutlinePlus className={cx('icon')} /> Thêm mới</span>
-                            </div>
-
-
-
-                            {/* import */}
-                            <div className={cx('function-button')}>
-
-                                <span className={cx('btn', 'btn-succeed')}><FaFileImport className={cx('icon')} /> Import</span>
-                            </div>
-                            {/* export */}
-                            <div className={cx('function-button')}>
-
-                                <span className={cx('btn', 'btn-succeed')}><FaFileExport className={cx('icon')} /> Xuất file</span>
-                            </div>
-                        </div>
+                     
                     </div>
 
                     <div className={cx('tableView')}>
@@ -161,9 +151,9 @@ function Orders() {
                             </thead>
                             <tbody>
 
-                                {[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12].map((item, index) => {
+                                {listOrders.map((item, index) => {
                                     return (
-                                        <OrderRow key={index} />
+                                        <OrderRow key={index} index={index}/>
                                     )
                                 })}
 

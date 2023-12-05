@@ -18,7 +18,7 @@ function RadioButton({listItems, filterValueChecked, selectedItem}) {
                     {
                         listItems.map((item, index) => {
                             return (
-                                <li key={index} value={index} onClick={() => {setSelected(item);}} className={cx('outer-child')}>
+                                <li key={index} value={index} onClick={() => {selected.id === -1 ? setSelected(item): setSelected({id: -1, name: ''})}} className={cx('outer-child')}>
                                     <div className={cx('sub-outer')}>
                                         <div>
                                             <div className={cx('dot-outer')}>

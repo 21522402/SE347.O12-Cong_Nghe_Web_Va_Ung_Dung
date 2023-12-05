@@ -6,7 +6,7 @@ const productTypeSchema = new mongoose.Schema({
         type: String,
         require: [true, 'Product type name is required.']
     },
-    productCategoryId:{
+    productCategory:{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'ProductCategory'
     }

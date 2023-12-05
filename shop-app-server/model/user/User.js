@@ -77,12 +77,15 @@ const userSchema = new mongoose.Schema(
             type: [
                 {
                     cartItemId: mongoose.Schema.Types.ObjectId,
-                    productId: mongoose.Schema.Types.ObjectId,
+                    product: {
+                        type: mongoose.Schema.Types.ObjectId,
+                        ref: 'Product'
+                    },
                     productName: String,
                     productPrice: Number,
                     size: String,
                     color: String,
-                    quantity: Number
+                    quantity: Number,                    
                 }
             ]
         },
@@ -94,11 +97,11 @@ const userSchema = new mongoose.Schema(
                 }
             ]
         },
-        feedback: {
+        feedbacks: {
             type: [
                 {
                     type: mongoose.Schema.Types.ObjectId,
-                    ref: 'Feeback'
+                    ref: 'Feedback'
                 }
             ]
         },
@@ -133,7 +136,6 @@ const userSchema = new mongoose.Schema(
             virtuals: true
         },
         timestamps: true
-
     }
 );
 userSchema.pre("save", async function(next){

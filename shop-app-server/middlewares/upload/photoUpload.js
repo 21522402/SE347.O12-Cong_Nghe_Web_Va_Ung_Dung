@@ -2,6 +2,7 @@ const multer = require('multer')
 const mutlerStorage = multer.memoryStorage();
 const sharp = require('sharp')
 const path = require('path')
+
 const multerFilter = (req, file, cb) => {
     if (file.mimetype.startsWith("image")) {
         cb(null, true)
@@ -15,7 +16,6 @@ const PhotoUpload = multer({
     fileFilter: multerFilter,
     limits: { fileSize: 1000000 }
 })
-
 
 const voucherImgResizing = async (req, res, next) => {
     if (typeof (req.file) === 'undefined') { next(); }

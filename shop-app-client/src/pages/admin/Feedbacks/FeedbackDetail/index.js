@@ -1,13 +1,11 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { useRef, useState } from "react";
 import classNames from "classnames/bind";
 import styles from "./FeedbackDetail.module.scss";
-import { item_product } from "~/assets/images";
 import { AiFillCloseCircle } from "react-icons/ai";
 import TextareaAutosize from "react-textarea-autosize";
 import { BsFillSendFill, BsFillImageFill } from "react-icons/bs";
 import ContentItemFeedback from "~/components/ContentItemFeedback";
-import { MdClose } from "react-icons/md";
 const cx = classNames.bind(styles);
 
 function FeedbackDetail({ itemFeedbackActive, send }) {
@@ -25,13 +23,18 @@ function FeedbackDetail({ itemFeedbackActive, send }) {
     for (let i = 0; i < files.length; i++) {
       if (files[i].type.split("/")[0] !== "image") continue;
       if (!images.some((e) => e.name === files[i].name)) {
-        setImages((prevImages) => [
-          ...prevImages,
-          {
-            name: files[i].name,
-            url: URL.createObjectURL(files[i]),
-          },
-        ]);
+        const reader = new FileReader();
+        reader.readAsDataURL(files[i]);
+        reader.onload = () => {
+          setImages((prevImages) => [
+            ...prevImages,
+            {
+              name: files[i].name,
+              url: URL.createObjectURL(files[i]),
+              imageBase64: reader.result,
+            },
+          ]);
+        };
       }
     }
   }
@@ -41,107 +44,108 @@ function FeedbackDetail({ itemFeedbackActive, send }) {
   }
 
   function sendFeedback() {
-    itemFeedbackActive.isRespon = true;
-    itemFeedbackActive.contentResponsed.text = text;
+    let timeRes = Date.now();
+    itemFeedbackActive.response.date = timeRes;
+    itemFeedbackActive.response.content = text;
     const newListImage = images.map((itemp) => {
-      return itemp.url;
+      return itemp.imageBase64;
     });
-    itemFeedbackActive.contentResponsed.listImage = [...newListImage];
+    itemFeedbackActive.response.imagesRsp = [...newListImage];
     send({ ...itemFeedbackActive });
-    // if (text.length > 0)
-    // {
-
-    // }
-    // else
-    // {
-    //   if (images.length > 0)
-    //   {
-    //     setIsSent(true);
-    //   }
-    // }
   }
   return (
     <div className={cx("wrapper")}>
-      <div style={{ marginTop: '10px' }}>
-        <ContentItemFeedback contentFeedback={itemFeedbackActive.contentFeedback} />
+      <div style={{ marginTop: "10px" }}>
+        <ContentItemFeedback contentFeedback={itemFeedbackActive} />
 
-        {itemFeedbackActive.isRespon ? (
-            <div className={cx("container-reply")}>
-              <div className={cx("container-res")}>
-                <div style={{ display: 'flex', marginLeft:'8px' }}>Phản hồi
-                </div>
-                <span className={cx("message-review")} style={{marginLeft:'8px'}}>
-                  {itemFeedbackActive.contentResponsed.text}
-                </span>
-                {itemFeedbackActive.contentResponsed.listImage.map((item, index) => {
-                  return (
-                    <div className={cx("images-list")} key={index}>
-                      <img
-                        className={cx("image")}
-                        src={item}
-                        alt="img"
-                      />
-                    </div>
-                  )
-
-                })}
-              </div>
+        {itemFeedbackActive.isResponsed ? (
+          <div className={cx("container-reply")}>
+            <div className={cx("container-res")}>
+              <div style={{ display: "flex", marginLeft: "8px" }}>Phản hồi</div>
+              <span
+                className={cx("message-review")}
+                style={{ marginLeft: "8px" }}
+              >
+                {itemFeedbackActive.response.content}
+              </span>
+              {itemFeedbackActive.response.imagesRsp.map((item, index) => {
+                return (
+                  <div className={cx("images-list")} key={index}>
+                    <img className={cx("image")} src={item} alt="img" />
+                  </div>
+                );
+              })}
             </div>
+          </div>
         ) : (
-          <div style={{ display: 'flex', flexDirection: 'row-reverse', alignItems: 'center', width: '93%',margin:'10px 100px 30px 00px' }}>
-                  <div style={{ display: 'flex', alignSelf: 'flex-end', marginBottom: '12px', cursor: 'pointer' }}>
-                    <div onClick={sendFeedback}>
-                      <BsFillSendFill size={24} style={{ marginRight: '10px' }} />
-                    </div>
-                    <div onClick={selectFiles}>
-                      <BsFillImageFill size={24} />
-                    </div>
-                    <input
-                      type="file"
-                      name="file"
-                      multiple
-                      hidden
-                      ref={fileInputRef}
-                      onChange={onFileSelect}
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "row-reverse",
+              alignItems: "center",
+              width: "93%",
+              margin: "10px 100px 30px 00px",
+            }}
+          >
+            <div
+              style={{
+                display: "flex",
+                alignSelf: "flex-end",
+                marginBottom: "12px",
+                cursor: "pointer",
+              }}
+            >
+              <div onClick={sendFeedback}>
+                <BsFillSendFill size={24} style={{ marginRight: "10px" }} />
+              </div>
+              <div onClick={selectFiles}>
+                <BsFillImageFill size={24} style={{ marginRight: "10px" }} />
+              </div>
+              <input
+                type="file"
+                name="file"
+                multiple
+                hidden
+                ref={fileInputRef}
+                onChange={onFileSelect}
+              />
+            </div>
+            <div style={{ width: "85%" }}>
+              <div
+                style={{
+                  width: "98%",
+                  height: "auto",
+                  display: "flex",
+                  alignItems: "flex-start",
+                  justifyContent: "flex-start",
+                  flexWrap: "wrap",
+                  padding: "20px 12px",
+                  border: "0.5px solid #8c8c8c",
+                  borderRadius: "4px 4px 0 4px",
+                }}
+              >
+                {images.map((image, index) => (
+                  <div className={cx("images-list")} key={index}>
+                    <img
+                      className={cx("image")}
+                      src={image.url}
+                      alt={image.name}
+                    />
+                    <AiFillCloseCircle
+                      className={cx("delete-img")}
+                      onClick={() => deleteImage(index)}
                     />
                   </div>
-                  <div style={{ width: '85%' }}>
-                    <div style={{
-                      width: '98%',
-                      height: 'auto',
-                      display: 'flex',
-                      alignItems: 'flex-start',
-                      justifyContent: 'flex-start',
-                      flexWrap: 'wrap',
-                      padding: '12px',
-                      border: '0.5px solid #8c8c8c',
-                      borderRadius: '4px 4px 0 4px'
-                    }}>
-                      {images.map((image, index) => (
-                        <div className={cx("images-list")} key={index}>
-                          <img
-                            className={cx("image")}
-                            src={image.url}
-                            alt={image.name}
-                          />
-                          <AiFillCloseCircle
-                            className={cx("delete-img")}
-                            onClick={() => deleteImage(index)}
-                          />
-                        </div>
-                      ))}
-                      <TextareaAutosize
-                        className={cx("input-text")}
-                        placeholder="Nhập nội dung"
-                        onChange={(e) => setText(e.target.value)}
-                        value={text}
-
-                      />
-                    </div>
-                  </div>
-                  {/* <MdClose style={{ marginRight: '20px', fontSize: '26px', display: 'flex', alignSelf: 'flex-end', marginBottom: '10px', cursor: 'pointer' }} onClick={handleClose} /> */}
-
-                </div>
+                ))}
+                <TextareaAutosize
+                  className={cx("input-text")}
+                  placeholder="Nhập nội dung"
+                  onChange={(e) => setText(e.target.value)}
+                  value={text}
+                />
+              </div>
+            </div>
+          </div>
         )}
       </div>
     </div>

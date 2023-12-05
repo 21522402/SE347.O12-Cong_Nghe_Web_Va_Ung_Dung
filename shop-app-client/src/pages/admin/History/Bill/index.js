@@ -1,34 +1,33 @@
 import classNames from "classnames/bind";
-import { AiOutlineSearch, AiFillCaretDown, AiOutlinePlus } from "react-icons/ai";
-import { FaFileImport, FaFileExport } from "react-icons/fa";
-import { IoSquareOutline, IoCheckboxSharp } from "react-icons/io5";
-import React, { useEffect, useState, createContext, useRef } from "react";
+import { AiOutlineSearch, AiFillCaretDown } from "react-icons/ai";
+import React, { useEffect, useState, useRef } from "react";
 import { Link } from "react-router-dom";
-
-
+import convertDate from "~/utils/convertDate";
+import convertDateTime from "~/utils/convertDate2";
+import baseUrl from '~/utils/baseUrl';
+import axios from "axios";
 import styles from './Bill.module.scss'
-import DropDown from "../../Products/DropDown";
 import BillRow from "./BillRow";
 
 const cx = classNames.bind(styles)
 
 function Bill() {
+    const [listBill,setListBill] = useState([])
+    const [listBillOrigin,setListBillOrigin] = useState([])
     const [inputFocus, setInputFocus] = useState(false);
-    const listProductCategory = ['Tất cả', 'Áo', 'Quần', 'Đồ lót']
-    const listProductType = ['Tất cả', 'Quần dài', 'Quần thể thao', 'Quần short']
-    const [showCategory, setShowCategory] = useState(false)
-    const [showType, setShowType] = useState(false)
-    const [showModal, setShowModal] = useState(false)
-    const [typeModal, setTypeModal] = useState('');
-
-
     const dateInputElement = useRef(null);
-    const [dateFilter, setDateFilter] = useState('')
+    const nowDate = convertDate(new Date())
+
+    const [filter,setFilter] = useState({
+        textSearch: '',
+        date: null,
+
+    }) 
 
     const handleMouseOverDateFilter = () => {
         dateInputElement.current?.showPicker();
     }
-    const convertDate = (value) => {
+    const convertDate2 = (value) => {
         const tmpArr = value.split('-');
         let date = [];
         for (let i = tmpArr.length - 1; i >= 0; i--) date = [...date, tmpArr[i]];
@@ -38,29 +37,54 @@ function Bill() {
     const handleChangeDateInput = (e) => {
         let value = e.target.value;
         if (!value) {
-            dateInputElement.current.valueAsDate = new Date();
-            const nowDate = convertDate(dateInputElement.current.value);
-            setDateFilter(nowDate)
+            setFilter(prev => ({...prev, date: ''}))
             return;
         }
-        const res = convertDate(value);
+        const res = convertDate2(value);
 
-        setDateFilter(res);
+        setFilter(prev => ({...prev, date: res}))
+
     }
 
-    const handleClickItemCategory = (item) => {
-        console.log(item)
-        setShowCategory(prev => !prev);
+    const getAllBills = async () => {
+        try {
+            const res = await axios.get(`${baseUrl}/api/bill/getAllBills`)
+            if (res) {
+                const tmp = [...res.data.data].map(item => {
+                    const time = convertDateTime(item.time)
+                    return {
+                        ...item,
+                        time,
+                    }
+                })
+                setListBill([...tmp])
+                setListBillOrigin([...tmp])
+                
+            }
+        } catch (error) {
+            
+        }
     }
+    useEffect(() => {
+        getAllBills()
+    },[])
 
     useEffect(() => {
-        dateInputElement.current.valueAsDate = new Date();
-        const nowDate = convertDate(dateInputElement.current.value);
-        setDateFilter(nowDate)
+        setFilter(prev => ({...prev, date: ''}))
     }, [])
     useEffect(() => {
-        console.log(showCategory)
-    })
+        let tmp = [...listBillOrigin]
+        if (filter.date!=='') {
+            tmp = tmp.filter(item => item.time.split(' ')[0] === filter.date)
+        }
+        if (filter.textSearch.trim()!=='') {
+            tmp = tmp.filter(item => ('#' + item._id).includes(filter.textSearch.trim())
+            ||  ('#' + item.orderId).includes(filter.textSearch.trim())
+            ||  (item.customerName.toLowerCase()).includes(filter.textSearch.trim().toLowerCase())
+            ||  (item.phoneNumber).includes(filter.textSearch.trim()))
+        }
+        setListBill([...tmp])
+    },[filter])
     return (
 
         <div className={cx('wrapper')} >
@@ -87,7 +111,7 @@ function Bill() {
                                         'input-focus': inputFocus
                                     })}>
                                         <AiOutlineSearch className={cx('icon')} />
-                                        <input onFocus={() => setInputFocus(true)} onBlur={() => setInputFocus(false)} type="text" placeholder="Theo mã, tên khách hàng, ngày" className={cx('search-input')} />
+                                        <input onChange={(e) => setFilter(prev => ({...prev,textSearch: e.target.value }))} onFocus={() => setInputFocus(true)} onBlur={() => setInputFocus(false)} type="text" placeholder="Theo mã hóa đơn, đơn hàng, tên khách hàng,..." className={cx('search-input')} />
                                         <AiFillCaretDown className={cx('icon')} />
                                     </div>
 
@@ -95,50 +119,16 @@ function Bill() {
                                     {/* Loại hàng */}
                                     <div className={cx('product-type')} onClick={handleMouseOverDateFilter}>
                                         <div className={cx('function-button')}>
-                                            <span className={cx('btn', 'btn-succeed')} >{dateFilter}<AiFillCaretDown style={{ marginLeft: '4px' }} /></span>
+                                            <span className={cx('btn', 'btn-succeed')} >{filter.date || nowDate}<AiFillCaretDown style={{ marginLeft: '4px' }} /></span>
                                         </div>
-                                        <input onChange={handleChangeDateInput} ref={dateInputElement} type="month" style={{ opacity: '0', top: '6px', left: '6px', right: '0', position: 'absolute' }} />
+                                        <input onChange={handleChangeDateInput} ref={dateInputElement} type="date" style={{ opacity: '0', top: '6px', left: '6px', right: '0', position: 'absolute' }} />
 
-                                        {/* <ul className={cx('product-type-list')}>
-                            <li>
-                                <span>Tất cả</span>
-                            </li>
-                            <li>
-                                <span>Quần dài</span>
-                            </li>
-                            <li>
-                                <span>Quần thể thao</span>
-                            </li>
-                            <li>
-                                <span>Quần short</span>
-                            </li>
-                        </ul> */}
-                                        {showType && <DropDown items={listProductType} />}
+                           
 
                                     </div>
                                 </div>
 
-                                {/* function */}
-                                <div className={cx('function-box')}>
-
-                                    {/* thêm */}
-                                    <div className={cx('function-button')}>
-                                        <span onClick={() => { setTypeModal('add'); setShowModal(true) }} className={cx('btn', 'btn-succeed')}><AiOutlinePlus className={cx('icon')} /> Thêm mới</span>
-                                    </div>
-
-
-
-                                    {/* import */}
-                                    <div className={cx('function-button')}>
-
-                                        <span className={cx('btn', 'btn-succeed')}><FaFileImport className={cx('icon')} /> Import</span>
-                                    </div>
-                                    {/* export */}
-                                    <div className={cx('function-button')}>
-
-                                        <span className={cx('btn', 'btn-succeed')}><FaFileExport className={cx('icon')} /> Xuất file</span>
-                                    </div>
-                                </div>
+                             
                             </div>
 
                             <div className={cx('tableView')}>
@@ -146,20 +136,21 @@ function Bill() {
                                     <thead className={cx('thead')}>
                                         <tr>
                                             {/* <th className={cx('delete')}></th> */}
-                                            <th className={cx('code')}>Mã hóa đơn</th>
+                                            <th className={cx('billCode')}>Mã hóa đơn</th>
+                                            <th className={cx('orderCode')}>Mã đơn hàng</th>
                                             <th className={cx('date')}>Thời gian</th>
                                             <th className={cx('payMethod')}>Phương thức thanh toán</th>
                                             <th className={cx('customerName')}>Tên khách hàng</th>
                                             <th className={cx('customerPhone')}>Số điện thoại</th>
-                                            <th className={cx('totalPrice')}>Tổng tiền</th>
+                                            <th className={cx('totalPrice')}>Tiền thanh toán</th>
 
                                         </tr>
                                     </thead>
                                     <tbody>
 
-                                        {[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12].map((item, index) => {
+                                        {listBill.map((item, index) => {
                                             return (
-                                                <BillRow key={index} />
+                                                <BillRow key={index} itemBill={item}/>
                                             )
                                         })}
 

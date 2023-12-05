@@ -6,6 +6,8 @@ const validationId = require("../../utils/validationId");
 const OrderItem = require('../../model/orderItem/OrderItem');
 const Order = require('../../model/order/Order');
 const Review = require('../../model/review/Review');
+const cloudinaryUploadImage = require('../../utils/cloudinary');
+const Product = require('../../model/product/Product');
 
 const userRegisterCtrl = async (req, res) => {
     try {
@@ -260,15 +262,17 @@ const getAllOrderCtrl = async (req, res) => {
 const updateOrderItem  = async (id, data) => {
     try {
 
-        const user = await User.findById(id)
+        const order = await Order.findById(id)
 
-        if(!user){
-            throw new Error('User is not existed. Please log in!');
+        if(!order){
+            throw new Error('Order is not existed. Please log in!');
         }
 
-        const orderIds = user.orders
+        const orderItemIds = order.orderItem
 
-        return successTemplate(res, orderIds, "Lấy tất cả địa chỉ thành công!", 200)
+        orderItemIds ? orderItemIds.push(data): orderItemIds = []
+
+        await Order.findByIdAndUpdate(id, {orderItem: orderItemIds}, {new: true})
     }
     catch(err){
         throw new Error(err);
@@ -288,7 +292,8 @@ const createOrderCtrl = async (req, res) => {
         }
         const {orderItem, ...other} = req?.body
         const order = await Order.create({
-            ...other
+            ...other,
+            orderDate: new Date()
         })
 
         const orderIds = user.orders
@@ -297,13 +302,13 @@ const createOrderCtrl = async (req, res) => {
 
         const promise = (item) => new Promise(async resolve => {
             const orderItem = await OrderItem.create({
-                "productName": item.productName,
-                "image": item.image,
-                "size": item.size,
-                "color": item.color,
-                "quanlity": item.quantity,
-                "price": item.price,
-                "discountPerc": item.discountPerc
+                "productName": item?.productName,
+                "image": item?.image,
+                "size": item?.size,
+                "color": item?.color,
+                "quantity": item?.quantity,
+                "price": item?.price,
+                "discountPerc": item?.discountPerc
             })
             
             resolve(orderItem.id)
@@ -315,17 +320,15 @@ const createOrderCtrl = async (req, res) => {
             p = p.then(async (data) => {
                 
                 await updateOrderItem(order.id,data)
-                console.log(["i"], data)
                 return promise(req?.body?.orderItem[i]);
             })
         }
 
         p.then(async data => {
-            await await updateOrderItem(order.id,data)
-            console.log(["i"], data)
+            await updateOrderItem(order.id,data)
         })
 
-        return successTemplate(res, "listOrderId", "Create address successfully!", 200)
+        return successTemplate(res, user.id, "Create order successfully!", 200)
 
     } catch (error) {
         return errorTemplate(res, error.message)
@@ -370,7 +373,7 @@ const getAllReviewCtrl = async (req, res) => {
             throw new Error('User is not existed. Please log in!');
         }
 
-        return successTemplate(res, user, "Create address successfully!", 200)
+        return successTemplate(res, user.orders, "Create address successfully!", 200)
 
 
     } catch (error) {
@@ -378,11 +381,29 @@ const getAllReviewCtrl = async (req, res) => {
     }
 }
 
+const updateImagesReview = async (id, data) => {
+    try{
+        const review = await Review.findById(id)
+
+        if(!review){
+            throw new Error('Review is not existed. Please log in!');
+        }
+
+        const images = review.imagesRv
+
+        images ? images.push(data): images = []
+
+        await Review.findByIdAndUpdate(id, {imagesRv: images}, {new: true})
+    }
+    catch(err){
+
+    }
+}
+
 const createReviewCtrl = async (req, res) => {
     try {
         const userId = req?.params?.id;
         validationId(userId)
-
         
         const review = await Review.create({
             user: userId,
@@ -390,22 +411,242 @@ const createReviewCtrl = async (req, res) => {
             orderItem: req?.params?.orderItemId,
             content: req?.body?.content, 
             reviewDate: new Date(), 
-            imagesRv: req?.body?.imagesRv, 
             isResponsed: false
         })
 
-        await User.findByIdAndUpdate(userId, {
-            $push: {
-                reviews: review.id,
-            },
+        await OrderItem.findByIdAndUpdate(req?.params?.orderItemId, {review: review._id}, {new:true})
+
+        const user = await User.findById(userId)
+
+        if(!user){
+            throw new Error('User is not existed. Please log in!');
+        }
+
+        let reviewIds = user.reviews
+
+        reviewIds ? reviewIds.push(review._id): reviewIds = []
+
+        await User.findByIdAndUpdate(userId, {reviews: reviewIds}, {new: true})
+
+        const promise = (item) => new Promise(async resolve => {
+            const imgUpload = await cloudinaryUploadImage(item, {
+                folder:'reviews'
+            })
+            resolve(imgUpload?.url)
+        });
+
+        
+        for (let i = 0; i < req?.body?.imagesRv.length; i++) {
+            if(i === 0) p = promise(req?.body?.imagesRv[0])
+            else p = p.then(async (data) => {
+                await updateImagesReview(review._id, data)
+                return promise(req?.body?.imagesRv[i]);
+            })
+        }
+
+        p.then(async data => {
+            await updateImagesReview(review._id, data)
         })
 
-        await OrderItem.findByIdAndUpdate(req?.params?.orderItemId, {
-            review: review.id
-        })
+        return successTemplate(res, req?.body, "Create address successfully!", 200)
 
-        return successTemplate(res, review, "Create address successfully!", 200)
+    } catch (error) {
+        return errorTemplate(res, error.message)
+    }
+}
 
+const getForuProductCtrl = async(req, res) => {
+    try {
+        const products = await Product.find();
+        return res.status(200).json(products)
+
+    } catch (error) {
+        return errorTemplate(res, error.message)
+    }
+}
+
+//cart
+
+const increaseQuantityCartItem = async(req, res) => {
+    try {
+        const user = await User.findById(req?.params?.id)
+        
+        if(!user){
+            throw new Error('User is not existed. Please log in!');
+        }
+
+        let cartIts = user.cart
+        const productId = cartIts.find((item) => item.id === req?.params?.cartItemId).product
+
+        const product = await Product.findById(productId);
+
+        if(!product){
+            throw new Error('Product is not existed!');
+        } 
+        let size = product.colors?.find(item => item.colorName == req?.body?.color)?.sizes?.find(item => item.sizeName === req?.body?.size)
+
+        if(size?.quantity === 0) {
+            return res.json({
+                result: false,
+                message: "Đã hết sản phẩm có size và màu mà bạn chọn!"
+            })
+        }
+
+        cartIts = cartIts.map(item => item.id === req?.params?.cartItemId ? {...item, quantity: ++item.quantity} : {...item})
+
+        // await Product.updateOne({
+        //     _id: product._id, 
+        //     "colors.colorName": req?.body?.color,
+        //     "colors.sizes.sizeName": req?.body?.size
+        // },{$inc: {
+        //     'colors.$[].sizes.$[xxx].quantity': -1
+        // }},
+        // {arrayFilters: [
+        //     {"xxx.sizeName": req?.body?.size}
+        // ]})
+
+        await User.findByIdAndUpdate(req?.params?.id, {cart: cartIts}, {new: true})
+
+        return successTemplate(res, product._id, "Update cart successfully!", 200)
+    } catch (error) {
+        return errorTemplate(res, error.message)
+    }
+}
+const decreaseQuantityCartItem = async(req, res) => {
+    try {
+        const user = await User.findById(req?.params?.id)
+        
+        if(!user){
+            throw new Error('User is not existed. Please log in!');
+        }
+
+        let cartIts = user.cart
+
+        let cartItem = cartIts.find(item => item.id === req?.params?.cartItemId)
+        if(cartItem.quantity == 1){
+            cartIts = cartIts.filter(item => item.id !== req?.params?.cartItemId)
+            await User.findByIdAndUpdate(req?.params?.id, {cart: cartIts}, {new: true})
+            return res.json({
+                result: false,
+                message: "Xóa sản phẩm nhé!"
+            })
+        }
+        else{
+            cartIts = cartIts.map(item => item.id === req?.params?.cartItemId ? {...item, quantity: --item.quantity} : {...item})
+            await User.findByIdAndUpdate(req?.params?.id, {cart: cartIts}, {new: true})
+            return successTemplate(res, cartItem._id, "Update cart successfully!", 200)
+        }
+    } catch (error) {
+        return errorTemplate(res, error.message)
+    }
+}
+
+const deleteCartItem = async(req, res) => {
+    try {
+        const user = await User.findById(req?.params?.id)
+        
+        if(!user){
+            throw new Error('User is not existed. Please log in!');
+        }
+
+        let cartIts = user.cart
+
+        cartIts = cartIts.filter(item => item.id !== req?.params?.cartItemId)
+
+        await User.findByIdAndUpdate(req?.params?.id, {cart: cartIts}, {new: true})
+
+        return successTemplate(res, req?.params?.cartItemId, "Update cart successfully!", 200)
+    } catch (error) {
+        return errorTemplate(res, error.message)
+    }
+}
+
+const createCartItem = async(req, res) => {
+    try {
+        const user = await User.findById(req?.params?.id)
+
+        if(!user){
+            throw new Error('User is not existed. Please log in!');
+        }
+
+        const cart = user.cart
+
+        cart ? cart.push({...req?.body}) : cart = [{...req?.body}]
+
+        const product = await Product.findById(req?.body?.product);
+
+        if(!product){
+            throw new Error('Product is not existed!');
+        } 
+        let size = product.colors?.find(item => item.colorName == req?.body?.color)?.sizes?.find(item => item.sizeName === req?.body?.size)
+
+        if(size?.quantity === 0) {
+            return res.json({
+                result: false,
+                message: "Đã hết sản phẩm có size và màu mà bạn chọn!"
+            })
+        }
+
+        // await Product.updateOne({
+        //     _id: product._id, 
+        //     "colors.colorName": req?.body?.color,
+        //     "colors.sizes.sizeName": req?.body?.size
+        // },{$inc: {
+        //     'colors.$[].sizes.$[xxx].quantity': -1
+        // }},
+        // {arrayFilters: [
+        //     {"xxx.sizeName": req?.body?.size}
+        // ]})
+
+        const item = await User.findByIdAndUpdate(req?.params?.id, {cart: cart}, {new: true}).populate('cart.product');
+
+        return successTemplate(res, item.cart[item.cart.length - 1], "Update cart successfully!", 200)
+    } catch (error) {
+        return errorTemplate(res, error.message)
+    }
+}
+
+const getAllCartItem = async(req, res) => {
+    try {
+        const user = await User.findById(req?.params?.id).populate('cart.product');
+
+        if(!user){
+            throw new Error('User is not existed. Please log in!');
+        }
+
+        return successTemplate(res, user.cart, "Get all cart item successfully!", 200)
+    } catch (error) {
+        return errorTemplate(res, error.message)
+    }
+}
+
+const getDefaultAddress = async(req, res) => {
+    try {
+        const user = await User.findById(req?.params?.id);
+
+        if(!user){
+            throw new Error('User is not existed. Please log in!');
+        }
+
+        const addressDf = user.address.find((item) => item.default)
+
+        return successTemplate(res, addressDf, "Get default address successfully!", 200)
+    } catch (error) {
+        return errorTemplate(res, error.message)
+    }
+}
+
+const checkVoucherDiscountCode = async(req, res) => {
+    try {
+        const user = await Voucher.findById(req?.body?.id);
+
+        if(!user){
+            throw new Error('User is not existed. Please log in!');
+        }
+
+        const addressDf = user.address.find((item) => item.default)
+
+        return successTemplate(res, addressDf, "Get default address successfully!", 200)
     } catch (error) {
         return errorTemplate(res, error.message)
     }
@@ -450,5 +691,13 @@ module.exports = {
     createOrderCtrl,
     cancelOrderCtrl,
     getAllReviewCtrl,
-    createReviewCtrl
+    createReviewCtrl,
+    getForuProductCtrl,
+    increaseQuantityCartItem,
+    decreaseQuantityCartItem,
+    deleteCartItem,
+    createCartItem,
+    getAllCartItem,
+    getDefaultAddress,
+    checkVoucherDiscountCode
 }

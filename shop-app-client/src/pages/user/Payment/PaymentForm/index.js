@@ -4,7 +4,7 @@ import classNames from 'classnames/bind';
 import { useState } from 'react';
 
 const cx = classNames.bind(styles);
-function PaymentForm({onClick}) {
+function PaymentForm({handlePayment}) {
     const paymentItems = [ 
         {
             id: 1,
@@ -67,7 +67,7 @@ function PaymentForm({onClick}) {
             }
             
             <div>
-                <div className={cx('account-info__btn')}>
+                <div className={cx('account-info__btn')} onClick={() => handlePayment(selected)}>
                     <span className={cx('account-info__btn-text')}>{`Thanh toán ${selected.key ? "(" + selected.key + ")" : ''}`}</span>
                 </div>
             </div>

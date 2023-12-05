@@ -17,5 +17,6 @@ const cloudinaryUploadImage = async(fileToUpload)=>{
     }
 }
 
+module.exports=cloudinary.v2
 
 module.exports=cloudinaryUploadImage

@@ -4,7 +4,7 @@ import classNames from 'classnames/bind';
 import { AiFillExclamationCircle, AiOutlineEye, AiOutlineEyeInvisible } from 'react-icons/ai';
 const cx = classNames.bind(styles);
 
-function TextInput({ placeHolder, icon, secure, type, value, register, name, error }) {
+function TextInput({ placeHolder, icon, secure, type, value, register, name, error , handleChange}) {
     const [hide, setHide] = useState(true);
     return (
         <>
