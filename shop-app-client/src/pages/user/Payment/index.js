@@ -35,7 +35,7 @@ function Payment() {
             <div className={cx('nav_left')}>
                 <div>
                     <span className={cx('title')}>Thông tin vận chuyển</span>
-                    <TransportInfo ref={transportInfo} props={address} userMail={currentUser.email}/>
+                    <TransportInfo _ref={transportInfo} props={address} userMail={currentUser.email}/>
                 </div>
                 <div style={{marginTop: '20px'}}>
                     <span className={cx('title')}>Hình thức thanh toán</span>
