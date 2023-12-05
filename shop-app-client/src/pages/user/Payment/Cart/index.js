@@ -6,7 +6,9 @@ import ProductForUItem from './ProductForUItem';
 import VoucherItem from './VoucherItem';
 import { VoucherIcon2 } from '~/assets/icons';
 import { useDispatch, useSelector } from 'react-redux';
-import { createCartItem, getAllVoucher, getCartProducts, getForUProduct, increaseQuantityCartItem } from '~/redux/api/userRequest';
+import { createCartItem, getAllVoucher, getCartProducts, getDefaultAddress, getForUProduct, increaseQuantityCartItem } from '~/redux/api/userRequest';
+import axios from 'axios';
+import baseUrl from '~/utils/baseUrl';
 const cx = classNames.bind(styles);
 function Cart() {
 
@@ -22,6 +24,7 @@ function Cart() {
 
     let [preTotal, setPreTotal] = useState(0);
     let [discount, setDiscount] = useState(0);
+    let [isPercent, setIsPercent] = useState(false);
     let [delivery, setDelivery] = useState(0);
     let [discountCode, setDiscountCode] = useState('');
 
@@ -36,33 +39,8 @@ function Cart() {
     }, [cartProducts])
 
     function calculateTotal(){
-        preTotal = cartProducts?.reduce((total, item) => total + item.exportPrice * (1 - item.discountPerc) * item.quantity, 0)
+        preTotal = cartProducts?.reduce((total, item) => total + item.productPrice * item.quantity, 0)
         setPreTotal(preTotal)
-    }
-
-    function onQuantityChange(item, type){
-        switch(type){
-            case 'increase':
-                setPreTotal(preTotal + item.exportPrice)
-                break;
-            case 'decrease':
-                setPreTotal(preTotal - item.exportPrice)
-                break;
-            default:
-                break;
-        }
-    }
-
-    function getQuantity(item){
-        const list = item.colors;
-        if(list){
-            const color = list.find((i) => i.colorName === item.selectColor)
-            if(color){
-                return color.size[item.selectSize].quantity
-            }
-        }
-        else
-            return 0;
     }
 
     function handleItemToOrder(item, selection){
@@ -76,12 +54,46 @@ function Cart() {
         }
 
         const existItem = cartProducts.find((cartIT) => cartIT.productId === cartItem.productId && cartIT.size === cartItem.size && cartIT.color === cartItem.color)
-        existItem ? increaseQuantityCartItem(currentUser, existItem._id, dispatch) : createCartItem(currentUser, cartItem, dispatch)
+        existItem ? increaseQuantityCartItem(currentUser, existItem, dispatch) : createCartItem(currentUser, cartItem, dispatch)
+    }
+
+    async function handleCheckVoucher(){
+        const voucher = vouchers.find((item) => item.voucherCode === discountCode)
+
+        if(voucher){
+            if(checkStatus(voucher)){
+                if(preTotal > voucher.minPrice){
+                    if(voucher.isPercent){
+                        setIsPercent(true)
+                    }
+                    else{
+                        setIsPercent(false)
+                    }
+                    setDiscount(voucher.voucherPrice)
+                }
+                else{
+                    alert("Hãy chi thêm " + (voucher.minPrice - preTotal) + " để được hưởng ưu đãi")
+                }
+            }
+            else{
+                alert("Voucher đã hết hoặc quá hạn")
+            }
+        }
+    }
+
+    const checkStatus = (item) => {
+        if (item.quanlity <= 0) return false;
+        const expirationDate = new Date(item.expiredDate);
+
+        // Lấy ngày hôm nay
+        const today = new Date();
+        if (today > expirationDate) return false;
+        return true;
     }
 
     return ( 
         <>
-        <button onClick={() => console.log(forUProducts)}>clickme</button>
+        {/* <button onClick={() => console.log(cartProducts)}>clickme</button> */}
             <div>
                 {
                     cartProducts?.map((item, index) => {
@@ -148,7 +160,7 @@ function Cart() {
 
             <div className={cx('discount-box')}>
                 <input type="text" placeholder='Nhập mã giảm giá' value={discountCode} onChange={(e) => setDiscountCode(e.target.value)}/>
-                <button datavoucher disabled={discountCode ? false: true}>Áp dụng</button>
+                <button datavoucher disabled={discountCode ? false: true} onClick={handleCheckVoucher}>Áp dụng</button>
             </div>
 
             <hr style={{width: 'calc(100% + 10px)', height: '1px', backgroundColor: '#f9f9f9', margin: '10px -10px'}}/>
@@ -158,7 +170,7 @@ function Cart() {
             </div>
             <div className={cx('outerMoney')}>
                 <span className={cx('titleMoney')}>Giảm giá</span>
-                <span className={cx('money')}>-{new Intl.NumberFormat('vi-VN', {style: 'currency', currency: 'VND'}).format(discount)}</span>
+                <span className={cx('money')}>-{new Intl.NumberFormat('vi-VN', {style: 'currency', currency: 'VND'}).format(isPercent ? preTotal * discount / 100 : discount)}</span>
             </div>
             <div className={cx('outerMoney')}>
                 <span className={cx('titleMoney')}>Phí giao hàng</span>
@@ -167,7 +179,7 @@ function Cart() {
             <hr style={{width: 'calc(100% + 10px)', height: '1px', backgroundColor: '#f9f9f9', margin: '10px -10px'}}/>
             <div className={cx('outerMoney')}>
                 <span className={cx('titleMoney')}>Tổng</span>
-                <span className={cx('money', 'totalMoney')}>{new Intl.NumberFormat('vi-VN', {style: 'currency', currency: 'VND'}).format(preTotal - discount + delivery)}</span>
+                <span className={cx('money', 'totalMoney')}>{new Intl.NumberFormat('vi-VN', {style: 'currency', currency: 'VND'}).format(isPercent ? preTotal - preTotal * discount / 100 + delivery : preTotal - discount + delivery)}</span>
             </div>
         </>
     );

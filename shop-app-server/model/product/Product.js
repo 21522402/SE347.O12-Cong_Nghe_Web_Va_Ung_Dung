@@ -28,9 +28,6 @@ const productSchema = new mongoose.Schema({
     quantitySold: {
         type: Number
     },
-    quantity: {
-        type: Number
-    },
     status:{
         type: String,
         default: "Chưa đăng bán"
@@ -50,7 +47,6 @@ const productSchema = new mongoose.Schema({
                         quantity: Number
                     }
                 ]
-                
             }
         ]
     }

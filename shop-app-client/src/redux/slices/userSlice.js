@@ -27,6 +27,7 @@ const userSlice = createSlice({
             cartProducts: [],
             forUProducts: [],
             vouchers: [],
+            address: [],
             error: false
         },
     },
@@ -202,10 +203,52 @@ const userSlice = createSlice({
         },
         increaseCartItemSuccess: (state, action) => {
             state.cart.isLoading = false;
-            state.cart.cartProducts = state.cart.cartProducts.map((item) => item.id === action.payload ? {...item, quantity: item.quantity + 1}: {...item})
+            state.cart.cartProducts = state.cart.cartProducts.map((item) => {
+                if(item.id === action?.payload) {
+                    return{...item, quantity: item.quantity + 1}
+                }
+                return {...item}
+            })
             state.cart.isSuccess = true;
         },
         increaseCartItemFailed: (state) => {
+            state.cart.isLoading = false;
+            state.cart.error = true;
+            state.cart.isSuccess = false;
+        },
+
+        decreaseCartItemStart: (state) => {
+            state.cart.isLoading = true;
+            state.cart.error = false;
+            state.cart.isSuccess = false;
+        },
+        decreaseCartItemSuccess: (state, action) => {
+            state.cart.isLoading = false;
+            state.cart.cartProducts = state.cart.cartProducts.map((item) => {
+                if(item.id === action?.payload) {
+                    return{...item, quantity: item.quantity - 1}
+                }
+                return {...item}
+            })
+            state.cart.isSuccess = true;
+        },
+        decreaseCartItemFailed: (state) => {
+            state.cart.isLoading = false;
+            state.cart.error = true;
+            state.cart.isSuccess = false;
+        },
+
+        deleteCartItemStart: (state) => {
+            state.cart.isLoading = true;
+            state.cart.error = false;
+            state.cart.isSuccess = false;
+        },
+        deleteCartItemSuccess: (state, action) => {
+            state.cart.isLoading = false;
+            if(action?.payload) state.cart.cartProducts = state.cart.cartProducts.filter((item) => item._id !== action.payload)
+            state.cart.isSuccess = true;
+        },
+        deleteCartItemFailed: (state) => {
             state.cart.isLoading = false;
             state.cart.error = true;
             state.cart.isSuccess = false;
@@ -218,6 +261,7 @@ const userSlice = createSlice({
         },
         createCartItemSuccess: (state, action) => {
             state.cart.isLoading = false;
+            if(action?.payload) state.cart.cartProducts = [...state.cart.cartProducts, action?.payload];
             state.cart.isSuccess = true;
         },
         createCartItemFailed: (state) => {
@@ -239,6 +283,24 @@ const userSlice = createSlice({
         },
         
         getCartProductsFailed: (state) => {
+            state.cart.isLoading = false;
+            state.cart.error = true;
+            state.cart.isSuccess = false;
+        },
+
+        getDefaultAddressStart: (state) => {
+            state.cart.isLoading = true;
+            state.cart.error = false;
+            state.cart.isSuccess = false;
+        },
+
+        getDefaultAddressSuccess: (state, action) => {
+            state.cart.isLoading = false;
+            state.cart.address = action?.payload
+            state.cart.isSuccess = true;
+        },
+        
+        getDefaultAddressFailed: (state) => {
             state.cart.isLoading = false;
             state.cart.error = true;
             state.cart.isSuccess = false;
@@ -283,7 +345,16 @@ export const {
     createCartItemFailed,
     getCartProductsStart,
     getCartProductsSuccess,
-    getCartProductsFailed
+    getCartProductsFailed,
+    decreaseCartItemStart,
+    decreaseCartItemSuccess,
+    decreaseCartItemFailed,
+    deleteCartItemStart,
+    deleteCartItemSuccess,
+    deleteCartItemFailed,
+    getDefaultAddressStart,
+    getDefaultAddressSuccess,
+    getDefaultAddressFailed
 } = userSlice.actions;
 
 export default userSlice.reducer;

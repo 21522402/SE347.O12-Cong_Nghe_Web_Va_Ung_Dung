@@ -1,12 +1,19 @@
 import { ComboBox, RadioButton, TextInput } from '~/components/Input';
 import styles from './TransportInfo.module.scss'
 import classNames from 'classnames/bind';
-import { useEffect, useState } from 'react';
+import React, { forwardRef, useEffect, useImperativeHandle, useState } from 'react';
 const cx = classNames.bind(styles);
-function TransportInfo({props}) {
-    const [selected, setSelected] = useState({})
+const TransportInfo =  forwardRef(({props, userMail, _ref}) => {
+    let [selected, setSelected] = useState({})
+
+    useImperativeHandle(_ref, () => ({
+        getChildSelected: () => {
+            return selected;
+        }
+    }));
+
     useEffect(() => {
-        setSelected(props ? props : {
+        setSelected(props ? {...props, email: userMail} : {
             name: "",
             province: "",
             district: "",
@@ -95,6 +102,6 @@ function TransportInfo({props}) {
                 </div>
         </>
     );
-}
+})
 
-export default TransportInfo;
+export default React.memo(TransportInfo);

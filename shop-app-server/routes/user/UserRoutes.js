@@ -17,8 +17,12 @@ const {
     createReviewCtrl,
     getForuProductCtrl,
     increaseQuantityCartItem,
+    decreaseQuantityCartItem,
     createCartItem,
-    getAllCartItem
+    deleteCartItem,
+    getAllCartItem,
+    getDefaultAddress,
+    checkVoucherDiscountCode
 } = require('../../controller/userController/UserController');
 
 const verify = require('../../middlewares/auth/verify');
@@ -63,8 +67,16 @@ userRoutes.get('/cart/getForUProduct', getForuProductCtrl);
 
 userRoutes.put('/cart/increateCartItem/:id/:cartItemId', increaseQuantityCartItem);
 
+userRoutes.put('/cart/deceaseCartItem/:id/:cartItemId', decreaseQuantityCartItem);
+
 userRoutes.post('/cart/createCartItem/:id', createCartItem);
 
+userRoutes.put('/cart/deleteCartItem/:id/:cartItemId', deleteCartItem);
+
 userRoutes.get('/cart/:id', getAllCartItem);
+
+userRoutes.get('/cart/defaultAddress/:id', getDefaultAddress);
+
+userRoutes.get('/cart/checkVoucherDiscountCode', checkVoucherDiscountCode)
 
 module.exports = userRoutes;

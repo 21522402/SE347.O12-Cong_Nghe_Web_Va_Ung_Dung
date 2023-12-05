@@ -1,5 +1,5 @@
 import axios from "axios";
-import { createAddressFailed, createAddressStart, createAddressSuccess, createCartItemFailed, createCartItemStart, createCartItemSuccess, createReviewFailed, createReviewStart, createReviewSuccess, deleteAddressFailed, deleteAddressStart, deleteAddressSuccess, getAllAddressFailed, getAllAddressStart, getAllAddressSuccess, getAllOrderFailed, getAllOrderReviewFailed, getAllOrderReviewStart, getAllOrderReviewSuccess, getAllOrderStart, getAllOrderSuccess, getAllVoucherFailed, getAllVoucherStart, getAllVoucherSuccess, getCartProductsFailed, getCartProductsStart, getCartProductsSuccess, getForUProductCartFailed, getForUProductCartStart, getForUProductCartSuccess, increaseCartItemFailed, increaseCartItemStart, increaseCartItemSuccess, resetSuccess, updateAddressFailed, updateAddressStart, updateAddressSuccess } from "../slices/userSlice";
+import { createAddressFailed, createAddressStart, createAddressSuccess, createCartItemFailed, createCartItemStart, createCartItemSuccess, createReviewFailed, createReviewStart, createReviewSuccess, decreaseCartItemFailed, decreaseCartItemStart, decreaseCartItemSuccess, deleteAddressFailed, deleteAddressStart, deleteAddressSuccess, deleteCartItemFailed, deleteCartItemStart, deleteCartItemSuccess, getAllAddressFailed, getAllAddressStart, getAllAddressSuccess, getAllOrderFailed, getAllOrderReviewFailed, getAllOrderReviewStart, getAllOrderReviewSuccess, getAllOrderStart, getAllOrderSuccess, getAllVoucherFailed, getAllVoucherStart, getAllVoucherSuccess, getCartProductsFailed, getCartProductsStart, getCartProductsSuccess, getDefaultAddressFailed, getDefaultAddressStart, getDefaultAddressSuccess, getForUProductCartFailed, getForUProductCartStart, getForUProductCartSuccess, increaseCartItemFailed, increaseCartItemStart, increaseCartItemSuccess, resetSuccess, updateAddressFailed, updateAddressStart, updateAddressSuccess } from "../slices/userSlice";
 import baseUrl from "~/utils/baseUrl";
 
 //orders
@@ -134,23 +134,56 @@ export const getAllVoucher = async (dispatch) => {
     }
 }
 
-export const increaseQuantityCartItem = async (user, cartItemId, dispatch) => {
+export const increaseQuantityCartItem = async (user, cartItem, dispatch) => {
     dispatch(increaseCartItemStart())
     try{
-        const res = await axios.put(baseUrl + "/api/users/cart/increateCartItem/" + user._id + "/" + cartItemId, cartItemId)
-        console.log(res)
-        dispatch(increaseCartItemSuccess(res))
+        const res = await axios.put(baseUrl + "/api/users/cart/increateCartItem/" + user._id + "/" + cartItem._id, cartItem, {
+            headers: {token: "Bearer " + user.accessToken}
+        })
+        if(!res?.data?.result) return;
+        dispatch(increaseCartItemSuccess(cartItem._id))
     }   
     catch(err){
         dispatch(increaseCartItemFailed())
     }
 }
 
+export const decreaseQuantityCartItem = async (user, cartItem, dispatch) => {
+    dispatch(decreaseCartItemStart())
+    try{
+        const res = await axios.put(baseUrl + "/api/users/cart/deceaseCartItem/" + user._id + "/" + cartItem._id, cartItem, {
+            headers: {token: "Bearer " + user.accessToken}
+        })
+        console.log()
+        if(!res?.data?.result) dispatch(deleteCartItemSuccess(cartItem._id))
+        else dispatch(decreaseCartItemSuccess(cartItem._id))
+    }   
+    catch(err){
+        dispatch(decreaseCartItemFailed())
+    }
+}
+
+export const deleteCartItem = async (user, cartItem, dispatch) => {
+    dispatch(deleteCartItemStart())
+    try{
+        const res = await axios.put(baseUrl + "/api/users/cart/deleteCartItem/" + user._id + "/" + cartItem._id, {
+            headers: {token: "Bearer " + user.accessToken}
+        })
+        if(!res?.data?.result) return;
+        dispatch(deleteCartItemSuccess(cartItem._id))
+    }   
+    catch(err){
+        dispatch(deleteCartItemFailed())
+    }
+}
+
 export const createCartItem = async (user, cart, dispatch) => {
     dispatch(createCartItemStart())
     try{
-        await axios.post(baseUrl + "/api/users/cart/createCartItem/" + user._id, cart)
-        dispatch(createCartItemSuccess())
+        const res = await axios.post(baseUrl + "/api/users/cart/createCartItem/" + user._id, cart)
+        if(!res?.data?.result) return;
+        console.log(res?.data?.result)
+        dispatch(createCartItemSuccess(res?.data?.result))
     }   
     catch(err){
         dispatch(createCartItemFailed())
@@ -165,6 +198,17 @@ export const getCartProducts = async (user, dispatch) => {
     }   
     catch(err){
         dispatch(getCartProductsFailed())
+    }
+}
+
+export const getDefaultAddress = async (user, dispatch) => {
+    dispatch(getDefaultAddressStart())
+    try{
+        const res = await axios.get(baseUrl + "/api/users/cart/defaultAddress/" + user._id)
+        dispatch(getDefaultAddressSuccess(res?.data?.result))
+    }   
+    catch(err){
+        dispatch(getDefaultAddressFailed())
     }
 }
 

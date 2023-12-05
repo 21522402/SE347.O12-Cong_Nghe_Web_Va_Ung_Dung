@@ -4,151 +4,104 @@ import classNames from 'classnames/bind';
 import { ComboBox } from '~/components/Input';
 import { GoTrash } from "react-icons/go";
 import { useDispatch, useSelector } from 'react-redux';
-import { deleteOrderItem, filterChange, increaseQuantityItem, reduceQuantityItem } from '~/redux/actions';
+import { decreaseQuantityCartItem, deleteCartItem, increaseQuantityCartItem } from '~/redux/api/userRequest';
 const cx = classNames.bind(styles);
 export default function ProductItem({props}) {
     const dispatch = useDispatch();
+    let currentUser = useSelector((state) => state.auth.login.currentUser)
+
     let [colors, setColors] = useState([])
     let [sizes, setSizes] = useState([])
-    let [image, setImage] = useState([])
+    let [defaultSelection, setDefaultSelection] = useState({
+        image: "",
+        colorName: "",
+        size: ""
+    })
 
     useEffect(() => {
-        setColors(createListColorCBB())
-        setSizes(createListSizeCBB(props.color))
-        setImage(getImage(props.color));
+        if(props){
+            getDefaultSelection();
+            setColors(createListColorCBB())
+        }
     }, [])
 
     function createListColorCBB(){
-        const list = props.colors;
-        if(list){
+        const list = props?.product
+        if(list.colors){
             const colors = [];
-            list.forEach((element, index) => {
-                if(Object.keys(element.size).length !== 0)
+            list.colors.forEach((element, index) => {
+                if(Object.keys(element.sizes).length !== 0)
                     colors.push({id: index, name: element.colorName})
             });
-            if(colors) return colors
-            return [{id: -1, name: ''}]
+            return colors
         }
         else
             return [{id: -1, name: ''}]
     }
 
     function createListSizeCBB(currentColor){
-        const list = props.colors;
-        if(list){
-            const color = list.find((i) => i.colorName === currentColor)
+        const list = props?.product
+        if(list?.colors){
+            const color = list.colors.find((i) => i.colorName === currentColor)
             if(color){
-                return  Object.keys(color.size).map((s, index) => {
-                    return {id: index, name: s}
+                return color.sizes.map((s, index) => {
+                    return {id: index, name: s.sizeName}
                 })
             }
+            else return []
         }
         else
-            return [{id: -1, name: ''}]
+            return []
     }
 
     function onColorchange(e){
-        const list = props.colors;
-        if(list){
-            setImage(getImage(e.name));
-            setSizes(createListSizeCBB(e.name))
-            if(!createListSizeCBB(e.name).map((item) => item.name).includes(props.size)){
-                console.log("màu này không có size bạn đang chọn")
-                dispatch(filterChange({
-                    id: props.productId,
-                    type: 'size',
-                    value: sizes[0].name,
-                    color: props.color,
-                }))
+        const list = props?.product
+        if(list?.colors){
+            const listSize = createListSizeCBB(e.name)
+            setSizes(listSize)
+            let have = true
+            if(!listSize.map((item) => item.name).includes(defaultSelection.size)){
+                have = false
             }
-            dispatch(filterChange({
-                id: props.productId,
-                type: 'color',
-                value: e.name,
-                color: props.color,
-            }))
+            have ? 
+                setDefaultSelection({...defaultSelection, colorName: e.name, image: list?.colors.find(item => item.colorName === e.name)?.images[0]})
+            :
+                setDefaultSelection({size: listSize[0].name, colorName: e.name, image: list?.colors.find(item => item.colorName === e.name)?.images[0]})
         }
-    }
-
-    function getQuantity(){
-        const list = props.colors;
-        if(list){
-            const color = list.find((i) => i.colorName === props.color)
-            if(color){
-                return color.size[props.size].quantity
-            }
-        }
-        else
-            return 0;
-    }
-
-    function increaseQuantity(){
-        if(props.quantity === getQuantity()){
-            console.log("Đã đủ số lượng tối đa")
-            return;
-        }
-                
-        dispatch(increaseQuantityItem({
-            id: props.productId,
-            color: props.color,
-        }))
-    }
-
-    function decreaseQuantity(){
-        if(props.quantity === 1){
-            console.log("xóa sản phẩm")
-            dispatch(deleteOrderItem({
-                id: props.productId,
-                color: props.color,
-            }))
-            return;
-        }
-        
-        dispatch(reduceQuantityItem({
-            id: props.productId,
-            color: props.color,
-        }))
     }
 
     function onSizeChange(e){
-        dispatch(filterChange({
-            id: props.productId,
-            type: 'size',
-            value: e.name,
-            color: props.color,
-        }))
+        setDefaultSelection({...defaultSelection, size: e.name})
     }
 
-    function handleDeleteItem(){
-        dispatch(deleteOrderItem({
-            id: props.productId,
-        }))
-    }
-
-    function getImage(currentColor){
-        const list = props.colors;
+    function getDefaultSelection(){
+        const list = props?.product?.colors;
         if(list){
-            const color = list.find((i) => i.colorName === currentColor)
-            if(color){
-                return color.images
+            for(let i = 0; i < list.length; i++){
+                if(list[i].sizes && list[i].images && list[i].colorName === props.color){
+                    setDefaultSelection({
+                        image: props?.product?.colors[i]?.images[0],
+                        colorName: props.color,
+                        size: props.size
+                    })
+                    setSizes(createListSizeCBB(list[i].colorName))
+                    return;    
+                }
             }
         }
-        else
-            return [{id: -1, name: ''}]
     }
     return ( 
         <>
             <hr style={{width: '100%', height: '1px', backgroundColor: '#f1f1f1'}}/>
-            <button onClick={() => console.log(props)}>clickme</button>
             <div className={cx('container')}>
                 <div>
-                    <img className={cx('image')} src={image} alt=''/>
+                    <img className={cx('image')} src={defaultSelection.image} alt=''/>
                 </div>
                 <div className={cx('rightContent')}>
                     <div>
                         <div className={cx('outerContent')}>
                             <span className={cx('productName')}>{props.productName}</span>
-                            <span className={cx('colorSize')}>{`${props.color} / ${props.size}`}</span>
+                            <span className={cx('colorSize')}>{`${defaultSelection.colorName} / ${defaultSelection.size}`}</span>
                         </div>
                         <div className={cx('selector')}>
                             <div style={{width: '120px'}}>
@@ -158,9 +111,9 @@ export default function ProductItem({props}) {
                                 <ComboBox listItems={sizes} placeHolder={''} selectedItem={props.size} type={'list-gray'} filterValueSelected={onSizeChange}/>
                             </div>
                             <div className={cx('outerQuantity')}>
-                                <div className={cx('operator')} style={{cursor: 'pointer', userSelect: 'none'}} onClick={decreaseQuantity}><span>-</span></div>
+                                <div className={cx('operator')} style={{cursor: 'pointer', userSelect: 'none'}} onClick={() => decreaseQuantityCartItem(currentUser, props, dispatch)}><span>-</span></div>
                                 <div className={cx('operator')}><span>{props.quantity}</span></div>
-                                <div className={cx('operator')} style={{cursor: 'pointer', userSelect: 'none'}} onClick={increaseQuantity}><span>+</span></div>
+                                <div className={cx('operator')} style={{cursor: 'pointer', userSelect: 'none'}} onClick={() => increaseQuantityCartItem(currentUser, props, dispatch)}><span>+</span></div>
                             </div>
                             <div style={{display: 'flex', flexDirection: 'column', alignItems: 'flex-end', marginLeft: '10px'}}>
                                 <div style={{fontWeight: '600'}}>{new Intl.NumberFormat('vi-VN', {style: 'currency', currency: 'VND'}).format(props.productPrice)}</div>
@@ -168,7 +121,7 @@ export default function ProductItem({props}) {
                             </div>
                         </div>
                     </div>
-                    <div style={{display: 'flex', flexDirection: 'row', alignItems: 'center', gap: '5px', cursor: 'pointer', alignSelf: 'flex-start'}} onClick={handleDeleteItem}>
+                    <div style={{display: 'flex', flexDirection: 'row', alignItems: 'center', gap: '5px', cursor: 'pointer', alignSelf: 'flex-start'}} onClick={() => deleteCartItem(currentUser, props, dispatch)}>
                         <GoTrash />
                         <div>Xóa</div>
                     </div>
