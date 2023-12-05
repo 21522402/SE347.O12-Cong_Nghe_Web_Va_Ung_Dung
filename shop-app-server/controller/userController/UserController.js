@@ -6,6 +6,8 @@ const validationId = require("../../utils/validationId");
 const OrderItem = require('../../model/orderItem/OrderItem');
 const Order = require('../../model/order/Order');
 const Review = require('../../model/review/Review');
+const cloudinaryUploadImage = require('../../utils/cloudinary');
+const Product = require('../../model/product/Product');
 
 const userRegisterCtrl = async (req, res) => {
     try {
@@ -261,15 +263,17 @@ const getAllOrderCtrl = async (req, res) => {
 const updateOrderItem  = async (id, data) => {
     try {
 
-        const user = await User.findById(id)
+        const order = await Order.findById(id)
 
-        if(!user){
-            throw new Error('User is not existed. Please log in!');
+        if(!order){
+            throw new Error('Order is not existed. Please log in!');
         }
 
-        const orderIds = user.orders
+        const orderItemIds = order.orderItem
 
-        return successTemplate(res, orderIds, "Lấy tất cả địa chỉ thành công!", 200)
+        orderItemIds ? orderItemIds.push(data): orderItemIds = []
+
+        await Order.findByIdAndUpdate(id, {orderItem: orderItemIds}, {new: true})
     }
     catch(err){
         throw new Error(err);
@@ -287,46 +291,45 @@ const createOrderCtrl = async (req, res) => {
         if(!user){
             throw new Error('User is not existed. Please log in!');
         }
-        // const {orderItem, ...other} = req?.body
-        // const order = await Order.create({
-        //     ...other
-        // })
+        const {orderItem, ...other} = req?.body
+        const order = await Order.create({
+            ...other,
+            orderDate: new Date()
+        })
 
-        // const orderIds = user.orders
-        // orderIds ? orderIds.push(order.id): orderIds = []
-        // await User.findByIdAndUpdate(userId, {orders: orderIds})
+        const orderIds = user.orders
+        orderIds ? orderIds.push(order.id): orderIds = []
+        await User.findByIdAndUpdate(userId, {orders: orderIds})
 
-        // const promise = (item) => new Promise(async resolve => {
-        //     const orderItem = await OrderItem.create({
-        //         "productName": item.productName,
-        //         "image": item.image,
-        //         "size": item.size,
-        //         "color": item.color,
-        //         "quantity": item.quantity,
-        //         "price": item.price,
-        //         "discountPerc": item.discountPerc
-        //     })
+        const promise = (item) => new Promise(async resolve => {
+            const orderItem = await OrderItem.create({
+                "productName": item?.productName,
+                "image": item?.image,
+                "size": item?.size,
+                "color": item?.color,
+                "quantity": item?.quantity,
+                "price": item?.price,
+                "discountPerc": item?.discountPerc
+            })
             
-        //     resolve(orderItem.id)
-        // });
+            resolve(orderItem.id)
+        });
 
-        // let p = promise(req?.body?.orderItem[0])
+        let p = promise(req?.body?.orderItem[0])
 
-        // for (let i = 1; i < req?.body?.orderItem.length; i++) {
-        //     p = p.then(async (data) => {
+        for (let i = 1; i < req?.body?.orderItem.length; i++) {
+            p = p.then(async (data) => {
                 
-        //         await updateOrderItem(order.id,data)
-        //         console.log(["i"], data)
-        //         return promise(req?.body?.orderItem[i]);
-        //     })
-        // }
+                await updateOrderItem(order.id,data)
+                return promise(req?.body?.orderItem[i]);
+            })
+        }
 
-        // p.then(async data => {
-        //     await updateOrderItem(order.id,data)
-        //     console.log(["i"], data)
-        // })
+        p.then(async data => {
+            await updateOrderItem(order.id,data)
+        })
 
-        return successTemplate(res, user, "Create address successfully!", 200)
+        return successTemplate(res, user.id, "Create order successfully!", 200)
 
     } catch (error) {
         return errorTemplate(res, error.message)
@@ -379,11 +382,29 @@ const getAllReviewCtrl = async (req, res) => {
     }
 }
 
+const updateImagesReview = async (id, data) => {
+    try{
+        const review = await Review.findById(id)
+
+        if(!review){
+            throw new Error('Review is not existed. Please log in!');
+        }
+
+        const images = review.imagesRv
+
+        images ? images.push(data): images = []
+
+        await Review.findByIdAndUpdate(id, {imagesRv: images}, {new: true})
+    }
+    catch(err){
+
+    }
+}
+
 const createReviewCtrl = async (req, res) => {
     try {
         const userId = req?.params?.id;
         validationId(userId)
-
         
         const review = await Review.create({
             user: userId,
@@ -391,22 +412,127 @@ const createReviewCtrl = async (req, res) => {
             orderItem: req?.params?.orderItemId,
             content: req?.body?.content, 
             reviewDate: new Date(), 
-            imagesRv: req?.body?.imagesRv, 
             isResponsed: false
         })
 
-        await User.findByIdAndUpdate(userId, {
-            $push: {
-                reviews: review.id,
-            },
+        await OrderItem.findByIdAndUpdate(req?.params?.orderItemId, {review: review._id}, {new:true})
+
+        const user = await User.findById(userId)
+
+        if(!user){
+            throw new Error('User is not existed. Please log in!');
+        }
+
+        let reviewIds = user.reviews
+
+        reviewIds ? reviewIds.push(review._id): reviewIds = []
+
+        await User.findByIdAndUpdate(userId, {reviews: reviewIds}, {new: true})
+
+        const promise = (item) => new Promise(async resolve => {
+            const imgUpload = await cloudinaryUploadImage(item, {
+                folder:'reviews'
+            })
+            resolve(imgUpload?.url)
+        });
+
+        
+        for (let i = 0; i < req?.body?.imagesRv.length; i++) {
+            if(i === 0) p = promise(req?.body?.imagesRv[0])
+            else p = p.then(async (data) => {
+                await updateImagesReview(review._id, data)
+                return promise(req?.body?.imagesRv[i]);
+            })
+        }
+
+        p.then(async data => {
+            await updateImagesReview(review._id, data)
         })
 
-        await OrderItem.findByIdAndUpdate(req?.params?.orderItemId, {
-            review: review.id
-        })
+        return successTemplate(res, req?.body, "Create address successfully!", 200)
 
-        return successTemplate(res, review, "Create address successfully!", 200)
+    } catch (error) {
+        return errorTemplate(res, error.message)
+    }
+}
 
+const getForuProductCtrl = async(req, res) => {
+    try {
+        const products = await Product.find();
+        return res.status(200).json(products)
+
+    } catch (error) {
+        return errorTemplate(res, error.message)
+    }
+}
+
+//cart
+
+const increaseQuantityCartItem = async(req, res) => {
+    try {
+        const user = await User.findById(req?.params?.id)
+        
+        if(!user){
+            throw new Error('User is not existed. Please log in!');
+        }
+
+        let cartIts = user.cart
+        const productId = cartIts.find((item) => item.id === req?.params?.cartItemId).product
+
+        console.log(productId)
+        const product = await Product.findById(productId);
+
+        if(!product){
+            throw new Error('Product is not existed!');
+        } 
+
+        if(product.quantity == 0) {
+            return errorTemplate(res, "Sản phẩm đã hết hàng")
+        }
+
+        cartIts = cartIts.map(item => item.id === req?.params?.cartItemId ? {...item, quantity: ++item.quantity} : {...item})
+
+        const pd = await Product.findByIdAndUpdate(productId, {quantity: -1}, {new: true})
+        //const pd = await Product.findById(productId);
+        console.log(pd)
+
+        await User.findByIdAndUpdate(req?.params?.id, {cart: cartIts}, {new: true})
+
+        return successTemplate(res, product._id, "Update cart successfully!", 200)
+    } catch (error) {
+        return errorTemplate(res, error.message)
+    }
+}
+
+const createCartItem = async(req, res) => {
+    try {
+        const user = await User.findById(req?.params?.id)
+
+        if(!user){
+            throw new Error('User is not existed. Please log in!');
+        }
+
+        const cart = user.cart
+
+        cart ? cart.push({...req?.body}) : cart = [{...req?.body}]
+
+        const newUserCart = await User.findByIdAndUpdate(req?.params?.id, {cart: cart}, {new: true})
+
+        return successTemplate(res, newUserCart, "Update cart successfully!", 200)
+    } catch (error) {
+        return errorTemplate(res, error.message)
+    }
+}
+
+const getAllCartItem = async(req, res) => {
+    try {
+        const user = await User.findById(req?.params?.id).populate('cart.product');
+
+        if(!user){
+            throw new Error('User is not existed. Please log in!');
+        }
+
+        return successTemplate(res, user.cart, "Get all cart item successfully!", 200)
     } catch (error) {
         return errorTemplate(res, error.message)
     }
@@ -429,5 +555,9 @@ module.exports = {
     createOrderCtrl,
     cancelOrderCtrl,
     getAllReviewCtrl,
-    createReviewCtrl
+    createReviewCtrl,
+    getForuProductCtrl,
+    increaseQuantityCartItem,
+    createCartItem,
+    getAllCartItem
 }

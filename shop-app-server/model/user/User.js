@@ -20,11 +20,11 @@ const userSchema = new mongoose.Schema(
         },
         gender: {
             type: String,
-            required: [true, "Gender is required"]
+            //required: [true, "Gender is required"]
         },
         dob: {
             type: Date,
-            required: [true, "Date of birth is required"]
+            //required: [true, "Date of birth is required"]
         },
         phoneNumber: {
             type: String,
@@ -73,12 +73,15 @@ const userSchema = new mongoose.Schema(
             type: [
                 {
                     cartItemId: mongoose.Schema.Types.ObjectId,
-                    productId: mongoose.Schema.Types.ObjectId,
+                    product: {
+                        type: mongoose.Schema.Types.ObjectId,
+                        ref: 'Product'
+                    },
                     productName: String,
                     productPrice: Number,
                     size: String,
                     color: String,
-                    quantity: Number
+                    quantity: Number,                    
                 }
             ]
         },

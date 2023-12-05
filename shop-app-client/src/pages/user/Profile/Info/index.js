@@ -3,8 +3,10 @@ import classNames from 'classnames/bind';
 import styles from './Info.module.scss';
 import UpdateInfo from './UpdateInfo';
 import ChangePass from './ChangePass';
+import { useRef, useState } from 'react';
 const cx = classNames.bind(styles);
 function Info(){
+    const [checked, setChecked] = useState(true)
     return (
         <>
             <div className={cx('container')}>
@@ -38,7 +40,7 @@ function Info(){
                         </div>
                     </div>
                     <label for={cx('popup__editInfo')}>
-                        <div className={cx('account-info__btn')}>
+                        <div className={cx('account-info__btn')} onClick={() => setChecked(true)}>
                             <span className={cx('account-info__btn-text')}>Cập nhật</span>
                         </div>
                     </label>
@@ -47,7 +49,7 @@ function Info(){
                     </label>
                     <div className={cx('outer_popup')}>
                         <div className={cx('popup')}>
-                            <UpdateInfo/>
+                            <UpdateInfo onUpdate={() => setChecked(false)}/>
                         </div>
                     </div>
                 </div>

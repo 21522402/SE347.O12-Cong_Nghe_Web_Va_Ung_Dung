@@ -9,7 +9,7 @@ import {IoIosBody} from 'react-icons/io';
 import {GiWeight} from 'react-icons/gi'
 import { useState } from 'react';
 const cx = classNames.bind(styles);
-function UpdateInfo(){
+function UpdateInfo({onUpdate}){
     const gender = [{id: 0, name: 'Nam'}, {id: 1, name: 'Nữ'}]
     let [currentDate, setCurrentDate] = useState({
         day: 1,
@@ -110,7 +110,7 @@ function UpdateInfo(){
                     </div>
                 </div>
                 <div style={{display: 'flex', width: '100%', justifyContent: 'end'}}>
-                    <div className={cx('account-info__btn')}>
+                    <div className={cx('account-info__btn')} onClick={onUpdate}>
                         <span className={cx('account-info__btn-text')}>Cập nhật</span>
                     </div>
                 </div>

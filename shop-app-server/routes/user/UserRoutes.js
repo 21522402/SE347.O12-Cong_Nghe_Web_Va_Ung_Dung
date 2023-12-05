@@ -14,7 +14,11 @@ const {
     createOrderCtrl,
     cancelOrderCtrl,
     getAllReviewCtrl,
-    createReviewCtrl
+    createReviewCtrl,
+    getForuProductCtrl,
+    increaseQuantityCartItem,
+    createCartItem,
+    getAllCartItem
 } = require('../../controller/userController/UserController');
 
 const verify = require('../../middlewares/auth/verify');
@@ -53,6 +57,14 @@ userRoutes.get('/reviews/:id', getAllReviewCtrl);
 
 userRoutes.post('/reviews/createReview/:id/:orderItemId', createReviewCtrl);
 
+//cart
 
+userRoutes.get('/cart/getForUProduct', getForuProductCtrl);
+
+userRoutes.put('/cart/increateCartItem/:id/:cartItemId', increaseQuantityCartItem);
+
+userRoutes.post('/cart/createCartItem/:id', createCartItem);
+
+userRoutes.get('/cart/:id', getAllCartItem);
 
 module.exports = userRoutes;

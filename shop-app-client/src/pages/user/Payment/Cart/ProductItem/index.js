@@ -139,6 +139,7 @@ export default function ProductItem({props}) {
     return ( 
         <>
             <hr style={{width: '100%', height: '1px', backgroundColor: '#f1f1f1'}}/>
+            <button onClick={() => console.log(props)}>clickme</button>
             <div className={cx('container')}>
                 <div>
                     <img className={cx('image')} src={image} alt=''/>
@@ -162,8 +163,8 @@ export default function ProductItem({props}) {
                                 <div className={cx('operator')} style={{cursor: 'pointer', userSelect: 'none'}} onClick={increaseQuantity}><span>+</span></div>
                             </div>
                             <div style={{display: 'flex', flexDirection: 'column', alignItems: 'flex-end', marginLeft: '10px'}}>
-                                <div style={{fontWeight: '600'}}>{new Intl.NumberFormat('vi-VN', {style: 'currency', currency: 'VND'}).format(props.exportPrice * (1 - props.discountPerc))}</div>
-                                <del style={{fontWeight: '400', fontSize: '14px', color: '#ccc'}}>{new Intl.NumberFormat('vi-VN', {style: 'currency', currency: 'VND'}).format(props.exportPrice)}</del>
+                                <div style={{fontWeight: '600'}}>{new Intl.NumberFormat('vi-VN', {style: 'currency', currency: 'VND'}).format(props.productPrice)}</div>
+                                {/* <del style={{fontWeight: '400', fontSize: '14px', color: '#ccc'}}>{new Intl.NumberFormat('vi-VN', {style: 'currency', currency: 'VND'}).format(props.exportPrice)}</del> */}
                             </div>
                         </div>
                     </div>
