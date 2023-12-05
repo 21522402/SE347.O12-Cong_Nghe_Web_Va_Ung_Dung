@@ -4,7 +4,9 @@
   "description": "server backend for shop app course Web",
   "main": "server.js",
   "scripts": {
-    "start": "nodemon server.js"
+    "start": "nodemon server.js",
+    "server": "nodemon server.js",
+    "debug": "node inspect server.js"
   },
   "author": "Group5_SE347.O12",
   "license": "ISC",
@@ -14,6 +16,7 @@
     "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
     "crypto": "^1.0.1",
+    "diacritic": "^0.0.2",
     "dotenv": "^16.3.1",
     "express": "^4.18.2",
     "jsonwebtoken": "^9.0.2",

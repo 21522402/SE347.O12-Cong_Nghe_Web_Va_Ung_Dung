@@ -1,9 +1,16 @@
 const mongoose = require('mongoose');
 
 const productSchema = new mongoose.Schema({
+    productCode: {
+        type: String,
+    },
     productName: {
         type: String,
         require: [true, 'Product Name is required.']
+    },
+    productCategory: {
+        type: String,
+        require: [true, 'Product Category is required.']
     },
     productType: {
         type: String,
@@ -21,9 +28,15 @@ const productSchema = new mongoose.Schema({
     quantitySold: {
         type: Number
     },
-    isSell:{
-        type: Boolean,
-        default:true
+    quantity: {
+        type: Number
+    },
+    status:{
+        type: String,
+        default: "Chưa đăng bán"
+    },
+    description:{
+        type: String,
     },
     colors: {
         type: [
@@ -31,10 +44,10 @@ const productSchema = new mongoose.Schema({
                 colorCode: String,
                 colorName: String,
                 images:[String],
-                size:[
+                sizes:[
                     {
                         sizeName: String,
-                        quanlity: Number
+                        quantity: Number
                     }
                 ]
                 

@@ -7,8 +7,13 @@
 
 .product-item {
 
-    td.code {
+    td.billCode {
         color: #0070f4;
+        padding: 10px 10px 10px 15px;
+        text-align: center;
+    
+    }
+    td.orderCode {
         padding: 10px 10px 10px 15px;
         text-align: center;
     

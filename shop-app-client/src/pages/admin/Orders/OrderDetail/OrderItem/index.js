@@ -1,42 +1,50 @@
 import classNames from "classnames/bind";
-import {  AiOutlineClose } from "react-icons/ai";
+import { AiOutlineClose } from "react-icons/ai";
 
 
 import styles from './OrderItem.module.scss'
 
 const cx = classNames.bind(styles)
 
-function OrderItem({index}) {
+function OrderItem({ orderItem, index }) {
     return (
         <div className={cx('wrapper')}>
-          
 
             <div className={cx('image-wrapper')}>
-                <img src='https://media.coolmate.me/cdn-cgi/image/width=672,height=990,quality=85,format=auto/uploads/October2023/QD001.7_43.jpg' />
-                <span className={cx('stt')}>{index+1}</span>
+                <img src={orderItem?.image} />
+                <span className={cx('stt')}>{index + 1}</span>
             </div>
 
             <div className={cx('item-info')}>
                 <div className={cx('item-name')}>
-                Quần dài thể thao Pro Active
+                    {orderItem?.productId.productName}
                 </div>
-                <div style={{display:'flex',flexDirection:'column'}}>
+                <div style={{ display: 'flex', flexDirection: 'column' }}>
                     <span className={cx('color-size')}>
-                    Xanh Navy / L
+                        {orderItem?.color + ' / ' + orderItem?.size}
                     </span>
                     <span className={cx('color-size')}>
-                    Quần / Quần dài
+                        {orderItem?.productId.productCategory + ' / ' + orderItem?.productId.productType}
                     </span>
                 </div>
-                <div style={{display: 'flex', alignItems:'center'}}>
+                <div style={{ display: 'flex', alignItems: 'center' }}>
                     <span className={cx('quantity')}>
-                    Số lượng: <strong style={{marginLeft: '4px'}}>2</strong>
+                        Số lượng: <strong style={{ marginLeft: '4px' }}>{orderItem.quantity}</strong>
                     </span>
-                    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end'}} >
-                        <span className={cx('price','enable')}>
-                        270,000</span>
-                        <span className={cx('price','price-serapate')}>310,000</span>
-                    </div>
+                    {
+                        orderItem.discountPerc &&
+                        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end' }} >
+                            <span className={cx('price', 'enable')}>
+                                {orderItem?.productId.exportPrice * (1 - orderItem.discountPerc)}</span>
+                            <span className={cx('price', 'price-serapate')}>{orderItem?.productId.exportPrice}</span>
+                        </div>
+                    }
+                    {
+                        !orderItem.discountPerc &&
+                        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end' }} >
+                            <span className={cx('price', 'enable')}>{orderItem?.productId.exportPrice}</span>
+                        </div>
+                    }
                 </div>
             </div>
         </div>

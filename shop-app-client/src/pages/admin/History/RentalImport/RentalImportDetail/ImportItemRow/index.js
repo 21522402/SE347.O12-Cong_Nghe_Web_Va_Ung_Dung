@@ -9,20 +9,20 @@ import { RiDeleteBin6Line } from "react-icons/ri";
 import styles from './ImportItemRow.module.scss'
 const cx = classNames.bind(styles)
 
-function ImportItemRow({ index, open, onClick, onClickRemoveItem, product }) {
+function ImportItemRow({  product }) {
    
 
     return (
         <React.Fragment >
             <tr  className={cx('bill-item')}>
                 {/* <td className={cx('delete')} ><span onClick={() => handleClickDeleteItem(index)}><RiDeleteBin6Line className={cx('icon-delete')} /></span></td> */}
-                <td className={cx('code')}>MH001</td>
-                <td className={cx('name')}>Áo thể thao mùa đông</td>
-                <td className={cx('type')}>Áo thể thao</td>
-                <td className={cx('color-size')}>Xanh/S</td>
-                <td className={cx('quantity')}>2</td>
-                <td className={cx('unitPrice')}>90,000</td>
-                <td className={cx('price')}>170000</td>
+                <td className={cx('code')}>{product.productCode}</td>
+                <td className={cx('name')}>{product.productName}</td>
+                <td className={cx('type')}>{product.productType}</td>
+                <td className={cx('color-size')}>{product.color+'/'+product.size}</td>
+                <td className={cx('quantity')}>{product.quantity}</td>
+                <td className={cx('unitPrice')}>{product.unitPriceImport}</td>
+                <td className={cx('price')}>{product.unitPriceImport*product.quantity}</td>
 
 
             </tr>
