@@ -61,7 +61,7 @@ function Info(){
                         </div>
                     </div>
                     <label for={cx('popup__editInfo')}>
-                        <div className={cx('account-info__btn')} onClick={() => setChecked(true)}>
+                        <div className={cx('account-info__btn')} >
                             <span className={cx('account-info__btn-text')}>Cập nhật</span>
                         </div>
                     </label>
