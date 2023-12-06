@@ -6,7 +6,8 @@ const userSlice = createSlice({
         order:{
             isLoading: false,
             orders: [],
-            error: false
+            error: false,
+            isSuccess: false,
         },
 
         address:{
@@ -19,7 +20,8 @@ const userSlice = createSlice({
         orderReview:{
             isLoading: false,
             orders: [],
-            error: false
+            error: false,
+            isSuccess: false,
         },
 
         cart:{
@@ -28,7 +30,8 @@ const userSlice = createSlice({
             forUProducts: [],
             vouchers: [],
             address: [],
-            error: false
+            error: false,
+            isSuccess: false,
         },
     },
     reducers: {
@@ -50,7 +53,10 @@ const userSlice = createSlice({
         //addresses
 
         resetSuccess: (state) => {
+            state.order.isSuccess = false
             state.address.isSuccess = false
+            state.orderReview.isSuccess = false
+            state.cart.isSuccess = false
         },
         getAllAddressStart: (state) => {
             state.address.isLoading = true;
@@ -67,9 +73,8 @@ const userSlice = createSlice({
 
         createAddressStart: (state) => {
             state.address.isLoading = true;
-            state.address.isSuccess = false;
             state.address.error = false;
-
+            state.address.isSuccess = false;
         },
         createAddressSuccess: (state, action) => {
             state.address.isLoading = false;
@@ -167,33 +172,27 @@ const userSlice = createSlice({
         getForUProductCartStart: (state) => {
             state.cart.isLoading = true;
             state.cart.error = false;
-            state.cart.isSuccess = false;
         },
         getForUProductCartSuccess: (state, action) => {
             state.cart.isLoading = false;
             state.cart.forUProducts = action?.payload
-            state.cart.isSuccess = true;
         },
         getForUProductCartFailed: (state) => {
             state.cart.isLoading = false;
             state.cart.error = true;
-            state.cart.isSuccess = false;
         },
 
         getAllVoucherStart: (state) => {
             state.cart.isLoading = true;
             state.cart.error = false;
-            state.cart.isSuccess = false;
         },
         getAllVoucherSuccess: (state, action) => {
             state.cart.isLoading = false;
             state.cart.vouchers = action?.payload
-            state.cart.isSuccess = true;
         },
         getAllVoucherFailed: (state) => {
             state.cart.isLoading = false;
             state.cart.error = true;
-            state.cart.isSuccess = false;
         },
 
         increaseCartItemStart: (state) => {
@@ -273,34 +272,45 @@ const userSlice = createSlice({
         getCartProductsStart: (state) => {
             state.cart.isLoading = true;
             state.cart.error = false;
-            state.cart.isSuccess = false;
         },
 
         getCartProductsSuccess: (state, action) => {
             state.cart.isLoading = false;
             state.cart.cartProducts = action?.payload
-            state.cart.isSuccess = true;
         },
         
         getCartProductsFailed: (state) => {
             state.cart.isLoading = false;
             state.cart.error = true;
-            state.cart.isSuccess = false;
         },
 
         getDefaultAddressStart: (state) => {
             state.cart.isLoading = true;
             state.cart.error = false;
-            state.cart.isSuccess = false;
         },
 
         getDefaultAddressSuccess: (state, action) => {
             state.cart.isLoading = false;
             state.cart.address = action?.payload
-            state.cart.isSuccess = true;
         },
         
         getDefaultAddressFailed: (state) => {
+            state.cart.isLoading = false;
+            state.cart.error = true;
+        },
+
+        createOrderStart: (state) => {
+            state.cart.isLoading = true;
+            state.cart.error = false;
+            state.cart.isSuccess = false;
+        },
+
+        createOrderSuccess: (state, action) => {
+            state.cart.isLoading = false;
+            state.cart.isSuccess = true;
+        },
+        
+        createOrderFailed: (state) => {
             state.cart.isLoading = false;
             state.cart.error = true;
             state.cart.isSuccess = false;
@@ -354,7 +364,10 @@ export const {
     deleteCartItemFailed,
     getDefaultAddressStart,
     getDefaultAddressSuccess,
-    getDefaultAddressFailed
+    getDefaultAddressFailed,
+    createOrderStart,
+    createOrderSuccess,
+    createOrderFailed
 } = userSlice.actions;
 
 export default userSlice.reducer;

@@ -13,7 +13,7 @@ const TransportInfo =  forwardRef(({props, userMail, _ref}) => {
     }));
 
     useEffect(() => {
-        setSelected(props ? {...props, email: userMail} : {
+        setSelected(props ? {...props, email: userMail, note: ''} : {
             name: "",
             province: "",
             district: "",

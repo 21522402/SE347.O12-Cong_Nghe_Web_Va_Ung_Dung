@@ -27,6 +27,7 @@ const orderSchema = new mongoose.Schema(
                 ward: String,
                 detail: String,
                 name: String,
+                email: String,
                 phoneNumber: String,
                 default: Boolean
             }

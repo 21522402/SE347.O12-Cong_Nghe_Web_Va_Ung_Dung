@@ -8,6 +8,7 @@ const Order = require('../../model/order/Order');
 const Review = require('../../model/review/Review');
 const cloudinaryUploadImage = require('../../utils/cloudinary');
 const Product = require('../../model/product/Product');
+const Voucher = require('../../model/voucher/Voucher');
 
 const userRegisterCtrl = async (req, res) => {
     try {
@@ -299,10 +300,10 @@ const createOrderCtrl = async (req, res) => {
 
         const orderIds = user.orders
         orderIds ? orderIds.push(order.id): orderIds = []
-        await User.findByIdAndUpdate(userId, {orders: orderIds})
 
         const promise = (item) => new Promise(async resolve => {
             const orderItem = await OrderItem.create({
+                "productId": item.productId,
                 "productName": item?.productName,
                 "image": item?.image,
                 "size": item?.size,
@@ -311,6 +312,17 @@ const createOrderCtrl = async (req, res) => {
                 "price": item?.price,
                 "discountPerc": item?.discountPerc
             })
+
+            await Product.updateOne({
+                _id: item.productId, 
+                "colors.colorName": item?.color,
+                "colors.sizes.sizeName": item?.size
+            },{$inc: {
+                'colors.$[].sizes.$[xxx].quantity': -item?.quantity
+            }},
+            {arrayFilters: [
+                {"xxx.sizeName": item?.size}
+            ]})
             
             resolve(orderItem.id)
         });
@@ -319,7 +331,6 @@ const createOrderCtrl = async (req, res) => {
 
         for (let i = 1; i < req?.body?.orderItem.length; i++) {
             p = p.then(async (data) => {
-                
                 await updateOrderItem(order.id,data)
                 return promise(req?.body?.orderItem[i]);
             })
@@ -328,6 +339,14 @@ const createOrderCtrl = async (req, res) => {
         p.then(async data => {
             await updateOrderItem(order.id,data)
         })
+
+        if(req?.body?.voucher){
+            await Voucher.findOneAndUpdate({voucherCode: req?.body?.voucher?.voucherCode}, {$inc: {
+                'quanlity': -1
+            }})
+        }
+
+        await User.findByIdAndUpdate(userId, {orders: orderIds, cart: []})
 
         return successTemplate(res, user.id, "Create order successfully!", 200)
 
@@ -494,17 +513,6 @@ const increaseQuantityCartItem = async(req, res) => {
         }
 
         cartIts = cartIts.map(item => item.id === req?.params?.cartItemId ? {...item, quantity: ++item.quantity} : {...item})
-
-        // await Product.updateOne({
-        //     _id: product._id, 
-        //     "colors.colorName": req?.body?.color,
-        //     "colors.sizes.sizeName": req?.body?.size
-        // },{$inc: {
-        //     'colors.$[].sizes.$[xxx].quantity': -1
-        // }},
-        // {arrayFilters: [
-        //     {"xxx.sizeName": req?.body?.size}
-        // ]})
 
         await User.findByIdAndUpdate(req?.params?.id, {cart: cartIts}, {new: true})
 

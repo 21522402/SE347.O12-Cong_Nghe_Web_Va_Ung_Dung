@@ -1,16 +1,14 @@
 import styles from './Cart.module.scss'
 import classNames from 'classnames/bind';
 import ProductItem from './ProductItem';
-import { useEffect, useState } from 'react';
+import { forwardRef, useEffect, useImperativeHandle, useState } from 'react';
 import ProductForUItem from './ProductForUItem';
 import VoucherItem from './VoucherItem';
 import { VoucherIcon2 } from '~/assets/icons';
 import { useDispatch, useSelector } from 'react-redux';
-import { createCartItem, getAllVoucher, getCartProducts, getDefaultAddress, getForUProduct, increaseQuantityCartItem } from '~/redux/api/userRequest';
-import axios from 'axios';
-import baseUrl from '~/utils/baseUrl';
+import { createCartItem, getAllVoucher, getCartProducts, getForUProduct, increaseQuantityCartItem } from '~/redux/api/userRequest';
 const cx = classNames.bind(styles);
-function Cart() {
+const Cart = forwardRef(({_ref}) => {
 
     let cartProducts = useSelector(state => state.user?.cart?.cartProducts)
     let forUProducts = useSelector(state => state.user?.cart?.forUProducts)
@@ -27,7 +25,12 @@ function Cart() {
     let [isPercent, setIsPercent] = useState(false);
     let [delivery, setDelivery] = useState(0);
     let [discountCode, setDiscountCode] = useState('');
-
+    let [voucherAL, setVoucher] = useState(null)
+    useImperativeHandle(_ref, () => ({
+        getChildVoucher: () => {
+            return voucherAL;
+        }
+    }));
     useEffect(() => {
         getCartProducts(currentUser, dispatch)
         getForUProduct(dispatch)
@@ -70,6 +73,7 @@ function Cart() {
                         setIsPercent(false)
                     }
                     setDiscount(voucher.voucherPrice)
+                    setVoucher(voucher)
                 }
                 else{
                     alert("Hãy chi thêm " + (voucher.minPrice - preTotal) + " để được hưởng ưu đãi")
@@ -183,6 +187,6 @@ function Cart() {
             </div>
         </>
     );
-}
+})
 
 export default Cart;

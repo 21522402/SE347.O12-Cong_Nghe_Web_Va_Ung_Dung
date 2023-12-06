@@ -7,28 +7,28 @@ import { useState } from 'react';
 const cx = classNames.bind(styles);
 
 function OrderItem({props}) {
-    let [detail, setDetail] = useState(false)
+    let [detail, setDetail] = useState(true)
     function calculateTotal(items){
-        return items.reduce((total, item) => total + (item.price * (1 - item.discountPerc) * item.quantity), 0);
+        return items.reduce((total, item) => total + (item.price * item.quantity), 0);
     }
     return ( <>
         <div className={cx('container')}>
             <div className={cx('header')}>
                 <div>
-                    <span className={cx('title')}>Order place:</span> <br></br>{(new Date(props.orderDate)).getDate() + '/ ' + ((new Date(props.orderDate)).getMonth() + 1) +'/ ' + (new Date(props.orderDate)).getFullYear()}
+                    <span className={cx('title')}>Ngày đặt hàng:</span> <br></br>{(new Date(props.orderDate)).getDate() + '/ ' + ((new Date(props.orderDate)).getMonth() + 1) +'/ ' + (new Date(props.orderDate)).getFullYear()}
                 </div>
                 <div>
-                    <span className={cx('title')}>Order total:</span> <br></br>{new Intl.NumberFormat('vi-VN', {style: 'currency', currency: 'VND'}).format(calculateTotal(props.orderItem))}
+                    <span className={cx('title')}>Tổng đơn hàng:</span> <br></br>{new Intl.NumberFormat('vi-VN', {style: 'currency', currency: 'VND'}).format(calculateTotal(props.orderItem))}
                 </div>
                 <div>
-                    <span className={cx('title')}>Order status:</span> <br></br><span style={{color: '#ED232F'}}>{props.status}</span>
+                    <span className={cx('title')}>Trạng thái:</span> <br></br><span style={{color: '#ED232F'}}>{props.status}</span>
                 </div>
-                <div onClick={() => setDetail(!detail)} style={{width: '106px'}}><span className={cx('title')} style={{color: '#4bc7bf', cursor: 'pointer'}}>{detail ? 'Less detail' : 'More detail'}</span></div>
+                <div onClick={() => setDetail(!detail)} style={{width: '106px'}}><span className={cx('title')} style={{color: 'white', cursor: 'pointer'}}>{detail ? 'Ẩn bớt' : 'Xem chi tiết'}</span></div>
             </div>
             <div className={cx('body')}>
                 <div className={cx(detail ? 'address-active' : 'address')}>
                     <div style={{ fontSize: '16px', fontWeight: 'bold', color: '#4bac4d' }}>
-                        Đơn đặt hàng #DH_{props._id} <span style={{ color: '#000' }}/>/ <span style={{color: '#ED232F', marginLeft: '5px'}}>{props.status}</span>
+                        Đơn đặt hàng #DH_{props._id.slice(0, 7)} <span style={{ color: '#000' }}/>/ <span style={{color: '#ED232F', marginLeft: '5px'}}>{props.status}</span>
                     </div>
                     <div style={{ display: 'flex', gap: '48px', marginTop: '8px' }}>
                         <div style={{ width: '30%' }}>

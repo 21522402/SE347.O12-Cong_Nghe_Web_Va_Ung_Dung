@@ -25,6 +25,7 @@ import DetailReview from "~/pages/admin/Reviews/DetailReview"
 import Feedbacks from "~/pages/admin/Feedbacks"
 import FeedbackDetail from "~/pages/admin/Feedbacks/FeedbackDetail"
 import Profile from "~/pages/user/Profile"
+import SuccessPayment from "~/pages/user/Payment/SuccessPayment"
 export const publicRoutes = [
     // user: => path: '/user/[pageName]'
     {path:'/user' , component: Home, layout:LayoutNoSidebar},
@@ -38,6 +39,7 @@ export const publicRoutes = [
     {path:'/cart' , component: Payment, layout: LayoutNoSidebar},
     {path:'/product/:id' , component: ProductDetail, layout:LayoutNoSidebar},
     {path:'/collection/:id' , component: Collection, layout:LayoutNoSidebar},
+    {path:'/successPayment' , component: SuccessPayment, layout:LayoutNoSidebar},
 
     // admin: => path: '/admin/[pageName]'
     {path:'/admin/customer-manage' , component: CustomerManage, layout:LayoutSidebar},
