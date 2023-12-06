@@ -41,7 +41,10 @@ function Modal({ setModal, typeModal, getAllProducts, getAllProductCaterogies, f
 
 
     const listProductCategory = ['Áo', 'Quần', 'Đồ lót']
-    const listProductType= listCategories.find(item => item.productCategoryName === product.productCategory).listProductType;
+    
+    const listProductType =  listCategories.find(item => item.productCategoryName === product.productCategory)?.listProductType || [];
+
+
 
     const [showCategory, setShowCategory] = useState(false)
     const [showType, setShowType] = useState(false)
@@ -228,7 +231,7 @@ function Modal({ setModal, typeModal, getAllProducts, getAllProductCaterogies, f
                                         <div ref={elementProductType} className={cx('product-category-select', { active: showType })} onClick={() => setShowType(prev => !prev)}>
                                             <span>{product.productType}</span>
                                             <span> {!showType ? <AiFillCaretDown /> : <AiFillCaretUp />}</span>
-                                            {showType && <AdvanceDropdown items={listProductType} keyProperty={'productTypeName'} keyId={'productTypeId'} style={{ width: '100%', left: '0', top: '35px' }} onClick={(item) => {dispatch(handleChangeInputText({ name: 'productType', value: item }))}} 
+                                            {showType && product.productCategory && <AdvanceDropdown items={listProductType} keyProperty={'productTypeName'} keyId={'productTypeId'} style={{ width: '100%', left: '0', top: '35px' }} onClick={(item) => {dispatch(handleChangeInputText({ name: 'productType', value: item }))}} 
                                                 addNewItem={handleAddNewProductType}
                                                 removeItem={handleRemoveProductType}
                                                 editItem={handleEditProductType}

@@ -66,6 +66,7 @@ function Products() {
                         listProductType: [...tmp].map(item => ({productTypeId: item._id, productTypeName: item.productTypeName}))
                     })
                 },[])
+                console.log(list)
                 dispatch(setListProductCategories(list))
             } 
         } catch (error) {
