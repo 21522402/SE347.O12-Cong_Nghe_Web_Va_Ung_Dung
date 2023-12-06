@@ -1,5 +1,5 @@
 import axios from "axios";
-import { createAddressFailed, createAddressStart, createAddressSuccess, deleteAddressFailed, deleteAddressStart, deleteAddressSuccess, getAllAddressFailed, getAllAddressStart, getAllAddressSuccess, getAllOrderFailed, getAllOrderReviewFailed, getAllOrderReviewStart, getAllOrderReviewSuccess, getAllOrderStart, getAllOrderSuccess, resetSuccess, updateAddressFailed, updateAddressStart, updateAddressSuccess } from "../slices/userSlice";
+import { createAddressFailed, createAddressStart, createAddressSuccess, createCartItemFailed, createCartItemStart, createCartItemSuccess, createReviewFailed, createReviewStart, createReviewSuccess, decreaseCartItemFailed, decreaseCartItemStart, decreaseCartItemSuccess, deleteAddressFailed, deleteAddressStart, deleteAddressSuccess, deleteCartItemFailed, deleteCartItemStart, deleteCartItemSuccess, getAllAddressFailed, getAllAddressStart, getAllAddressSuccess, getAllOrderFailed, getAllOrderReviewFailed, getAllOrderReviewStart, getAllOrderReviewSuccess, getAllOrderStart, getAllOrderSuccess, getAllVoucherFailed, getAllVoucherStart, getAllVoucherSuccess, getCartProductsFailed, getCartProductsStart, getCartProductsSuccess, getDefaultAddressFailed, getDefaultAddressStart, getDefaultAddressSuccess, getForUProductCartFailed, getForUProductCartStart, getForUProductCartSuccess, increaseCartItemFailed, increaseCartItemStart, increaseCartItemSuccess, resetSuccess, updateAddressFailed, updateAddressStart, updateAddressSuccess } from "../slices/userSlice";
 import baseUrl from "~/utils/baseUrl";
 
 //orders
@@ -94,4 +94,122 @@ export const getAllOrderReview = async (user, dispatch) => {
         dispatch(getAllOrderReviewFailed())
     }
 }
+
+export const createReview = async (user, orderItemId, data, dispatch, callback) => {
+    dispatch(createReviewStart())
+    try{
+        console.log(data)
+        const res = await axios.post(baseUrl + "/api/users/reviews/createReview/"+ user._id + "/" + orderItemId, data, {
+            headers: {token: "Bearer " + user.accessToken},
+        })
+        dispatch(createReviewSuccess(res.data.result))
+        callback(res)
+    }   
+    catch(err){
+        dispatch(createReviewFailed())
+    }
+}
+
+//cart
+
+export const getForUProduct = async (dispatch) => {
+    dispatch(getForUProductCartStart())
+    try{
+        const res = await axios.get(baseUrl + "/api/users/cart/getForUProduct")
+        dispatch(getForUProductCartSuccess(res.data))
+    }   
+    catch(err){
+        dispatch(getForUProductCartFailed())
+    }
+}
+
+export const getAllVoucher = async (dispatch) => {
+    dispatch(getAllVoucherStart())
+    try{
+        const res = await axios.get(baseUrl + "/api/vouchers/")
+        dispatch(getAllVoucherSuccess(res.data.result))
+    }   
+    catch(err){
+        dispatch(getAllVoucherFailed())
+    }
+}
+
+export const increaseQuantityCartItem = async (user, cartItem, dispatch) => {
+    dispatch(increaseCartItemStart())
+    try{
+        const res = await axios.put(baseUrl + "/api/users/cart/increateCartItem/" + user._id + "/" + cartItem._id, cartItem, {
+            headers: {token: "Bearer " + user.accessToken}
+        })
+        if(!res?.data?.result) return;
+        dispatch(increaseCartItemSuccess(cartItem._id))
+    }   
+    catch(err){
+        dispatch(increaseCartItemFailed())
+    }
+}
+
+export const decreaseQuantityCartItem = async (user, cartItem, dispatch) => {
+    dispatch(decreaseCartItemStart())
+    try{
+        const res = await axios.put(baseUrl + "/api/users/cart/deceaseCartItem/" + user._id + "/" + cartItem._id, cartItem, {
+            headers: {token: "Bearer " + user.accessToken}
+        })
+        console.log()
+        if(!res?.data?.result) dispatch(deleteCartItemSuccess(cartItem._id))
+        else dispatch(decreaseCartItemSuccess(cartItem._id))
+    }   
+    catch(err){
+        dispatch(decreaseCartItemFailed())
+    }
+}
+
+export const deleteCartItem = async (user, cartItem, dispatch) => {
+    dispatch(deleteCartItemStart())
+    try{
+        const res = await axios.put(baseUrl + "/api/users/cart/deleteCartItem/" + user._id + "/" + cartItem._id, {
+            headers: {token: "Bearer " + user.accessToken}
+        })
+        if(!res?.data?.result) return;
+        dispatch(deleteCartItemSuccess(cartItem._id))
+    }   
+    catch(err){
+        dispatch(deleteCartItemFailed())
+    }
+}
+
+export const createCartItem = async (user, cart, dispatch) => {
+    dispatch(createCartItemStart())
+    try{
+        const res = await axios.post(baseUrl + "/api/users/cart/createCartItem/" + user._id, cart)
+        if(!res?.data?.result) return;
+        console.log(res?.data?.result)
+        dispatch(createCartItemSuccess(res?.data?.result))
+    }   
+    catch(err){
+        dispatch(createCartItemFailed())
+    }
+}
+
+export const getCartProducts = async (user, dispatch) => {
+    dispatch(getCartProductsStart())
+    try{
+        const res = await axios.get(baseUrl + "/api/users/cart/" + user._id)
+        dispatch(getCartProductsSuccess(res?.data?.result))
+    }   
+    catch(err){
+        dispatch(getCartProductsFailed())
+    }
+}
+
+export const getDefaultAddress = async (user, dispatch) => {
+    dispatch(getDefaultAddressStart())
+    try{
+        const res = await axios.get(baseUrl + "/api/users/cart/defaultAddress/" + user._id)
+        dispatch(getDefaultAddressSuccess(res?.data?.result))
+    }   
+    catch(err){
+        dispatch(getDefaultAddressFailed())
+    }
+}
+
 

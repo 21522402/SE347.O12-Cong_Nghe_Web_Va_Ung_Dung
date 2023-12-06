@@ -50,7 +50,7 @@ function OrderItem({props}) {
                             <div className={cx('form-group')}>
                                 <label>Phí ship:
                                 </label>
-                                <div className={cx('info-value')}>200,000 VNĐ</div>
+                                <div className={cx('info-value')}>0</div>
                             </div>
 
                         </div>

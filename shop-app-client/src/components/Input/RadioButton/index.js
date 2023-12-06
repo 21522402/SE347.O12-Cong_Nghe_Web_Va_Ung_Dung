@@ -4,8 +4,8 @@ import { useEffect, useState } from 'react';
 import { BsCheck } from 'react-icons/bs';
 const cx = classNames.bind(styles);
 
-function RadioButton({listItems, filterValueChecked}) {
-    let [selected, setSelected] = useState({id: -1, name: ''})
+function RadioButton({listItems, filterValueChecked, selectedItem}) {
+    let [selected, setSelected] = useState({...selectedItem})
     useEffect(()=>{
         filterValueChecked(selected)
     

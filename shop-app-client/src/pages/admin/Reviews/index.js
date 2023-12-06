@@ -12,18 +12,73 @@ const cx = classNames.bind(styles);
 function Reviews() {
   const cbb = [
     { value: 'All', label: 'Tất cả' },
-    { value: 'Increase', label: 'Giá từ thấp đến cao' },
-    { value: 'Reduce', label: 'Giá từ cao xuống thấp' }
+    { value: 'From 1 star', label: 'Từ 1 sao trở lên' },
+    { value: 'From 2 star', label: 'Từ 2 sao trở lên' },
+    { value: 'From 3 star', label: 'Từ 3 sao trở lên' },
+    { value: 'From 4 star', label: 'Từ 4 sao trở lên' },
+    { value: '5 star', label: '5 sao' },
   ]
   const [listAllItemReview, setListAllItemReview] = useState([]);
+  const [listItemReviewTmp, setListItemReviewTmp] = useState([]);
+  const [textSearch, setTextSearch] = useState("");
+
+  const handleChangeTextSearch = (e) => {
+    setTextSearch(e.target.value);
+    const arrSearch = e.target.value.trim() ==='' ? listItemReviewTmp : listItemReviewTmp.filter((item) => {
+      return item.product.productName.includes(e.target.value);
+    })
+    setListAllItemReview([...arrSearch])
+  }
+
+  const handleChangeCbb = (value) => {
+    if (value.label === "Từ 1 sao trở lên")
+    {
+      const arrSearch = listItemReviewTmp.filter((item) => {
+        return item.averageStar >= 1;
+      })
+      setListAllItemReview([...arrSearch])
+    }
+    else if (value.label === "Từ 2 sao trở lên")
+    {
+      const arrSearch = listItemReviewTmp.filter((item) => {
+        return item.averageStar >= 2;
+      })
+      setListAllItemReview([...arrSearch])
+    }
+    else if (value.label === "Từ 3 sao trở lên")
+    {
+      const arrSearch = listItemReviewTmp.filter((item) => {
+        return item.averageStar >= 3;
+      })
+      setListAllItemReview([...arrSearch])
+    }
+    else if (value.label === "Từ 4 sao trở lên")
+    {
+      const arrSearch = listItemReviewTmp.filter((item) => {
+        return item.averageStar >= 4;
+      })
+      setListAllItemReview([...arrSearch])
+    }
+    else if (value.label === "5 sao")
+    {
+      const arrSearch = listItemReviewTmp.filter((item) => {
+        return item.averageStar === 5;
+      })
+      setListAllItemReview([...arrSearch])
+    }
+    else
+    {
+      const arrSearch = listItemReviewTmp;
+      setListAllItemReview([...arrSearch])
+    }
+  }
 
   const getAllReviews = async () => {
     try {
       const config = {};
       const { data } = await axios.get(`${baseUrl}/api/reviews/all_review`, config);
-      console.log(data);
       setListAllItemReview([...data.result]);
-      // setListFeedbackTmp([...data.result]);
+      setListItemReviewTmp([...data.result]);
     } catch (error) {
       console.log(error);
     }
@@ -32,11 +87,6 @@ function Reviews() {
   useEffect(() => {
     getAllReviews();
   }, []);
-
-  useEffect(() => {
-    console.log(listAllItemReview)
-  }, [listAllItemReview]);
-
 
   return (
     <div className={cx('wrapper')} style={{ fontSize: '14px' }}>
@@ -51,11 +101,19 @@ function Reviews() {
             <div style={{ display: 'flex' }}>
               <form className={cx('search-field')}>
                 <BiSearch fontSize={20} style={{ position: 'absolute', top: '0', left: 0, marginTop: '20px', marginLeft: '18px' }} />
-                <input type='text' name='searchField' id='searchField' className={cx('search-input')} placeholder='Tìm kiếm' />
+                <input 
+                  type='text' 
+                  name='searchField' 
+                  id='searchField' 
+                  className={cx('search-input')} 
+                  placeholder='Tìm kiếm'
+                  value={textSearch}
+                  onChange={handleChangeTextSearch} />
               </form>
               <Select options={cbb}
                 defaultValue={cbb[0]}
-                className={cx('combobox')} />
+                className={cx('combobox')} 
+                onChange={handleChangeCbb}/>
             </div>
           </div>
           <div className={cx("container-list", "row")}>
@@ -64,7 +122,6 @@ function Reviews() {
                 <ProductReviewItem
                   key={index}
                   item={item}
-                  numberReview={listAllItemReview.length}
                 />
               );
             })}

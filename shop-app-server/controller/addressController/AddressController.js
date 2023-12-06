@@ -7,9 +7,6 @@ const cloudinaryUploadImage = require('../../utils/cloudinary');
 const fs = require('fs');
 const addAddressCtrl = async (req, res) => {
     try {
-        // if (existedVoucher && existedVoucher.expiredDate > currentDate) throw new Error('Voucher code is existed and launched. Please try again!');
-        // const localPath = `public/images/vouchers/${req.file.filename}`;
-        // const imgUpload = await cloudinaryUploadImage(localPath)
         const address = await Address.create({
             ...req?.body
         })

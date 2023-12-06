@@ -62,7 +62,7 @@ function Login({navSignup, navForgot}) {
                     <form onSubmit={handleSubmit} style={{width:'100%', marginTop:'16px'}}>
                         <input onChange={handleChange("phoneNumber")} placeholder='Email/SĐT của bạn' type='text' name='username' autoFocus='autoFocus' style={{border:'1px solid #ccc',height:'48px', borderRadius:'100vmax', width:'100%',boxSizing:'border-box', padding:'5px 20px',transition: 'all .2s', marginBottom:'16px'}}/>
                         <input onChange={handleChange("password")} placeholder='Mật khẩu'  type='password' name='password' autoFocus='autoFocus' style={{border:'1px solid #ccc',height:'48px', borderRadius:'100vmax', width:'100%',boxSizing:'border-box', padding:'5px 20px',transition: 'all .2s', marginBottom:'16px'}}/>
-                        <CustomeButton title={' Đăng nhập '} type={'submit'} containStyles={{backgroundColor:'black', color:'white', width:'100%', height:'48px', borderRadius:'100vmax'}} bgHover={'#ccc'}/>
+                        <CustomeButton title={' Đăng nhập '} type={'Submit'} containStyles={{backgroundColor:'black', color:'white', width:'100%', height:'48px', borderRadius:'100vmax'}} bgHover={'#ccc'}/>
                     </form>
                     <div style={{display:'flex', justifyContent:'space-between',marginTop:'4px' }}>
                         <CustomeButton onClick={() => navSignup("signup")} title={'Đăng ký tài khoản mới'} containStyles={{backgroundColor:'white', color:'#2f5acf', width:'fit-content', fontSize:'14px'}}/>
