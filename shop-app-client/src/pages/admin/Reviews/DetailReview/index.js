@@ -16,8 +16,8 @@ function DetailReview() {
   const {id} = useParams();
   const cbb = [
     { value: 'All', label: 'Tất cả' },
-    { value: 'UnResponse', label: 'Đã phản hồi' },
-    { value: 'Responsed', label: 'Chưa phản hồi' }
+    { value: 'Responsed', label: 'Đã phản hồi' },
+    { value: 'UnResponsed', label: 'Chưa phản hồi' }
   ]
   const cbb1 = [
     { value: 'All', label: 'Tất cả' },
@@ -28,8 +28,8 @@ function DetailReview() {
     { value: '5', label: '5 sao' },
   ]
 
-  // const [cbbStar, setCbbStar] = useState("Tất cả")
-  // const [cbbRes, setCbbRes] = useState("Tất cả")
+  const [cbbStar, setCbbStar] = useState(cbb1[0].value)
+  const [cbbRes, setCbbRes] = useState(cbb[0].value)
 
   const [itemReview, setItemReview] = useState({})
   const [listItemReviewTmp, setListItemReviewTmp] = useState([]);
@@ -47,39 +47,30 @@ function DetailReview() {
       console.log(error);
     }
   };
-  const handleChangeCbb1 = (value) => {
-    if (value.label === "1 sao")
+
+
+  const handleCbb1 = (v) => {
+    setCbbStar(v.value)
+  }
+
+  const handleCbb = (v) => {
+    setCbbRes(v.value)
+  }
+
+  useEffect(() => {
+    if (cbbRes === "Responsed")
     {
       const arrSearch = listItemReviewTmp.filter((item) => {
-        return item.star === 1;
+        console.log(item.star, Number(cbbStar))
+        return item.star === Number(cbbStar) && item.isResponsed === true;
       })
       setItemReview({...itemReview, reviews: arrSearch})
     }
-    else if (value.label === "2 sao")
+    else if (cbbRes === "UnResponsed")
     {
       const arrSearch = listItemReviewTmp.filter((item) => {
-        return item.star === 2;
-      })
-      setItemReview({...itemReview, reviews: arrSearch})
-    }
-    else if (value.label === "3 sao")
-    {
-      const arrSearch = listItemReviewTmp.filter((item) => {
-        return item.star === 3;
-      })
-      setItemReview({...itemReview, reviews: arrSearch})
-    }
-    else if (value.label === "4 sao")
-    {
-      const arrSearch = listItemReviewTmp.filter((item) => {
-        return item.star === 4;
-      })
-      setItemReview({...itemReview, reviews: arrSearch})
-    }
-    else if (value.label === "5 sao")
-    {
-      const arrSearch = listItemReviewTmp.filter((item) => {
-        return item.star === 5;
+        console.log(item.star, Number(cbbStar))
+        return item.star === Number(cbbStar) && item.isResponsed === false;
       })
       setItemReview({...itemReview, reviews: arrSearch})
     }
@@ -88,37 +79,15 @@ function DetailReview() {
       const arrSearch = listItemReviewTmp;
       setItemReview({...itemReview, reviews: arrSearch})
     }
-  }
-  const handleChangeCbb = (value) => {
-    if (value.label === "Đã phản hồi")
-    {
-      const arrSearch = listItemReviewTmp.filter((item) => {
-        return item.isResponsed === true;
-      })
-      setItemReview({...itemReview, reviews: arrSearch})
-    }
-    else if (value.label === "Chưa phản hồi")
-    {
-      const arrSearch = listItemReviewTmp.filter((item) => {
-        return item.isResponsed === false;
-      })
-      setItemReview({...itemReview, reviews: arrSearch})
-    }
-    else
-    {
-      const arrSearch = listItemReviewTmp;
-      setItemReview({...itemReview, reviews: arrSearch})
-    }
-  }
+  }, [cbbStar, cbbRes])
 
   useEffect(() => {
     getReviewsById();
   }, []);
 
   useEffect(() => {
-    console.log(itemReview.reviews);
-  }, [itemReview]) 
-
+    console.log(listItemReviewTmp)
+  }, [listItemReviewTmp]);
 
   const formatMoney = (monney) => {
     const formatter = new Intl.NumberFormat("de-VN", {
@@ -215,12 +184,14 @@ function DetailReview() {
               <Select options={cbb1}
                 defaultValue={cbb1[0]}
                 className={cx('combobox')}
-                onChange={handleChangeCbb1}
+                onChange={handleCbb1}
+                openMenuOnClick={handleCbb1}
               />
               <Select options={cbb}
                 defaultValue={cbb[0]}
                 className={cx('combobox')} 
-                onChange={handleChangeCbb}/>
+                onChange={handleCbb}
+                openMenuOnClick={handleCbb}/>
 
             </div>
             {/* List Reivew */}

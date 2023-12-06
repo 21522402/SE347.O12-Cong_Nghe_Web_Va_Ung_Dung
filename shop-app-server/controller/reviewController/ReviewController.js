@@ -1,6 +1,7 @@
 const Review = require("../../model/review/Review");
 const successTemplate = require("../../templates/succesTemplate");
 const errorTemplate = require("../../templates/errorTemplate");
+const cloudinaryCustom = require('../../utils/cloudinaryCustom');
 
 const getAllReviews = async (req, res) => {
   try {
@@ -75,9 +76,7 @@ const getAllReviews = async (req, res) => {
         ThreeStar: CountStar(item.reviews, 3),
         FourStar: CountStar(item.reviews, 4),
         FiveStar: CountStar(item.reviews, 5),
-        quantityResponsed: item.reviews.reduce((acc, cur) => {
-          return cur.isResponsed === true && acc + 1;
-        }, 0),
+        quantityResponsed: CountResponsed(item.reviews),
       };
     });
 
@@ -94,8 +93,11 @@ const getAllReviews = async (req, res) => {
 const responseReview = async (req, res) => {
   try {
     const imageBuffer = [];
+    debugger;
     const listImageBase64 = req.body.response.imagesRsp;
+    debugger;
     for (let i = 0; i < listImageBase64.length; i++) {
+      debugger;
       const result = await cloudinaryCustom.uploader.upload(
         listImageBase64[i],
         {
@@ -104,16 +106,25 @@ const responseReview = async (req, res) => {
       );
       imageBuffer.push(result.secure_url);
     }
+    debugger;
+    const rv = await Review.findByIdAndUpdate(
+      { _id: req.body._id },
+      {
+        $set: {
+          response: {
+            content: req.body.response.content,
+            date: new Date(),
+            imagesRsp: imageBuffer,
+          },
+          isResponsed: true,
+        },
+      }
+    ).exec();
 
-    const rv = await Review.findById(req.body._id).exec();
-    rv.response.content = req.body.response.content;
-    rv.response.imagesRsp = imageBuffer;
-    rv.response.date = new Date();
-  
-    rv.isResponsed = true;
     rv.save();
     return successTemplate(res, rv, "Responsed review successfully!", 200);
   } catch (error) {
+    debugger;
     return errorTemplate(res, error.message);
   }
 };
@@ -127,6 +138,16 @@ const CountStar = (arr, star) => {
   }
   return (temp / arr.length) * 100;
 };
+
+const CountResponsed = (arr) => {
+  let temp = 0;
+  for (let i = 0; i < arr.length; i++) {
+    if (arr[i].isResponsed === true) {
+      temp = temp + 1;
+    }
+  }
+  return temp;
+}
 
 module.exports = {
   getAllReviews,

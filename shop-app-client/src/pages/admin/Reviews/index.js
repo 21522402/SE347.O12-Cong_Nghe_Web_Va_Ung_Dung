@@ -25,7 +25,7 @@ function Reviews() {
   const handleChangeTextSearch = (e) => {
     setTextSearch(e.target.value);
     const arrSearch = e.target.value.trim() ==='' ? listItemReviewTmp : listItemReviewTmp.filter((item) => {
-      return item.product.productName.includes(e.target.value);
+      return item.product.productName.toLowerCase().includes(e.target.value.toLowerCase());
     })
     setListAllItemReview([...arrSearch])
   }
@@ -128,14 +128,6 @@ function Reviews() {
           </div>
         </div>
       </div>
-      <footer className={cx("sticky-footer")}>
-        <div className={cx("container")}>
-          <div class="copyright text-center my-auto">
-            <span>Copyright &copy; Your Website 2023</span>
-          </div>
-        </div>
-      </footer>
-
     </div>
 
   );
