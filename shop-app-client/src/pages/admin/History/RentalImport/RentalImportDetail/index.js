@@ -23,9 +23,9 @@ import ImportItemRow from "./ImportItemRow";
 
 const cx = classNames.bind(styles)
 
-function RentalImportDetail({itemImport}) {
-   
-   
+function RentalImportDetail({ itemImport }) {
+
+
     return (
         <div className={cx('wrapper')}>
             {/* Header */}
@@ -37,7 +37,7 @@ function RentalImportDetail({itemImport}) {
             <div className={cx('product-container')}>
                 <div className={cx('order-container')}>
                     <div style={{ fontSize: '16px', fontWeight: 'bold', color: '#4bac4d' }}>
-                        Phiếu nhập #{itemImport._id}
+                        Phiếu nhập #{itemImport._id.substring(12)}
 
                     </div>
                     <div style={{ marginTop: '8px' }}>
@@ -60,14 +60,16 @@ function RentalImportDetail({itemImport}) {
 
                         <div className={cx('wrap-form-groups')}>
                             <div className={cx('form-group')} style={{ width: '30%' }}>
+                            <label>Tiền hàng: </label>
+                                <div className={cx('info-value')}>{itemImport.totalMoneyGoods +' VNĐ'}</div>
+                            </div>
+                            <div className={cx('form-group')} style={{ width: '30%' }}>
+                            <label>Giảm giá: </label>
+                                <div className={cx('info-value')}>{itemImport.discount +' VNĐ'}</div>
+                            </div>
+                            <div className={cx('form-group')} style={{ width: '30%' }}>
                                 <label>Tổng tiền: </label>
-                                <div className={cx('info-value')}>{itemImport.finalMoney}</div>
-                            </div>
-                            <div className={cx('form-group')} style={{ width: '30%' }}>
-
-                            </div>
-                            <div className={cx('form-group')} style={{ width: '30%' }}>
-
+                                <div className={cx('info-value')}>{itemImport.finalMoney+' VNĐ'}</div>
                             </div>
 
                         </div>
@@ -95,7 +97,7 @@ function RentalImportDetail({itemImport}) {
 
                                 {itemImport.listImportProducts.map((item, index) => {
                                     return (
-                                        <ImportItemRow key={index} product={item}/>
+                                        <ImportItemRow key={index} product={item} />
                                     )
                                 })}
 
@@ -107,10 +109,7 @@ function RentalImportDetail({itemImport}) {
 
                 </div>
                 {/* Chức năng */}
-                <div className={cx('product-fucntion')}>
-
-                    <span className={cx('btn', 'btn-succeed')}><AiOutlineSave style={{ marginRight: '6px', fontSize: '16px' }} />  Lưu</span>
-                </div>
+               
             </div>
         </div>
     );

@@ -88,7 +88,7 @@ const slice = createSlice({
                 if (index === action.payload.index) {
                     return {
                         ...item,
-                        unitPriceImport: Number(action.payload.unitPriceImport)
+                        unitPriceImport: (action.payload.unitPriceImport)
                     }
                 }
                 else return item;
@@ -198,7 +198,7 @@ const slice = createSlice({
                                         if (index3===action.payload.indexSize) {
                                             return {
                                                 ...item3,
-                                                quantity: Number(action.payload.quantity)
+                                                quantity: (action.payload.quantity)
                                             }
                                         }
                                         else return item3
@@ -298,9 +298,12 @@ const slice = createSlice({
             state.finalMoney = state.totalMoneyGoods - state.discount
         },
         handleChangeDiscount: (state, action) => {
-            state.discount = Number(action.payload.discount)
-            state.finalMoney = state.totalMoneyGoods - state.discount
-            if (state.finalMoney<0) state.finalMoney = 0
+            state.discount = action.payload.discount
+            if (action.payload.discount.trim()!=='' && (/^\d+$/.test(action.payload.discount.trim()))) {
+                state.finalMoney = state.totalMoneyGoods - state.discount
+                if (state.finalMoney<0) state.finalMoney = 0
+            }
+           
         },
         handleSetQuantity: (state, action) => {
             state.listImportProducts = [...state.listImportProducts].map((item, index) => {

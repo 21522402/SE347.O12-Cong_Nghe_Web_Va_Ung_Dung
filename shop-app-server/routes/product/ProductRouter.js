@@ -8,6 +8,7 @@ const router = express.Router();
 
 router.post('/addProduct',productController.addProduct)
 router.patch('/editProduct',productController.editProduct)
+router.patch('/editStatusProduct',productController.editStatusProduct)
 router.patch('/editProductByType',productController.editProductByType)
 router.get('/getAllProducts',productController.getAllProducts)
 router.get('/', (req, res) => {

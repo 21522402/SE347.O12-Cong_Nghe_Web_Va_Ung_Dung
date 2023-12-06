@@ -11,7 +11,7 @@ const cx = classNames.bind(styles)
 
 
 
-function ImportProductRow({ index, setModal, setIndexItemImport, product, onClickRemoveItem }) {
+function ImportProductRow({ index, setModal, setIndexItemImport, product, onClickRemoveItem, listImportsLength }) {
     const itemImport = useSelector(state => state.importProduct.listImportProducts[index]);
     const dispatch = useDispatch();
     const handleClickImport = () => {
@@ -26,7 +26,7 @@ function ImportProductRow({ index, setModal, setIndexItemImport, product, onClic
     return (
         <React.Fragment >
             <tr className={cx('product-item')}>
-                <td className={cx('delete')} ><span onClick={() => dispatch(removeItemImport({index}))}><RiDeleteBin6Line className={cx('icon-delete')} /></span></td>
+                <td className={cx('delete')} >{listImportsLength>1 && <span onClick={() => dispatch(removeItemImport({index}))}><RiDeleteBin6Line className={cx('icon-delete')} /></span>}</td>
                 <td className={cx('stt')}>{index + 1}</td>
                 <td className={cx('code')}>{itemImport.productCode}</td>
                 <td className={cx('name')}>{itemImport.productName}</td>

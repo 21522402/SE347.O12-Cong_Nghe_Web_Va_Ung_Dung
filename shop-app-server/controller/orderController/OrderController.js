@@ -59,6 +59,20 @@ const orderController = {
             return errorTemplate(res, error.message)
         }
     },
+    adminEditStatus: async (req,res) => {
+        try {
+            const {id,status} = req.body
+            const order = await Order.findById(id).exec();
+            order.status = status;
+            await order.save();
+            res.status(200).json({
+                message: "Thay đổi trạng thái thành công!",
+                data: order
+            })
+        } catch (error) {
+            return errorTemplate(res, error.message)
+        }
+    }
 }
 
 module.exports = orderController;

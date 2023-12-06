@@ -3,8 +3,10 @@ import { AiOutlineSearch, AiFillCaretDown, AiOutlinePlus } from "react-icons/ai"
 import { FaFileImport, FaFileExport } from "react-icons/fa";
 import { IoSquareOutline, IoCheckboxSharp } from "react-icons/io5";
 import React, { useEffect, useState, createContext } from "react";
-import { resetCurrentProduct, setListProducts, filterListProductsState, setListProductsState,
-setListProductCategories} from "~/redux/slices/productSlice";
+import {
+    resetCurrentProduct, setListProducts, filterListProductsState, setListProductsState,
+    setListProductCategories
+} from "~/redux/slices/productSlice";
 
 import ProductRow from "./ProductRow";
 import styles from './Products.module.scss'
@@ -19,20 +21,20 @@ const cx = classNames.bind(styles)
 export const ModalContext = createContext();
 function Products() {
     const dispatch = useDispatch();
-    const listProducts =  useSelector(state => state.product.listProducts)
+    const listProducts = useSelector(state => state.product.listProducts)
     const listProductsState = useSelector(state => state.product.listProductsState)
     const listCategories = useSelector(state => state.product.listCategories)
     const [inputFocus, setInputFocus] = useState(false);
-    const [listStatus,setListStatus] = useState(['Tất cả','Bán trực tiếp','Chưa đăng bán','Ngừng kinh doanh'])
+    const [listStatus, setListStatus] = useState(['Tất cả', 'Bán trực tiếp', 'Chưa đăng bán', 'Ngừng kinh doanh'])
     const listProductCategory = ['Tất cả', 'Áo', 'Quần', 'Đồ lót']
-    const [listProductType, setListProductType] = useState([]); 
-    const [filter,setFilter] = useState({
+    const [listProductType, setListProductType] = useState([]);
+    const [filter, setFilter] = useState({
         productType: '',
         productCategory: '',
         status: '',
         searchText: ''
-    
-    }) 
+
+    })
     const [showCategory, setShowCategory] = useState(false)
     const [showType, setShowType] = useState(false)
     const filterTypeElement = useRef(null)
@@ -47,8 +49,8 @@ function Products() {
             if (res && res.data) {
                 dispatch(setListProducts(res.data.data))
                 dispatch(setListProductsState(res.data.data))
-                dispatch(filterListProductsState({filter}));
-            } 
+                dispatch(filterListProductsState({ filter }));
+            }
         } catch (error) {
             console.log(error.message)
         }
@@ -58,17 +60,17 @@ function Products() {
             const res1 = await axios.get(`${baseUrl}/api/productCategory/getAllProductCaterogies`)
             const res2 = await axios.get(`${baseUrl}/api/productType/getAllProductType`);
             if (res1 && res1.data && res2 && res2.data) {
-                const list = res1.data.data.reduce((acc,cur) => {
+                const list = res1.data.data.reduce((acc, cur) => {
                     let tmp = res2.data.data.filter(item => item.productCategory === cur._id);
                     return acc.concat({
                         productCategoryName: cur.productCategoryName,
                         productCategoryId: cur._id,
-                        listProductType: [...tmp].map(item => ({productTypeId: item._id, productTypeName: item.productTypeName}))
+                        listProductType: [...tmp].map(item => ({ productTypeId: item._id, productTypeName: item.productTypeName }))
                     })
-                },[])
+                }, [])
                 console.log(list)
                 dispatch(setListProductCategories(list))
-            } 
+            }
         } catch (error) {
             console.log(error.message)
         }
@@ -76,7 +78,7 @@ function Products() {
     useEffect(() => {
         getAllProducts()
         getAllProductCaterogies()
-    },[])
+    }, [])
     useEffect(() => {
         function handleClickOutside(event) {
             if (filterTypeElement.current && !filterTypeElement.current.contains(event.target)) {
@@ -120,15 +122,16 @@ function Products() {
                 return ['Tất cả'].concat(productCategory.listProductType.map(item => item.productTypeName));
             })
         }
-        dispatch(filterListProductsState({filter}));
-    },[filter])
+        dispatch(filterListProductsState({ filter }));
+    }, [filter])
     useEffect(() => {
-        setFilter(prev => ({...prev, productType: ''}))
-    },[filter.productCategory])
+        setFilter(prev => ({ ...prev, productType: '' }))
+    }, [filter.productCategory])
     return (
         <ModalContext.Provider value={{ setShowModal, setTypeModal }}>
 
             <div className={cx('wrapper')}>
+                
                 <div className={cx('container')}>
                     <div>
                         <h1>QUẢN LÝ SẢN PHẨM</h1>
@@ -144,8 +147,7 @@ function Products() {
                                 })}>
                                     <AiOutlineSearch className={cx('icon')} />
                                     <input onFocus={() => setInputFocus(true)} onBlur={() => setInputFocus(false)} type="text" placeholder="Theo mã, tên hàng" className={cx('search-input')}
-                                    value={filter.searchText} onChange={(e) => setFilter(prev => ({...prev, searchText: e.target.value}))}/>
-                                    <AiFillCaretDown className={cx('icon')} />
+                                        value={filter.searchText} onChange={(e) => setFilter(prev => ({ ...prev, searchText: e.target.value }))} />
                                 </div>
 
                                 {/* nhóm hàng */}
@@ -154,8 +156,8 @@ function Products() {
                                         <span className={cx('btn', 'btn-succeed')}>{filter.productCategory || 'Nhóm hàng'} <AiFillCaretDown /></span>
                                     </div>
 
-                       
-                                    {showCategory && <DropDown items={listProductCategory} onClick={(item) => {setFilter(prev => ({...prev, productCategory: item}))}} />}
+
+                                    {showCategory && <DropDown items={listProductCategory} onClick={(item) => { setFilter(prev => ({ ...prev, productCategory: item })) }} />}
                                 </div>
 
                                 {/* Loại hàng */}
@@ -164,7 +166,7 @@ function Products() {
                                         <span className={cx('btn', 'btn-succeed')}>{filter.productType || 'Loại hàng'} <AiFillCaretDown /></span>
                                     </div>
 
-                                    {showType && <DropDown items={listProductType} onClick={(item) => {setFilter(prev => ({...prev, productType: item}))}} />}
+                                    {showType && <DropDown items={listProductType} onClick={(item) => { setFilter(prev => ({ ...prev, productType: item })) }} />}
 
                                 </div>
                                 <div ref={filterStatusElement} className={cx('product-type')} onClick={() => setShowStatus(prev => !prev)}>
@@ -172,7 +174,7 @@ function Products() {
                                         <span className={cx('btn', 'btn-succeed')}>{filter.status || 'Trạng thái'}<AiFillCaretDown /></span>
                                     </div>
 
-                                    {showStatus && <DropDown items={listStatus} onClick={(item) => {setFilter(prev => ({...prev, status: item}))}}/>}
+                                    {showStatus && <DropDown items={listStatus} onClick={(item) => { setFilter(prev => ({ ...prev, status: item })) }} />}
 
                                 </div>
                             </div>
@@ -182,7 +184,7 @@ function Products() {
 
                                 {/* thêm */}
                                 <div className={cx('function-button')}>
-                                    <span onClick={() => { dispatch(resetCurrentProduct())  ;setTypeModal('add'); setShowModal(true) }} className={cx('btn', 'btn-succeed')}><AiOutlinePlus className={cx('icon')} /> Thêm mới</span>
+                                    <span onClick={() => { dispatch(resetCurrentProduct()); setTypeModal('add'); setShowModal(true) }} className={cx('btn', 'btn-succeed')}><AiOutlinePlus className={cx('icon')} /> Thêm mới</span>
                                 </div>
 
 
@@ -207,7 +209,7 @@ function Products() {
 
                                     {listProductsState.map((item, index) => {
                                         return (
-                                            <ProductRow key={index} index={index}/>
+                                            <ProductRow key={index} index={index}  getAllProducts={getAllProducts} />
                                         )
                                     })}
 

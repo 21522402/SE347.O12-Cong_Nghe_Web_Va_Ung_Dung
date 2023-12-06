@@ -17,7 +17,7 @@ function BillRow({ itemBill }) {
         <React.Fragment >
             <tr className={cx('product-item', { showDetail: openDetail })} ref={element}>
                 {/* <td className={cx('delete')} ><span onClick={() => handleClickDeleteItem(index)}><RiDeleteBin6Line className={cx('icon-delete')} /></span></td> */}
-                <td className={cx('billCode')}>{'#' + itemBill._id}</td>
+                <td className={cx('billCode')}>{'#' + itemBill._id.substring(12)}</td>
                 <td className={cx('orderCode')}>{itemBill.orderId}</td>
                 <td className={cx('date')}>{itemBill.time}</td>
                 <td className={cx('payMethod')}>{itemBill.method}</td>

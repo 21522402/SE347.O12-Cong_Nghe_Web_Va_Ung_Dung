@@ -53,7 +53,7 @@ function ItemColor({ index }) {
     return (
         <div className={cx('wrapper')}>
             <div style={{ marginTop: '8px', transition: 'height 0.3s linear' }}>
-
+ 
                 <div style={{ display: 'flex', alignItems: 'center' }}>
                     {
                         !showMore ?
