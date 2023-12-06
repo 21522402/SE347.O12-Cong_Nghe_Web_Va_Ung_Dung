@@ -8,13 +8,25 @@ function VoucherPopup({props, onClose}) {
     const [selected, setSelected] = useState({})
     useEffect(() => {
         setSelected(props ? props : {
-            voucherDes: '',
-            voucherStartDate: '',
-            voucherOutDate: '',
+            description: '',
+            startDate: '',
+            expiredDate: '',
             voucherCode: '',
-            voucherCondition: '',
+            minPrice: '',
         })
     }, [props])
+    const convertDate = (d) => {
+        const date = new Date(d);
+
+        // Lấy thông tin ngày, tháng, năm
+        const day = String(date.getDate()).padStart(2, '0');
+        const month = String(date.getMonth() + 1).padStart(2, '0'); // Tháng bắt đầu từ 0
+        const year = date.getFullYear();
+
+        // Tạo chuỗi ngày tháng định dạng 'DD-MM-YYYY'
+        const formattedDate = `${day}/${month}/${year}`;
+        return formattedDate;
+    }
     return ( 
         <>
             <div className={cx('container')}>
@@ -28,7 +40,7 @@ function VoucherPopup({props, onClose}) {
                             Chi tiết
                         </h2>
                         <p className={cx('infoContent')}>
-                            {selected.voucherDes}
+                            {selected.description}
                         </p>
                     </div>
                     <div className={cx('outerInfo')}>
@@ -36,7 +48,7 @@ function VoucherPopup({props, onClose}) {
                             Thời gian áp dụng
                         </h2>
                         <p className={cx('infoContent')}>
-                            {`${selected.voucherStartDate} - ${selected.voucherOutDate}`}
+                            {`${convertDate(selected.startDate)} - ${convertDate(selected.expiredDate)}`}
                         </p>
                     </div>
                     <div className={cx('outerInfo')}>
@@ -44,10 +56,10 @@ function VoucherPopup({props, onClose}) {
                             Điều kiện
                         </h2>
                         <p className={cx('infoContent')}>
-                            {selected.voucherCondition}
+                            Áp dụng với đơn hàng trên {selected.minPrice} d
                         </p>
                     </div>
-                    <div className={cx('outerInfo')}>
+                    {/* <div className={cx('outerInfo')}>
                         <h2 className={cx('infoTitle')}>
                             Không áp dụng với
                         </h2>
@@ -55,7 +67,7 @@ function VoucherPopup({props, onClose}) {
                             Lượt sử dụng có hạn. Nhanh tay kẻo lỡ bạn nhé!
                             Tặng 01 Quần lót Trunk Cotton cho đơn hàng 259K (Không áp dụng cho sản phẩm SALE)
                         </p>
-                    </div>
+                    </div> */}
                 </div>
             </div>
         </>

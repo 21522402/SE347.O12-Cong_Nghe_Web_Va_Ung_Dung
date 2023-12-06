@@ -18,7 +18,7 @@ function PolicyItem({props}) {
             <div className={cx('outer_header', `${popup ? 'pop_head' : ''}`)} onClick={() => setPopup(!popup)}>
                 <span className={cx('question')}>{item.question}</span>
                 {
-                    popup ? <AiOutlinePlus className={cx('icon_plus')}/> : <AiOutlineMinus className={cx('icon_plus')}/>
+                    !popup ? <AiOutlinePlus className={cx('icon_plus')}/> : <AiOutlineMinus className={cx('icon_plus')}/>
                 }
                 
             </div>
