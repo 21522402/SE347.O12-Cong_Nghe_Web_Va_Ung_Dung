@@ -15,7 +15,15 @@ const {
     createOrderCtrl,
     cancelOrderCtrl,
     getAllReviewCtrl,
-    createReviewCtrl
+    createReviewCtrl,
+    getForuProductCtrl,
+    increaseQuantityCartItem,
+    decreaseQuantityCartItem,
+    createCartItem,
+    deleteCartItem,
+    getAllCartItem,
+    getDefaultAddress,
+    checkVoucherDiscountCode
 } = require('../../controller/userController/UserController');
 
 const verify = require('../../middlewares/auth/verify');
@@ -26,6 +34,10 @@ userRoutes.get('/', verify.verifyToken, getAllUser);
 
 userRoutes.delete('/:id', verify.verifyTokenAndAdmin, deleteUser);
 
+userRoutes.get('/get-all-buyers', getAllBuyer);
+
+userRoutes.get('/:id', getUserInfo);
+
 userRoutes.put('/addresses/addAddress/:id', addAddressCtrl);
 
 userRoutes.put('/addresses/updateAddress/:id/:addressId', updateAddressCtrl);
@@ -34,15 +46,13 @@ userRoutes.get('/addresses/:id', getAllAddresssCtrl);
 
 userRoutes.delete('/addresses/deleteAddress/:id/:addressId', deleteAddressCtrl);
 
-userRoutes.get('/get-all-buyers', getAllBuyer);
+
 
 userRoutes.post('/update-active-buyer/:id', updateActiveBuyer);
 
-userRoutes.get('/:id', getUserInfo);
 
-userRoutes.post('/updateUser/:id', updateUserInfo);
+userRoutes.post('/update-User/:id', updateUserInfo);
 
-userRoutes.post('/save-voucher-buyer', saveVoucherBuyer);
 userRoutes.get('/getAllOrders/:id', getAllOrderCtrl);
 
 userRoutes.post('/createOrder/:id', createOrderCtrl);
@@ -55,6 +65,38 @@ userRoutes.get('/reviews/:id', getAllReviewCtrl);
 
 userRoutes.post('/reviews/createReview/:id/:orderItemId', createReviewCtrl);
 
+userRoutes.get('/getAllOrders/:id', getAllOrderCtrl);
 
+userRoutes.post('/createOrder/:id', createOrderCtrl);
+
+userRoutes.put('/cancelOrder/:orderId', cancelOrderCtrl);
+
+//review
+
+userRoutes.get('/reviews/:id', getAllReviewCtrl);
+
+userRoutes.post('/reviews/createReview/:id/:orderItemId', createReviewCtrl);
+
+userRoutes.post('/save-voucher-buyer', saveVoucherBuyer);
+
+userRoutes.post('/save-voucher-buyer', saveVoucherBuyer);
+
+//cart
+
+userRoutes.get('/cart/getForUProduct', getForuProductCtrl);
+
+userRoutes.put('/cart/increateCartItem/:id/:cartItemId', increaseQuantityCartItem);
+
+userRoutes.put('/cart/deceaseCartItem/:id/:cartItemId', decreaseQuantityCartItem);
+
+userRoutes.post('/cart/createCartItem/:id', createCartItem);
+
+userRoutes.put('/cart/deleteCartItem/:id/:cartItemId', deleteCartItem);
+
+userRoutes.get('/cart/:id', getAllCartItem);
+
+userRoutes.get('/cart/defaultAddress/:id', getDefaultAddress);
+
+userRoutes.get('/cart/checkVoucherDiscountCode', checkVoucherDiscountCode)
 
 module.exports = userRoutes;

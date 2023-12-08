@@ -3,16 +3,19 @@ import React, { useEffect, useRef } from "react";
 import { useState } from "react";
 import { IoSquareOutline, IoCheckboxSharp } from "react-icons/io5";
 import { RiDeleteBin6Line } from "react-icons/ri";
-
+import { removeItemImport, handleChangeUnitPriceImport } from "~/redux/slices/importProductsSlice";
 
 import styles from './ImportProductRow.module.scss'
+import { useDispatch, useSelector } from "react-redux";
 const cx = classNames.bind(styles)
 
 
 
-function ImportProductRow({ index, setModal, setProduct, product, onClickRemoveItem }) {
+function ImportProductRow({ index, setModal, setIndexItemImport, product, onClickRemoveItem }) {
+    const itemImport = useSelector(state => state.importProduct.listImportProducts[index]);
+    const dispatch = useDispatch();
     const handleClickImport = () => {
-        setProduct(product)
+        setIndexItemImport(index)
         setModal(true)
     }
     const handleClickDeleteItem = (index) => {
@@ -23,15 +26,15 @@ function ImportProductRow({ index, setModal, setProduct, product, onClickRemoveI
     return (
         <React.Fragment >
             <tr className={cx('product-item')}>
-                <td className={cx('delete')} ><span onClick={() => handleClickDeleteItem(index)}><RiDeleteBin6Line className={cx('icon-delete')} /></span></td>
+                <td className={cx('delete')} ><span onClick={() => dispatch(removeItemImport({index}))}><RiDeleteBin6Line className={cx('icon-delete')} /></span></td>
                 <td className={cx('stt')}>{index + 1}</td>
-                <td className={cx('code')}>{product.productId}</td>
-                <td className={cx('name')}>{product.productName}</td>
-                <td className={cx('quantity')}>15</td>
+                <td className={cx('code')}>{itemImport.productCode}</td>
+                <td className={cx('name')}>{itemImport.productName}</td>
+                <td className={cx('quantity')}>{itemImport.quantity}</td>
                 <td className={cx('unitPrice')}>
-                    <input  placeholder="100000" type="text" style={{ width: '80px', textAlign: 'center', background: 'transparent' }}  />
+                    <input value={itemImport.unitPriceImport}  placeholder="100000" onChange={(e) => dispatch(handleChangeUnitPriceImport({index,unitPriceImport: e.target.value}))} type="text" style={{ width: '80px', textAlign: 'center', background: 'transparent' }}  />
                 </td>
-                <td className={cx('price')}>1,720,000</td>
+                <td className={cx('price')}>{itemImport.totalMoey}</td>
                 <td className={cx('import')}>
                     <span onClick={handleClickImport} className={cx('btn', 'btn-succeed')}>Nhập</span>
                 </td>

@@ -1,6 +1,11 @@
 const mongoose = require('mongoose');
 
+
 const reviewSchema = new mongoose.Schema({
+    orderItem: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "OrderItem"
+    },
     user: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "User"
@@ -9,10 +14,7 @@ const reviewSchema = new mongoose.Schema({
         type: Number,
         require: [true, 'Star of review is required.']
     },
-    orderItem: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "OrderItem"
-    },
+    
     content: {
         type: String,
         require: [true, 'Content review is required.']

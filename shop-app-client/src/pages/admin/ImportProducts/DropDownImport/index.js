@@ -10,15 +10,16 @@ function DropDownImport({items, style, onClick}) {
     return (
 
         <ul className={cx('wrapper')} style={style}>
-            {items.map((item,index) => 
+            
+            {items &&  items.map((item,index) => 
                 <li key={index} onClick={() => handleClickItem(item)}>
                     <div className={cx('productImage')}>
-                        <img src={item.productImage}/>
+                        <img src={item.colors[0].images[0]}/>
                     </div>
                     <div className={cx('productInfo')}>
                         <h2>{item.productName}</h2>
                         <div>
-                            <span>{item.productId}</span>
+                            <span>{item.productCode}</span>
                             <span style={{marginLeft: '30px'}}>Giá: {item.exportPrice}</span>
                         </div>
                         <span>Tồn: {item.quantity}</span>

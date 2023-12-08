@@ -1,5 +1,5 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { Link, Navigate, useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import styles from './Sidebar.module.scss'
 import classNames from 'classnames/bind';
 import { BsArrowRight } from "react-icons/bs";
@@ -9,8 +9,6 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { logoutUser } from '~/redux/api/authRequest';
 import { useDispatch, useSelector } from 'react-redux';
-import { createAxios } from '~/redux/api/createInstance';
-import { loginSuccess, logoutSuccess } from '~/redux/slices/authSlice';
 const cx = classNames.bind(styles);
 function Sidebar() {
     const [activeItem , setActiveItem ] = useState('info')
@@ -38,7 +36,7 @@ function Sidebar() {
                         'active-item':activeItem==='info'
                     })}>
                     <div className={cx('tab_container_info')}>
-                        <img src={AccountIcon} className={cx('tab_icon')}></img>
+                        <img alt='img' src={AccountIcon} className={cx('tab_icon')} />
                         <span className={cx('tab_info')}>Thông tin tài khoản</span>
                     </div>
                     <BsArrowRight className={cx('tab_arrowRight')}/>
@@ -49,7 +47,7 @@ function Sidebar() {
                         'active-item':activeItem==='order'
                     })}>
                     <div className={cx('tab_container_info')}>
-                        <img src={OrderIcon} className={cx('tab_icon')}></img>
+                        <img alt='img' src={OrderIcon} className={cx('tab_icon')}></img>
                         <span className={cx('tab_info')}>Lịch sử đơn hàng</span>
                     </div>
                     <BsArrowRight className={cx('tab_arrowRight')}/>
@@ -60,7 +58,7 @@ function Sidebar() {
                         'active-item':activeItem==='voucher'
                     })}>
                     <div className={cx('tab_container_info')}>
-                        <img src={VoucherIcon} className={cx('tab_icon')}></img>
+                        <img alt='img' src={VoucherIcon} className={cx('tab_icon')}></img>
                         <span className={cx('tab_info')}>Ví voucher</span>
                     </div>
                     <BsArrowRight className={cx('tab_arrowRight')}/>
@@ -72,7 +70,7 @@ function Sidebar() {
                         'active-item':activeItem==='address'
                     })}>
                     <div className={cx('tab_container_info')}>
-                        <img src={LocationIcon} className={cx('tab_icon')}></img>
+                        <img alt='img' src={LocationIcon} className={cx('tab_icon')}></img>
                         <span className={cx('tab_info')}>Sổ địa chỉ</span>
                     </div>
                     <BsArrowRight className={cx('tab_arrowRight')}/>
@@ -83,7 +81,7 @@ function Sidebar() {
                         'active-item':activeItem==='review'
                     })}>
                     <div className={cx('tab_container_info')}>
-                        <img src={RatingIcon} className={cx('tab_icon')}></img>
+                        <img alt='img' src={RatingIcon} className={cx('tab_icon')}></img>
                         <span className={cx('tab_info')}>Đánh giá và phản hồi</span>
                     </div>
                     <BsArrowRight className={cx('tab_arrowRight')}/>
@@ -94,7 +92,7 @@ function Sidebar() {
                         'active-item':activeItem==='policies'
                     })}>
                     <div className={cx('tab_container_info')}>
-                        <img src={QuestionIcon} className={cx('tab_icon')}></img>
+                        <img alt='img' src={QuestionIcon} className={cx('tab_icon')}></img>
                         <span className={cx('tab_info')}>Chính sách và câu hỏi thường gặp</span>
                     </div>
                     <BsArrowRight className={cx('tab_arrowRight')}/>
@@ -102,7 +100,7 @@ function Sidebar() {
             </Link>
             <div className={cx('tab_container')} onClick={handleLogout}>
                 <div className={cx('tab_container_info')}>
-                    <img src={LogOutIcon} className={cx('tab_icon')}></img>
+                    <img alt='img' src={LogOutIcon} className={cx('tab_icon')}></img>
                     <span className={cx('tab_info')}>Đăng xuất</span>
                 </div>
                 <BsArrowRight className={cx('tab_arrowRight')}/>

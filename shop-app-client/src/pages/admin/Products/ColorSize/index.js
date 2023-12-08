@@ -13,7 +13,7 @@ import styles from './ColorSize.module.scss'
 
 const cx = classNames.bind(styles)
 
-function ColorSize() {
+function ColorSize({ list }) {
     return (
         <div className={cx('wrapper')}>
             <div className={cx('table-view')}>
@@ -25,48 +25,21 @@ function ColorSize() {
                             <th className={cx('quantity')}><span>Số lượng</span></th>
                         </tr>
                     </thead>
-    
-                    <tbody>
-                        <tr>
-                            <td className={cx('color')}>Vàng</td>
-                            <td className={cx('size')}>XL</td>
-                            <td className={cx('quantity')}>32</td>
-                        </tr>
-                        <tr>
-                            <td className={cx('color')}>Vàng</td>
-                            <td className={cx('size')}>XL</td>
-                            <td className={cx('quantity')}>32</td>
-                        </tr>
-                        <tr>
-                            <td className={cx('color')}>Vàng</td>
-                            <td className={cx('size')}>XL</td>
-                            <td className={cx('quantity')}>32</td>
-                        </tr>
-                        <tr>
-                            <td className={cx('color')}>Vàng</td>
-                            <td className={cx('size')}>XL</td>
-                            <td className={cx('quantity')}>32</td>
-                        </tr>
-                        <tr>
-                            <td className={cx('color')}>Vàng</td>
-                            <td className={cx('size')}>XL</td>
-                            <td className={cx('quantity')}>32</td>
-                        </tr>
-                        <tr>
-                            <td className={cx('color')}>Vàng</td>
-                            <td className={cx('size')}>XL</td>
-                            <td className={cx('quantity')}>32</td>
-                        </tr>
-                        <tr>
-                            <td className={cx('color')}>Vàng</td>
-                            <td className={cx('size')}>XL</td>
-                            <td className={cx('quantity')}>32</td>
-                        </tr>
-                   
 
-                      
-                       
-                        
+                    <tbody>
+                        {
+                            list.map((item, index) => {
+                                return (
+                                    <tr key={index}>
+                                        <td className={cx('color')}>{item.color}</td>
+                                        <td className={cx('size')}>{item.size}</td>
+                                        <td className={cx('quantity')}>{item.quantity}</td>
+                                    </tr>
+                                )
+                            })
+                        }
+
+                     
                     </tbody>
                 </table>
             </div>

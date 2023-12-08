@@ -3,14 +3,18 @@ import React, { useEffect, useRef } from "react";
 import { useState } from "react";
 import ProductDetail from "../ProductDetail";
 import { IoSquareOutline, IoCheckboxSharp } from "react-icons/io5";
-
+import {  useSelector } from "react-redux";
 import styles from './ProductRow.module.scss'
 const cx = classNames.bind(styles)
 
 
 
-function ProductRow({ index, open, onClick}) {
+function ProductRow({ index}) {
+
+    const product = useSelector(state => state.product.listProductsState[index])
     const element = useRef(null)
+    const imageProductDefault = "https://cdn-app.kiotviet.vn/sample/fashion/38.png";
+    const img = product.colors[0]?.images[0] ?? imageProductDefault
     const [openDetail,setOpenDetail] = useState(false);
     const handleClickProducItem = () => {
         setOpenDetail(prev => !prev);
@@ -24,16 +28,15 @@ function ProductRow({ index, open, onClick}) {
     return (
         <React.Fragment >
             <tr onClick={handleClickProducItem} className={cx('product-item', {showDetail: openDetail})} ref={element}>
-                <td className={cx('checkbox')} ><IoCheckboxSharp className={cx('icon-checkbox')} /></td>
                 <td className={cx('img')}>
-                    <img src="https://cdn-app.kiotviet.vn/sample/fashion/38.png"/>
+                    <img src={img}/>
                 </td>
-                <td className={cx('code')}>CM015</td>
-                <td className={cx('name')}>Áo ba lỗ</td>
-                <td className={cx('status')}>Ngưng kinh doanh</td>
-                <td className={cx('price-buy')}>3,520,000</td>
-                <td className={cx('price-origin')}>1,720,000</td>
-                <td className={cx('quantity')}>200</td>
+                <td className={cx('code')}>{product.productCode}</td>
+                <td className={cx('name')}>{product.productName}</td>
+                <td className={cx('status')}>{product.status}</td>
+                <td className={cx('price-buy')}>{product.exportPrice}</td>
+                <td className={cx('price-origin')}>{product.importPrice}</td>
+                <td className={cx('quantity')}>{product.quantity}</td>
 
             </tr>
 
@@ -41,7 +44,7 @@ function ProductRow({ index, open, onClick}) {
                 openDetail &&
                 <tr className={cx('product-detail')}>
                     <td colSpan={8} style={{ padding: '0' }}>
-                        <ProductDetail />
+                        <ProductDetail index={index}/>
                     </td>
                 </tr>
             }

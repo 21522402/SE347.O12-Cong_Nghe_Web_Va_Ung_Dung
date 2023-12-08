@@ -6,138 +6,111 @@ import { GoTrash } from "react-icons/go";
 import { IoMdThermometer } from 'react-icons/io';
 import { useDispatch } from 'react-redux';
 import { importItemToOrder } from '~/redux/actions';
+import Orders from '~/pages/admin/Orders';
 const cx = classNames.bind(styles);
-function ProductForUItem({props}) {
+function ProductForUItem({props, handleItemToOrder}) {
     const dispatch = useDispatch();
     let [colors, setColors] = useState([])
     let [sizes, setSizes] = useState([])
-    let [image, setImage] = useState([])
-    let [item, setItem] = useState({})
+    let [defaultSelection, setDefaultSelection] = useState({
+        image: "",
+        colorName: "",
+        size: ""
+    })
 
     useEffect(() => {
-        setColors(createListColorCBB(props.colors))
-        setSizes(createListSizeCBB(props.color, props.colors))
-        setImage(getImage(props.color, props.colors));
-        setItem(props ? props : {
-            productId: '1',
-            productavatar: '',
-            productName: '',
-            importPrice: 0,
-		    exportPrice: 0,
-            colors:[
-                {
-                    colorCode: '',
-                    colorName: '',
-                    images: '',
-                    size:{
-                    }
-                },
-            ],
-            discountPerc: 0,
-            quantity: 0,
-            size: '',
-            color: '',
-        })
+        if(props){
+            getDefaultSelection();
+            setColors(createListColorCBB())
+        }
     }, [])
 
-    function createListColorCBB(list){
-        if(list){
+    function createListColorCBB(){
+        if(props.colors){
             const colors = [];
-            list.forEach((element, index) => {
-                if(Object.keys(element.size).length !== 0)
+            props.colors.forEach((element, index) => {
+                if(Object.keys(element.sizes).length !== 0)
                     colors.push({id: index, name: element.colorName})
             });
-            if(colors) return colors
-            return [{id: -1, name: ''}]
+            return colors
         }
         else
             return [{id: -1, name: ''}]
     }
 
-    function createListSizeCBB(currentColor, list){
-        if(list){
-            const color = list.find((i) => i.colorName === currentColor)
+    function createListSizeCBB(currentColor){
+        if(props.colors){
+            const color = props.colors.find((i) => i.colorName === currentColor)
             if(color){
-                return  Object.keys(color.size).map((s, index) => {
-                    return {id: index, name: s}
+                return color.sizes.map((s, index) => {
+                    return {id: index, name: s.sizeName}
                 })
             }
+            else return []
         }
         else
-            return [{id: -1, name: ''}]
+            return []
     }
 
-    function onColorchange(e, list){
-        if(list){
-            setSizes(createListSizeCBB(e.name, item.colors))
-            if(!createListSizeCBB(e.name, item.colors).map((item) => item.name).includes(item.size)){
-                console.log("màu này không có size bạn đang chọn")
-                return
+    function onColorchange(e){
+        if(props.colors){
+            const listSize = createListSizeCBB(e.name)
+            setSizes(listSize)
+            let have = true
+            if(!listSize.map((item) => item.name).includes(defaultSelection.size)){
+                have = false
             }
-            setImage(getImage(e.name, list));
-            setItem({...item, color: e.name})
+            have ? 
+                setDefaultSelection({...defaultSelection, colorName: e.name, image: props.colors.find(item => item.colorName === e.name)?.images[0]})
+            :
+                setDefaultSelection({size: listSize[0].name, colorName: e.name, image: props.colors.find(item => item.colorName === e.name)?.images[0]})
         }
-    }
-
-    function getQuantity(){
-        const list = props.colors;
-        if(list){
-            const color = list.find((i) => i.colorName === props.color)
-            if(color){
-                return color.size[props.size].quantity
-            }
-        }
-        else
-            return 0;
     }
 
     function onSizeChange(e){
-        item.size = e.name
-        setItem({...item, 'size': e.name})
+        setDefaultSelection({...defaultSelection, size: e.name})
     }
 
-    function getImage(currentColor, list){
-        if(list){
-            const color = list.find((i) => i.colorName === currentColor)
-            if(color){
-                return color.images
+    function getDefaultSelection(){
+        if(props?.colors){
+            for(let i = 0; i < props.colors.length; i++){
+                if(props.colors[i].sizes && props.colors[i].images){
+                    setDefaultSelection({
+                        image: props.colors[i].images[0],
+                        colorName: props.colors[i].colorName,
+                        size: props.colors[i].sizes[0].sizeName
+                    })
+                    setSizes(createListSizeCBB(props.colors[i].colorName))
+                    return;    
+                }
             }
         }
-        else
-            return [{id: -1, name: ''}]
-    }
-
-    function handleItemToOrder(){
-        dispatch(importItemToOrder({
-            product: item,
-            color: props.color,
-        }))
     }
     return ( 
         <>
             <div className={cx('container')}>
                 <div className={cx('image')}>
-                    <img className={cx('image')} src={image} alt=''/>
+                    <img className={cx('image')} src={defaultSelection.image} alt=''/>
                 </div>
                 <div className={cx('rightContent')}>
                     <div>
                         <div className={cx('outerContent')}>
-                            <span className={cx('productName')}>{item.productName}</span>
+                            <span className={cx('productName')}>{props.productName}</span>
                         </div>
                         <div className={cx('selector')}>
                             <div style={{width: '120px'}}>
-                                <ComboBox listItems={colors} placeHolder={''} selectedItem={item.color} type={'list-gray'} filterValueSelected={(e) => onColorchange(e, item.colors)}/>
+                                <ComboBox listItems={colors} placeHolder={''} selectedItem={defaultSelection.colorName} type={'list-gray'} filterValueSelected={(e) => onColorchange(e)}/>
                             </div>
                             <div style={{width: '70px'}}>
-                                <ComboBox listItems={sizes} placeHolder={''} selectedItem={item.size} type={'list-gray'} filterValueSelected={onSizeChange}/>
+                                <ComboBox listItems={sizes} placeHolder={''} selectedItem={defaultSelection.size} type={'list-gray'} filterValueSelected={onSizeChange}/>
                             </div>
                         </div>
                         <div style={{fontSize: '14px', fontStyle: 'italic'}}>Top 10 sản phẩm bán chạy</div>
                         <div style={{display: 'flex', flexDirection: 'row', gap: '5px', alignItems: 'flex-end', marginBottom: '15px'}}>
-                            <div style={{fontWeight: '600'}}>{new Intl.NumberFormat('vi-VN', {style: 'currency', currency: 'VND'}).format(item.exportPrice * (1 - item.discountPerc))}</div>
-                            <del style={{fontWeight: '400', fontSize: '14px', color: '#ccc'}}>{new Intl.NumberFormat('vi-VN', {style: 'currency', currency: 'VND'}).format(item.exportPrice)}</del>
+                            <div style={{fontWeight: '600'}}>{new Intl.NumberFormat('vi-VN', {style: 'currency', currency: 'VND'}).format(props.exportPrice * (1 - props.discountPerc  / 100))}</div>
+                            <del style={{fontWeight: '400', fontSize: '14px', color: '#ccc'}}>{new Intl.NumberFormat('vi-VN', {style: 'currency', currency: 'VND'}).format(props.exportPrice)}</del>
                         </div>
-                        <div className={cx('account-info__btn')} onClick={() => handleItemToOrder()}>
+                        <div className={cx('account-info__btn')} onClick={() => handleItemToOrder(props, defaultSelection)}>
                             <span className={cx('account-info__btn-text')}>Lấy ngay</span>
                         </div>
                     </div>

@@ -202,7 +202,12 @@
     // }
     
     
-    th.code {
+    th.billCode {
+        width: 150px;
+        padding: 10px 10px 10px 25px;
+        text-align: center;
+    }
+    th.orderCode {
         width: 150px;
         padding: 10px 10px 10px 25px;
         text-align: center;

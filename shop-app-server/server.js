@@ -6,11 +6,23 @@ const userRoutes = require('./routes/user/UserRoutes');
 const { errorHandler, notFound } = require('./middlewares/error/errorHandler');
 const cors = require('cors');
 const cookieParser = require('cookie-parser')
-const voucherRoutes = require('./routes/voucher/VoucherRoutes');
+const voucherRoutes = require('./routes/voucher/VoucherRoutes')
+const productRouter = require('./routes/product/ProductRouter')
+const productCategoryRouter = require('./routes/productCategory/ProductCategoryRouter')
+const productTypeRouter = require('./routes/productType/productTypeRouter')
+const importProductRouter = require('./routes/importProduct/ImportProductRouter')
+const billRouter = require('./routes/bill/BillRouter');
+
 const addressRoutes = require('./routes/address/AddressRoutes');
 const authRoutes = require('./routes/auth/AuthRoute');
 const orderRoutes = require('./routes/order/OrderRoutes');
+<<<<<<< HEAD
 const productRoutes = require('./routes/productRoutes');
+=======
+const feedbackRoutes = require('./routes/feedback/FeedbackRoutes');
+const reviewRoutes = require('./routes/review/ReviewRouters');
+
+>>>>>>> origin/merge512
 
 // declaire app express
 const app = express();
@@ -19,7 +31,9 @@ const app = express();
 dbConnect();
 
 // use middlewares
-app.use(express.json());
+app.use(express.json({
+    limit: '500mb'
+}));
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(cors());
@@ -28,11 +42,21 @@ app.use(cors());
 // User Route
 app.use('/api/users', userRoutes);
 app.use('/api/vouchers', voucherRoutes);
+app.use('/api/products',productRouter)
+app.use('/api/productCategory',productCategoryRouter)
+app.use('/api/productType',productTypeRouter)
+app.use('/api/importProduct',importProductRouter)
 app.use('/api/addresses', addressRoutes);
 app.use('/api/auth', authRoutes);
 app.use('/api/orders', orderRoutes);
+<<<<<<< HEAD
 app.use('/api/product',productRoutes);
 
+=======
+app.use('/api/feedbacks', feedbackRoutes);
+app.use('/api/reviews', reviewRoutes);
+app.use('/api/bill', billRouter);
+>>>>>>> origin/merge512
 
 // Error handler
 app.use(notFound);

@@ -52,13 +52,15 @@ const authController = {
 
     loginUser: async (req, res) => {
         try{
-            const user = await User.findOne({ phoneNumber: req?.body?.phoneNumber })
+            const user = await User.findOne({ phoneNumber: req?.body?.phoneNumber }).populate('vouchers')
             
             if(!user){
                 return res.status(404).json("User is not exist");
             }
+
+            console.log(req.body.password, user.password)
             
-            const validPassword = bcrypt.compareSync(
+            const validPassword = bcrypt.compare(
                 req.body.password, 
                 user.password
             )
