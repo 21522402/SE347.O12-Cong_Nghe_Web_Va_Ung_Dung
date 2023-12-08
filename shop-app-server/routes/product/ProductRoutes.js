@@ -4,6 +4,7 @@ const productController = require('../controllers/productController');
 const authenticationMiddleware = require('../middlewares/authenticationMiddleware');
 
 // Public routes
+router.get('/search',productController.)
 router.get('/products', productController.getAllProducts);
 router.get('/products/:id', productController.getProductById);
 

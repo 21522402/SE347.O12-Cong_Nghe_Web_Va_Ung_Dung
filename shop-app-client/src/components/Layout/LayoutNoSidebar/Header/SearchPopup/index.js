@@ -44,11 +44,13 @@ function SearchPopup({ onMouseLeave }) {
       try {
         setLoading(true);
         if (valueSearch.trim() !== '') {
-          const response = await axios.get(`/api/products/search?query=${valueSearch}`);
+          const response = await axios.get(`/api/product/search?query=${valueSearch}`);
           setSearchResults(response.data);
         } else {
-          setSearchResults([]); // Reset results if the search keyword is empty
+          // setSearchResults([]); 
+          console.log('ahihi');
         }
+
       } catch (error) {
         console.error(error);
       } finally {

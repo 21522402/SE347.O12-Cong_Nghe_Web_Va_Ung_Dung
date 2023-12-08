@@ -10,6 +10,8 @@ const voucherRoutes = require('./routes/voucher/VoucherRoutes');
 const addressRoutes = require('./routes/address/AddressRoutes');
 const authRoutes = require('./routes/auth/AuthRoute');
 const orderRoutes = require('./routes/order/OrderRoutes');
+const productRoutes = require('./routes/productRoutes');
+
 // declaire app express
 const app = express();
 
@@ -29,7 +31,7 @@ app.use('/api/vouchers', voucherRoutes);
 app.use('/api/addresses', addressRoutes);
 app.use('/api/auth', authRoutes);
 app.use('/api/orders', orderRoutes);
-
+app.use('/api/product',productRoutes);
 
 
 // Error handler
