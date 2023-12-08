@@ -1,9 +1,25 @@
+import axios from 'axios';
 import classNames from "classnames/bind";
-import styles from './Collection.module.scss'
 import { useEffect, useState } from "react";
+import "react-multi-carousel/lib/styles.css";
+import { useDispatch, useSelector } from 'react-redux';
+import { useParams } from "react-router-dom";
+import {
+    filterListProductsState,
+    setListProducts,
+    setListProductsState
+} from "~/redux/slices/productSlice";
+import baseUrl from '~/utils/baseUrl';
+import styles from './Collection.module.scss';
 import ItemCollection from "./ItemCollection";
+
 const cx = classNames.bind(styles)
 function Collection() {
+
+    const {id} = useParams()
+
+    const listProducts =  useSelector(state => state.product.listProducts)
+    const [currentProducts, setCurrentProducts] =  useState([])
     const [category, setCategory] = useState(() => {
         return {
             category: 'Áo',
@@ -78,6 +94,12 @@ function Collection() {
         type: []
     })
     const [condititonsSelected, setCondititonsSelected] = useState([]);
+    useEffect(() => {
+        !id.includes("type") ?
+        setCurrentProducts(listProducts.filter((item) => item.productCategory === id)) :
+        setCurrentProducts(listProducts.filter((item) => item.productType === id.replace("type=", "") ))
+    }, [id])
+    
     const handleClickType = (type, index) => {
         let state;
         setCategory(prev => {
@@ -97,8 +119,13 @@ function Collection() {
             const nextState = { ...prev, type: newType };
             return nextState;
         })
-
     }
+    // useEffect(() => {
+    //     !id.includes("size") ?
+    //     setCurrentProducts(listProducts.filter((item) => item.productCategory === id)) :
+    //     setCurrentProducts(listProducts.filter((item) => item.size === id.replace("size=", "") ))
+        
+    // }, [id])
     const handleClickSize = (size, index) => {
         let state;
         setCategory(prev => {
@@ -151,8 +178,6 @@ function Collection() {
 
             })
         }
-
-
     }
     const handleRemoveFilter = () => {
         setConditions({
@@ -168,7 +193,30 @@ function Collection() {
             }
         })
     }
+    //DUY
+    const dispatch = useDispatch();
+    const [filter,setFilter] = useState({
+        productType: '',
+        productCategory: '',
+        status: '',
+        searchText: ''
+    
+    })
+    const getAllProducts = async () => {
+    try {
+        const res = await axios.get(`${baseUrl}/api/products/getAllProducts`);
+        if (res && res.data) {
+            dispatch(setListProducts(res.data.data))
+            dispatch(setListProductsState(res.data.data))
+            dispatch(filterListProductsState({filter}));
+        }
+    } catch (error) {
+        console.log(error.message)
+    }
+}
     useEffect(() => {
+        // getAllProductsCategories()
+        getAllProducts()
         setCondititonsSelected(prev => {
             let nextState = [];
             for (var key in conditions) {
@@ -216,7 +264,6 @@ function Collection() {
                                         return <li key={index} style={{ position: 'relative', marginTop: '8px' }}>
                                             <div className={cx('filter-color-item')}>
                                                 <div onClick={() => handleClickColor(item.colorName)} className={cx('filter-select-color__button')} style={{ backgroundColor: `${item.colorCode}` }}>
-
                                                 </div>
                                                 <label className={cx('filter-select-color__label')}>{item.colorName}</label>
                                             </div>
@@ -225,7 +272,11 @@ function Collection() {
                                 }
                             </ul>
                         </div>
-                        <div className={cx('filter-item')}>
+                        {
+                            id.includes("type") ? null
+                            :
+                            <div className={cx('filter-item')}>
+                            
                             <h5 className={cx('filter-heading')} style={{ marginBottom: '16px' }}>Loại sản phẩm</h5>
                             <ul className={cx('filter-type')}>
                                 {
@@ -240,13 +291,15 @@ function Collection() {
                                 }
                             </ul>
                         </div>
+                        }
+                        
                     </div>
                 </div>
             </div>
             <div className={cx('right-side')}>
-                <h1 className={cx('heading')}>Áo</h1>
+                <h1 className={cx('heading')}>{id.includes("type") ? id.replace("type=", "") : id}</h1>
                 <div className={cx('selected')}>
-                    <h5>16 kết quả</h5>
+                    <h5>{currentProducts ? currentProducts.length : 0} kết quả</h5>
 
                     <div className={'wrapper-item-selected'}>
                         {
@@ -256,27 +309,23 @@ function Collection() {
                                         style={{ fontSize: '12px', marginLeft: '5px', opacity: '1', fontWeight: '600', cursor: 'pointer', padding: '0 2px' }}>x</span></span>
                             })
                         }
-
-
                     </div>
                     {
                         condititonsSelected.length > 0 &&
                         <div onClick={handleRemoveFilter} className={cx('delete-filter')}>Xóa lọc</div>
                     }
-
                 </div>
-
                 <div className={cx('list-product-filter')}>
-                    {
-                        [1, 2, 3, 4, 5, 6, 7, 8].map((item, index) => {
-                            return <ItemCollection key={index} />
-                        })
-                    }
+                {currentProducts?.map((item, index) => {
+                return (
+                <div key={index} style={{ width: "100%"}} >
+                <ItemCollection product={item}/>
+                </div>
+                );
+            })}
                 </div>
             </div>
-
         </div>
     );
 }
-
 export default Collection;

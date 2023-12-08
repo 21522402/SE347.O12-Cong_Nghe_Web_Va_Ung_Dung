@@ -1,10 +1,22 @@
 // Home.jsx
+import axios from 'axios';
+import classNames from "classnames/bind";
+import { useEffect, useState } from 'react';
 import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
+import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+import images from '~/assets/img';
+import {
+  filterListProductsState,
+  setListProducts,
+  setListProductsState
+} from "~/redux/slices/productSlice";
+import baseUrl from '~/utils/baseUrl';
 import ItemCollection from "../Collection/ItemCollection";
 import styles from "./Home.module.scss";
-import classNames from "classnames/bind";
-import images from '~/assets/img'
+
+
 
 const cx = classNames.bind(styles);
 
@@ -14,6 +26,9 @@ function Home() {
     "https://media.coolmate.me/cdn-cgi/image/width=1920,quality=90,format=auto/uploads/November2023/kkGraphic_Special_(1).png",
     "https://media.coolmate.me/cdn-cgi/image/width=1920,quality=90,format=auto/uploads/November2023/cc1920x788-ver-3_68.jpg",
   ];
+
+  const listProducts =  useSelector(state => state.product.listProducts)
+  const navigate=useNavigate();
 
   const responsiveBanner = {
     desktop: {
@@ -43,9 +58,38 @@ function Home() {
       items: 1,
     },
   };
+  //DUyY
+  const dispatch = useDispatch();
+  const [filter,setFilter] = useState({
+        productType: '',
+        productCategory: '',
+        status: '',
+        searchText: ''
+    
+    }) 
+  const getAllProducts = async () => {
+    try {
+        const res = await axios.get(`${baseUrl}/api/products/getAllProducts`)
+        if (res && res.data) {
+            dispatch(setListProducts(res.data.data))
+            dispatch(setListProductsState(res.data.data))
+            dispatch(filterListProductsState({filter}));
+        } 
+    } catch (error) {
+        console.log(error.message)
+    }
+}
+useEffect(() => {
+  getAllProducts()
+},[])
   return (
     <div>
       {/* Slider */}
+      
+      <button onClick={() => console.log(listProducts)}>
+  Click
+</button>
+
       <div>
         <Carousel
           swipeable={true}
@@ -71,13 +115,14 @@ function Home() {
           draggable={false}
           responsive={responsive}
           ssr={true}>
-          {[1, 2, 3, 4, 1, 2, 3, 4, 1, 2].map(() => {
+          {listProducts.map((item, index) => {
               return (
-                <div style={{ width: "100%"}} >
-                  <ItemCollection />
+                <div key={index} style={{ width: "100%"}} >
+                  <ItemCollection product={item}/>
                 </div>
               );
             })}
+          
         </Carousel>
       </div>
 
@@ -104,10 +149,10 @@ function Home() {
           draggable={false}
           responsive={responsive}
           ssr={true}>
-          {[1, 2, 3, 4, 1, 2, 3, 4, 1, 2].map(() => {
+         {listProducts.map((item, index) => {
               return (
-                <div style={{ width: "100%"}} >
-                  <ItemCollection />
+                <div key={index} style={{ width: "100%"}} >
+                  <ItemCollection product={item}/>
                 </div>
               );
             })}
@@ -137,10 +182,10 @@ function Home() {
           draggable={false}
           responsive={responsive}
           ssr={true}>
-          {[1, 2, 3, 4, 1, 2, 3, 4, 1, 2].map(() => {
+         {listProducts.map((item, index) => {
               return (
-                <div style={{ width: "100%"}} >
-                  <ItemCollection />
+                <div key={index} style={{ width: "100%"}} >
+                  <ItemCollection product={item}/>
                 </div>
               );
             })}
@@ -170,10 +215,10 @@ function Home() {
           draggable={false}
           responsive={responsive}
           ssr={true}>
-          {[1, 2, 3, 4, 1, 2, 3, 4, 1, 2].map(() => {
+           {listProducts.map((item, index) => {
               return (
-                <div style={{ width: "100%"}} >
-                  <ItemCollection />
+                <div key={index} style={{ width: "100%"}} >
+                  <ItemCollection product={item}/>
                 </div>
               );
             })}
@@ -221,7 +266,7 @@ function Home() {
             alt="ao"
           />{" "}
           <div className={cx("btn-item")}>
-            <a href="./collection/1">Xem chi tiết</a>
+            <a href="./collection/Áo">Xem chi tiết</a>
           </div>
         </div>
 
@@ -232,7 +277,7 @@ function Home() {
             alt="quan"
           />
           <div className={cx("btn-item")}>
-            <a href="./collection/1">Xem chi tiết</a>
+            <a href="./collection/Quần">Xem chi tiết</a>
           </div>
         </div>
 
@@ -243,7 +288,7 @@ function Home() {
             alt="dolot"
           />
           <div className={cx("btn-item")}>
-            <a href="./collection/1">Xem chi tiết</a>
+            <a href="./collection/Đồ%20lót">Xem chi tiết</a>
           </div>
         </div>
       </div>

@@ -5,18 +5,19 @@ import styles from './ItemSearch.module.scss';
 const cx = classNames.bind(styles)
 
 function ItemSearch({result}) {
-    
-    const product = {
-        productName: 'Áo khoác thể thao Pro Active',
-        productImage: 'https://media.coolmate.me/cdn-cgi/image/quality=100/uploads/October2023/QD001.10.jpg',
-
+    const getImage = () => {
+        for(let i = 0; i < result.colors.length; i++){
+            if(result.colors[i].sizes && result.colors[i].images){
+                return result.colors[i].images[0]
+            }
+        }
+        return "";
     }
     return (
         <div className={cx('wrapper')}>
             <div className={cx('image-wrapper')}>
-                <img className={cx('image')} src={result.productImage} />
+                <img className={cx('image')} src={getImage()} />
             </div>
-           
             <div className={cx('section-info')}>
                 <h3 className={cx('product-name')}>
                     <a href="/">{result.productName}</a>

@@ -10,6 +10,8 @@ router.post('/addProduct',productController.addProduct)
 router.patch('/editProduct',productController.editProduct)
 router.patch('/editProductByType',productController.editProductByType)
 router.get('/getAllProducts',productController.getAllProducts)
+router.get('/search/:valueSearch',productController.searchProduct)
+
 router.get('/', (req, res) => {
     res.send('Welcome to product!')
 })

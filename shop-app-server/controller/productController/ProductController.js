@@ -1,62 +1,3 @@
-<<<<<<< HEAD
-// const Product = require('../../model/product/Product');
-
-// const productController = {
-//   searchProducts: async (req, res) => {
-//     const { query } = req.query;
-
-//     try {
-//       const results = await Product.find({
-//         $or: [
-//           { name: { $regex: query, $options: 'i' } },
-//           { description: { $regex: query, $options: 'i' } },
-//         ],
-//       });
-
-//       res.json(results);
-//     } catch (error) {
-//       console.error(error);
-//       res.status(500).send('Internal Server Error');
-//     }
-//   },
-// };
-
-// module.exports = productController;
-// controllers/productController.js
-
-const Product = require('../../model/product')
-
-const productController = {
-  getAllProducts: async (req, res) => {
-    try {
-      const products = await Product.find();
-      res.json(products);
-    } catch (error) {
-      console.error(error);
-      res.status(500).send('Internal Server Error');
-    }
-  },
-
-  getProductById: async (req, res) => {
-    const productId = req.params.id;
-
-    try {
-      const product = await Product.findById(productId);
-      if (!product) {
-        return res.status(404).json({ error: 'Product not found' });
-      }
-      res.json(product);
-    } catch (error) {
-      console.error(error);
-      res.status(500).send('Internal Server Error');
-    }
-  },
-
-  // Other controller methods...
-};
-
-module.exports = productController;
-=======
 const Product = require('../../model/product/Product')
 const cloudinaryCustom = require('../../utils/cloudinaryCustom.js')
 const getNewItemCode = (prefix, lastCode, lengthCode) => {
@@ -70,6 +11,27 @@ const getNewItemCode = (prefix, lastCode, lengthCode) => {
 
     return prefix + newNumStr;
 
+}
+const searchProduct = async (req, res) => {
+    try {
+        const keyword=req?.params.valueSearch.toLowerCase()
+        const listProducts=await Product.find({})
+        let listResult = []
+        for(let i = 0; i < listProducts.length; i++){
+            if(listProducts[i].productName.toLowerCase().includes(keyword)){
+                listResult.push(listProducts[i])
+
+            }
+        }
+        res.status(200).json({
+            message: 'Get products successfully',
+            data: listResult
+        })
+    } catch (error) {
+        res.status(400).json({
+            message: error.message
+        })
+    }
 }
 
 
@@ -198,6 +160,6 @@ module.exports = {
     addProduct,
     getAllProducts,
     editProduct,
-    editProductByType
+    editProductByType,
+    searchProduct
 }
->>>>>>> origin/merge512

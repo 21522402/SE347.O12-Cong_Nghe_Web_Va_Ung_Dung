@@ -1,12 +1,15 @@
-import { useEffect, useRef, useState } from 'react';
-import styles from './DetailPopup.module.scss'
 import classNames from 'classnames/bind';
+import { useEffect, useRef, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import styles from './DetailPopup.module.scss';
 
 
 const cx = classNames.bind(styles);
 function DetailPopup({ onMouseLeave, category }) {
+    const navigate=useNavigate();
     const wrapper = useRef(null);
     const [isSticky, setSticky] = useState(false);
+    const [isVisible, setIsVisible] = useState(true);
     useEffect(() => {
         var offset = wrapper.current.offsetTop;
         window.onscroll = function () {
@@ -17,8 +20,14 @@ function DetailPopup({ onMouseLeave, category }) {
                 setSticky(false)
             }
         }
-    }, [])
-    return (
+    }, []);
+    const handleCategoryClick = (type) => {
+        // Hide the popup
+        setIsVisible(false);
+        // Navigate to the desired route
+        navigate(`/collection/type=${type}`);
+    };
+    return isVisible ?(
         <div   ref={wrapper} className={cx('wrapper', { sticky: isSticky })}>
             <div onMouseLeave={() => onMouseLeave()} className={cx('inner')}>
                 <div style={{ borderRight: '1px solid #ccc', paddingRight: '60px' }}>
@@ -30,7 +39,10 @@ function DetailPopup({ onMouseLeave, category }) {
                         <div className={cx('product-type')}>
                             {
                                 category.listTypes.map((item, index) => {
-                                    return <div key={index} className={cx('product-type-item')} style={{ color: 'rgb(112, 113, 113)', fontSize: '14px', fontWeight: '500', marginRight: '40px' }}><span><a href={item.link}>{item.name}</a></span></div>
+                                    return <div key={index} className={cx('product-type-item')} 
+                                    // onClick={() => {navigate(`/collection/type=${item.name}`)}} 
+                                    onClick={() => handleCategoryClick(item.name)}
+                                    style={{ color: 'rgb(112, 113, 113)', fontSize: '14px', fontWeight: '500', marginRight: '40px' }}>{item.name}</div>
                                 })
                             }
 
@@ -46,7 +58,9 @@ function DetailPopup({ onMouseLeave, category }) {
                         <div className={cx('product-type')}>
                             {
                                 category.listTypes.map((item, index) => {
-                                    return <div key={index} className={cx('product-type-item')} style={{ color: 'rgb(112, 113, 113)', fontSize: '14px', fontWeight: '500', marginRight: '40px' }}><span><a href={item.link}>{item.name}</a></span></div>
+                                    return <div key={index} className={cx('product-type-item')} 
+                                    onClick={() => handleCategoryClick(item.name)}
+                                     style={{ color: 'rgb(112, 113, 113)', fontSize: '14px', fontWeight: '500', marginRight: '40px' }}>{item.name}</div>
                                 })
                             }
 
@@ -89,7 +103,7 @@ function DetailPopup({ onMouseLeave, category }) {
 
 
         </div>
-    );
+    ):null;
 }
 
 export default DetailPopup;

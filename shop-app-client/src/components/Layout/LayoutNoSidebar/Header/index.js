@@ -1,4 +1,3 @@
-import axios from 'axios';
 import classNames from 'classnames/bind';
 import { useRef, useState } from 'react';
 import { IoMdClose } from "react-icons/io";
@@ -24,15 +23,20 @@ function Header() {
     const [showDetailPopUp, setShowDetailPopup] = useState(false)
     const [showSearchPopUp, setShowSearchPopup] = useState(false)
     const [valueSearch, setValueSearch] = useState('');
-    // const [categories, setCategories] = useState([]);
     const [popup, setPopup] = useState("login")
+    const handleCategoryClick = (index) => {
+        setShowDetailPopup(false);
+
+        // Chuyển hướng đến trang collection
+        navigate(`/collection/${categories[index].category}`);
+    };
     const categories = [
         {
             category: 'Áo',
             listTypes: [
                 {
                     name: 'Áo khoác',
-                    link: `/collection/1`
+                
                 }
                 ,
                 {
@@ -151,23 +155,6 @@ function Header() {
             else 
                 setPopup("forgot")
     }
-    const handleSearch = async () => {
-        try {
-          setLoading(true);
-          if (valueSearch.trim() !== '') {
-            const response = await axios.get(`/api/product/search?query=${valueSearch}`);
-            setSearchResults(response.data);
-            setShowSearchPopup(true); // Show search popup when there are results
-          } else {
-            setSearchResults([]);
-            setShowSearchPopup(false); // Hide search popup when the search input is empty
-          }
-        } catch (error) {
-          console.error(error);
-        } finally {
-          setLoading(false);
-        }
-      };
     return (
         <div className={cx('wrapper')}>
             <Modal visible={login} setModal={setLogin}>
@@ -194,7 +181,9 @@ function Header() {
                         {
                             categories.map((item, index) => {
                                 return (
-                                    <div onMouseOver={() => handleMouseOver(index)} key={index} className={cx('item-category')}>
+                                    <div onMouseOver={() => handleMouseOver(index)}
+                                    onClick={() => handleCategoryClick(index)}
+                                    className={cx('item-category')}>
                                         {item.category}
                                     </div>
                                 )
@@ -214,23 +203,15 @@ function Header() {
                         <IoSearch style={{ color: '#000', fontSize: '24px' }} />
                     </div>
                     <div className={cx('input-wrapper')}>
-                        {/* <input  onClick={() => setShowSearchPopup(prev => !prev)} onChange={(e) => setValueSearch(e.target.value.trim())} className={cx('input-search')} type='text' value={valueSearch} placeholder='Tìm kiếm sản phẩm...' /> */}
-                        <input
-                         onClick={() => setShowSearchPopup(true)} // Show search popup on input click
-                         onChange={(e) => setValueSearch(e.target.value.trim())}
-                         className={cx('input-search')}
-                         type='text'
-                         value={valueSearch}
-                         placeholder='Tìm kiếm sản phẩm...' />
+                        <input onClick={() => setShowSearchPopup(prev => !prev)} onChange={(e) => {setValueSearch(e.target.value.trim()); console.log(e)}} className={cx('input-search')} type='text' value={valueSearch} placeholder='Tìm kiếm sản phẩm...' />
+
                     </div>
                     <div onClick={() => setValueSearch('')} style={{ padding: '0 12px', cursor: 'pointer' }}>
                         <IoMdClose style={{ color: '#000', fontSize: '24px' }} />
                     </div>
                     {
                         showSearchPopUp &&
-                        <SearchPopup onMouseLeave={() => setShowSearchPopup(false)}
-                        searchResults={searchResults} 
-                         />
+                        <SearchPopup searchKey={valueSearch} onMouseLeave={() => setShowSearchPopup(false)} />
                     }
 
                 </div>
@@ -248,7 +229,6 @@ function Header() {
                         <div style={{cursor: 'pointer'}}><img src='https://mcdn.coolmate.me/image/October2023/mceclip3_72.png' alt='' /></div>
                         {currentUser ? <div style={{marginLeft: '5px', marginTop: '5px'}}>{`Hi, ${currentUser.fullName.split(' ')[currentUser.fullName.split(' ').length - 1]}`}</div> : null}
                     </div>
-                   
                 </label>
                 <Link to='/cart'>
                     <div style={{cursor: 'pointer'}}><IoBagHandle style={{ color: '#fff', fontSize: '28px' }} /></div>

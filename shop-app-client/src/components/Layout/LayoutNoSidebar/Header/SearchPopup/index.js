@@ -1,6 +1,7 @@
 import axios from 'axios';
 import classNames from 'classnames/bind';
 import { useEffect, useState } from 'react';
+import baseUrl from '~/utils/baseUrl';
 import ItemSearch from './ItemSearch';
 import styles from './SearchPopup.module.scss';
 
@@ -35,22 +36,22 @@ const cx = classNames.bind(styles);
 
 // export default SearchPopup;
 
-function SearchPopup({ onMouseLeave }) {
-    const [valueSearch, setValueSearch] = useState('');
+function SearchPopup({ onMouseLeave , searchKey }) {
     const [searchResults, setSearchResults] = useState([]);
     const [loading, setLoading] = useState(false);
   
     const handleSearch = async () => {
+      console.log(searchKey)
       try {
         setLoading(true);
-        if (valueSearch.trim() !== '') {
-          const response = await axios.get(`/api/product/search?query=${valueSearch}`);
-          setSearchResults(response.data);
+        if (searchKey && searchKey.trim() !== '') {
+          const response = await axios.get(`${baseUrl}/api/products/search/${searchKey}`);
+          if(response.data){
+            setSearchResults(response.data.data);
+          }
         } else {
-          // setSearchResults([]); 
-          console.log('ahihi');
+          setSearchResults([]); 
         }
-
       } catch (error) {
         console.error(error);
       } finally {
@@ -61,7 +62,7 @@ function SearchPopup({ onMouseLeave }) {
     useEffect(() => {
       // Call handleSearch or perform other actions on search query change
       handleSearch();
-    }, [valueSearch]);
+    }, [searchKey]);
   
     return (
       <div onMouseMove={() => onMouseLeave()} className={cx('wrapper')}>
@@ -69,7 +70,7 @@ function SearchPopup({ onMouseLeave }) {
           <div className={cx('separate')}></div>
           <div className={cx('title')}>Sản phẩm</div>
           <div className={cx('list-product-filter')}>
-            {searchResults.map((result) => (
+            {searchResults?.map((result) => (
               <ItemSearch key={result._id} result={result} />
             ))}
           </div>
