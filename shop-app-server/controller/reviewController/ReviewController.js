@@ -90,14 +90,12 @@ const getAllReviews = async (req, res) => {
     return errorTemplate(res, error.message);
   }
 };
+
 const responseReview = async (req, res) => {
   try {
     const imageBuffer = [];
-    debugger;
     const listImageBase64 = req.body.response.imagesRsp;
-    debugger;
     for (let i = 0; i < listImageBase64.length; i++) {
-      debugger;
       const result = await cloudinaryCustom.uploader.upload(
         listImageBase64[i],
         {
@@ -106,7 +104,6 @@ const responseReview = async (req, res) => {
       );
       imageBuffer.push(result.secure_url);
     }
-    debugger;
     const rv = await Review.findByIdAndUpdate(
       { _id: req.body._id },
       {
