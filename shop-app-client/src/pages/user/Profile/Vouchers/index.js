@@ -3,10 +3,11 @@ import VoucherItem from './VoucherItem/VoucherItem';
 import VoucherPopup from './VoucherPopup';
 import styles from './Vouchers.module.scss'
 import classNames from 'classnames/bind';
+import { useSelector } from 'react-redux';
 const cx = classNames.bind(styles);
 
 function Vouchers() {
-    const vouchers = [{voucherCode: 'CMBAMBO259K', voucherDes: 'Tặng 01 Quần lót Trunk Cotton cho đơn hàng 259K (Không áp dụng cho sản phẩm SALE)', voucherStartDate: '20.10.2023', voucherOutDate: '31.10.2023', voucherCondition: 'Mã giảm giá không có giá trị quy đổi ra tiền mặt'}, {voucherCode: 'CMBAMBO259K', voucherDes: 'Tặng 01 Quần lót Trunk Cotton cho đơn hàng 259K (Không áp dụng cho sản phẩm SALE)', voucherStartDate: '20.10.2023', voucherOutDate: '31.10.2023', voucherCondition: 'Mã giảm giá không có giá trị quy đổi ra tiền mặt'}, {voucherCode: 'CMBAMBO259K', voucherDes: 'Tặng 01 Quần lót Trunk Cotton cho đơn hàng 259K (Không áp dụng cho sản phẩm SALE)', voucherStartDate: '20.10.2023', voucherOutDate: '31.10.2023', voucherCondition: 'Mã giảm giá không có giá trị quy đổi ra tiền mặt'}, {voucherCode: 'CMBAMBO259K', voucherDes: 'Tặng 01 Quần lót Trunk Cotton cho đơn hàng 259K (Không áp dụng cho sản phẩm SALE)', voucherStartDate: '20.10.2023', voucherOutDate: '31.10.2023', voucherCondition: 'Mã giảm giá không có giá trị quy đổi ra tiền mặt'}]
+    let currentUser = useSelector((state) => state.auth.login.currentUser)
     const [popup, setPopup] = useState(undefined)
     const [selected, setSelected] = useState({voucherCode: 'concec'})
     return ( 
@@ -16,7 +17,7 @@ function Vouchers() {
                 <div className={cx('outerVouchers')}>
                     {/* List Vouchers */}
                     {
-                        vouchers.map((item, index) => {
+                        currentUser.vouchers.map((item, index) => {
                             return (
                                 <div style={{margin: '5px 10px'}} key={index}>
                                     <VoucherItem props={item} onClickCondition={() => {setSelected(item); setPopup(true);}}/>

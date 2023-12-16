@@ -17,82 +17,47 @@ import DropDownImport from "./DropDownImport";
 import ImportProductRow from "./ImportProductRow";
 import Modal from "./Modal";
 import { useDispatch, useSelector } from "react-redux";
-import { addIntoListImportProducts, setListImportProducts } from "~/redux/slices/importProductsSlice";
+import { addIntoListImportProducts, setListImportProducts, handleChangeDiscount } from "~/redux/slices/importProductsSlice";
 
 const cx = classNames.bind(styles)
 
 function ImportProducts() {
-    const listImportProducts = useSelector(state => state.importProducts.listImportProducts)
+    const listImportProducts = useSelector(state => state.importProduct.listImportProducts)
+    const totalMoneyGoods = useSelector(state => state.importProduct.totalMoneyGoods)
+    const discount = useSelector(state => state.importProduct.discount)
+    const finalMoney = useSelector(state => state.importProduct.finalMoney)
+    const Import = useSelector(state => state.importProduct)
     const location = useLocation();
-    console.log(location.state)
     const dispatch = useDispatch();
 
-
+    const [indexItemImport,setIndexItemImport] = useState(-1);
     const [inputFocus, setInputFocus] = useState(false);
     const [openModelImport, setOpenModalImport] = useState(false)
-    const [product, setProduct] = useState(null);
     const [showContract, setShowContract] = useState(true)
     const [isClickFromDropDown, setClickFromDropDown] = useState(false);
     const inputElement = useRef(null);
     const dropElement = useRef(null);
     
     const [listSearchProducts, setListSearchProducts] = useState([
-        {
-            productName: 'Áo vest nữ màu hồng chìm',
-            productId: 'NU001',
-            exportPrice: 870000,
-            quantity: 170,
-            productImage: 'https://cdn-app.kiotviet.vn/sample/fashion/25.png'
-        },
-        {
-            productName: 'Áo vest nữ màu hồng chìm',
-            productId: 'NU001',
-            exportPrice: 870000,
-            quantity: 170,
-            productImage: 'https://cdn-app.kiotviet.vn/sample/fashion/25.png'
-        },
-        {
-            productName: 'Áo vest nữ màu hồng chìm',
-            productId: 'NU001',
-            exportPrice: 870000,
-            quantity: 170,
-            productImage: 'https://cdn-app.kiotviet.vn/sample/fashion/25.png'
-        },
-        {
-            productName: 'Áo vest nữ màu hồng chìm',
-            productId: 'NU001',
-            exportPrice: 870000,
-            quantity: 170,
-            productImage: 'https://cdn-app.kiotviet.vn/sample/fashion/25.png'
-        },
-        {
-            productName: 'Áo vest nữ màu hồng chìm',
-            productId: 'NU001',
-            exportPrice: 870000,
-            quantity: 170,
-            productImage: 'https://cdn-app.kiotviet.vn/sample/fashion/25.png'
-        }
+
     ])
     const handleClickItemSearch = (item) => {
-        // inputElement.current.focus();
-        // setListImportProducts(prev => [...prev, item])
-        // setInputFocus(prev => !prev);
+        dispatch(addIntoListImportProducts(item))
+        setInputFocus(false)
 
     }
-    const handleRemoveItem = (index) => {
-        // setListImportProducts(prev => {
-        //     const nextState = [...prev];
-        //     nextState.splice(index, 1);
-        //     return nextState;
-        // })
-    }
+    
     const handleChangeSearch = async (e) => {
         setInputFocus(true);
-        const value = e.target.value.trim();
-        console.log(value)
+        const value = e.target.value
+        if (value.trim()==='') {
+            setListSearchProducts([])
+            return;
+        }
         try {
-            const res =  await axios.get(`${baseUrl}/api/importProduct/getProductsByKey`,{key: value})
+            const res =  await axios.post(`${baseUrl}/api/importProduct/getProductsByKey`,{key: value})
             if (res) {
+               
                 setListSearchProducts(res.data.data)
             }
         } catch (error) {
@@ -100,9 +65,7 @@ function ImportProducts() {
         }
     }
 
-    useEffect(() => {
-        console.log(listImportProducts)
-    }, [listImportProducts])
+
     useEffect(() => {
         dispatch(setListImportProducts(location.state))
     },[])
@@ -118,6 +81,17 @@ function ImportProducts() {
         document.removeEventListener("mousedown",handleClickOutside )
         }
     },[dropElement])
+    const handleClickAcceptImport = async () => {
+        // console.log(Import)
+        try {
+            const res = await axios.post(`${baseUrl}/api/importProduct/addImport`,Import)
+            if (res) {
+                console.log(res.data)
+            }
+        } catch (error) {
+            
+        }
+    }
    
     return (
         <div className={cx('wrapper')}>
@@ -169,14 +143,14 @@ function ImportProducts() {
 
                             {listImportProducts.map((item, index) => {
                                 return (
-                                    <ImportProductRow key={index} index={index} setModal={setOpenModalImport} setProduct={setProduct} product={item} onClickRemoveItem={handleRemoveItem} />
+                                    <ImportProductRow key={index} index={index} setModal={setOpenModalImport} setIndexItemImport={setIndexItemImport}  />
                                 )
                             })}
 
                         </tbody>
                     </table>
                 </div>
-                {openModelImport && <Modal setModal={setOpenModalImport} product={product} />}
+                {openModelImport && <Modal setModal={setOpenModalImport} indexItemImport={indexItemImport}/>}
             </div>
             <div className={cx('import-contract', { hide: showContract })}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
@@ -203,24 +177,24 @@ function ImportProducts() {
 
                     <div className={cx('form-group')}>
                         <label>Tổng tiền hàng</label>
-                        <span className={cx('text')} style={{ textAlign: 'right' }}>3,720,000</span>
+                        <span className={cx('text')} style={{ textAlign: 'right' }}>{totalMoneyGoods}</span>
                     </div>
 
                     <div className={cx('form-group')}>
                         <label>Giảm giá</label>
                         <div style={{ width: '140px', display: 'inline-block' }}>
-                            <input className={cx('text')} type="text" style={{ width: '100px', background: 'transparent', textAlign: 'right', marginRight: '8px' }} />
+                            <input onChange={(e) => dispatch(handleChangeDiscount({discount: e.target.value}))} value={discount} className={cx('text')} type="text" style={{ width: '100px', background: 'transparent', textAlign: 'right', marginRight: '8px' }} />
                             <span>VNĐ</span>
                         </div>
                     </div>
 
                     <div className={cx('form-group')}>
                         <label>Thành tiền</label>
-                        <span className={cx('text')} style={{ textAlign: 'right', fontWeight: 'bold' }}>3,720,000 VNĐ</span>
+                        <span className={cx('text')} style={{ textAlign: 'right', fontWeight: 'bold' }}>{finalMoney}</span>
                     </div>
 
                     <div style={{ marginTop: '48px', display: 'flex', justifyContent: 'center' }}>
-                        <span className={cx('btn', 'btn-succeed')} style={{ fontSize: '16px', padding: '10px 24px' }}>Hoàn tất <BsCheckLg style={{ marginLeft: '4px', fontSize: '20px' }} /></span>
+                        <span onClick={handleClickAcceptImport} className={cx('btn', 'btn-succeed')} style={{ fontSize: '16px', padding: '10px 24px' }}>Hoàn tất <BsCheckLg style={{ marginLeft: '4px', fontSize: '20px' }} /></span>
                     </div>
                 </div>
 

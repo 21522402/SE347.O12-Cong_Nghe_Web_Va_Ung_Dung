@@ -5,60 +5,98 @@ import { useEffect, useState } from 'react';
 import ProductForUItem from './ProductForUItem';
 import VoucherItem from './VoucherItem';
 import { VoucherIcon2 } from '~/assets/icons';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { createCartItem, getAllVoucher, getCartProducts, getDefaultAddress, getForUProduct, increaseQuantityCartItem } from '~/redux/api/userRequest';
+import axios from 'axios';
+import baseUrl from '~/utils/baseUrl';
 const cx = classNames.bind(styles);
 function Cart() {
-    let {cart, forUProducts} = useSelector(state => state)
+
+    let cartProducts = useSelector(state => state.user?.cart?.cartProducts)
+    let forUProducts = useSelector(state => state.user?.cart?.forUProducts)
+    let currentUser = useSelector((state) => state.auth.login.currentUser)
+    const vouchers = useSelector(state => state.user?.cart?.vouchers)
+
+    const dispatch = useDispatch()
 
     let i = 50;
 
-    const vouchers = [{voucherCode: 'CMBAMBO259K', voucherDes: 'Tặng 01 Quần lót Trunk Cotton cho đơn hàng 259K (Không áp dụng cho sản phẩm SALE)', voucherStartDate: '20.10.2023', voucherOutDate: '31.10.2023', voucherCondition: 'Mã giảm giá không có giá trị quy đổi ra tiền mặt'}, {voucherCode: 'CMBAMBO259K', voucherDes: 'Tặng 01 Quần lót Trunk Cotton cho đơn hàng 259K (Không áp dụng cho sản phẩm SALE)', voucherStartDate: '20.10.2023', voucherOutDate: '31.10.2023', voucherCondition: 'Mã giảm giá không có giá trị quy đổi ra tiền mặt'}, {voucherCode: 'CMBAMBO259K', voucherDes: 'Tặng 01 Quần lót Trunk Cotton cho đơn hàng 259K (Không áp dụng cho sản phẩm SALE)', voucherStartDate: '20.10.2023', voucherOutDate: '31.10.2023', voucherCondition: 'Mã giảm giá không có giá trị quy đổi ra tiền mặt'}, {voucherCode: 'CMBAMBO259K', voucherDes: 'Tặng 01 Quần lót Trunk Cotton cho đơn hàng 259K (Không áp dụng cho sản phẩm SALE)', voucherStartDate: '20.10.2023', voucherOutDate: '31.10.2023', voucherCondition: 'Mã giảm giá không có giá trị quy đổi ra tiền mặt'}]
 
     let [preTotal, setPreTotal] = useState(0);
     let [discount, setDiscount] = useState(0);
+    let [isPercent, setIsPercent] = useState(false);
     let [delivery, setDelivery] = useState(0);
-    let [discountCode, setDiscountCode] = useState(0);
+    let [discountCode, setDiscountCode] = useState('');
+
+    useEffect(() => {
+        getCartProducts(currentUser, dispatch)
+        getForUProduct(dispatch)
+        getAllVoucher(dispatch)
+    }, []) 
 
     useEffect(() => {
         calculateTotal()
-    }, [cart])
+    }, [cartProducts])
 
     function calculateTotal(){
-        preTotal = cart.reduce((total, item) => total + item.exportPrice * (1 - item.discountPerc) * item.quantity, 0)
+        preTotal = cartProducts?.reduce((total, item) => total + item.productPrice * item.quantity, 0)
         setPreTotal(preTotal)
     }
 
-    function onQuantityChange(item, type){
-        switch(type){
-            case 'increase':
-                setPreTotal(preTotal + item.exportPrice)
-                break;
-            case 'decrease':
-                setPreTotal(preTotal - item.exportPrice)
-                break;
-            default:
-                break;
+    function handleItemToOrder(item, selection){
+        const cartItem = {
+            product: item._id,
+            productName: item.productName,
+            productPrice: item.exportPrice * (1 - item.discountPerc/100),
+            size: selection.size,
+            color: selection.colorName,
+            quantity: 1
+        }
+
+        const existItem = cartProducts.find((cartIT) => cartIT.productId === cartItem.productId && cartIT.size === cartItem.size && cartIT.color === cartItem.color)
+        existItem ? increaseQuantityCartItem(currentUser, existItem, dispatch) : createCartItem(currentUser, cartItem, dispatch)
+    }
+
+    async function handleCheckVoucher(){
+        const voucher = vouchers.find((item) => item.voucherCode === discountCode)
+
+        if(voucher){
+            if(checkStatus(voucher)){
+                if(preTotal > voucher.minPrice){
+                    if(voucher.isPercent){
+                        setIsPercent(true)
+                    }
+                    else{
+                        setIsPercent(false)
+                    }
+                    setDiscount(voucher.voucherPrice)
+                }
+                else{
+                    alert("Hãy chi thêm " + (voucher.minPrice - preTotal) + " để được hưởng ưu đãi")
+                }
+            }
+            else{
+                alert("Voucher đã hết hoặc quá hạn")
+            }
         }
     }
 
-    function getQuantity(item){
-        const list = item.colors;
-        if(list){
-            const color = list.find((i) => i.colorName === item.selectColor)
-            if(color){
-                return color.size[item.selectSize].quantity
-            }
-        }
-        else
-            return 0;
+    const checkStatus = (item) => {
+        if (item.quanlity <= 0) return false;
+        const expirationDate = new Date(item.expiredDate);
+
+        // Lấy ngày hôm nay
+        const today = new Date();
+        if (today > expirationDate) return false;
+        return true;
     }
 
     return ( 
         <>
-            <button onClick={() => console.log(cart)}>clickme</button>
+        {/* <button onClick={() => console.log(cartProducts)}>clickme</button> */}
             <div>
                 {
-                    cart.map((item, index) => {
+                    cartProducts?.map((item, index) => {
                         return (
                             <div style={{position: 'relative', zIndex: i--}}>
                                 <ProductItem key={index} props={item}/>
@@ -88,10 +126,10 @@ function Cart() {
                 </div>
                 <div className={cx('outerForUProducts')}>
                     {
-                        forUProducts.map((item, index) => {
+                        forUProducts?.map((item, index) => {
                             return <>
                                 <div style={{borderRight: '1px solid #c9c9c9', position: 'relative', zIndex: 10}}>
-                                    <ProductForUItem key={index} props={item}/>
+                                    <ProductForUItem key={index} props={item} handleItemToOrder={handleItemToOrder}/>
                                 </div>
                             </>
                         })
@@ -101,10 +139,10 @@ function Cart() {
             
             <div className={cx('containerVoucher')}>
                 {
-                    vouchers.map((item, index) => {
+                    vouchers?.map((item, index) => {
                         return (
                             <div key={index} style={{margin: '0px 10px'}}>
-                                <VoucherItem props={item}/>
+                                <VoucherItem props={item} onClickVoucher={() => setDiscountCode(item.voucherCode)}/>
                             </div>
                         )
                     })
@@ -121,8 +159,8 @@ function Cart() {
             </div>
 
             <div className={cx('discount-box')}>
-                <input type="text" placeholder='Nhập mã giảm giá' />
-                <button datavoucher disabled>Áp dụng</button>
+                <input type="text" placeholder='Nhập mã giảm giá' value={discountCode} onChange={(e) => setDiscountCode(e.target.value)}/>
+                <button datavoucher disabled={discountCode ? false: true} onClick={handleCheckVoucher}>Áp dụng</button>
             </div>
 
             <hr style={{width: 'calc(100% + 10px)', height: '1px', backgroundColor: '#f9f9f9', margin: '10px -10px'}}/>
@@ -132,7 +170,7 @@ function Cart() {
             </div>
             <div className={cx('outerMoney')}>
                 <span className={cx('titleMoney')}>Giảm giá</span>
-                <span className={cx('money')}>-{new Intl.NumberFormat('vi-VN', {style: 'currency', currency: 'VND'}).format(discount)}</span>
+                <span className={cx('money')}>-{new Intl.NumberFormat('vi-VN', {style: 'currency', currency: 'VND'}).format(isPercent ? preTotal * discount / 100 : discount)}</span>
             </div>
             <div className={cx('outerMoney')}>
                 <span className={cx('titleMoney')}>Phí giao hàng</span>
@@ -141,7 +179,7 @@ function Cart() {
             <hr style={{width: 'calc(100% + 10px)', height: '1px', backgroundColor: '#f9f9f9', margin: '10px -10px'}}/>
             <div className={cx('outerMoney')}>
                 <span className={cx('titleMoney')}>Tổng</span>
-                <span className={cx('money', 'totalMoney')}>{new Intl.NumberFormat('vi-VN', {style: 'currency', currency: 'VND'}).format(preTotal - discount + delivery)}</span>
+                <span className={cx('money', 'totalMoney')}>{new Intl.NumberFormat('vi-VN', {style: 'currency', currency: 'VND'}).format(isPercent ? preTotal - preTotal * discount / 100 + delivery : preTotal - discount + delivery)}</span>
             </div>
         </>
     );

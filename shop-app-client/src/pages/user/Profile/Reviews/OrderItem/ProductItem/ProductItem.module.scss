@@ -134,3 +134,45 @@
     outline: none;
     border: 1px solid #2f5acf;
 }
+
+.img-wrapper {
+    position: relative;
+    display: inline-block;
+    p {
+        text-wrap: nowrap;
+        font-size: 12px;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%,-50%);
+        margin-bottom: 0;
+    }
+    input {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        opacity: 0;
+        cursor: pointer;
+    }
+
+    .icon-remove-img {
+        z-index: 20;
+        position: absolute;
+        padding: 4px;
+        top: 4px;
+        right: 4px;
+        background-color: #fff;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        opacity: 0.8;
+        cursor: pointer;
+
+        &:hover {
+            opacity: 1;
+        }
+    }
+}

@@ -56,20 +56,25 @@ function AddressPopup({props, onClose, isAdd, onCloseAndReload} ) {
     }, [])
 
     const filterProvince = (e) => {
-        setSelected({...selected, 'province': e.name})
         fetch(districtApi(e.code))
-            .then((res) => res.json())
-            .then((json) => {
-                setDistrict(json.districts)
-            });
+        .then((res) => res.json())
+        .then((json) => {
+            setDistrict(json.districts)
+            if(selected.district) selected.district = ''
+            if(selected.ward) selected.ward = ''
+            selected.province = e.name
+            setSelected({...selected})
+        });
     }
 
     const filterDistrict = (e) => {
-        setSelected({...selected, 'district': e.name})
         fetch(wardApi(e.code))
             .then((res) => res.json())
             .then((json) => {
                 setWard(json.wards)
+                if(selected.ward) selected.ward = ''
+                selected.district = e.name
+                setSelected({...selected})
             });
     }
     return ( 

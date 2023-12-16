@@ -15,6 +15,7 @@ const productSchema = new mongoose.Schema({
         {
             productCode: String,
             productName: String,
+            productType: String,
             unitPriceImport: Number,
             quantity: Number,
             totalMoey: Number,

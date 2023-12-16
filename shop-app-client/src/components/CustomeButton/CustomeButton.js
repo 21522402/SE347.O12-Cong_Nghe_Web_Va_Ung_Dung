@@ -22,7 +22,7 @@ function CustomeButton({onClick, containStyles, icon, isLeft, type, title, bgHov
             <button
               onClick={onClick}
               type={type || "button"}
-              style={{...style, backgroundColor:bgc, color:colorText}}
+              style={{...style, backgroundColor:bgc, color:colorText, border:'none', textAlign:'center', justifyItems:'center', alignContent:'center'}}
               onMouseOver={handleHoverBg}
               onMouseOut={handleOutHoverBg}
             >
@@ -35,7 +35,7 @@ function CustomeButton({onClick, containStyles, icon, isLeft, type, title, bgHov
         <button
           onClick={onClick}
           type={type || "button"}
-          style={{...style, backgroundColor:bgc, color:colorText}}
+          style={{...style, backgroundColor:bgc, color:colorText, border:'none', alignItems:'center', justifyItems:'center', alignContent:'center'}}
           onMouseOver={handleHoverBg}
               onMouseOut={handleOutHoverBg}
         >
