@@ -1,10 +1,11 @@
 import classNames from "classnames/bind";
-
+import styles from './ItemCarousel.module.scss'
+const cx = classNames.bind(styles)
 function ItemCarousel() {
     return (
-        <div style={{userSelect: 'none', overflow: 'hidden'}}>
+        <div className={cx('wrapper')} style={{userSelect: 'none', overflow: 'hidden'}}>
             <a href="/" target="_blank">
-                <img style={{width: '320px', height: '420px', objectFit: 'cover', borderRadius: '8px'}} src="https://media.coolmate.me/cdn-cgi/image/width=450,height=663,quality=80,format=auto/uploads/October2023/ST002.4.jpg" />
+                <img className={cx('img')} src="https://media.coolmate.me/cdn-cgi/image/width=450,height=663,quality=80,format=auto/uploads/October2023/ST002.4.jpg" />
             </a>
             <p style={{fontSize: '14px', marginTop: '12px', fontWeight: '500'}}>Áo nỉ chui đầu Lifewear</p>
             <div style={{ display: 'flex', gap: '16px', marginTop: '8px', alignItems: 'center' }}>

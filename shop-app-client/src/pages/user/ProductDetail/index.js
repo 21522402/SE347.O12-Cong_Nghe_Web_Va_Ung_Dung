@@ -13,18 +13,18 @@ function ProductDetail() {
     const responsive = {
         superLargeDesktop: {
             breakpoint: { max: 4000, min: 3000 },
-            items: 5
+            items: 4
         },
         desktop: {
             breakpoint: { max: 3000, min: 1024 },
             items: 4
         },
         tablet: {
-            breakpoint: { max: 1024, min: 464 },
+            breakpoint: { max: 1024, min: 768 },
             items: 3
         },
         mobile: {
-            breakpoint: { max: 464, min: 0 },
+            breakpoint: { max: 768, min: 0 },
             items: 2
         }
     };
@@ -140,43 +140,45 @@ function ProductDetail() {
         <div className={cx('wrapper')}>
 
             <div className={cx('header')}>
-                <span style={{ color: 'grey', fontWeight: '500', fontSize: '16px' }}>Trang chủ</span>
-                <span style={{ fontWeight: '500', fontSize: '16px' }}> / Áo thể thao nam</span>
+                <span className={cx('span1')} >Trang chủ</span>
+                <span className={cx('span2')} > / Áo thể thao nam</span>
             </div>
             <div className={cx('body')}>
 
-                <div className={cx('product-image-wrapper')}>
-                    <ul className={cx('product-list-image')}>
+          
+                    <div className={cx('product-image-wrapper')}>
+                        <ul className={cx('product-list-image')}>
+                            {
+                                product.colors[indexColorActive].images.map((item, index) => {
+                                    return (
+                                        <li key={index}>
+                                            <div onClick={() => setIndexImageActive(index)} className={cx('div-item-img', {
+                                                active: indexImageActive === index
+                                            })}>
+                                                <img src={item} alt="" />
+                                            </div>
+                                        </li>
+                                    )
+                                })
+                            }
+                        </ul>
+
                         {
                             product.colors[indexColorActive].images.map((item, index) => {
                                 return (
-                                    <li key={index}>
-                                        <div onClick={() => setIndexImageActive(index)} className={cx('div-item-img', {
-                                            active: indexImageActive === index
-                                        })}>
-                                            <img src={item} alt="" />
-                                        </div>
-                                    </li>
+                                    <img alt="" className={cx('image-view', { active: indexImageActive === index })} src={item} key={index} />
                                 )
                             })
                         }
-                    </ul>
+                        <div onClick={handleClickPreviousImage} className={cx('btn-switch', 'left')}>
+                            <FaAngleLeft />
+                        </div>
+                        <div onClick={handleClickNextImage} className={cx('btn-switch', 'right')}>
+                            <FaAngleRight />
+                        </div>
 
-                    {
-                        product.colors[indexColorActive].images.map((item, index) => {
-                            return (
-                                <img alt="" className={cx('image-view', { active: indexImageActive === index })} src={item} key={index} />
-                            )
-                        })
-                    }
-                    <div onClick={handleClickPreviousImage} className={cx('btn-switch', 'left')}>
-                        <FaAngleLeft />
                     </div>
-                    <div onClick={handleClickNextImage} className={cx('btn-switch', 'right')}>
-                        <FaAngleRight />
-                    </div>
-
-                </div>
+              
 
 
                 <div className={cx('section-info')}>
@@ -192,10 +194,10 @@ function ProductDetail() {
                         <span>|</span>
                         <div style={{ fontSize: '12px', fontWeight: '500' }}>Đã bán: {product.quantitySold}</div>
                     </div>
-                    <div style={{ display: 'flex', gap: '16px', marginTop: '8px', alignItems: 'center' }}>
-                        <span style={{ fontWeight: '600', fontFamily: 'Pangea,sans-serif', fontSize: '24px', }}>469.000đ</span>
-                        <span style={{ fontWeight: '500', fontFamily: 'Pangea,sans-serif', color: '#c4c4c4', textDecoration: 'line-through', fontSize: '24px', }}>499.000đ</span>
-                        <span style={{ fontWeight: '500', fontFamily: 'Pangea,sans-serif', color: '#ff3102', fontSize: '20px', }}>-6%</span>
+                    <div className={cx('price')}>
+                        <span className={cx('price1')}>469.000đ</span>
+                        <span className={cx('price2')}>499.000đ</span>
+                        <span className={cx('percent')}>-6%</span>
                     </div>
                     <div style={{ marginTop: '8px' }}>
                         <div>
@@ -207,7 +209,7 @@ function ProductDetail() {
                                 product.colors.map((item, index) => {
                                     return (
                                         <div key={index} className={cx('img-color-wrapper', { active: index === indexColorActive })}>
-                                            <img onClick={() => {setIndexColorActive(index); setIndexSizeActive(0); setIndexImageActive(0)}} alt="" src={item.images[0]} className={cx('img-color')} />
+                                            <img onClick={() => { setIndexColorActive(index); setIndexSizeActive(0); setIndexImageActive(0) }} alt="" src={item.images[0]} className={cx('img-color')} />
 
                                         </div>
                                     )
@@ -235,12 +237,12 @@ function ProductDetail() {
 
                     <div style={{ marginTop: '32px', padding: '16px 0', display: 'flex', alignItems: 'center', gap: '16px' }}>
                         <div style={{ display: 'inline-flex', borderRadius: '30px', height: '40px', width: '100px', alignItems: 'center', justifyContent: 'space-between', border: '1px solid #000' }}>
-                            <span onClick={() => { if (quantityAddCart === 1) return; setQuantityAddCart(prev => prev - 1) }} style={{userSelect: 'none', display: 'inline-block', padding: '0px 16px', fontSize: '20px', cursor: 'pointer', fontWeight: '700' }}>-</span>
+                            <span onClick={() => { if (quantityAddCart === 1) return; setQuantityAddCart(prev => prev - 1) }} style={{ userSelect: 'none', display: 'inline-block', padding: '0px 16px', fontSize: '20px', cursor: 'pointer', fontWeight: '700' }}>-</span>
                             <span style={{ display: 'inline-block', fontWeight: '600' }}>{quantityAddCart}</span>
-                            <span onClick={() => setQuantityAddCart(prev => prev + 1)} style={{userSelect: 'none', display: 'inline-block', padding: '0px 16px', fontSize: '20px', cursor: 'pointer', fontWeight: 'bold' }}>+</span>
+                            <span onClick={() => setQuantityAddCart(prev => prev + 1)} style={{ userSelect: 'none', display: 'inline-block', padding: '0px 16px', fontSize: '20px', cursor: 'pointer', fontWeight: 'bold' }}>+</span>
                         </div>
                         <div onClick={handleClickBtnAddCart} className={cx('btn-add-cart')} >
-                           {indexSizeActive === -1 ? 'Chọn kích thước' : <><BsCartCheck style={{ marginRight: '8px', fontSize: '20px' }} />  Thêm vào giỏ hàng </>}
+                            {indexSizeActive === -1 ? <span>Chọn kích thước</span> : <><BsCartCheck style={{ marginRight: '8px', fontSize: '20px' }} />  <span>Thêm vào giỏ hàng</span> </>}
                         </div>
                     </div>
 
@@ -338,8 +340,8 @@ function ProductDetail() {
                 </div>
             </div>
             <div className={cx('carsousel-wrapper')}>
-                <h1 style={{ fontSize: '30px', fontWeight: '700', marginBottom: '28px', textAlign: 'center' }}>SẢN PHẨM BẠN CÓ THỂ THÍCH</h1>
-                <Carousel  responsive={responsive} arrows={false} renderButtonGroupOutside={true} customButtonGroup={<ButtonGroup />}>
+                <h1 >SẢN PHẨM BẠN CÓ THỂ THÍCH</h1>
+                <Carousel itemClass="carousel" responsive={responsive} arrows={false} renderButtonGroupOutside={true} customButtonGroup={<ButtonGroup />}>
                     <ItemCarousel />
                     <ItemCarousel />
                     <ItemCarousel />
@@ -353,10 +355,10 @@ function ProductDetail() {
 
             <div className={cx('review')}>
                 <div className={cx('reviews-leftside-rating')}>
-                    <div style={{ textTransform: 'uppercase', fontWeight: '700', fontSize: '18px' }}>
+                    <div className={cx('title')}>
                         ĐÁNH GIÁ SẢN PHẨM
                     </div>
-                    <div style={{ textTransform: 'uppercase', fontWeight: '700', fontSize: '64px', textAlign: 'center' }}>5</div>
+                    <div className={cx('rate')}>5</div>
                     <div style={{ display: 'flex', gap: '8px', alignItems: 'center', justifyContent: 'center' }}>
                         <img src="https://www.coolmate.me/images/star-yellow.svg?8f4d13b24f276e8a788250b192548210" />
                         <img src="https://www.coolmate.me/images/star-yellow.svg?8f4d13b24f276e8a788250b192548210" />
@@ -364,14 +366,14 @@ function ProductDetail() {
                         <img src="https://www.coolmate.me/images/star-yellow.svg?8f4d13b24f276e8a788250b192548210" />
                         <img src="https://www.coolmate.me/images/star-yellow.svg?8f4d13b24f276e8a788250b192548210" />
                     </div>
-                    <div style={{ textAlign: 'center', marginTop: '12px', fontSize: '14px', fontWeight: '500', fontStyle: 'italic', color: 'rgb(77, 77, 77)' }}>
+                    <div className={cx('quantity-reviews')}>
                         3 đánh giá
                     </div>
                 </div>
                 <div className={cx('reviews-rightside')}>
                     <div className={cx('reviews__filter')}>
                         <div className={cx('reviews__select')}>
-                            <select style={{backgroundImage: 'url('+{FaAngleDown} +')'}}>
+                            <select style={{ backgroundImage: 'url(' + { FaAngleDown } + ')' }}>
                                 <option value="">Đánh giá</option>
                                 <option value="1">1 sao</option>
                                 <option value="2">2 sao</option>
@@ -379,7 +381,7 @@ function ProductDetail() {
                                 <option value="4">4 sao</option>
                                 <option value="5">5 sao</option>
                             </select>
-                            <FaAngleDown className={cx('icon')}/>
+                            <FaAngleDown className={cx('icon')} />
                         </div>
                         <div className={cx('reviews__select')}>
                             <select className={cx('reviews-filter-image')}>
@@ -387,7 +389,7 @@ function ProductDetail() {
                                 <option value="true">Có ảnh</option>
                                 <option value="false">Không ảnh</option>
                             </select>
-                            <FaAngleDown className={cx('icon')}/>
+                            <FaAngleDown className={cx('icon')} />
                         </div>
                         <div className={cx('reviews__select')}>
                             <select >
@@ -395,7 +397,7 @@ function ProductDetail() {
                                 <option value="true">Đã phản hồi</option>
                                 <option value="false">Chưa phản hồi</option>
                             </select>
-                            <FaAngleDown className={cx('icon')}/>
+                            <FaAngleDown className={cx('icon')} />
                         </div>
                     </div>
 
