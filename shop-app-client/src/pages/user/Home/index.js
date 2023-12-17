@@ -1,6 +1,18 @@
 // Home.jsx
+import axios from 'axios';
+import classNames from "classnames/bind";
+import { useEffect, useState } from 'react';
 import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
+import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+import images from '~/assets/img';
+import {
+  filterListProductsState,
+  setListProducts,
+  setListProductsState
+} from "~/redux/slices/productSlice";
+import baseUrl from '~/utils/baseUrl';
 import ItemCollection from "../Collection/ItemCollection";
 import styles from "./Home.module.scss";
 import classNames from "classnames/bind";
@@ -15,6 +27,9 @@ function Home() {
     "https://media.coolmate.me/cdn-cgi/image/width=1920,quality=90,format=auto/uploads/November2023/kkGraphic_Special_(1).png",
     "https://media.coolmate.me/cdn-cgi/image/width=1920,quality=90,format=auto/uploads/November2023/cc1920x788-ver-3_68.jpg",
   ];
+
+  const listProducts =  useSelector(state => state.product.listProducts)
+  const navigate=useNavigate();
 
   const banners = [
     "https://media.coolmate.me/cdn-cgi/image/quality=80,format=auto/uploads/October2023/mceclip0_74.png",
@@ -94,9 +109,38 @@ function Home() {
       items: 1,
     },
   };
+  //DUyY
+  const dispatch = useDispatch();
+  const [filter,setFilter] = useState({
+        productType: '',
+        productCategory: '',
+        status: '',
+        searchText: ''
+    
+    }) 
+  const getAllProducts = async () => {
+    try {
+        const res = await axios.get(`${baseUrl}/api/products/getAllProducts`)
+        if (res && res.data) {
+            dispatch(setListProducts(res.data.data))
+            dispatch(setListProductsState(res.data.data))
+            dispatch(filterListProductsState({filter}));
+        } 
+    } catch (error) {
+        console.log(error.message)
+    }
+}
+useEffect(() => {
+  getAllProducts()
+},[])
   return (
     <div>
       {/* Slider */}
+      
+      <button onClick={() => console.log(listProducts)}>
+  Click
+</button>
+
       <div>
         <Carousel
           itemClass={cx("carousel-item")}
@@ -127,10 +171,10 @@ function Home() {
                 responsive={responsive}
                 ssr={true}
               >
-                {item.listProduct.map(() => {
+                {listProducts.map((item, index) => {
                   return (
-                    <div className={cx("width-item")}>
-                      <ItemCollection />
+                    <div key={index} className={cx("width-item")}>
+                      <ItemCollection product={item}/>
                     </div>
                   );
                 })}

@@ -12,14 +12,11 @@ const productCategoryRouter = require('./routes/productCategory/ProductCategoryR
 const productTypeRouter = require('./routes/productType/productTypeRouter')
 const importProductRouter = require('./routes/importProduct/ImportProductRouter')
 const billRouter = require('./routes/bill/BillRouter');
-
 const addressRoutes = require('./routes/address/AddressRoutes');
 const authRoutes = require('./routes/auth/AuthRoute');
 const orderRoutes = require('./routes/order/OrderRoutes');
 const feedbackRoutes = require('./routes/feedback/FeedbackRoutes');
 const reviewRoutes = require('./routes/review/ReviewRouters');
-
-
 // declaire app express
 const app = express();
 
@@ -48,11 +45,9 @@ app.use('/api/orders', orderRoutes);
 app.use('/api/feedbacks', feedbackRoutes);
 app.use('/api/reviews', reviewRoutes);
 app.use('/api/bill', billRouter);
-
 // Error handler
 app.use(notFound);
 app.use(errorHandler);
-
 // Server run here
 const port = process.env.PORT;
 app.listen(port, console.log("Server is running at port: " + port));
