@@ -5,6 +5,7 @@ import ItemCollection from "../Collection/ItemCollection";
 import styles from "./Home.module.scss";
 import classNames from "classnames/bind";
 import images from "~/assets/img";
+import { FaCircleArrowRight } from "react-icons/fa6";
 
 const cx = classNames.bind(styles);
 
@@ -78,17 +79,18 @@ function Home() {
       items: 1,
     },
   };
+
   const responsive = {
     desktop: {
       breakpoint: { max: 3000, min: 1024 },
       items: 5,
     },
     tablet: {
-      breakpoint: { max: 1024, min: 464 },
-      items: 2,
+      breakpoint: { max: 1024, min: 768 },
+      items: 3,
     },
     mobile: {
-      breakpoint: { max: 464, min: 0 },
+      breakpoint: { max: 768, min: 0 },
       items: 1,
     },
   };
@@ -97,6 +99,7 @@ function Home() {
       {/* Slider */}
       <div>
         <Carousel
+          itemClass={cx("carousel-item")}
           swipeable={true}
           draggable={false}
           responsive={responsiveBanner}
@@ -147,7 +150,9 @@ function Home() {
             <div className={cx("container-item")}>
               <img className={cx("itemIMG")} src={item.url} alt="all" />
               <div className={cx("btn-item")}>
-                <a href={item.route}>Xem chi tiết</a>
+                <a href={item.route}>
+                  <FaCircleArrowRight />
+                </a>
               </div>
             </div>
           );
