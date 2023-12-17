@@ -76,8 +76,8 @@
                 display: grid;
                 grid-template-columns: repeat(4,1fr);
                 gap: 6px;
-
-
+                max-width: 80%;
+            
                 .filter-color-item {
                     display: flex;
                     flex-direction: column;
@@ -87,6 +87,7 @@
                     margin-bottom: 6px;
                     cursor: pointer;
                     white-space: nowrap;
+                    
                     .filter-select-color__button {
                         margin: 4px;
                         width: 26px;
@@ -235,3 +236,266 @@
     }
 }
 
+
+@media (max-width: 1024px) {
+    .wrapper {
+        padding: 32px 32px 0 32px;
+        .left-side-wrapper {
+           
+    
+    
+    
+        }
+        .left-side {
+    
+           
+    
+            .quantity {
+               
+            }
+            .filter {
+               .filter-item {
+              
+                &:first-child {
+                   
+                }
+                .filter-heading {
+                   
+                }
+                .filter-size {
+                   
+    
+                    .filter-size-item {
+                     
+    
+                        &.checked {
+                         
+                        }
+                    }
+                }
+    
+                .filter-color {
+                   
+    
+    
+                    .filter-color-item {
+                     
+                        .filter-select-color__button {
+                        
+                        }
+                        .filter-select-color__label {
+                           
+                        }
+              
+                    }
+                }
+    
+                .filter-type {
+                
+             
+                    .filter-type-item {
+                    
+                        .filter-type-checkbox {
+                           
+    
+                            &.checked {
+                              
+                            }
+                        }
+                        
+                        
+                    }
+                    
+                    
+                    .filter-type-label {
+                      
+                    }
+    
+                   
+                }
+                
+               }
+            }
+        }
+        .right-side {
+           
+            .heading {
+                margin-top: 16px;
+            }
+            .selected {
+               
+        
+    
+                h5 {
+                  
+          
+         
+                }
+                .wrapper-item-selected {
+                    
+                }
+                .item-selected {
+                    
+                }
+                
+            }
+            .delete-filter {
+             
+            }
+            .list-product-filter {
+                grid-template-columns: repeat(3, 1fr);
+            }
+      
+        }
+    
+    
+        .filter-select-color__button--den {
+            
+        }
+        .filter-select-color__button--xam {
+            
+        }
+        .filter-select-color__button--xanh-navy {
+            
+        }
+        .filter-select-color__button--trang {
+            
+        }
+        .filter-select-color__button--xanh-la {
+            
+        }
+    }
+}
+@media (max-width: 767px) {
+    .wrapper {
+        padding: 32px 16px 0 24px;
+        flex-direction: column;
+        .left-side-wrapper {
+           
+            max-width: 90%;
+    
+    
+        }
+        .left-side {
+    
+           
+    
+            .quantity {
+               
+            }
+            .filter {
+               .filter-item {
+              
+                &:first-child {
+                   
+                }
+                .filter-heading {
+                   
+                }
+                .filter-size {
+                   
+    
+                    .filter-size-item {
+                     
+    
+                        &.checked {
+                         
+                        }
+                    }
+                }
+    
+                .filter-color {
+                   
+    
+    
+                    .filter-color-item {
+                     
+                        .filter-select-color__button {
+                        
+                        }
+                        .filter-select-color__label {
+                           
+                        }
+              
+                    }
+                }
+    
+                .filter-type {
+                
+                    display: flex;
+                    flex-wrap: wrap;
+                    gap: 32px;
+                    row-gap: 12px;
+                    .filter-type-item {
+                    
+                        .filter-type-checkbox {
+                           
+    
+                            &.checked {
+                              
+                            }
+                        }
+                        
+                        
+                    }
+                    
+                    
+                    .filter-type-label {
+                      
+                    }
+    
+                   
+                }
+                
+               }
+            }
+        }
+        .right-side {
+           padding-left: 0;
+            .heading {
+             
+            }
+            .selected {
+               
+        
+    
+                h5 {
+                  
+          
+         
+                }
+                .wrapper-item-selected {
+                    
+                }
+                .item-selected {
+                    
+                }
+                
+            }
+            .delete-filter {
+             
+            }
+            .list-product-filter {
+                grid-template-columns: repeat(2, 1fr);
+            }
+      
+        }
+    
+    
+        .filter-select-color__button--den {
+            
+        }
+        .filter-select-color__button--xam {
+            
+        }
+        .filter-select-color__button--xanh-navy {
+            
+        }
+        .filter-select-color__button--trang {
+            
+        }
+        .filter-select-color__button--xanh-la {
+            
+        }
+    }
+}
