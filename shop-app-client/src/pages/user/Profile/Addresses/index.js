@@ -6,6 +6,8 @@ import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useEffect } from 'react';
 import { deleteAddresses, getAllAddresses } from '~/redux/api/userRequest';
+import { Link } from 'react-router-dom';
+import { BiArrowBack } from 'react-icons/bi';
 const cx = classNames.bind(styles);
 
 function Addresses() {
@@ -63,6 +65,9 @@ function Addresses() {
     return ( 
         <>
             <div className={cx('container')}>
+            <Link to={'/user-profile'} className={cx('account-page__icon')}>
+                    <BiArrowBack /> 
+                </Link>
                 <div style={{display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between'}}>
                     <h1 className={cx('account-page__title')}>Địa chỉ của tôi</h1>
                     <div className={cx('account-info__btn')} onClick={() => {setIsAdd(true); setPopup(true)}}>

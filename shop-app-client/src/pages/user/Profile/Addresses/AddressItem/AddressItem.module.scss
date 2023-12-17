@@ -76,3 +76,26 @@
     margin-top: 5px;
     font-size: 14px;
 }
+@media (max-width:500px) {
+    .defaultBtn{
+        padding: 2px;
+        border: 1px #c1c1c1 solid; 
+        border-radius: 30px;
+        font-size: 10px;
+        display: flex;
+        flex-direction: row;
+    }
+    .addressName{
+        display: flex;
+        flex-direction: column;
+        align-items: start;
+        font-weight: 600;
+        gap: 2px;
+    }
+    .headAddress{
+        display: flex;
+        flex-direction: row;
+        align-items: start;
+        justify-content: space-between;
+    }
+}

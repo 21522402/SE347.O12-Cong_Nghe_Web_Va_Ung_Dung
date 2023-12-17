@@ -85,27 +85,27 @@ function AddressPopup({props, onClose, isAdd, onCloseAndReload} ) {
                     <AiOutlineClose/>
                 </div>
                 <div className={cx('outer')}>
-                    <div style={{display: 'flex', flexDirection: 'row', alignItems: 'center', gap: '15px'}}>
-                        <div style={{width: '50%'}}>
+                    <div className={cx('row-item')} >
+                        <div className={cx('row-item-input')}>
                             <TextInput placeHolder={'Họ và tên'} type={"type_2"} value={selected.name} handleChange={(e) => handleChange(e, "name")}/>
                         </div>
-                        <div style={{width: '50%'}}>
+                        <div className={cx('row-item-input')}>
                             <TextInput placeHolder={'Số điện thoại'} type={"type_2"} value={selected.phoneNumber} handleChange={(e) => handleChange(e, "phoneNumber")}/>
                         </div>
                     </div>
-                    <div style={{display: 'flex', flexDirection: 'row', alignItems: 'center', gap: '15px'}}>
-                        <div style={{width: '50%'}}>
+                    <div className={cx('row-item')}>
+                        <div className={cx('row-item-input')}>
                             <TextInput placeHolder={'Địa chỉ'} type={"type_2"} value={selected.detail} handleChange={(e) => handleChange(e, "detail")}/>
                         </div>
-                        <div style={{width: '50%', position: 'relative', zIndex: 1000}}>
+                        <div className={cx('row-item-input')} style={{ position: 'relative', zIndex: 1000}}>
                             <ComboBox listItems={provinces} placeHolder={'Chọn Tỉnh/Thành phố'} selectedItem={selected.province} type={'list'} filterValueSelected={filterProvince}/>
                         </div>
                     </div>
-                    <div style={{display: 'flex', flexDirection: 'row', alignItems: 'center', gap: '15px'}}>
-                        <div style={{width: '50%'}}>
+                    <div className={cx('row-item')}>
+                        <div className={cx('row-item-input')}>
                             <ComboBox listItems={districts} placeHolder={'Chọn Quận/Huyện'} selectedItem={selected.district} type={'list'} filterValueSelected={filterDistrict}/>
                         </div>
-                        <div style={{width: '50%'}}>
+                        <div className={cx('row-item-input')}>
                             <ComboBox listItems={wards} placeHolder={'Chọn Phường/Xã'} selectedItem={selected.ward} type={'list'} filterValueSelected={(e)=> {setSelected({...selected, 'ward': e.name})}}/>
                         </div>
                     </div>
@@ -113,7 +113,7 @@ function AddressPopup({props, onClose, isAdd, onCloseAndReload} ) {
                         <RadioButton listItems={defaults} filterValueChecked={(e)=> {e.id === -1 ? setSelected({...selected, default: false }) : setSelected({...selected, default: true})}}/>
                     </div>
                     <div style={{display: 'flex', width: '100%', flexDirection:'column', alignItems: 'end'}}>
-                        <div style={{width: '50%', display: 'flex', flexDirection: 'row', alignItems: 'center', gap: '10px'}}>
+                        <div style={{width: '100%', display: 'flex', flexDirection: 'row', alignItems: 'center', gap: '10px'}}>
                             <div className={cx('account-info__btn_cancel')} style={{width: '50%'}} onClick={onClose}>
                                 <span className={cx('account-info__btn-text_cancel')}>Hủy</span>
                             </div>

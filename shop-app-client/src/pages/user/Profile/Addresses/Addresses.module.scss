@@ -105,3 +105,32 @@
         opacity: 0.5;
     }
 }
+.account-page__icon{
+    font-size: 26px;
+    margin-bottom: 10px;
+    margin-top: 10px;
+    display: none;
+}
+@media (max-width:500px) {
+    .container{
+        padding: 10px 8px;
+    }
+    .account-page__icon{
+        display: block;
+    }
+    .account-page__title{
+        font-size: 25px;
+        margin-bottom: 6px;
+        font-weight: 500;
+    }
+    .outerPopup{
+        position: fixed;
+        width: 98vw;
+        max-width: 98vw;
+        z-index: 13;
+        top: 100%;
+        left: 50%;
+        transform: translate(-50%, 0%);
+        opacity: 0;
+    }
+}
