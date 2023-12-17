@@ -134,7 +134,7 @@ function Header() {
             ]
         }
     ]
-
+    
     const handleMouseOver = (index) => {
         setIndexCategoryActive(index)
         setShowDetailPopup(true)
