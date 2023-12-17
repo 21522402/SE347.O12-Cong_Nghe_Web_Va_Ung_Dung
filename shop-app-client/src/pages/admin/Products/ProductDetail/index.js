@@ -16,15 +16,18 @@ import ColorSize from "../ColorSize";
 
 import { useState } from "react";
 
-
+import axios from 'axios';
+import baseUrl from '~/utils/baseUrl';
 import styles from './ProductDetail.module.scss'
 import { useRef } from "react";
 import { useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-
+import { toast } from "react-toastify";
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 const cx = classNames.bind(styles)
 
-function ProductDetail({index}) {
+function ProductDetail({index, getAllProducts}) {
     const dispatch = useDispatch()
     const navigate = useNavigate()
     const {setShowModal, setTypeModal} = useContext(ModalContext);
@@ -60,8 +63,37 @@ function ProductDetail({index}) {
             descriptionElement.current.innerHTML = product.description;
         }
     },[product])
+    const handleEditStatus = async (status) => {
+        try {
+            const res = await axios.patch(`${baseUrl}/api/products/editStatusProduct`,{productStatus: status, id: product._id})
+            getAllProducts();
+            if (status==='Bán trực tiếp') {
+                toast.success('Đăng bán thành công!')
+            }
+            else if (status === 'Ngừng kinh doanh') {
+                toast.error('Đã ngừng kinh doanh sản phẩm!')
+            }
+        } catch (error) {
+            console.log(error.message)
+        }
+    }
+    const handleClickImport = () => {
+        if (product.colors.length===0 || product.colors[0].sizes.length === 0) {
+            toast.error('Sản phẩm hiện chưa có mặt hàng nào để nhập hàng')
+            return;
+        }
+        navigate('/admin/products/import', {
+            state: product
+        })
+    }
     return (
         <div className={cx('wrapper')}>
+        <ToastContainer
+                    position='top-right'
+                    autoClose={1000}
+                    hideProgressBar={true}
+                    draggable={false}
+                />
             {/* Header */}
             <div className={cx('header')}>
                 <div className={cx('tabpanel')}>Thông tin</div>
@@ -174,11 +206,15 @@ function ProductDetail({index}) {
                 {/* Chức năng */}
                 <div className={cx('product-fucntion')}>
                     <span className={cx('btn', 'btn-succeed')} onClick={() => { dispatch(setCurrentProduct(product)) ; setTypeModal('update'); setShowModal(true)}}><AiOutlineEdit style={{ marginRight: '6px', fontSize: '16px' }} />   Cập nhật </span>
-                    <a onClick={() => navigate('/admin/products/import', {
-                        state: product
-                    })} className={cx('btn', 'btn-succeed')}><BiImport style={{ marginRight: '6px', fontSize: '18px' }} />   Nhập hàng </a>
-                    <span className={cx('btn', 'btn-error')}><BiSolidLockAlt style={{ marginRight: '6px', fontSize: '16px' }} />   Ngừng kinh doanh</span>
-                    <span className={cx('btn', 'btn-succeed')}><MdPublish style={{ marginRight: '6px', fontSize: '16px' }} />   Đăng bán</span>
+                    <a onClick={handleClickImport} className={cx('btn', 'btn-succeed')}><BiImport style={{ marginRight: '6px', fontSize: '18px' }} />   Nhập hàng </a>
+                    {
+                        product.status === 'Bán trực tiếp' &&
+                        <span onClick={() => handleEditStatus('Ngừng kinh doanh')} className={cx('btn', 'btn-error')}><BiSolidLockAlt style={{ marginRight: '6px', fontSize: '16px' }} />   Ngừng kinh doanh</span>
+                    }
+                    {
+                        (product.status === 'Chưa đăng bán' || product.status === 'Ngừng kinh doanh' ) &&
+                        <span onClick={() => handleEditStatus('Bán trực tiếp')} className={cx('btn', 'btn-succeed')}><MdPublish style={{ marginRight: '6px', fontSize: '16px' }} />   Đăng bán</span>
+                    }
                 </div>
             </div>
         </div>

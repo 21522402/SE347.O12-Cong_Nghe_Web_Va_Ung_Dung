@@ -26,7 +26,7 @@ function RentalImportRow({ itemImport }) {
         <React.Fragment >
             <tr onClick={handleClickProducItem} className={cx('product-item', { showDetail: openDetail })} ref={element}>
             
-                <td className={cx('code')}>{'#' + itemImport._id}</td>
+                <td className={cx('code')}>{'#' + itemImport._id.substring(12)}</td>
                 <td className={cx('date')}>{itemImport.date}</td>
                 <td className={cx('productQuantity')}>{itemImport.productQuantity}</td>
                 <td className={cx('itemQuantity')}>{itemImport.itemQuantity}</td>

@@ -38,6 +38,29 @@ const addImport = async (req, res) => {
             ...req.body,
             date: new Date()
         })
+        debugger
+        for (let i=0; i<importProduct.listImportProducts.length; i++) {
+            debugger
+            const productCode = importProduct.listImportProducts[i].productCode
+            const product = await Product.findOne({productCode}).exec();
+            debugger
+            product.colors.forEach(item0 => {
+                importProduct.listImportProducts[i].colors.forEach(item1 => {
+                    if (item0.colorName === item1.colorName) {
+                        item1.sizes.forEach(item3 => {
+                            item0.sizes.forEach(item4 => {
+                                if (item3.sizeName === item4.sizeName) {
+                                    item4.quantity = item4.quantity + item3.quantity
+                                }
+                            })
+                        })
+                    }
+                })
+               
+            })
+            await product.save();
+        }
+        debugger
         res.status(200).json({
             message: 'Import goods successfully',
             data: importProduct

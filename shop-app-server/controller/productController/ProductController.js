@@ -3,7 +3,6 @@ const cloudinaryCustom = require('../../utils/cloudinaryCustom.js')
 const getNewItemCode = (prefix, lastCode, lengthCode) => {
     const lastedNum = Number(lastCode.substring(prefix.length));
     let newNumStr = "" + (lastedNum + 1);
-    debugger
     while (newNumStr.length < lengthCode - prefix.length) {
         newNumStr = '0' + newNumStr
 
@@ -32,12 +31,19 @@ const getAllProducts = async (req, res) => {
 const addProduct = async (req, res) => {
     try {
         let productCode = '';
-        const isExists = await Product.findOne().exec();
+        const isExistsProduct = (await Product.findOne({productName: req.body.productName}).exec());
+        if (isExistsProduct ) {
+            throw new Error('Tên sản phẩm đã tồn tại')
+        }
+       
+        const isExists = await Product.findOne({}).exec();
         if (isExists) {
-            const lastCode = (await Product.findOne().sort({ created_at: -1 }).exec()).productCode;
+            
+            const lastCode = (await Product.findOne({}).sort({ createdAt: -1 }).exec()).productCode;
             productCode = getNewItemCode('MH', lastCode, 6)
         }
         else productCode = 'MH0001'
+  
 
         const product = await Product.create({
             ...req.body,
@@ -48,13 +54,40 @@ const addProduct = async (req, res) => {
             data: product
         })
     } catch (error) {
+        debugger;
+        if (error.message === 'Tên sản phẩm đã tồn tại') {
+            res.status(400).json({
+                message: 'Tên sản phẩm đã tồn tại',
+            })
+        }
+        else {
+            res.status(400).json({
+                message: 'Add product failed',
+            })
+        }
+       
+    }
+}
+
+const editStatusProduct = async (req, res) => {
+    try {
+        const {productStatus, id} = req.body
+        const product = await Product.findById(id).exec();
+        product.status = productStatus
+        await product.save();
+        res.status(200).json({
+            message: 'Successfully',
+            data: product
+        })
+    } catch (error) {
         res.status(400).json({
-            message: 'Add product failed',
+            message: 'Failed',
         })
     }
 }
 const editProduct = async (req, res) => {
     const { productCode,
+        _id,
         productName,
         productType,
         productCategory,
@@ -64,6 +97,10 @@ const editProduct = async (req, res) => {
         discountPerc,
         colors } = req.body
     try {
+        const isExistsProduct = (await Product.findOne({productName}).exec());
+        if (isExistsProduct && isExistsProduct._id.toString() !== _id ) {
+            throw new Error('Tên sản phẩm đã tồn tại')
+        }
         for (let i = 0; i < colors.length; i++) {
             const imageBuffer = [];
             const color = colors[i];
@@ -110,9 +147,17 @@ const editProduct = async (req, res) => {
         })
     } catch (error) {
         debugger
-        res.status(400).json({
-            message: 'Update product failed',
-        })
+        if (error.message === 'Tên sản phẩm đã tồn tại') {
+            res.status(400).json({
+                message: 'Tên sản phẩm đã tồn tại',
+            })
+        }
+        else {
+            res.status(400).json({
+                message: 'Update product failed',
+            })
+        }
+     
     }
 }
 const editProductByType = async (req, res) => {
@@ -139,5 +184,6 @@ module.exports = {
     addProduct,
     getAllProducts,
     editProduct,
-    editProductByType
+    editProductByType,
+    editStatusProduct
 }

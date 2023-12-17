@@ -153,7 +153,7 @@ function Orders() {
 
                                 {listOrders.map((item, index) => {
                                     return (
-                                        <OrderRow key={index} index={index}/>
+                                        <OrderRow key={index} index={index} getAllOrders={getAllOrders}/>
                                     )
                                 })}
 

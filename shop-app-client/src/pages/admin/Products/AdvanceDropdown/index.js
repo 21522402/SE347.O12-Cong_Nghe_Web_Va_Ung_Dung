@@ -6,7 +6,6 @@ import { useState } from "react";
 import { useRef } from "react";
 import { useEffect } from "react";
 
-
 const cx = classNames.bind(styles)
 
 function AdvanceDropdown({ items, style, onClick, indexA, indexB, addNewItem, editItem, removeItem, keyProperty, keyId }) {

@@ -7,18 +7,21 @@ import { handleChangeOrderStatus } from "~/redux/slices/orderAdminSlice";
 
 
 import { useEffect, useRef } from "react";
-
+import baseUrl from '~/utils/baseUrl';
+import axios from "axios";
 
 import { useState } from "react";
 
-
+import { toast } from "react-toastify";
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import styles from './OrderDetail.module.scss'
 import OrderItem from "./OrderItem";
 import DropDown from "../../Products/DropDown";
 
 const cx = classNames.bind(styles)
 
-function OrderDetail({ index }) {
+function OrderDetail({ index, getAllOrders }) {
     const dispatch = useDispatch()
     const order = useSelector(state => state.orderAdmin.listOrders[index])
     const [status, setStatus] = useState(order.status)
@@ -41,9 +44,28 @@ function OrderDetail({ index }) {
 
         }
     }, [statusElement])
+    const handleClickSave = async () => {
+        try {
+            const res = await axios.patch(`${baseUrl}/api/orders/adminEditStatus`,{id: order._id, status:status })
+            if (res) {
+                console.log(res.data)
+                getAllOrders();
+                toast.success('Thay đổi trạng thái đơn hàng thành công!')
+                
+            }
+        } catch (error) {
+            
+        }
+    }
 
     return (
         <div className={cx('wrapper')}>
+         <ToastContainer
+                    position='top-right'
+                    autoClose={1000}
+                    hideProgressBar={true}
+                    draggable={false}
+                />
             {/* Header */}
             <div className={cx('header')}>
                 <div className={cx('tabpanel')}>Thông tin</div>
@@ -53,7 +75,7 @@ function OrderDetail({ index }) {
             <div className={cx('product-container')}>
                 <div className={cx('order-container')}>
                     <div style={{ fontSize: '16px', fontWeight: 'bold', color: '#4bac4d' }}>
-                        Đơn đặt hàng {`#${order._id}`} <span style={{ color: '#000' }}>/ Trạng thái
+                        Đơn đặt hàng {`#${order._id.substring(12)}`} <span style={{ color: '#000' }}>/ Trạng thái
                             <div ref={statusElement} className={cx('product-category-select', { active: showListStatus })} onClick={() => setShowListStatus(prev => !prev)}>
                                 <span style={{ color: status === 'Chờ xác nhận' || status === 'Đã hủy' ? 'red' : '#4eb7f5' }}>{status}</span>
                                 <span> {!showListStatus ? <AiFillCaretDown /> : <AiFillCaretUp />}</span>
@@ -120,30 +142,12 @@ function OrderDetail({ index }) {
                             </div>
                         </div>
                         <div style={{ marginTop: '16px', marginLeft: '32px' }}>
-                            <label style={{ fontSize: '16px', fontWeight: '600', marginLeft: '32px', marginBottom: '16px' }}>Thông tin khách hàng</label>
+                            <label style={{ fontSize: '16px', fontWeight: '600', marginLeft: '32px', marginBottom: '16px' }}>Thông tin giao hàng</label>
                             <div style={{ borderLeft: '3px solid #4bac4d', height: '100%', paddingLeft: '32px', fontSize: '14px' }}>
-                                <div style={{ display: 'flex', alignItems: 'center' }}>
+                             
+                                <div style={{ marginTop: '12px', display: 'flex', alignItems: 'center' }}>
                                     <img style={{ width: '100px', height: '100px' }} src="https://png.pngtree.com/png-vector/20191101/ourmid/pngtree-cartoon-color-simple-male-avatar-png-image_1934459.jpg" />
 
-                                    <div style={{ marginLeft: '24px', display: 'flex', flexDirection: 'column', gap: '4px' }}>
-
-                                        <div style={{ display: 'flex' }}>
-                                            <span style={{ display: 'inline-block', width: '110px', fontWeight: '600' }}>Khách hàng:</span>
-                                            <span style={{ fontWeight: '600' }}>Nguyễn Văn A</span>
-                                        </div>
-                                        <div style={{ display: 'flex' }}>
-                                            <span style={{ display: 'inline-block', width: '110px', fontWeight: '600' }}>SĐT:</span>
-                                            <span style={{ fontWeight: '600' }}>0868208744</span>
-                                        </div>
-                                        <div style={{ display: 'flex' }}>
-                                            <span style={{ display: 'inline-block', width: '110px', fontWeight: '600' }}>Email: </span>
-                                            <span style={{ fontWeight: '600' }}>vana@gmail.com</span>
-                                        </div>
-
-                                    </div>
-                                </div>
-                                <div style={{ marginTop: '48px' }}>
-                                    <label style={{ fontSize: '16px', fontWeight: '600', marginBottom: '16px' }}>Thông tin giao hàng</label>
                                     <div style={{ marginLeft: '16px', fontSize: '14px' }}>
                                         <div style={{ display: 'flex', alignItems: 'center' }}>
                                             <span style={{ display: 'inline-block', width: '150px', fontWeight: '600' }}>
@@ -198,7 +202,7 @@ function OrderDetail({ index }) {
                 {/* Chức năng */}
                 <div className={cx('product-fucntion')}>
 
-                    <span className={cx('btn', 'btn-succeed')}><AiOutlineSave style={{ marginRight: '6px', fontSize: '16px' }} />  Lưu</span>
+                    <span onClick={handleClickSave} className={cx('btn', 'btn-succeed')}><AiOutlineSave style={{ marginRight: '6px', fontSize: '16px' }} />  Lưu</span>
                 </div>
             </div>
         </div>

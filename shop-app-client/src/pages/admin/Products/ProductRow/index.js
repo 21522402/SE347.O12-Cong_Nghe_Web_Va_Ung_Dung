@@ -9,9 +9,15 @@ const cx = classNames.bind(styles)
 
 
 
-function ProductRow({ index}) {
+function ProductRow({ index, getAllProducts}) {
 
     const product = useSelector(state => state.product.listProductsState[index])
+    const quantityStorage = product.colors.reduce((accumulator, currentValue) => {
+        const quantityColor = currentValue.sizes.reduce((acc,curr) => {
+            return acc + curr.quantity
+        },0)
+        return accumulator + quantityColor;
+    },0)
     const element = useRef(null)
     const imageProductDefault = "https://cdn-app.kiotviet.vn/sample/fashion/38.png";
     const img = product.colors[0]?.images[0] ?? imageProductDefault
@@ -36,7 +42,7 @@ function ProductRow({ index}) {
                 <td className={cx('status')}>{product.status}</td>
                 <td className={cx('price-buy')}>{product.exportPrice}</td>
                 <td className={cx('price-origin')}>{product.importPrice}</td>
-                <td className={cx('quantity')}>{product.quantity}</td>
+                <td className={cx('quantity')}>{quantityStorage}</td>
 
             </tr>
 
@@ -44,7 +50,7 @@ function ProductRow({ index}) {
                 openDetail &&
                 <tr className={cx('product-detail')}>
                     <td colSpan={8} style={{ padding: '0' }}>
-                        <ProductDetail index={index}/>
+                        <ProductDetail index={index} getAllProducts={getAllProducts}/>
                     </td>
                 </tr>
             }
