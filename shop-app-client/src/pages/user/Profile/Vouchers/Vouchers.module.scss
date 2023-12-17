@@ -7,6 +7,13 @@
     font-weight: 500;
 }
 
+.account-page__icon{
+    font-size: 26px;
+    margin-bottom: 10px;
+    margin-top: 10px;
+    display: none;
+}
+
 .outerVouchers{
     display: flex;
     flex-direction: row;
@@ -57,12 +64,14 @@
 }
 
 .vouchers-footer{
-    position: relative;
+    // position: relative;
     margin-top: 30px;
+    background-image: url('https://mcdn.coolmate.me/image/September2023/mceclip0_96.jpg');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-clip: content-box;
     .vouchers-footer__content{
-        position: absolute;
-        left: 0;
-        bottom: 0;
+        z-index: 1;
         padding: 24px;
         padding-bottom: 32px;
         .content{
@@ -147,3 +156,47 @@
         opacity: 0.5;
     }
 }
+
+@media (max-width: 500px) {
+    .container{
+        .account-page__icon{
+            display: block;
+        }
+    }
+    .outerPopup{
+        position: fixed;
+        width: 80vw;
+        max-width: 600px;
+        z-index: 13;
+        top: 100%;
+        left: 60%;
+        transform: translate(0, 0);
+        opacity: 0.5;
+        top: 100%;
+        left: 60%;
+        transform: translate(0, 0);
+        opacity: 0;
+    }
+}
+
+@media (max-width:1200px) {
+    .vouchers-footer{
+        display: none;
+       
+    }
+    .outerPopup{
+        position: fixed;
+        width: 80vw;
+        max-width: 600px;
+        z-index: 13;
+        top: 100%;
+        left: 60%;
+        transform: translate(0, 0);
+        opacity: 0.5;
+        top: 100%;
+        left: 60%;
+        transform: translate(0, 0);
+        opacity: 0;
+    }
+}
+

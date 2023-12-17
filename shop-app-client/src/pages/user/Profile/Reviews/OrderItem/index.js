@@ -23,6 +23,15 @@ function OrderItem({props}) {
                 </div>
                 <div onClick={() => setDetail(!detail)} style={{width: '106px'}}><span className={cx('title')} style={{color: '#4bc7bf', cursor: 'pointer'}}>{detail ? 'Less detail' : 'More detail'}</span></div>
             </div>
+            <div className={cx('header-responsive')}>
+                <div>
+                    <div style={{ fontSize: '16px', fontWeight: 'bold', color: 'white' }}>
+                        #DH_{props._id?.slice(16)}
+                    </div>
+                    <div style={{ color: 'white' }}>{(new Date(props.orderDate)).getDate() + '/ ' + ((new Date(props.orderDate)).getMonth() + 1) + '/ ' + (new Date(props.orderDate)).getFullYear()}</div>
+                </div>
+                <div style={{ backgroundColor: 'white', borderRadius: '16px', padding: '4px 10px' }}>{props.status}</div>
+            </div>
             <div className={cx('body')}>
                 <div style={{display: 'flex', flexDirection: 'row', alignItems: 'top', justifyContent: 'space-between'}}>
                     <div style={{flex: 1}}>

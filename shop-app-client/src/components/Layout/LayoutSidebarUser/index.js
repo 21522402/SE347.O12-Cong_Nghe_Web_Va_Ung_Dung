@@ -1,18 +1,21 @@
 import Footer from "./Footer";
 import Header from "../LayoutNoSidebar/Header";
 import Sidebar from "./Sidebar";
+import styles from './LayoutSidebarUser.module.scss'
+import classNames from 'classnames/bind';
+const cx = classNames.bind(styles);
 
 function LayoutSidebarUser({children}) {
     return ( 
         <div>
-            <Header/>
-            <div style={{ display:'flex', flexDirection: 'row', padding: '10px 64px', backgroundColor: '#f4f7fe'}}>
-                <div style={{display: 'flex',flex: 2}}>
-                    <Sidebar />
+            {/* <Header/> */}
+            <div  className={cx('container')} >
+                <div  className={cx('sidebar')}>
+                    <Sidebar  />
                 </div>
-                <div style={{flex: 5, backgroundColor: 'white', marginTop: '10px', marginLeft: '64px', marginBottom: '10px', borderRadius: '10px', boxShadow: '0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px -1px rgba(0, 0, 0, 0.1)'}}>{children}</div>
+                <div className={cx('content')} >{children}</div>
             </div>
-            <Footer/>
+            {/* <Footer/> */}
         </div>
         );
 }

@@ -9,7 +9,7 @@ import { deleteAddresses, getAllAddresses } from '~/redux/api/userRequest';
 import { ToastContainer, toast } from 'react-toastify';
 const cx = classNames.bind(styles);
 
-function Addresses() {
+function Addresses({payment, onClickAddress}) {
     const [popup, setPopup] = useState(undefined)
     const [isAdd, setIsAdd] = useState(true)
     const [selected, setSelected] = useState({})
@@ -54,8 +54,13 @@ function Addresses() {
                 <hr style={{width: '100%', height: '1px', backgroundColor: '#e1e1e1'}}></hr>
                 <div className={cx('outerAddresses')}>
                     {
-                        addresses?.map((item, index) => <div key={index}>
+                        addresses?.map((item, index) => <div key={index} style={{position: 'relative'}}>
                             <AddressItem props={item} onClickUpdate={()=>{setSelected(item);setReload(!reload); setIsAdd(false); setPopup(true)}}  onClickDelete={() => deleteItem(item)}/>
+                            {
+                                payment && <div className={cx('account-info__btn')} style={{position: 'absolute', bottom: '20px', right: 0}} onClick={() => {onClickAddress(item)}}>
+                                <span className={cx('account-info__btn-text')}>Chọn</span>
+                            </div>
+                            }
                             <hr style={{width: '100%', height: '1px', backgroundColor: '#e1e1e1'}}></hr>
                         </div>)
                     }

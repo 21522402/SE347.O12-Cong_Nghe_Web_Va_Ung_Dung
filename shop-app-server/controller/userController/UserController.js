@@ -116,7 +116,12 @@ const userLoginCtrl = async (req, res) => {
 
 const getAllBuyer = async (req, res) => {
     try {
-        const buyers = await User.find({ role: 'Buyer' }).populate('orders');
+        const buyers = await User.find({ role: 'Buyer' }).populate({
+            path: 'orders',
+            populate: {
+                path: 'orderItem'
+            }
+        });
         return successTemplate(res, buyers, "Lấy tất cả khách hàng thành công!", 200)
     } catch (error) {
         return errorTemplate(res, error.message)

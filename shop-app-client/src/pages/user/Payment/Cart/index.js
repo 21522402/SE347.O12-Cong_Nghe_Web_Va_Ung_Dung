@@ -7,6 +7,9 @@ import VoucherItem from './VoucherItem';
 import { VoucherIcon2 } from '~/assets/icons';
 import { useDispatch, useSelector } from 'react-redux';
 import { createCartItem, getAllVoucher, getCartProducts, getForUProduct, increaseQuantityCartItem } from '~/redux/api/userRequest';
+import { toast } from 'react-toastify';
+import { Modal } from '~/components';
+import Vouchers from '../../Profile/Vouchers';
 const cx = classNames.bind(styles);
 const Cart = forwardRef(({_ref}) => {
 
@@ -26,6 +29,8 @@ const Cart = forwardRef(({_ref}) => {
     let [delivery, setDelivery] = useState(0);
     let [discountCode, setDiscountCode] = useState('');
     let [voucherAL, setVoucher] = useState(null)
+
+    const [voucherPopup, setVoucherPopup] = useState(false)
     useImperativeHandle(_ref, () => ({
         getChildVoucher: () => {
             return voucherAL;
@@ -74,13 +79,15 @@ const Cart = forwardRef(({_ref}) => {
                     }
                     setDiscount(voucher.voucherPrice)
                     setVoucher(voucher)
+                    
+                    notify("info", "Mã giảm giá đã được áp dụng")
                 }
                 else{
-                    alert("Hãy chi thêm " + (voucher.minPrice - preTotal) + " để được hưởng ưu đãi")
+                    notify("warning", "Hãy chi thêm " + new Intl.NumberFormat('vi-VN', {style: 'currency', currency: 'VND'}).format(voucher.minPrice - preTotal) + " để được hưởng ưu đãi")
                 }
             }
             else{
-                alert("Voucher đã hết hoặc quá hạn")
+                notify("warning", "Voucher đã hết hoặc quá hạn")
             }
         }
     }
@@ -94,6 +101,7 @@ const Cart = forwardRef(({_ref}) => {
         if (today > expirationDate) return false;
         return true;
     }
+    const notify = (type, message) => toast(message, { type: type });
 
     return ( 
         <>
@@ -146,14 +154,14 @@ const Cart = forwardRef(({_ref}) => {
                     vouchers?.map((item, index) => {
                         return (
                             <div key={index} style={{margin: '0px 10px'}}>
-                                <VoucherItem props={item} onClickVoucher={() => setDiscountCode(item.voucherCode)}/>
+                                <VoucherItem active={item.voucherCode === voucherAL?.voucherCode} props={item} onClickVoucher={() => setDiscountCode(item.voucherCode)}/>
                             </div>
                         )
                     })
                 }
             </div>
 
-            <div style={{display: 'flex', margin: '14px 0'}}>
+            <div style={{display: 'flex', margin: '14px 0'}} onClick={() => setVoucherPopup(true)}>
                 <div style={{display: 'flex', flexDirection: 'row', alignItems: 'center', border: '1px solid #2f5acf', borderRadius: '30px', padding: '6px 12px', cursor: 'pointer'}}>
                     <div style={{width: '19px', height: '17px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#2f5acf'}}>
                         <img src={VoucherIcon2} alt='' style={{width: '14px', height: '14px'}}/>
@@ -185,6 +193,11 @@ const Cart = forwardRef(({_ref}) => {
                 <span className={cx('titleMoney')}>Tổng</span>
                 <span className={cx('money', 'totalMoney')}>{new Intl.NumberFormat('vi-VN', {style: 'currency', currency: 'VND'}).format(isPercent ? preTotal - preTotal * discount / 100 + delivery : preTotal - discount + delivery)}</span>
             </div>
+            <Modal visible={voucherPopup} setModal={setVoucherPopup}>
+                <div className={cx('outer-voucher-popup')}>
+                    <Vouchers onClickVoucher={(item) => {setDiscountCode(item.voucherCode); setVoucherPopup(false); console.log(item)}}/>         
+                </div>
+            </Modal>
         </>
     );
 })

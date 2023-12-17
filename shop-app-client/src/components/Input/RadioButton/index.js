@@ -11,10 +11,6 @@ function RadioButton({listItems, filterValueChecked, selectedItem}) {
     
       },[selected])
 
-    useEffect(()=>{
-        setSelected(selectedItem)
-    }, [selectedItem])
-
     return (
         <>
             <div className={cx('container')}>

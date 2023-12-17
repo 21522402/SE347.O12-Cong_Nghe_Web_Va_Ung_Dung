@@ -302,18 +302,18 @@ const userSlice = createSlice({
         createOrderStart: (state) => {
             state.cart.isLoading = true;
             state.cart.error = false;
-            state.cart.isSuccess = false;
+            state.cart.isSuccessPayment = false;
         },
 
         createOrderSuccess: (state, action) => {
             state.cart.isLoading = false;
-            state.cart.isSuccess = true;
+            state.cart.isSuccessPayment = true;
         },
         
         createOrderFailed: (state) => {
             state.cart.isLoading = false;
             state.cart.error = true;
-            state.cart.isSuccess = false;
+            state.cart.isSuccessPayment = false;
         },
     }
 })
