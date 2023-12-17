@@ -68,3 +68,22 @@
     margin-bottom: 10px;
     border-radius: 10px;
 }
+
+@media (max-width:500px) {
+    .container{
+        display: flex;
+        flex-direction: row;
+        padding: 0 20px;
+        background-color: white;
+    }
+    .main__sideBar{
+        margin-top: 10px;
+    }
+    .main__page{
+        background-color: white;
+       margin-left: 0px;
+        margin-top: 17px;
+        margin-bottom: 10px;
+        border-radius: 10px;
+    }
+}

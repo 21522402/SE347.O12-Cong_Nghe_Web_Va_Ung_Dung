@@ -16,6 +16,15 @@
             font-weight: 500;
         }
     }
+    .header-responsive{
+        padding: 10px 10px;
+        border-radius: 8px;
+        display: flex;
+        background-color: #2f5acf;
+        justify-content: space-between;
+        align-items: center;
+        display: none;
+    }
     .body{
         margin-bottom: 10px;
         .address{
@@ -115,4 +124,27 @@
             transition: all 0.4s ease-in-out;
         }
     }
+}
+@media (max-width: 500px) {
+    .container{
+        border:none;
+        border-radius: 0px;
+        .header{
+            display: none;
+        }
+        .header-responsive{
+            display: flex;
+        }
+        .see-detail-responsive{
+            display: block;
+        }
+        .label{
+            display: none;
+            opacity: 0;
+            margin: 0 0 0 24px;
+            height: 0;
+            transition: all 0.4s ease-in-out;
+        }
+    }
+
 }

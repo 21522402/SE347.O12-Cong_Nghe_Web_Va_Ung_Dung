@@ -66,19 +66,19 @@ function ProductItem({props}) {
 
     return ( 
         <>
-            <div style={{display: 'flex', flexDirection: 'row', alignItems: 'flex-start'}}>
-                <div style={{width: '50%', boxShadow: '0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0px rgba(0, 0, 0, 0.1)', padding: '5px', borderRadius: '4px'}} className={cx('container')}>
+            <div className={cx('tt-container')} >
+                <div className={cx('container')}>
                     <div className={cx('image')}>
                         <img className={cx('image')} src={item.image} alt=''/>
                     </div>
                     <div className={cx('rightContent')}>
-                        <div>
+                        <div className={cx('info-responsive')}>
                             <div className={cx('outerContent')}>
                                 <span className={cx('productName')}>{item.productName}</span>
-                                <span className={cx('colorSize')} style={{marginTop: '5px'}}>{`${props.color} / ${props.size}`}</span>
-                                <span className={cx('colorSize')} style={{marginTop: '5px'}}>x {props.quantity}</span>
+                                <span className={cx('colorSize')} >{`${props.color} / ${props.size}`}</span>
+                                <span className={cx('colorSize')} >x {props.quantity}</span>
                             </div>
-                            <div style={{display: 'flex', flexDirection: 'row', gap: '5px', alignItems: 'flex-end', marginBottom: '15px', marginTop: '5px'}}>
+                            <div className={cx('order-price')} >
                                 <div style={{fontWeight: '600'}}>{new Intl.NumberFormat('vi-VN', {style: 'currency', currency: 'VND'}).format(item.price * (1 - item.discountPerc))}</div>
                                 <del style={{fontWeight: '400', fontSize: '14px', color: '#ccc'}}>{new Intl.NumberFormat('vi-VN', {style: 'currency', currency: 'VND'}).format(item.price)}</del>
                             </div>
@@ -86,7 +86,7 @@ function ProductItem({props}) {
                     </div>
                 </div>
                 <hr style={{height: '100%', width: '1px', backgroundColor: 'rgb(75, 172, 77)'}}/>
-                <div style={{width: '50%'}}>
+                <div className={cx('rv-container')}>
                     {
                         props.review ? (
                             <div style={{boxShadow: '0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0px rgba(0, 0, 0, 0.1)', padding: '5px', borderRadius: '4px'}}>
@@ -109,7 +109,7 @@ function ProductItem({props}) {
                                             <div style={{display: 'flex', flexDirection: 'row', gap: '7px', alignItems: 'center', marginBottom: '8px'}}>
                                                 {
                                                     props.review.imagesRv.map((item, index) => {
-                                                        return <img src={item} style={{width: '80px', height: '100px', border: '0.5px solid #ccc', borderRadius: '5px'}} alt=''/>
+                                                        return <img src={item} className={cx('img-review')}  alt=''/>
                                                     })
                                                 }
                                             </div> : null
@@ -190,7 +190,7 @@ function ProductItem({props}) {
                                     <div style={{display: 'flex', flexDirection: 'row', gap: '7px', alignItems: 'center', marginBottom: '8px'}}>
                                         {
                                             props.review.response.imagesRsp.map((item, index) => {
-                                                return <img src={item} style={{width: '80px', height: '100px', border: '0.5px solid #ccc', borderRadius: '5px'}} alt=''/>
+                                                return <img src={item} className={cx('img-review')}  alt=''/>
                                             })
                                         }
                                     </div> : null

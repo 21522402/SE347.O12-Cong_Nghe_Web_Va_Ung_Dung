@@ -72,14 +72,6 @@
     opacity: 0;
 }
 
-.main__page{
-    flex: 5;
-    background-color: white;
-    margin-left: 70px;
-    margin-top: 17px;
-    margin-bottom: 10px;
-    border-radius: 10px;
-}
 
 .active-item {
     background-color: black;
@@ -90,5 +82,34 @@
     }
     .tab_icon{
         filter: invert(1);
+    }
+}
+@media (max-width: 500px){
+
+    .tab_container{
+        cursor: pointer;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+        background-color: white;
+        box-shadow: none;
+        padding: 10px 12px;
+        border-radius: 2px;
+        animation: 0.3s linear;
+        margin: 0 0 10px;
+        transition: all 0.25s ease;
+        border-bottom: 0.5px solid #ccc
+    }
+    .active-item {
+        background-color: black;
+        color: white;
+        .tab_arrowRight{
+            color: white;
+            opacity: 1;
+        }
+        .tab_icon{
+            filter: invert(1);
+        }
     }
 }

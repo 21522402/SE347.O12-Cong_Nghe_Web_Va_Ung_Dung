@@ -1,44 +1,65 @@
-.container{
+.tt-container {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+}
+
+.container {
     display: flex;
     flex-direction: row;
     flex-grow: 1;
     margin: 0px 16px;
+    padding: 5px;
+    border-radius: 4px;
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0px rgba(0, 0, 0, 0.1);
+    width: 50%;
 }
 
-.image{
+.image {
     width: 92px;
     height: 120px;
     border-radius: 10px;
 }
 
-.rightContent{
+.rightContent {
     margin-left: 10px;
     margin-right: 20px;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
 }
-
-.outerContent{
+.rv-container{
+    width: 50%;
+}
+.outerContent {
     display: flex;
     flex-direction: column;
     flex-grow: 1;
 
 }
 
-.productName{
+.order-price {
+    display: flex;
+    flex-direction: row;
+    gap: 5px;
+    align-items: flex-end;
+    margin-bottom: 15px;
+    margin-top: 5px
+}
+
+.productName {
     font-size: 16px;
     font-weight: 600;
     text-wrap: nowrap;
     max-width: 300px;
 }
 
-.colorSize{
+.colorSize {
     color: #00000099;
     font-size: 14px;
 }
 
-.selector{
+.selector {
     display: flex;
     flex-direction: row;
     flex-grow: 1;
@@ -48,7 +69,7 @@
     margin-bottom: 10px;
 }
 
-.operator{
+.operator {
     height: 100%;
     display: flex;
     align-items: center;
@@ -57,7 +78,7 @@
     height: 35px;
 }
 
-.outerQuantity{
+.outerQuantity {
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -66,7 +87,7 @@
     overflow: hidden;
 }
 
-.account-info__btn{
+.account-info__btn {
     cursor: pointer;
     padding: 5px 7px;
     border-radius: 20px;
@@ -78,24 +99,32 @@
     background-color: #000;
     color: white;
 }
-
-.colorSize{
+.img-review{
+    width: 80px;
+    height: 80px;
+    border: 0.5px solid #ccc;
+     border-radius: 5px;
+}
+.colorSize {
     color: #00000099;
     font-size: 14px;
 }
+
 .account-info__btn .account-info__btn-text {
     font-weight: 600;
     font-size: 14px;
     transition: 0.1s linear;
 }
-.account-info__btn:hover .account-info__btn-text{
+
+.account-info__btn:hover .account-info__btn-text {
     color: white;
 }
-.account-info__btn:hover{
+
+.account-info__btn:hover {
     background-color: #2f5acf;
 }
 
-.account-info__btn_cancel{
+.account-info__btn_cancel {
     cursor: pointer;
     padding: 5px 7px;
     border-radius: 20px;
@@ -107,19 +136,22 @@
     align-items: center;
     transition: 0.1s linear;
 }
+
 .account-info__btn_cancel .account-info__btn-text_cancel {
     font-weight: 600;
     font-size: 14px;
     transition: 0.1s linear;
 }
-.account-info__btn_cancel:hover .account-info__btn-text_cancel{
+
+.account-info__btn_cancel:hover .account-info__btn-text_cancel {
     color: white;
 }
-.account-info__btn_cancel:hover{
+
+.account-info__btn_cancel:hover {
     background-color: rgb(172, 27, 27);
 }
 
-.input{
+.input {
     padding: 5px 10px;
     width: 100%;
     height: 100%;
@@ -130,7 +162,7 @@
     font-size: 14px;
 }
 
-.input:focus{
+.input:focus {
     outline: none;
     border: 1px solid #2f5acf;
 }
@@ -138,15 +170,17 @@
 .img-wrapper {
     position: relative;
     display: inline-block;
+
     p {
         text-wrap: nowrap;
         font-size: 12px;
         position: absolute;
         top: 50%;
         left: 50%;
-        transform: translate(-50%,-50%);
+        transform: translate(-50%, -50%);
         margin-bottom: 0;
     }
+
     input {
         position: absolute;
         top: 0;
@@ -174,5 +208,57 @@
         &:hover {
             opacity: 1;
         }
+    }
+}
+
+@media (max-width: 500px) {
+    .container {
+        display: flex;
+        flex-direction: row;
+        flex-grow: 1;
+        margin: 0px 5px;
+        box-shadow: none;
+        width: 100%;
+    }
+    .rightContent {
+        margin-left: 10px;
+        width: 90%;
+        margin-right: 0px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }
+    .image {
+        width: 60px;
+        height: 60px;
+        border-radius: 2px;
+    }
+
+    .tt-container {
+        flex-direction: column;
+    }
+
+    .info-responsive {
+        display: flex;
+        width: 100%;
+        justify-content: space-between;
+        align-items: end;
+    }
+    .order-price {
+        display: flex;
+        flex-direction: row;
+        gap: 5px;
+        align-items: flex-end;
+        margin-bottom: 0px;
+        margin-top: 5px
+    }
+    .rv-container{
+        width: 100%;
+    }
+    .img-review{
+        width: 60px;
+        height: 60px;
+        border: 0.5px solid #ccc;
+         border-radius: 2px;
     }
 }
