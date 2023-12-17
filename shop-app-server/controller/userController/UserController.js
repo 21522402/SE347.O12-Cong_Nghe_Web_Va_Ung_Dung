@@ -152,13 +152,22 @@ const addAddressCtrl = async (req, res) => {
         if(!user){
             throw new Error('User is not existed. Please log in!');
         }
-        const addresses = user.address
+        let addresses = user.address
+        if(req?.body?.default) addresses.map(item => {
+            if(item.default){
+                let newAd = item
+                newAd.default = false
+                return newAd
+            }
+            else 
+                return item
+        })
         addresses.push({...req?.body})
         
         const updateAddress = await User.findByIdAndUpdate(userId, {
             address: addresses
         }, {new: true})
-        return successTemplate(res, updateAddress, "Create address successfully!", 200)
+        return successTemplate(res, updateAddress, "Thêm địa chỉ mới thành công!", 200)
 
     } catch (error) {
         return errorTemplate(res, error.message)
@@ -176,12 +185,30 @@ const updateAddressCtrl = async (req, res) => {
         if(!user){
             throw new Error('User is not existed. Please log in!');
         }
-        const addressesNew = user.address.map(ad => ad.id.toString() === req?.params?.addressId ? {...req.body} : {...ad})
+        const addressesNew = user.address.map(ad =>
+            {
+                if(ad.id.toString() === req?.params?.addressId){
+                    return {...req.body}
+                }
+                else{
+                    if(ad.default && req?.body?.default)
+                    {
+                        let newAd = ad
+                        newAd.default = false
+                        return newAd
+                    }
+                    else{
+                        return {...ad}
+                    }
+                }
+            })
+
+        // console.log(addressesNew)
         
         const updateAddress = await User.findByIdAndUpdate(userId, {
             address: addressesNew
         }, {new: true})
-        return successTemplate(res, updateAddress, "Update address successfully!", 200)
+        return successTemplate(res, updateAddress, "Câp nhật địa chỉ thành công!", 200)
 
 
     } catch (error) {

@@ -7,19 +7,19 @@ const cx = classNames.bind(styles);
 function OrderItem({props}) {
     let [detail, setDetail] = useState(false)
     function calculateTotal(items){
-        return items.reduce((total, item) => total + (item.price * (1 - item.discountPerc) * item.quantity), 0);
+        return items.reduce((total, item) => total + (item.price * item.quantity), 0);
     }
     return ( <>
         <div className={cx('container')}>
             <div className={cx('header')}>
                 <div>
-                    <span className={cx('title')}>Order place:</span> <br></br>{(new Date(props.orderDate)).getDate() + '/ ' + ((new Date(props.orderDate)).getMonth() + 1) +'/ ' + (new Date(props.orderDate)).getFullYear()}
+                    <span className={cx('title')}>Ngày đặt hàng:</span> <br></br>{(new Date(props.orderDate)).getDate() + '/ ' + ((new Date(props.orderDate)).getMonth() + 1) +'/ ' + (new Date(props.orderDate)).getFullYear()}
                 </div>
                 <div>
-                    <span className={cx('title')}>Order total:</span> <br></br>{new Intl.NumberFormat('vi-VN', {style: 'currency', currency: 'VND'}).format(calculateTotal(props.orderItem))}
+                    <span className={cx('title')}>Tổng đơn hàng:</span> <br></br>{new Intl.NumberFormat('vi-VN', {style: 'currency', currency: 'VND'}).format(calculateTotal(props.orderItem))}
                 </div>
                 <div>
-                    <span className={cx('title')}>Order status:</span> <br></br><span style={{color: '#ED232F'}}>{props.status}</span>
+                    <span className={cx('title')}>Trạng thái:</span> <br></br><span style={{color: '#ED232F'}}>{props.status}</span>
                 </div>
                 <div onClick={() => setDetail(!detail)} style={{width: '106px'}}><span className={cx('title')} style={{color: '#4bc7bf', cursor: 'pointer'}}>{detail ? 'Less detail' : 'More detail'}</span></div>
             </div>

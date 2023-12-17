@@ -6,41 +6,14 @@ import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useEffect } from 'react';
 import { deleteAddresses, getAllAddresses } from '~/redux/api/userRequest';
+import { ToastContainer, toast } from 'react-toastify';
 const cx = classNames.bind(styles);
 
 function Addresses() {
     const [popup, setPopup] = useState(undefined)
     const [isAdd, setIsAdd] = useState(true)
     const [selected, setSelected] = useState({})
-    // const addresses = [
-    //     {
-    //         name: 'Lê Quang Nhân',
-    //         province: "Quảng Ngãi",
-    //         district: "Miền núi chất",
-    //         phoneNumber: '0868008460',
-    //         ward: "Hải Phòng",
-    //         detail: "Nằm trên đường quốc lộ 1A",
-    //         default: true,
-    //     },
-    //     {
-    //         name: 'Lê Quang Nhân',
-    //         province: "Quảng Ngãi",
-    //         district: "Huyện Tư Nghĩa",
-    //         phoneNumber: '0868008460',
-    //         ward: "Xã Nghĩa Phương",
-    //         detail: "Nằm trên đường quốc lộ 1A",
-    //         default: false,
-    //     },
-    //     {
-    //         name: 'Lê Quang Nhân',
-    //         province: "Quảng Ngãi",
-    //         district: "Huyện Tư Nghĩa",
-    //         phoneNumber: '0868008460',
-    //         ward: "Xã Nghĩa Phương",
-    //         detail: "Nằm trên đường quốc lộ 1A",
-    //         default: false,
-    //     },
-    // ]
+    const [reload, setReload] = useState(false)
 
     const dispatch = useDispatch()
     let currentUser = useSelector((state) => state.auth.login.currentUser)
@@ -50,22 +23,31 @@ function Addresses() {
         getAllAddresses(currentUser, dispatch)
     }, [])
 
-    const onCloseAndReload = () => {
+    const onCloseAndReload = (res) => {
         setPopup(false)
+        notify("success", res?.data?.message)
         getAllAddresses(currentUser, dispatch)
     }
 
     const deleteItem = (item) => {
+        if(item.default) {
+            notify("warning", "Không thể xóa địa chỉ mặc định")
+            return;
+        }
         deleteAddresses(currentUser, item, dispatch, (res) => {
             getAllAddresses(currentUser, dispatch)
+            notify("success", "Xóa địa chỉ thành công")
         })
     }
+
+    const notify = (type, message) => toast(message, { type: type });
     return ( 
         <>
+            <ToastContainer />
             <div className={cx('container')}>
                 <div style={{display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between'}}>
                     <h1 className={cx('account-page__title')}>Địa chỉ của tôi</h1>
-                    <div className={cx('account-info__btn')} onClick={() => {setIsAdd(true); setPopup(true)}}>
+                    <div className={cx('account-info__btn')} onClick={() => {setIsAdd(true); setReload(!reload); setPopup(true)}}>
                         <span className={cx('account-info__btn-text')}>Thêm địa chỉ mới</span>
                     </div>
                 </div>
@@ -73,14 +55,14 @@ function Addresses() {
                 <div className={cx('outerAddresses')}>
                     {
                         addresses?.map((item, index) => <div key={index}>
-                            <AddressItem props={item} onClickUpdate={()=>{setSelected(item); setIsAdd(false); setPopup(true)}}  onClickDelete={() => deleteItem(item)}/>
+                            <AddressItem props={item} onClickUpdate={()=>{setSelected(item);setReload(!reload); setIsAdd(false); setPopup(true)}}  onClickDelete={() => deleteItem(item)}/>
                             <hr style={{width: '100%', height: '1px', backgroundColor: '#e1e1e1'}}></hr>
                         </div>)
                     }
                 </div>
                 <div className={cx('overLay', `${popup ? 'popMask' : ''}`)} onClick={() => setPopup(false)}></div>
                 <div className={cx('outerPopup', `${popup === true ? 'pop' : popup === false ? 'down' : ''}`)}>
-                    <AddressPopup props={isAdd ? undefined : selected} isAdd={isAdd} onClose={() => setPopup(false)} onCloseAndReload={onCloseAndReload}/>
+                    <AddressPopup props={isAdd ? undefined : selected} isAdd={isAdd} list={addresses} onClose={() => setPopup(false)} reload={reload} onCloseAndReload={onCloseAndReload}/>
                 </div>
             </div>
         </>
