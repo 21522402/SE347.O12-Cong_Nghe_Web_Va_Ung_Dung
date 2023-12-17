@@ -31,6 +31,13 @@
     font-weight: 500;
 }
 
+.account-page__icon{
+    font-size: 26px;
+    margin-bottom: 10px;
+    margin-top: 10px;
+    display: none;
+}
+
 .account-info__value_lower{
     color: #231f20;
     font-size: 14px;
@@ -150,6 +157,49 @@
     }
     to{
         opacity: 1;
+    }
+}
+
+@media (max-width:500px) {
+    .container{
+        padding: 10px 8px;
+    }
+    .account-page__icon{
+        display: block;
+    }
+    #popup__editInfo:checked ~ .outer_popup{
+        display: block;
+        opacity: 1;
+        width: 95%;
+       // margin: 0px 4px;
+    }
+
+    #popup__editPass:checked ~ #outer_popup_pass{
+        display: block;
+        opacity: 1;
+        width: 95%;
+        margin: 0px 4px;
+    }
+}
+
+@media (min-width:500px) and (max-width:1024px) {
+    .container{
+        padding: 10px 8px;
+    }
+    .account-page__icon{
+        display: none;
+    }
+    #popup__editInfo:checked ~ .outer_popup{
+        display: block;
+        opacity: 1;
+        width: 90%;
+       // margin: 0px 15px;
+    }
+    #popup__editPass:checked ~ #outer_popup_pass{
+        display: block;
+        opacity: 1;
+        width: 100%;
+        margin: 0px 15px;
     }
 }
 

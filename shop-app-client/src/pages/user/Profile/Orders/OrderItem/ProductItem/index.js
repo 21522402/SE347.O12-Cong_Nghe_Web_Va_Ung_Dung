@@ -15,7 +15,6 @@ function ProductItem({props}) {
             color: "Nâu",
             quantity: 2,
             price: 120000,
-            discountPerc: 0.2,
         })
     }, [])
 
@@ -33,8 +32,8 @@ function ProductItem({props}) {
                             <span className={cx('colorSize')} style={{marginTop: '5px'}}>x {props.quantity}</span>
                         </div>
                         <div style={{display: 'flex', flexDirection: 'row', gap: '5px', alignItems: 'flex-end', marginBottom: '15px', marginTop: '5px'}}>
-                            <div style={{fontWeight: '600'}}>{new Intl.NumberFormat('vi-VN', {style: 'currency', currency: 'VND'}).format(item.price * (1 - item.discountPerc))}</div>
-                            <del style={{fontWeight: '400', fontSize: '14px', color: '#ccc'}}>{new Intl.NumberFormat('vi-VN', {style: 'currency', currency: 'VND'}).format(item.price)}</del>
+                            <div style={{fontWeight: '600'}}>{new Intl.NumberFormat('vi-VN', {style: 'currency', currency: 'VND'}).format(item.price)}</div>
+                            {/* <del style={{fontWeight: '400', fontSize: '14px', color: '#ccc'}}>{new Intl.NumberFormat('vi-VN', {style: 'currency', currency: 'VND'}).format(item.price)}</del> */}
                         </div>
                     </div>
                 </div>

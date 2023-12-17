@@ -4,7 +4,7 @@ import classNames from 'classnames/bind';
 import { AiFillExclamationCircle, AiOutlineEye, AiOutlineEyeInvisible } from 'react-icons/ai';
 const cx = classNames.bind(styles);
 
-function TextInput({ placeHolder, icon, secure, type, value, register, name, error , handleChange}) {
+function TextInput({ placeHolder, icon, secure, type, value, register, name, defaultValue, error , handleChange}) {
     const [hide, setHide] = useState(true);
     return (
         <>
@@ -44,7 +44,9 @@ function TextInput({ placeHolder, icon, secure, type, value, register, name, err
                                     <input
                                         type={`${secure && hide ? 'password' : 'text'}`}
                                         className={cx(`${type}_form-input`)}
-                                        placeholder='   ' defaultValue={value}
+                                        placeholder='   ' value={value}
+                                        onChange={handleChange}
+                                        defaultValue={defaultValue}
                                         {...register}
                                         name={name}
                                         style={{ borderColor: `${error ? "#a9252b" : ""}`, outlineColor: `${error ? "#a9252b" : ""}` }} />

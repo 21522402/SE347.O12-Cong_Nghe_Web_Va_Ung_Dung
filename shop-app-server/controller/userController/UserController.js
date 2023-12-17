@@ -8,6 +8,7 @@ const Order = require('../../model/order/Order');
 const Review = require('../../model/review/Review');
 const cloudinaryUploadImage = require('../../utils/cloudinary');
 const Product = require('../../model/product/Product');
+const Voucher = require('../../model/voucher/Voucher');
 
 const userRegisterCtrl = async (req, res) => {
     try {
@@ -156,13 +157,22 @@ const addAddressCtrl = async (req, res) => {
         if(!user){
             throw new Error('User is not existed. Please log in!');
         }
-        const addresses = user.address
+        let addresses = user.address
+        if(req?.body?.default) addresses.map(item => {
+            if(item.default){
+                let newAd = item
+                newAd.default = false
+                return newAd
+            }
+            else 
+                return item
+        })
         addresses.push({...req?.body})
         
         const updateAddress = await User.findByIdAndUpdate(userId, {
             address: addresses
         }, {new: true})
-        return successTemplate(res, updateAddress, "Create address successfully!", 200)
+        return successTemplate(res, updateAddress, "Thêm địa chỉ mới thành công!", 200)
 
     } catch (error) {
         return errorTemplate(res, error.message)
@@ -180,12 +190,30 @@ const updateAddressCtrl = async (req, res) => {
         if(!user){
             throw new Error('User is not existed. Please log in!');
         }
-        const addressesNew = user.address.map(ad => ad.id.toString() === req?.params?.addressId ? {...req.body} : {...ad})
+        const addressesNew = user.address.map(ad =>
+            {
+                if(ad.id.toString() === req?.params?.addressId){
+                    return {...req.body}
+                }
+                else{
+                    if(ad.default && req?.body?.default)
+                    {
+                        let newAd = ad
+                        newAd.default = false
+                        return newAd
+                    }
+                    else{
+                        return {...ad}
+                    }
+                }
+            })
+
+        // console.log(addressesNew)
         
         const updateAddress = await User.findByIdAndUpdate(userId, {
             address: addressesNew
         }, {new: true})
-        return successTemplate(res, updateAddress, "Update address successfully!", 200)
+        return successTemplate(res, updateAddress, "Câp nhật địa chỉ thành công!", 200)
 
 
     } catch (error) {
@@ -303,10 +331,10 @@ const createOrderCtrl = async (req, res) => {
 
         const orderIds = user.orders
         orderIds ? orderIds.push(order.id): orderIds = []
-        await User.findByIdAndUpdate(userId, {orders: orderIds})
 
         const promise = (item) => new Promise(async resolve => {
             const orderItem = await OrderItem.create({
+                "productId": item.productId,
                 "productName": item?.productName,
                 "image": item?.image,
                 "size": item?.size,
@@ -315,6 +343,17 @@ const createOrderCtrl = async (req, res) => {
                 "price": item?.price,
                 "discountPerc": item?.discountPerc
             })
+
+            await Product.updateOne({
+                _id: item.productId, 
+                "colors.colorName": item?.color,
+                "colors.sizes.sizeName": item?.size
+            },{$inc: {
+                'colors.$[].sizes.$[xxx].quantity': -item?.quantity
+            }},
+            {arrayFilters: [
+                {"xxx.sizeName": item?.size}
+            ]})
             
             resolve(orderItem.id)
         });
@@ -323,7 +362,6 @@ const createOrderCtrl = async (req, res) => {
 
         for (let i = 1; i < req?.body?.orderItem.length; i++) {
             p = p.then(async (data) => {
-                
                 await updateOrderItem(order.id,data)
                 return promise(req?.body?.orderItem[i]);
             })
@@ -332,6 +370,14 @@ const createOrderCtrl = async (req, res) => {
         p.then(async data => {
             await updateOrderItem(order.id,data)
         })
+
+        if(req?.body?.voucher){
+            await Voucher.findOneAndUpdate({voucherCode: req?.body?.voucher?.voucherCode}, {$inc: {
+                'quanlity': -1
+            }})
+        }
+
+        await User.findByIdAndUpdate(userId, {orders: orderIds, cart: []})
 
         return successTemplate(res, user.id, "Create order successfully!", 200)
 
@@ -498,17 +544,6 @@ const increaseQuantityCartItem = async(req, res) => {
         }
 
         cartIts = cartIts.map(item => item.id === req?.params?.cartItemId ? {...item, quantity: ++item.quantity} : {...item})
-
-        // await Product.updateOne({
-        //     _id: product._id, 
-        //     "colors.colorName": req?.body?.color,
-        //     "colors.sizes.sizeName": req?.body?.size
-        // },{$inc: {
-        //     'colors.$[].sizes.$[xxx].quantity': -1
-        // }},
-        // {arrayFilters: [
-        //     {"xxx.sizeName": req?.body?.size}
-        // ]})
 
         await User.findByIdAndUpdate(req?.params?.id, {cart: cartIts}, {new: true})
 

@@ -12,8 +12,8 @@ function OrderItem({ props }) {
     let [detail, setDetail] = useState(false)
     let [detailMB, setDetailMB] = useState(false)
 
-    function calculateTotal(items) {
-        return items.reduce((total, item) => total + (item.price * (1 - item.discountPerc) * item.quantity), 0);
+    function calculateTotal(items){
+        return items.reduce((total, item) => total + (item.price * item.quantity), 0);
     }
     return (<>
         <div className={cx('container')}>
@@ -22,7 +22,7 @@ function OrderItem({ props }) {
                     <span className={cx('title')}>Order place:</span> <br></br>{(new Date(props.orderDate)).getDate() + '/ ' + ((new Date(props.orderDate)).getMonth() + 1) + '/ ' + (new Date(props.orderDate)).getFullYear()}
                 </div>
                 <div>
-                    <span className={cx('title')}>Order total:</span> <br></br>{new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(calculateTotal(props.orderItem))}
+                    <span className={cx('title')}>Order total:</span> <br></br>{new Intl.NumberFormat('vi-VN', {style: 'currency', currency: 'VND'}).format(calculateTotal(props.orderItem))}
                 </div>
                 <div>
                     <span className={cx('title')}>Order status:</span> <br></br><span style={{ color: '#ED232F' }}>{props.status}</span>

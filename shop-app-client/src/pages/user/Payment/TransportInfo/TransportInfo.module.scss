@@ -7,13 +7,24 @@
     color: #231f20;
 }
 
+
+
 .outer{
     margin-top: 10px;
     max-height: 400px;
     display: flex;
     flex-direction: column;
     gap: 15px;
-    
+    .outer-address{
+        display: flex;
+        flex-direction: row;
+        width: 100%;
+        align-items: flex-start;
+        gap: 15px;
+        .addressItem{
+            width: calc(100% / 3);
+        }
+    }
 }
 
 .voucherCode{
@@ -108,3 +119,39 @@
 .account-info__btn_cancel:hover{
     background-color: rgb(172, 27, 27);
 }
+
+@media (max-width:500px) {
+    .outer{
+        margin-top: 10px;
+        max-height: 400px;
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+        .outer-address{
+            display: flex;
+            flex-direction: column;
+            .addressItem{
+                width: 100%;
+            }
+        }
+    }
+    
+}
+
+@media (min-width:500px) and (max-width:1024px) {
+    .outer{
+        margin-top: 10px;
+        max-height: 400px;
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+        .outer-address{
+            display: flex;
+            flex-direction: column;
+            .addressItem{
+                width: 100%;
+            }
+        }
+    }
+}
+

@@ -40,9 +40,10 @@ userRoutes.get('/:id', getUserInfo);
 
 userRoutes.put('/addresses/addAddress/:id', addAddressCtrl);
 
+userRoutes.get('/addresses/:id', getAllAddresssCtrl);
+
 userRoutes.put('/addresses/updateAddress/:id/:addressId', updateAddressCtrl);
 
-userRoutes.get('/addresses/:id', getAllAddresssCtrl);
 
 userRoutes.delete('/addresses/deleteAddress/:id/:addressId', deleteAddressCtrl);
 

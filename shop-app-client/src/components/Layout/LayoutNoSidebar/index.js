@@ -71,7 +71,7 @@ function LayoutNoSidebar({ children }) {
     }, [])
     return (
         <>
-            <Header />
+            {/* <Header /> */}
             <ToastContainer />
             <div style={{ paddingTop: '30px' }}>{children}</div>
             <div style={{ position: 'fixed', bottom: 0, left: 0, width: '100%', zIndex: openGridVoucher ? 14 : 11, transition: 'all 0.3s', transform: openGridVoucher ? 'translatey(0)' : 'translatey(100%)' }}>
@@ -103,7 +103,7 @@ function LayoutNoSidebar({ children }) {
                 </div>
             </div >
             <div id="xsngxWrapperOverlayVoucherOpen" onClick={handleClose} style={{ opacity: openGridVoucher ? 1 : 0, visibility: openGridVoucher ? 'visible' : 'hidden', pointerEvents: openGridVoucher ? 'visible' : 'none', position: 'fixed', top: 0, left: 0, width: '100%', height: '100%', backgroundColor: '#0006', transition: 'all .3s', zIndex: openGridVoucher ? 13 : 10 }}></div>
-            <Footer />
+            {/* <Footer /> */}
         </>
     );
 }

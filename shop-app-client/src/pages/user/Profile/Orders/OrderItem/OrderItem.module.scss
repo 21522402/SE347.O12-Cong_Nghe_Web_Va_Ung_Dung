@@ -1,10 +1,10 @@
 .container{
-    border: 1.5px solid #99e0dc;
-    border-radius: 6px;
+    border: 1.5px solid #2f5acf;
+    border-radius: 2px;
     .header{
-        background-color: #99e0dc;
-        border-radius: 6px;
-        color: black;
+        background-color: #2f5acf;
+        border-radius: 2px;
+        color: white;
         font-size: 14px;
         display: flex;
         flex-direction: row;
@@ -13,7 +13,7 @@
         padding: 8px 24px;
         .title{
             font-size: 16px;
-            font-weight: 500;
+            font-weight: 600;
         }
     }
     .header-responsive{
@@ -105,7 +105,7 @@
         }
 
         .containerProduct{
-            max-height: 420px;
+            max-height: 425px;
             overflow-y: auto;
         }
         .containerProduct::-webkit-scrollbar {
