@@ -37,13 +37,18 @@ function ItemReview({ item , getReviewsById}) {
     for (let i = 0; i < files.length; i++) {
       if (files[i].type.split("/")[0] !== "image") continue;
       if (!images.some((e) => e.name === files[i].name)) {
-        setImages((prevImages) => [
-          ...prevImages,
-          {
-            name: files[i].name,
-            url: URL.createObjectURL(files[i]),
-          },
-        ]);
+        const reader = new FileReader();
+        reader.readAsDataURL(files[i]);
+        reader.onload = () => {
+          setImages((prevImages) => [
+            ...prevImages,
+            {
+              name: files[i].name,
+              url: URL.createObjectURL(files[i]),
+              imageBase64: reader.result,
+            },
+          ]);
+        };
       }
     }
   }
@@ -99,9 +104,9 @@ function ItemReview({ item , getReviewsById}) {
             />
           </div>
           <div style={{ display: 'flex', marginTop: '6px', fontWeight: '300', fontSize: '13px', color: '#909090' }}>
-            <div >{item.reviewDate}</div>
+            <div >{convertDate(item.reviewDate)}</div>
             <div style={{ marginLeft: '4px' }}>
-              | Phân loại hàng: colorSize
+              | Loại: {item.color} / {item.size}
             </div>
           </div>
         </div>
