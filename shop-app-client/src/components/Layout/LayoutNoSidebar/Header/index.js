@@ -4,13 +4,7 @@ import classNames from "classnames/bind";
 import { useRef, useState } from "react";
 import { IoSearch, IoBagHandle } from "react-icons/io5";
 import { IoMdClose } from "react-icons/io";
-import { IoBagHandle, IoSearch } from "react-icons/io5";
-import { useSelector } from 'react-redux';
-import { Link, useNavigate } from 'react-router-dom';
-import Modal from '~/components/Modal';
-import { ChangePass, Login, SignUp } from '~/pages/auth';
 import DetailPopup from './DetailPopup';
-import styles from './Header.module.scss';
 import SearchPopup from './SearchPopup';
 import SettingPopup from './SettingPopup';
 import Modal from "~/components/Modal";
@@ -262,7 +256,7 @@ function Header() {
               {currentUser ? (
                 <div style={{ marginLeft: "5px", marginTop: "5px" }}>{`Hi, ${currentUser.fullName.split(" ")[
                   currentUser.fullName.split(" ").length - 1
-                  ]
+                ]
                   }`}</div>
               ) : null}
             </div>
@@ -274,7 +268,8 @@ function Header() {
           </Link>
         </div>
       </div>
-      );
+    </div>
+  );
 }
 
-      export default Header;
+export default Header;

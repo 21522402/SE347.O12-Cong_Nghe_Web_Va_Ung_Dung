@@ -71,7 +71,7 @@ function LayoutNoSidebar({ children }) {
     }, [])
     return (
         <>
-            {/* <Header /> */}
+            <Header />
             <ToastContainer />
             <div style={{ paddingTop: '30px' }}>{children}</div>
             <div style={{ position: 'fixed', bottom: 0, left: 0, width: '100%', zIndex: openGridVoucher ? 304 : 301, transition: 'all 0.3s', transform: openGridVoucher ? 'translatey(0)' : 'translatey(100%)' }}>

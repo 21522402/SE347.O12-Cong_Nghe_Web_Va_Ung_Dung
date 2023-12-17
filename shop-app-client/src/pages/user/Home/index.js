@@ -15,8 +15,6 @@ import {
 import baseUrl from '~/utils/baseUrl';
 import ItemCollection from "../Collection/ItemCollection";
 import styles from "./Home.module.scss";
-import classNames from "classnames/bind";
-import images from "~/assets/img";
 import { FaCircleArrowRight } from "react-icons/fa6";
 
 const cx = classNames.bind(styles);
@@ -136,10 +134,6 @@ useEffect(() => {
   return (
     <div>
       {/* Slider */}
-      
-      <button onClick={() => console.log(listProducts)}>
-  Click
-</button>
 
       <div>
         <Carousel
