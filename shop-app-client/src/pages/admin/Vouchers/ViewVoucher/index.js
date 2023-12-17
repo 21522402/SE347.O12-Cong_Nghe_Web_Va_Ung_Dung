@@ -52,11 +52,11 @@ function ViewVoucher({ item }) {
                 <div className={cx('row-input')} >
                     <div className={cx('input-field-left')} >
                         <div className={cx('label-input')}>Giá được giảm <HiOutlineInformationCircle fontSize={'18px'} /> </div>
-                        <div className={cx('input')}>{item.isPercent}</div>
+                        <div className={cx('input')}>{item.voucherPrice} {item.isPercent?'%':'VNĐ'}</div>
                     </div>
                     <div className={cx('input-field-right')} >
                         <div className={cx('label-input')}>Giá trị tối thiểu <HiOutlineInformationCircle fontSize={'18px'} /> </div>
-                        <div className={cx('input')}>{item.minPrice}</div>
+                        <div className={cx('input')}>{item.minPrice} VNĐ</div>
                     </div>
                 </div>
                 <div className={cx('row-input')} >

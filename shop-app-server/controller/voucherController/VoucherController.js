@@ -9,10 +9,7 @@ const addVoucherCtrl = async (req, res) => {
     try {
         const existedVoucher = await Voucher.findOne({ voucherCode: req?.body?.voucherCode });
         const currentDate = new Date();
-        console.log(req.body)
-        console.log(req.file)
-
-        if (existedVoucher && existedVoucher.expiredDate > currentDate) throw new Error('Mã giảm giá đã tồn tại và đang được phát hành. Thử lại mã mới!');
+        if (existedVoucher && existedVoucher.expiredDate > currentDate && existedVoucher.quanlity > 0) throw new Error('Mã giảm giá đã tồn tại và đang được phát hành. Thử lại mã mới!');
         const localPath = `public/images/vouchers/${req.file.filename}`;
         const imgUpload = await cloudinaryUploadImage(localPath)
         const voucher = await Voucher.create({

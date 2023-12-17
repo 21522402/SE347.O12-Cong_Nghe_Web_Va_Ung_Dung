@@ -27,15 +27,7 @@ function CustomerManage() {
     const npage = Math.ceil(customerList.length / recordPerPages);
     const numbers = [...Array(npage + 1).keys()].slice(1);
 
-    const getAllBuyers = async () => {
-        try {
-            const config = {}
-            const { data } = await axios.get(`${baseUrl}/api/users/get-all-buyers`, config)
-            setCustomerList([...data.result])
-        } catch (error) {
-            console.log(error)
-        }
-    }
+
     const handleChangeSearchField = (e) => {
         setSelectedTextFilter(e.target.value)
     }
@@ -43,6 +35,16 @@ function CustomerManage() {
         setSelectedFilter(selectedOption.value)
     }
     useEffect(() => {
+        const getAllBuyers = async () => {
+            try {
+                const config = {}
+                const { data } = await axios.get(`${baseUrl}/api/users/get-all-buyers`, config)
+                // console.log(data)
+                setCustomerList([...data.result])
+            } catch (error) {
+                console.log(error)
+            }
+        }
         getAllBuyers()
     }, [customerList])
 
@@ -86,10 +88,10 @@ function CustomerManage() {
                                         return true
                                     })).filter(i => {
                                         if (selectedTextFilter.length === 0) return true;
-                                        else return (i.fullName.toLowerCase()).includes(selectedTextFilter.toLowerCase()) ||(i.phoneNumber.toLowerCase()).includes(selectedTextFilter.toLowerCase()) 
+                                        else return (i.fullName.toLowerCase()).includes(selectedTextFilter.toLowerCase()) || (i.phoneNumber.toLowerCase()).includes(selectedTextFilter.toLowerCase())
                                     })).map((item, index) => {
                                         return (
-                                            <CusRow key={index} item={item} index={index} currentPage={currentPage} setCustomerList={setCustomerList}/>
+                                            <CusRow key={index} item={item} index={index} currentPage={currentPage} setCustomerList={setCustomerList} />
                                         );
                                     })
                                 }

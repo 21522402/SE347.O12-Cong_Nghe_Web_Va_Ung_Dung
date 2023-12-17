@@ -49,16 +49,20 @@ const responseFeedback = async (req, res) => {
             })
             imageBuffer.push(result.secure_url)
         }
-
-        const fb = await Feedback.findById(req.body._id).exec();
-        fb.response.content = req.body.response.content;
-        fb.response.imagesRsp = imageBuffer;
-        fb.response.date = new Date();
-
-        // send email 
+        const fb = await Feedback.findByIdAndUpdate(
+          { _id: req.body._id },
+          {
+            $set: {
+              response: {
+                content: req.body.response.content,
+                date: new Date(),
+                imagesRsp: imageBuffer,
+              },
+              isResponsed: true,
+            },
+          }
+        ).exec();
         sendMail(req.body.user.email, req.body.title, req.body.response.content, imageBuffer);
-
-        fb.isResponsed = true;
         fb.save();
         return successTemplate(res, fb, "Responsed feedback successfully!", 200)
     } catch (error) {

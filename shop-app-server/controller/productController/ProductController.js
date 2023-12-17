@@ -11,6 +11,27 @@ const getNewItemCode = (prefix, lastCode, lengthCode) => {
     return prefix + newNumStr;
 
 }
+const searchProduct = async (req, res) => {
+    try {
+        const keyword=req?.params.valueSearch.toLowerCase()
+        const listProducts=await Product.find({})
+        let listResult = []
+        for(let i = 0; i < listProducts.length; i++){
+            if(listProducts[i].productName.toLowerCase().includes(keyword)){
+                listResult.push(listProducts[i])
+
+            }
+        }
+        res.status(200).json({
+            message: 'Get products successfully',
+            data: listResult
+        })
+    } catch (error) {
+        res.status(400).json({
+            message: error.message
+        })
+    }
+}
 
 
 const getAllProducts = async (req, res) => {
@@ -185,5 +206,6 @@ module.exports = {
     getAllProducts,
     editProduct,
     editProductByType,
-    editStatusProduct
+    editStatusProduct,
+    searchProduct
 }

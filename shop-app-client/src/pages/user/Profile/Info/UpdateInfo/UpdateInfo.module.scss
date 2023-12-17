@@ -57,3 +57,16 @@
 .account-info__btn:hover{
     background-color: #a3a3a3;
 }
+
+@media (max-width:500px) {
+    .date_item{
+        width: 100%;
+    }
+    .date_info{
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        margin-top: 20px;
+        gap: 10px;
+    }
+}

@@ -5,6 +5,8 @@ import classNames from 'classnames/bind';
 import { getAllOrder } from '~/redux/api/userRequest';
 import { useDispatch, useSelector } from 'react-redux';
 import { useState } from 'react';
+import { BiArrowBack } from 'react-icons/bi';
+import { Link } from 'react-router-dom';
 const cx = classNames.bind(styles);
 
 function Orders() {
@@ -19,6 +21,9 @@ function Orders() {
     return ( 
         <>
             <div className={cx('container')}>
+                <Link to={'/user-profile'} className={cx('account-page__icon')}>
+                    <BiArrowBack /> 
+                </Link>
                 <h1 className={cx('account-page__title')}>Lịch sử đơn hàng</h1>
                 
                 {

@@ -16,6 +16,32 @@ function BillDetailCus({ item, cusId }) {
         }
         init()
     }, [item.address])
+    const convertDate = (d) => {
+        const date = new Date(d);
+
+        // Lấy thông tin ngày, tháng, năm
+        const day = String(date.getDate()).padStart(2, '0');
+        const month = String(date.getMonth() + 1).padStart(2, '0'); // Tháng bắt đầu từ 0
+        const year = date.getFullYear();
+        const h = date.getUTCHours();
+        const m = date.getMinutes();
+
+        // Tạo chuỗi ngày tháng định dạng 'DD-MM-YYYY'
+        const formattedDate = `${day}/${month}/${year} ${h}:${m}`;
+        return formattedDate;
+    }
+    const totalMoney = (item) => {
+        var total = 0;
+        item?.orderItem.forEach((i) => {
+            total += i.price * i.quantity 
+        })
+        if (item?.voucher?.isPercent) {
+            return total * (1 - item?.voucher?.voucherPrice)
+        }
+        else {
+            return total - item?.voucher?.voucherPrice
+        }
+    }
     return (
         <div className={cx('wrapper')}>
             {/* Header */}
@@ -84,7 +110,7 @@ function BillDetailCus({ item, cusId }) {
                                     <th className={cx('code')}>Mã hóa đơn</th>
                                     <th className={cx('date')}>Thời gian</th>
                                     <th className={cx('payMethod')}>Phương thức thanh toán</th>
-                                    <th className={cx('customerName')}>Tên khách hàng</th>
+                                    <th className={cx('customerName')}>Tên người nhận</th>
                                     <th className={cx('customerPhone')}>Số điện thoại</th>
                                     <th className={cx('status')}>Tình trạng</th>
                                     <th className={cx('totalPrice')}>Tổng tiền</th>
@@ -93,16 +119,16 @@ function BillDetailCus({ item, cusId }) {
                             </thead>
                             <tbody>
 
-                                {[0, 1, 2, 3, 4].map((item, index) => {
+                                {item?.orders.map((item, index) => {
                                     return (
                                         <tr key={item} className={cx('product-item')}>
-                                            <td className={cx('code')}>HD00001</td>
-                                            <td className={cx('date')}>15/08/2019 11:05</td>
-                                            <td className={cx('payMethod')}>Thanh toán trực tuyến</td>
-                                            <td className={cx('customerName')}>Huỳnh Ngọc Quí</td>
-                                            <td className={cx('customerPhone')}>0868208744</td>
-                                            <td className={cx('status')}>Đã hoàn thành</td>
-                                            <td className={cx('totalPrice')}>4,200,000</td>
+                                            <td className={cx('code')}>HD{item._id.slice(16)}</td>
+                                            <td className={cx('date')}>{convertDate(item?.orderDate)}</td>
+                                            <td className={cx('payMethod')}>Thanh toán trực tiếp</td>
+                                            <td className={cx('customerName')}>{item?.address?.name}</td>
+                                            <td className={cx('customerPhone')}>{item?.address?.phoneNumber}</td>
+                                            <td className={cx('status')}>{item?.status}</td>
+                                            <td className={cx('totalPrice')}>{totalMoney(item)} đ</td>
                                         </tr>
                                     )
                                 })}

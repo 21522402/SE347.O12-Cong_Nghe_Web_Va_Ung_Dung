@@ -2,8 +2,9 @@ import { ComboBox, RadioButton, TextInput } from '~/components/Input';
 import styles from './TransportInfo.module.scss'
 import classNames from 'classnames/bind';
 import React, { forwardRef, useEffect, useImperativeHandle, useState } from 'react';
+import { AiFillExclamationCircle } from 'react-icons/ai';
 const cx = classNames.bind(styles);
-const TransportInfo =  forwardRef(({props, userMail, _ref}) => {
+const TransportInfo =  forwardRef(({props, error, userMail, _ref}) => {
     let [selected, setSelected] = useState({})
 
     useImperativeHandle(_ref, () => ({
@@ -13,7 +14,7 @@ const TransportInfo =  forwardRef(({props, userMail, _ref}) => {
     }));
 
     useEffect(() => {
-        setSelected(props ? {...props, email: userMail} : {
+        setSelected(props ? {...props, email: userMail, note: ''} : {
             name: "",
             province: "",
             district: "",
@@ -38,12 +39,26 @@ const TransportInfo =  forwardRef(({props, userMail, _ref}) => {
     const [wards, setWard] = useState([])
 
     useEffect(() => {
-        fetch(provinceApi)
+       props && fetch(provinceApi)
             .then((res) => res.json())
             .then((json) => {
                 setProvince(json)
+                    const code = Array.from(json).find(item => item.name === props.province)?.code
+                    code &&
+                        fetch(districtApi(code))
+                        .then((res) => res.json())
+                        .then((json) => {
+                            const code = Array.from(json.districts).find(item => item.name === props.district)?.code
+                            setDistrict(json.districts)
+                            code &&
+                                fetch(wardApi(code))
+                                .then((res) => res.json())
+                                .then((json) => {
+                                    setWard(json.wards)
+                                });
+                        });
             });
-    }, [])
+    }, [props])
 
     const filterProvince = (e) => {
         fetch(districtApi(e.code))
@@ -71,29 +86,36 @@ const TransportInfo =  forwardRef(({props, userMail, _ref}) => {
     return ( 
         <>
             <div className={cx('outer')}>
-                    <div style={{display: 'flex', flexDirection: 'row', alignItems: 'center', gap: '15px'}}>
+                    <div style={{display: 'flex', flexDirection: 'row', alignItems: 'flex-start', gap: '15px'}}>
                         <div style={{width: '50%'}}>
                             <TextInput placeHolder={'Họ và tên'} type={"type_2"} value={selected.name} handleChange={(e) => handleChange(e, "name")}/>
+                            {(error.name || !selected.name) && <span style={{display: 'flex', 'flexDirection': 'row', alignItems: 'center', fontSize: '14px', color: '#a9252b', marginTop: '4px'}}><AiFillExclamationCircle className="mr-1"/>Vui lòng nhập họ và tên</span>}
                         </div>
                         <div style={{width: '50%'}}>
                             <TextInput placeHolder={'Số điện thoại'} type={"type_2"} value={selected.phoneNumber} handleChange={(e) => handleChange(e, "phoneNumber")}/>
+                            {(error.phoneNumber || !selected.phoneNumber) && <span style={{display: 'flex', 'flexDirection': 'row', alignItems: 'center', fontSize: '14px', color: '#a9252b', marginTop: '4px'}}><AiFillExclamationCircle classphoneNumber="mr-1"/>Vui lòng nhập số điện thoại</span>}
                         </div>
                     </div>
                     <div>
                         <TextInput placeHolder={'Email'} type={"type_2"} value={selected.email} handleChange={(e) => handleChange(e, "email")}/>
+                        {(error.email || !selected.email) && <span style={{display: 'flex', 'flexDirection': 'row', alignItems: 'center', fontSize: '14px', color: '#a9252b', marginTop: '4px'}}><AiFillExclamationCircle className="mr-1"/>Vui lòng nhập địa chỉ email</span>}
                     </div>
                     <div>
                             <TextInput placeHolder={'Địa chỉ'} type={"type_2"} value={selected.detail} handleChange={(e) => handleChange(e, "detail")}/>
+                            {(error.detail || !selected.detail) && <span style={{display: 'flex', 'flexDirection': 'row', alignItems: 'center', fontSize: '14px', color: '#a9252b', marginTop: '4px'}}><AiFillExclamationCircle className="mr-1"/>Vui lòng nhập chi tiết địa chỉ</span>}
                     </div>
-                    <div style={{display: 'flex', flexDirection: 'row', alignItems: 'center', gap: '15px'}}>
-                        <div style={{width: '33.3333%', position: 'relative'}}>
+                    <div className={cx('outer-address')} >
+                        <div className={cx('addressItem')}>
                             <ComboBox listItems={provinces} placeHolder={'Chọn Tỉnh/Thành phố'} selectedItem={selected.province} type={'list'} filterValueSelected={filterProvince}/>
+                            {(error.province || !selected.province) && <span style={{display: 'flex', 'flexDirection': 'row', alignItems: 'center', fontSize: '14px', color: '#a9252b', marginTop: '4px'}}><AiFillExclamationCircle className="mr-1"/>Vui lòng chọn tỉnh</span>}
                         </div>
-                        <div style={{width: '33.3333%'}}>
-                            <ComboBox listItems={districts} placeHolder={'Chọn Quận/Huyện'} selectedItem={selected.district} type={'list'} filterValueSelected={filterDistrict}/>                        
+                        <div className={cx('addressItem')}>
+                            <ComboBox listItems={districts} placeHolder={'Chọn Quận/Huyện'} selectedItem={selected.district} type={'list'} filterValueSelected={filterDistrict}/>    
+                            {(error.district || !selected.district) && <span style={{display: 'flex', 'flexDirection': 'row', alignItems: 'center', fontSize: '14px', color: '#a9252b', marginTop: '4px'}}><AiFillExclamationCircle className="mr-1"/>Vui lòng chọn quận/huyện</span>}
                         </div>
-                        <div style={{width: '33.3333%'}}>
-                            <ComboBox listItems={wards} placeHolder={'Chọn Phường/Xã'} selectedItem={selected.ward} type={'list'} filterValueSelected={(e)=> {setSelected({...selected, 'ward': e.name})}}/>                        
+                        <div className={cx('addressItem')}>
+                            <ComboBox listItems={wards} placeHolder={'Chọn Phường/Xã'} selectedItem={selected.ward} type={'list'} filterValueSelected={(e)=> {setSelected({...selected, 'ward': e.name})}}/>          
+                            {(error.ward || !selected.ward) && <span style={{display: 'flex', 'flexDirection': 'row', alignItems: 'center', fontSize: '14px', color: '#a9252b', marginTop: '4px'}}><AiFillExclamationCircle className="mr-1"/>Vui lòng chọn phường/xã</span>}
                         </div>
                     </div>
                     <div>

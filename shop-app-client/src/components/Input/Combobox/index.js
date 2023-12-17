@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from 'react';
 import {RxChevronDown } from 'react-icons/rx';
 const cx = classNames.bind(styles);
 
-function ComboBox({placeHolder, icon, listItems, filterValueSelected, type, selectedItem, name}) {
+function ComboBox({placeHolder, icon, listItems, filterValueSelected, type, selectedItem, name, err}) {
     let [selected, setSelected] = useState({id: -1, name: ""})
     let [dropdown, setDropDown] = useState('hide')
     let [hover, setHover] = useState('')
@@ -58,7 +58,7 @@ function ComboBox({placeHolder, icon, listItems, filterValueSelected, type, sele
                 (type === 'list' ? (
                     <div className={cx(`${type}_container`)}>
                         <div className={cx(`${type}_form-field`, `${type}_${hover}`)} ref={input} tabIndex={0} onClick={toggleDropDown} onBlur={() => {setDropDown('hide'); setHover('')}}>
-                            <div className={cx(`${type}_form-input`)} value={selectedItem ? selectedItem : (selectedItem === "" ? "" : selected.name)}><span>{selectedItem ? selectedItem : (selectedItem === "" ? "" : selected.name)}</span></div>
+                            <div className={cx(`${type}_form-input`)} style={err ? {borderColor: '#a9252b'} : {}} value={selectedItem ? selectedItem : (selectedItem === "" ? "" : selected.name)}><span>{selectedItem ? selectedItem : (selectedItem === "" ? "" : selected.name)}</span></div>
                             <label for="name" className={cx(`${type}_form-label`)}>{placeHolder}</label>
                             <div className={cx(`${type}_form-icon-drop-down`)}><RxChevronDown strokeWidth={1}/></div>
                             <div className={cx(`${type}_drop-down-list`, `${type}_${dropdown}`)}>

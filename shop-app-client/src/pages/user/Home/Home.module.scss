@@ -1,43 +1,182 @@
-.container-item {
-    position: relative;
-    width: 100%;
-    margin: 0 10px;
-    &:hover {
-        .itemIMG {
-            opacity: 0.8;
+
+
+@media only screen and (max-width: 767px) {
+    .container-slider {
+        padding-top: 30px;
+        margin: 0 10px;
+        .title-slider {
+            font-size: 16px;
+            font-weight: 600;
+            margin: 20px 0 0 10px;
         }
-        
-        .btn-item {
-            display: block;
+        .width-item {
+            width: 100%;
+        }
+        .carousel-item {
+            width: 100%;
         }
     }
+    
+    .container-banner {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 20px 0;
+        img {
+            width: 96%;
+            border-radius: 4px;
+            margin-top: 20px;
+        }
+    }
+    
+    .container-pages {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        align-items: center;
+        .container-item {
+            position: relative;
+            width: 100%;
+            padding: 10px;
+        }
+        .itemIMG {
+            width: 100%;
+            border-radius: 4px;
+        }
+        .btn-item {
+            cursor: pointer;
+            font-size: 5vw;
+            color: #000;
+            border-radius: 10px;
+            position: absolute;
+            top: 0;
+            right:  0;
+            margin: 8% 11% 0 0;
+            &:hover {
+                opacity: 0.7;
+            }
+        }
+    }
+}
 
-}
-.carousel-item {
-    width: 25%;
-}
-.itemIMG {
-    width: 100%;
-    border-radius: 4px;
-}
-.btn-item {
-    width: 120px;
-    cursor: pointer;
-    padding: 10px;
-    background-color: #000;
-    color: #fff;
-    text-align: center;
-    border-radius: 10px;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    -ms-transform: translate(-50%, -50%);
-    display: none;
+@media only screen and (min-width: 768px) and (max-width: 1023px) {
+    .container-slider {
+        padding-top: 30px;
+        margin: 0 80px;
+        .title-slider {
+            font-size: 20px;
+            font-weight: 600;
+            margin: 20px 0 0 10px;
+        }
+        .width-item {
+            width: 100%;
+        }
+        .carousel-item {
+            width: 25%;
+        }
+    }
+    
+    .container-banner {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 20px 0;
+        img {
+            width: 96%;
+            border-radius: 4px;
+            margin-top: 20px;
+        }
+    }
+    
+    .container-pages {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        align-items: center;
+        .container-item {
+            position: relative;
+            width: 100%;
+            padding: 20px;
+        }
+        .itemIMG {
+            width: 100%;
+            border-radius: 4px;
+        }
+        .btn-item {
+            cursor: pointer;
+            font-size: 40px;
+            color: #000;
+            border-radius: 10px;
+            position: absolute;
+            top: 0;
+            right:  0;
+            margin: 30px 40px 0 0;
+            &:hover {
+                opacity: 0.7;
+            }
+        }
+    }
 }
 
-.title-slider {
-    font-size: 20px;
-    font-weight: 600;
-    margin: 20px 0 0 10px;
+@media only screen and (min-width: 1024px) {
+    .container-slider {
+        padding-top: 30px;
+        margin: 0 80px;
+        .title-slider {
+            font-size: 20px;
+            font-weight: 600;
+            margin: 20px 0 0 10px;
+        }
+        .width-item {
+            width: 100%;
+        }
+        .carousel-item {
+            width: 25%;
+        }
+    }
+    
+    .container-banner {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 20px 0;
+        img {
+            width: 96%;
+            border-radius: 4px;
+            margin-top: 20px;
+        }
+    }
+    
+    .container-pages {
+        display: flex;
+        align-items: center;
+        justify-content: space-evenly;
+        margin: 10px 20px;
+        .container-item {
+            position: relative;
+            width: 100%;
+            margin: 0 10px; 
+        }
+        .itemIMG {
+            width: 100%;
+            border-radius: 4px;
+        }
+        .btn-item {
+            cursor: pointer;
+            font-size: 30px;
+            color: #000;
+            border-radius: 10px;
+            position: absolute;
+            top: 0;
+            right:  0;
+            margin-right: 20px;
+            &:hover {
+                opacity: 0.7;
+            }
+        }
+    }
 }
+
+
+
+
+
+

@@ -81,12 +81,12 @@ function ProductForUItem({props, handleItemToOrder}) {
                         size: props.colors[i].sizes[0].sizeName
                     })
                     setSizes(createListSizeCBB(props.colors[i].colorName))
-                    return;    
+                    return;
                 }
             }
         }
     }
-    return ( 
+    return (
         <>
             <div className={cx('container')}>
                 <div className={cx('image')}>

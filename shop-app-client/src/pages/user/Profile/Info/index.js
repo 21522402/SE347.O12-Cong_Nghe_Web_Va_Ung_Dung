@@ -5,6 +5,8 @@ import ChangePass from './ChangePass';
 import { useSelector } from 'react-redux';
 import { ToastContainer, toast } from 'react-toastify';
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
+import { BiArrowBack } from 'react-icons/bi';
 
 const cx = classNames.bind(styles);
 function Info(){
@@ -31,6 +33,9 @@ function Info(){
             <ToastContainer />
 
             <div className={cx('container')}>
+                <Link to={'/user-profile'} className={cx('account-page__icon')}>
+                        <BiArrowBack /> 
+                </Link>
                 <div className={cx('account-info__form')}>
                     <h1 className={cx('account-page__title')}>Thông tin tài khoản</h1>
                     <div className={cx('account-info__content')}>

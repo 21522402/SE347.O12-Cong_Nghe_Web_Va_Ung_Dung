@@ -21,7 +21,7 @@ function Sidebar() {
     }
     return (
 
-        <div class="d-flex flex-column flex-shrink-0 p-5 text-bg-dark" style={{ width: "250px", position: 'fixed', top:0, left: 0, bottom:0 }}>
+        <div  className={cx(`sidebar-container` )}  style={{ width: "250px", position: 'fixed', top:0, left: 0, bottom:0 }}>
             <div className={cx(`header-logo` )} >
                     <Link onClick={()=>{handleClickItem('Dashboard')}} to="/admin" style={{ color: 'white', fontWeight: 'bold', fontSize: '20px' }}>
                         Shop<span style={{ backgroundColor: 'white', color: 'black', borderRadius: '3px', padding: '0' }}>App</span>

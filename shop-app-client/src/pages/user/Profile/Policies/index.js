@@ -1,6 +1,8 @@
 import styles from './Policies.module.scss'
 import classNames from 'classnames/bind';
 import PolicyItem from './PolicyItem';
+import { Link } from 'react-router-dom';
+import { BiArrowBack } from 'react-icons/bi';
 const cx = classNames.bind(styles);
 
 function Policies() {
@@ -21,6 +23,9 @@ function Policies() {
     return ( 
         <>
             <div className={cx('container')}>
+            <Link to={'/user-profile'} className={cx('account-page__icon')}>
+                    <BiArrowBack /> 
+                </Link>
                 <h1 className={cx('account-page__title')}>FAQ - Câu hỏi thường gặp</h1>
                 <div>
                     {
