@@ -15,6 +15,9 @@ import ItemCollection from "./ItemCollection";
 
 const cx = classNames.bind(styles)
 function Collection() {
+    useEffect(() => {
+        window.scrollTo(0, 0)
+      }, [])
 
     const {id} = useParams()
 

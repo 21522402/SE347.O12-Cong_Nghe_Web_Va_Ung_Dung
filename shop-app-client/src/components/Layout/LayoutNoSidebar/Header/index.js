@@ -27,7 +27,7 @@ function Header() {
   const [indexCategoryActive, setIndexCategoryActive] = useState(-1);
   const [showDetailPopUp, setShowDetailPopup] = useState(false);
   const [showSearchPopUp, setShowSearchPopup] = useState(false);
-  const [showCartPopUp, setShowCartPopup] = useState(false)
+  const [showCartPopUp, setShowCartPopup] = useState(false);
   const [valueSearch, setValueSearch] = useState("");
   const [popup, setPopup] = useState("login");
 
@@ -166,12 +166,24 @@ function Header() {
       </Modal>
 
       {openSideBar ? (
-        <BiAlignLeft onClick={() => setOpenSidebar(!openSideBar)} className={cx("icon-menu")} />
+        <BiAlignLeft
+          onClick={() => setOpenSidebar(!openSideBar)}
+          className={cx("icon-menu")}
+        />
       ) : (
         <>
-          <div onClick={() => setOpenSidebar(!openSideBar)} className={cx("overlay-sidebar",{active: !openSideBar})}>
-            <div onClick={(e) => e.stopPropagation()} className={cx('sidebar-wrapper')}>
-              <IoClose onClick={() => setOpenSidebar(!openSideBar)} className={cx("icon-close")} />
+          <div
+            onClick={() => setOpenSidebar(!openSideBar)}
+            className={cx("overlay-sidebar", { active: !openSideBar })}
+          >
+            <div
+              onClick={(e) => e.stopPropagation()}
+              className={cx("sidebar-wrapper")}
+            >
+              <IoClose
+                onClick={() => setOpenSidebar(!openSideBar)}
+                className={cx("icon-close")}
+              />
               <div className={cx("list-categorys")}>
                 <div className={cx("item-list-category")}>Tất cả</div>
                 {categories.map((item) => {
@@ -293,23 +305,25 @@ function Header() {
                 currentUser.fullName.split(" ")[
                   currentUser.fullName.split(" ").length - 1
                 ]
-                  }`}</div>
-              ) : null}
-            </div>
-          </label>
-          <Link to="/cart">
-            <div style={{ cursor: "pointer" }} onMouseMove={() => {setShowCartPopup(true)}}>
-              <IoBagHandle style={{ color: "#fff", fontSize: "24px" }} />
-                {
-                    showCartPopUp &&
-                    <CartPopup onMouseLeave={() => setShowCartPopup(false)} />
-                }
-            </div>
-          </Link>
-        </div>
+              }`}</div>
+            ) : null}
+          </div>
+        </label>
+        <Link to="/cart">
+          <div
+            style={{ cursor: "pointer" }}
+            onMouseMove={() => {
+              setShowCartPopup(true);
+            }}
+          >
+            <IoBagHandle style={{ color: "#fff", fontSize: "24px" }} />
+            {showCartPopUp && (
+              <CartPopup onMouseLeave={() => setShowCartPopup(false)} />
+            )}
+          </div>
+        </Link>
       </div>
     </div>
-   
   );
 }
 

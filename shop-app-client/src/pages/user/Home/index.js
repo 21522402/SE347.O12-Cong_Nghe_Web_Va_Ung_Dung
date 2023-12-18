@@ -50,15 +50,15 @@ function Home() {
     },
     {
       url: images.Ao,
-      route: "./collection/1",
+      route: "/collection/Áo",
     },
     {
       url: images.Quan,
-      route: "./collection/1",
+      route: "/collection/Quần",
     },
     {
       url: images.DoLot,
-      route: "./collection/1",
+      route: "/collection/Đồ lót",
     },
   ];
 
@@ -188,7 +188,7 @@ const [popupProductCart, setPopupProductCart] = useState(false)
                 </div>
             </div>
         </div>  
-        <button onClick={() => setPopupProductCart(!popupProductCart)}>clickme</button>
+        {/* <button onClick={() => setPopupProductCart(!popupProductCart)}>clickme</button> */}
       {/* Slider */}
 
       <div>
@@ -245,10 +245,8 @@ const [popupProductCart, setPopupProductCart] = useState(false)
           return (
             <div className={cx("container-item")}>
               <img className={cx("itemIMG")} src={item.url} alt="all" />
-              <div className={cx("btn-item")}>
-                <a href={item.route}>
-                  <FaCircleArrowRight />
-                </a>
+              <div className={cx("btn-item")} onClick={() => navigate(item.route)}>
+                <FaCircleArrowRight />
               </div>
             </div>
           );
