@@ -505,7 +505,9 @@ const createReviewCtrl = async (req, res) => {
             await updateImagesReview(review._id, data)
         })
 
-        return successTemplate(res, req?.body, "Create address successfully!", 200)
+        const reviewRes = await Review.findById(review._id)
+
+        return successTemplate(res, reviewRes, "Create review successfully!", 200)
 
     } catch (error) {
         return errorTemplate(res, error.message)

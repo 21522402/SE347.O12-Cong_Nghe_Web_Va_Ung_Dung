@@ -95,13 +95,13 @@ export const getAllOrderReview = async (user, dispatch) => {
     }
 }
 
-export const createReview = async (user, orderItemId, data, dispatch, callback) => {
-    dispatch(createReviewStart())
+export const createReview = async (user, orderItemId, data, productId ,dispatch, callback) => {
+    dispatch(createReviewStart(productId))
     try{
-        console.log(data)
         const res = await axios.post(baseUrl + "/api/users/reviews/createReview/"+ user._id + "/" + orderItemId, data, {
             headers: {token: "Bearer " + user.accessToken},
         })
+        console.log(res.data.result)
         dispatch(createReviewSuccess(res.data.result))
         callback(res)
     }   
