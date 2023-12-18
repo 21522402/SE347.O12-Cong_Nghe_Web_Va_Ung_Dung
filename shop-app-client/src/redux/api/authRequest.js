@@ -9,7 +9,8 @@ export const loginUser = async (user, dispatch, navigate) => {
 
         console.log(res)
         dispatch(loginSuccess(res.data))
-        navigate("/user-profile/info")
+        if(res?.data?.role==='Admin') navigate("/Admin")
+        else navigate("/user-profile/info")
     }   
     catch(err){
         dispatch(loginFailed())
@@ -31,11 +32,11 @@ export const registerUser = async (user, dispatch, navigate, callback) => {
 export const logoutUser = async (id, dispatch, accessToken, navigate) => {
     dispatch(logoutStart())
     try{
+        navigate("/user")
         await axios.post(baseUrl + '/api/auth/logout',id , {
             headers: {token: "Bearer " + accessToken}
         })
         dispatch(logoutSuccess())
-        navigate("/user")
     }   
     catch(err){
         console.log(err)

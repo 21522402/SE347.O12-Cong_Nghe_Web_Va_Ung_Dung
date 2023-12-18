@@ -8,6 +8,7 @@ import { MdAdd } from 'react-icons/md';
 import baseUrl from '~/utils/baseUrl';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import { ToastContainer, toast } from 'react-toastify';
 const cx = classNames.bind(styles)
 function EditVoucher({item, closeFunc, setVoucherList}) {
 
@@ -16,6 +17,8 @@ function EditVoucher({item, closeFunc, setVoucherList}) {
     const [img, setImage] = useState(item.voucherImage)
     const [status, setStatus] = useState(true)
     const [err, setErr] = useState(null)
+    const notify = (type, message) => toast(message, {type: type});
+
     const {
         register,
         handleSubmit,
@@ -60,8 +63,8 @@ function EditVoucher({item, closeFunc, setVoucherList}) {
                 })
                 return arr
             })
-            
             closeFunc(false)
+            notify("success", 'Cập nhật voucher thành công!')
         } catch (error) {
             setErr(error.response.data.error.message)
         }
@@ -99,6 +102,8 @@ function EditVoucher({item, closeFunc, setVoucherList}) {
     },[getValues('quanlity'), getValues('endDate')])
     return (
         <div className={cx('wrapper')} style={{ animation: 'dropTop .3s linear' }}>
+            <ToastContainer/>
+
             <div style={{ fontWeight: 500, fontSize: '20px', marginBottom: '20px', backgroundColor: 'black', color: 'white', padding: '8px', width: '20%', borderRadius: '4px' }}>Cập nhật voucher</div>
             <div style={{ display: 'flex', alignItems: 'end' }}>
                 <div style={{ paddingLeft: '4rem', marginBottom: '8px' }}>
