@@ -20,6 +20,7 @@ import { FaCircleArrowRight } from "react-icons/fa6";
 const cx = classNames.bind(styles);
 
 function Home() {
+  const [withWindow,setWithWindow] = useState(window.innerWidth)
   const linkImagesSlider = [
     "https://media.coolmate.me/cdn-cgi/image/width=1920,quality=90,format=auto/uploads/November2023/141920x788.jpg",
     "https://media.coolmate.me/cdn-cgi/image/width=1920,quality=90,format=auto/uploads/November2023/kkGraphic_Special_(1).png",
@@ -27,14 +28,7 @@ function Home() {
   ];
 
   const listProducts =  useSelector(state => state.product.listProducts)
-  const navigate=useNavigate();
-
-  const banners = [
-    "https://media.coolmate.me/cdn-cgi/image/quality=80,format=auto/uploads/October2023/mceclip0_74.png",
-    "https://media.coolmate.me/cdn-cgi/image/quality=80,format=auto/uploads/October2023/mceclip0_87.png",
-    "https://mcdn.coolmate.me/image/September2023/mceclip4_64.jpg",
-    "https://mcdn.coolmate.me/image/March2023/mceclip0_137.jpg",
-  ];
+  const navigate = useNavigate();
 
   const navPages = [
     {
@@ -58,23 +52,19 @@ function Home() {
   const contents = [
     {
       titleSlider: "SẢN PHẨM NỔI BẬT",
-      listProduct: ["item 1", "item 2", "item 3", "item 4", "item 5", "item 6"],
-      urlBanner: banners[0],
+      urlBanner: "https://media.coolmate.me/cdn-cgi/image/quality=80,format=auto/uploads/October2023/mceclip0_74.png",
     },
     {
       titleSlider: "SẢN PHẨM COOLEXTRA",
-      listProduct: ["item 1", "item 2", "item 3", "item 4", "item 5", "item 6"],
-      urlBanner: banners[1],
+      urlBanner: "https://media.coolmate.me/cdn-cgi/image/quality=80,format=auto/uploads/October2023/mceclip0_87.png",
     },
     {
       titleSlider: "SẢN PHẨM THU ĐÔNG",
-      listProduct: ["item 1", "item 2", "item 3", "item 4", "item 5", "item 6"],
-      urlBanner: banners[2],
+      urlBanner: "https://mcdn.coolmate.me/image/September2023/mceclip4_64.jpg",
     },
     {
       titleSlider: "SẢN PHẨM THỂ THAO",
-      listProduct: ["item 1", "item 2", "item 3", "item 4", "item 5", "item 6"],
-      urlBanner: banners[3],
+      urlBanner: "https://mcdn.coolmate.me/image/March2023/mceclip0_137.jpg",
     },
   ];
 
@@ -84,11 +74,11 @@ function Home() {
       items: 1,
     },
     tablet: {
-      breakpoint: { max: 1024, min: 464 },
+      breakpoint: { max: 1024, min: 768 },
       items: 1,
     },
     mobile: {
-      breakpoint: { max: 464, min: 0 },
+      breakpoint: { max: 767, min: 0 },
       items: 1,
     },
   };
@@ -103,8 +93,8 @@ function Home() {
       items: 3,
     },
     mobile: {
-      breakpoint: { max: 768, min: 0 },
-      items: 1,
+      breakpoint: { max: 767, min: 0 },
+      items: 2,
     },
   };
   //DUyY
@@ -129,7 +119,16 @@ function Home() {
     }
 }
 useEffect(() => {
-  getAllProducts()
+  function handleResize() {
+    setWithWindow(window.innerWidth)
+  }
+
+  window.addEventListener('resize', handleResize);
+  return () => window.removeEventListener('resize', handleResize);
+}, []);
+useEffect(() => {
+  getAllProducts();
+  console.log(listProducts)
 },[])
   return (
     <div>
@@ -142,6 +141,7 @@ useEffect(() => {
           draggable={false}
           responsive={responsiveBanner}
           autoPlay
+          arrows={withWindow >=1024 ? true : false }
           ssr={true} // means to render carousel on server-side.
           infinite={true}
           autoPlaySpeed={3000}
@@ -162,6 +162,7 @@ useEffect(() => {
                 itemClass={cx("carousel-item")}
                 swipeable={true}
                 draggable={false}
+                arrows={withWindow >=1024 ? true : false }
                 responsive={responsive}
                 ssr={true}
               >

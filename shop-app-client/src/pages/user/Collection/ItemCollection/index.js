@@ -7,65 +7,6 @@ const cx = classNames.bind(styles)
 
 function ItemCollection({product}) {
     const [indexColorActive, setIndexColorActive] = useState(0);
-    // const product = {
-    //     productName: 'Áo khoác thể thao Pro Active',
-    //     productType: 'Áo khoác',
-    //     colors: [
-    //         {
-    //             colorName: 'Xám',
-    //             images: [
-    //                 "https://media.coolmate.me/cdn-cgi/image/quality=100/uploads/October2023/QD001.20_38.jpg",
-    //                 "https://media.coolmate.me/cdn-cgi/image/quality=100/uploads/October2023/QD001.24_53.jpg",
-    //             ],
-    //             sizes: [
-    //                 {
-    //                     name: 'S',
-    //                     quantity: 10,
-    //                 },
-    //                 {
-    //                     name: 'L',
-    //                     quantity: 102,
-    //                 },
-    //                 {
-    //                     name: 'M',
-    //                     quantity: 90,
-    //                 }
-    //             ]
-    //         },
-    //         {
-    //             colorName: 'Xanh Navy',
-    //             images: [
-    //                 "https://media.coolmate.me/cdn-cgi/image/quality=100/uploads/October2023/QD001.9_84.jpg",
-    //                 "https://media.coolmate.me/cdn-cgi/image/quality=100/uploads/October2023/QD001.12_94.jpg",
-    //                 "https://media.coolmate.me/cdn-cgi/image/quality=100/uploads/October2023/QD001.10.jpg",
-    //                 "https://media.coolmate.me/cdn-cgi/image/quality=100/uploads/October2023/AD001.s2.4.jpg"
-    //             ],
-    //             sizes: [
-    //                 {
-    //                     name: 'M',
-    //                     quantity: 10,
-    //                 },
-    //                 {
-    //                     name: 'L',
-    //                     quantity: 102,
-    //                 },
-    //                 {
-    //                     name: 'XL',
-    //                     quantity: 90,
-    //                 },
-    //                 {
-    //                     name: '2XL',
-    //                     quantity: 20,
-    //                 },
-    //                 {
-    //                     name: '3XL',
-    //                     quantity: 40,
-    //                 }
-    //             ]
-    //         }
-    //     ],
-    //     quantitySold: 120
-    // }
     return (
         <div className={cx('wrapper')}>
             <div className={cx('image-wrapper')}>
@@ -82,8 +23,8 @@ function ItemCollection({product}) {
                     </div>
                 </div>
                 <div className={cx('rating-star')}>
-                    <span className={cx('rating')}>5</span>
-                    <img src="https://www.coolmate.me/images/star-new.svg?08a379c24952a980d5430515abb8be4e"/>
+                    <span className={cx('rating')}>5 <img style={{marginBottom: '4px'}} src="https://www.coolmate.me/images/star-new.svg?08a379c24952a980d5430515abb8be4e"/></span>
+                    
                     <span className={cx('num-review')}>(3)</span>
                 </div>
                 <div className={cx('overlay')}></div>
@@ -104,10 +45,10 @@ function ItemCollection({product}) {
                     <a href="/">{product?.productName}</a>
                 </h3>
                 <p className={cx('product-color')}>{product?.colors[indexColorActive]?.colorName}</p>
-                <div style={{ display: 'flex', gap: '8px', marginTop: '8px', alignItems: 'center' }}>
-                    <span style={{ fontWeight: '600', fontFamily: 'Pangea,sans-serif', fontSize: '14px', }}>469.000đ</span>
-                    <span style={{ fontWeight: '500', fontFamily: 'Pangea,sans-serif', color: '#c4c4c4', textDecoration: 'line-through', fontSize: '14px', }}>499.000đ</span>
-                    <span style={{ fontWeight: '500', fontFamily: 'Pangea,sans-serif', color: '#ff3102', fontSize: '14px', }}>-6%</span>
+                <div className={cx('layout-price')}>
+                    <span className={cx('price')}>469.000đ</span>
+                    <span className={cx('sale-off')}>499.000đ</span>
+                    <span className={cx('percent')}>-6%</span>
                 </div>
             </div>
         </div>
