@@ -1,14 +1,16 @@
 import classNames from "classnames/bind";
 import { useState } from "react";
 import styles from './ItemCollection.module.scss';
+import { useNavigate } from "react-router-dom";
 
 
 const cx = classNames.bind(styles)
 
 function ItemCollection({product, handleToCart}) {
     const [indexColorActive, setIndexColorActive] = useState(0);
+    const navigate = useNavigate()
     return (
-        <div className={cx('wrapper')}>
+        <div className={cx('wrapper')} onClick={() => window.location.href = `/product/${product._id}`}>
             <div className={cx('image-wrapper')}>
                 <img className={cx('image-1')} src={product?.colors[indexColorActive]?.images[0]} />
                 <img className={cx('image-2')} src={product?.colors[indexColorActive]?.images[1]}  />
@@ -34,7 +36,7 @@ function ItemCollection({product, handleToCart}) {
                     product?.colors.map((item, index) => {
                         return (
                             <div key={index} className={cx('color-item', { active: index === indexColorActive })}>
-                                <img onClick={() => { setIndexColorActive(index) }} alt="" src={item.images[0]} className={cx('img-color')} />
+                                <img onClick={(e) => { e.stopPropagation() ;setIndexColorActive(index) }} alt="" src={item.images[0]} className={cx('img-color')} />
                             </div>
                         )
                     })
@@ -42,7 +44,7 @@ function ItemCollection({product, handleToCart}) {
             </div>
             <div className={cx('section-info')}>
                 <h3 className={cx('product-name')}>
-                    <a href="/">{product?.productName}</a>
+                    <a style={{cursor: 'pointer'}} onClick={() => window.location.href = `/product/${product._id}`}>{product?.productName}</a>
                 </h3>
                 <p className={cx('product-color')}>{product?.colors[indexColorActive]?.colorName}</p>
                 <div className={cx('layout-price')}>

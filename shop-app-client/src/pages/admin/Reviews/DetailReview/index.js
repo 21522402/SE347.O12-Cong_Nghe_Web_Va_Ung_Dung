@@ -102,7 +102,7 @@ function DetailReview() {
     <div className={cx('wrapper')} style={{ fontSize: '14px' }}>
       <div className={cx('container')}>
         <div>
-          <Link to={'/admin/reviews'}>
+          <Link to={'/admin/reviews'} style={{textDecoration: 'none', color: '#000'}}>
             <h1 ><BiArrowBack style={{ marginBottom: '4px', }} /> Reviews Product Detail</h1>
           </Link>
 

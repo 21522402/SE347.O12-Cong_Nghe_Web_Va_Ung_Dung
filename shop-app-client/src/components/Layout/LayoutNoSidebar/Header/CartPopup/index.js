@@ -18,7 +18,7 @@ function CartPopup({ onMouseLeave, cartProducts}) {
                     <Link to={'/cart'} onClick={() => onMouseLeave()} style={{cursor: 'pointer', fontSize: '12px', color: '#2f5acf', textDecoration: 'none', fontWeight: '600'}}>Xem tất cả</Link>
                 </div>
                 <div className={cx('list-product-filter')}>
-                    {cartProducts.map((item, index) => 
+                    {cartProducts?.map((item, index) => 
                         (
                             <div key={index} style={{position: 'relative', zIndex: i--, cursor: 'pointer'}}>
                                 <ProductItem props={item}/>

@@ -222,7 +222,7 @@ const [popupProductCart, setPopupProductCart] = useState(false)
               >
                 {listProducts.map((item, index) => {
                   return (
-                    <div key={index} onClick={() => {navigate(`/product/${item._id}`)}} className={cx("width-item")}>
+                    <div key={index} className={cx("width-item")}>
                       <ItemCollection handleToCart={handleItemToCart} product={item}/>
                     </div>
                   );
