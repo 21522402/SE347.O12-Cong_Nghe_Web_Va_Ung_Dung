@@ -12,6 +12,7 @@ import { Login, SignUp, ChangePass } from "~/pages/auth";
 import { useSelector } from "react-redux";
 import { BiAlignLeft } from "react-icons/bi";
 import { FaUserCircle } from "react-icons/fa";
+import CartPopup from "./CartPopup";
 
 const cx = classNames.bind(styles);
 
@@ -26,6 +27,7 @@ function Header() {
   const [indexCategoryActive, setIndexCategoryActive] = useState(-1);
   const [showDetailPopUp, setShowDetailPopup] = useState(false)
   const [showSearchPopUp, setShowSearchPopup] = useState(false)
+  const [showCartPopUp, setShowCartPopup] = useState(false)
   const [valueSearch, setValueSearch] = useState('');
   const [popup, setPopup] = useState("login")
   const handleCategoryClick = (index) => {
@@ -262,8 +264,12 @@ function Header() {
             </div>
           </label>
           <Link to="/cart">
-            <div style={{ cursor: "pointer" }}>
+            <div style={{ cursor: "pointer" }} onMouseMove={() => {setShowCartPopup(true)}}>
               <IoBagHandle style={{ color: "#fff", fontSize: "24px" }} />
+                {
+                    showCartPopUp &&
+                    <CartPopup onMouseLeave={() => setShowCartPopup(false)} />
+                }
             </div>
           </Link>
         </div>

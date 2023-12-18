@@ -16,6 +16,8 @@ import baseUrl from '~/utils/baseUrl';
 import ItemCollection from "../Collection/ItemCollection";
 import styles from "./Home.module.scss";
 import { FaCircleArrowRight } from "react-icons/fa6";
+import ProductItem from './ProductItem';
+import { createCartItem, getCartProducts, increaseQuantityCartItem } from '~/redux/api/userRequest';
 
 const cx = classNames.bind(styles);
 
@@ -27,6 +29,10 @@ function Home() {
   ];
 
   const listProducts =  useSelector(state => state.product.listProducts)
+  let cartProducts = useSelector(state => state.user?.cart?.cartProducts)
+  let currentUser = useSelector((state) => state.auth.login.currentUser)
+
+  const [selected, setSelected] = useState(null)
   const navigate=useNavigate();
 
   const banners = [
@@ -130,9 +136,53 @@ function Home() {
 }
 useEffect(() => {
   getAllProducts()
+  currentUser && getCartProducts(currentUser, dispatch)
 },[])
+
+const setCloseTimer = () => {
+    let t = 3
+    const a = setInterval(() => {
+        if(t-- === 0){
+            clearInterval(a)
+            setPopupProductCart(false)
+            setSelected(null)
+        }
+    }, 1000)
+}
+const handleItemToCart = (product, b, c) => {
+
+    const cartItem = {
+        product: product._id,
+        productName: product.productName,
+        productPrice: product.exportPrice * (1 - product.discountPerc/100),
+        size: b.sizeName,
+        color: c.colorName,
+        quantity: 1
+    }
+
+    setSelected({...cartItem, product: product})
+    setPopupProductCart(true)
+    setCloseTimer()
+
+    console.log(cartProducts)
+
+
+    // const existItem = cartProducts.find((cartIT) => cartIT.productId === cartItem.productId && cartIT.size === cartItem.size && cartIT.color === cartItem.color)
+    // existItem ? increaseQuantityCartItem(currentUser, existItem, dispatch) : createCartItem(currentUser, cartItem, dispatch)
+}
+const [popupProductCart, setPopupProductCart] = useState(false)
   return (
     <div>
+        <div className={cx(popupProductCart ? 'bayra' : 'bayvao')} style={{position: 'fixed', zIndex: 1000, top: '16px', right: '16px', borderRadius: '16px', width: '400px', maxHeight: '350px', backgroundColor: 'white', padding: '15px', fontSize: '16px', color: 'black', fontWeight: '600' }}>
+            <div>Đã thêm vào giỏ hàng</div>
+            {selected && <ProductItem props={selected}/>}
+            <div>
+                <div className={cx('account-info__btn')} onClick={() => navigate("/cart")}>
+                    <span className={cx('account-info__btn-text')}>Xem giỏ hàng</span>
+                </div>
+            </div>
+        </div>  
+        <button onClick={() => setPopupProductCart(!popupProductCart)}>clickme</button>
       {/* Slider */}
 
       <div>
@@ -168,7 +218,7 @@ useEffect(() => {
                 {listProducts.map((item, index) => {
                   return (
                     <div key={index} className={cx("width-item")}>
-                      <ItemCollection product={item}/>
+                      <ItemCollection handleToCart={handleItemToCart} product={item}/>
                     </div>
                   );
                 })}

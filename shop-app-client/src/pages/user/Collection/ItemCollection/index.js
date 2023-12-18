@@ -5,7 +5,7 @@ import styles from './ItemCollection.module.scss';
 
 const cx = classNames.bind(styles)
 
-function ItemCollection({product}) {
+function ItemCollection({product, handleToCart}) {
     const [indexColorActive, setIndexColorActive] = useState(0);
     // const product = {
     //     productName: 'Áo khoác thể thao Pro Active',
@@ -76,7 +76,7 @@ function ItemCollection({product}) {
                     <div style={{ display: 'flex', gap: '4px', marginTop: '12px', flexWrap: 'wrap' }}>
                         {
                             product?.colors[indexColorActive]?.sizes?.map((item, index) => {
-                                return <span key={index} className={cx('item-size')}>{item.sizeName}</span>
+                                return <span onClick={() => handleToCart(product, item, product?.colors[indexColorActive])} key={index} className={cx('item-size')}>{item.sizeName}</span>
                             })
                         }
                     </div>
@@ -105,9 +105,9 @@ function ItemCollection({product}) {
                 </h3>
                 <p className={cx('product-color')}>{product?.colors[indexColorActive]?.colorName}</p>
                 <div style={{ display: 'flex', gap: '8px', marginTop: '8px', alignItems: 'center' }}>
-                    <span style={{ fontWeight: '600', fontFamily: 'Pangea,sans-serif', fontSize: '14px', }}>469.000đ</span>
-                    <span style={{ fontWeight: '500', fontFamily: 'Pangea,sans-serif', color: '#c4c4c4', textDecoration: 'line-through', fontSize: '14px', }}>499.000đ</span>
-                    <span style={{ fontWeight: '500', fontFamily: 'Pangea,sans-serif', color: '#ff3102', fontSize: '14px', }}>-6%</span>
+                    <span style={{ fontWeight: '600', fontFamily: 'Pangea,sans-serif', fontSize: '14px', }}>{new Intl.NumberFormat('vi-VN', {style: 'currency', currency: 'VND'}).format((product?.exportPrice && product?.discountPerc) ? product?.exportPrice * (1 - product?.discountPerc / 100) : 0 )}</span>
+                    <span style={{ fontWeight: '500', fontFamily: 'Pangea,sans-serif', color: '#c4c4c4', textDecoration: 'line-through', fontSize: '14px', }}>{new Intl.NumberFormat('vi-VN', {style: 'currency', currency: 'VND'}).format(product?.exportPrice)}</span>
+                    <span style={{ fontWeight: '500', fontFamily: 'Pangea,sans-serif', color: '#ff3102', fontSize: '14px', }}>{product?.discountPerc && `-${product?.discountPerc}%`}</span>
                 </div>
             </div>
         </div>
