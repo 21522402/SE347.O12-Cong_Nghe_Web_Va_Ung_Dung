@@ -5,7 +5,7 @@ import styles from './ItemCollection.module.scss';
 
 const cx = classNames.bind(styles)
 
-function ItemCollection({product}) {
+function ItemCollection({product, handleToCart}) {
     const [indexColorActive, setIndexColorActive] = useState(0);
     return (
         <div className={cx('wrapper')}>
@@ -17,7 +17,7 @@ function ItemCollection({product}) {
                     <div style={{ display: 'flex', gap: '4px', marginTop: '12px', flexWrap: 'wrap' }}>
                         {
                             product?.colors[indexColorActive]?.sizes?.map((item, index) => {
-                                return <span key={index} className={cx('item-size')}>{item.sizeName}</span>
+                                return <span onClick={() => handleToCart(product, item, product?.colors[indexColorActive])} key={index} className={cx('item-size')}>{item.sizeName}</span>
                             })
                         }
                     </div>
