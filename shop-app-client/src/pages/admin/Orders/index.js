@@ -20,7 +20,7 @@ function Orders() {
     const dispatch = useDispatch()
     const listOrders = useSelector(state => state.orderAdmin.listOrders)
     const [inputFocus, setInputFocus] = useState(false);
-    const listStatus = ['Tất cả', 'Đã xác nhận', 'Đang giao hàng', 'Giao thành công','Đã hủy']
+    const listStatus = ['Tất cả', 'Đang xử lý','Đã xác nhận', 'Đang giao hàng', 'Giao thành công','Đã hủy']
     const [showStatus, setShowStatus] = useState(false)
     const filterStatus = useRef(null)
     const dateInputElement = useRef(null);

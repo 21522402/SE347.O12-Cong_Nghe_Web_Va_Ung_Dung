@@ -126,6 +126,39 @@ const responseReview = async (req, res) => {
   }
 };
 
+const getReviewsByProductId = async (req, res) => {
+    try {
+      const {id} = req.params;
+      const reviews = await Review.find({}).populate([
+        {
+          path: "user",
+          model: "User",
+        },
+        {
+          path: "orderItem",
+          model: "OrderItem",
+          populate: {
+            path: "productId",
+            match: {
+              _id: id
+            },
+            model: "Product",
+          },
+        },
+      ])
+      .exec();
+      res.status(200).json({
+        message: 'Get reviews by productId successfullly',
+        data: reviews
+      })
+    } catch (error) {
+      res.status(400).json({
+        message: error.message
+      })
+    }
+    
+}
+
 const CountStar = (arr, star) => {
   let temp = 0;
   for (let i = 0; i < arr.length; i++) {
@@ -149,4 +182,5 @@ const CountResponsed = (arr) => {
 module.exports = {
   getAllReviews,
   responseReview,
+  getReviewsByProductId
 };
