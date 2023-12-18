@@ -104,24 +104,14 @@ export default function ProductItem({props}) {
                             <span className={cx('colorSize')}>{`${defaultSelection.colorName} / ${defaultSelection.size}`}</span>
                         </div>
                         <div className={cx('selector')}>
-                            <div style={{width: '120px'}}>
-                                <ComboBox listItems={colors} placeHolder={''} selectedItem={props.color} type={'list-gray'} filterValueSelected={onColorchange}/>
-                            </div>
-                            <div style={{width: '70px'}}>
-                                <ComboBox listItems={sizes} placeHolder={''} selectedItem={props.size} type={'list-gray'} filterValueSelected={onSizeChange}/>
-                            </div>
-                            <div className={cx('outerQuantity')}>
-                                <div className={cx('operator')} style={{cursor: 'pointer', userSelect: 'none'}} onClick={() => decreaseQuantityCartItem(currentUser, props, dispatch)}><span>-</span></div>
-                                <div className={cx('operator')}><span>{props.quantity}</span></div>
-                                <div className={cx('operator')} style={{cursor: 'pointer', userSelect: 'none'}} onClick={() => increaseQuantityCartItem(currentUser, {...props, quantity: 1}, dispatch)}><span>+</span></div>
-                            </div>
-                            <div style={{display: 'flex', flexDirection: 'column', alignItems: 'flex-end', marginLeft: '10px'}}>
+                            <div style={{display: 'flex', flexDirection: 'column', alignItems: 'flex-end'}}>
                                 <div style={{fontWeight: '600'}}>{new Intl.NumberFormat('vi-VN', {style: 'currency', currency: 'VND'}).format(props.productPrice)}</div>
                                 {/* <del style={{fontWeight: '400', fontSize: '14px', color: '#ccc'}}>{new Intl.NumberFormat('vi-VN', {style: 'currency', currency: 'VND'}).format(props.exportPrice)}</del> */}
                             </div>  
                         </div>
+                        <div>x{props.quantity}</div>
                     </div>
-                    <div style={{display: 'flex', flexDirection: 'row', alignItems: 'center', gap: '5px', cursor: 'pointer', alignSelf: 'flex-start'}} onClick={() => deleteCartItem(currentUser, props, dispatch)}>
+                    <div style={{display: 'flex', flexDirection: 'row', alignItems: 'center', gap: '5px', cursor: 'pointer', alignSelf: 'flex-start'}} onClick={(e) => {e.stopPropagation() ;deleteCartItem(currentUser, props, dispatch)}}>
                         <GoTrash />
                         <div>Xóa</div>
                     </div>

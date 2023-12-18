@@ -14,7 +14,7 @@ const TransportInfo =  forwardRef(({props, error, userMail, _ref}) => {
     }));
 
     useEffect(() => {
-        setSelected(props ? {...props, email: userMail, note: ''} : {
+        props ? setSelected({...props, email: userMail, note: ''}) : setSelected({
             name: "",
             province: "",
             district: "",
@@ -26,9 +26,18 @@ const TransportInfo =  forwardRef(({props, error, userMail, _ref}) => {
             default: false,
         })
     }, [props])
+
+    useEffect(() => {
+        if(Object.keys(error).length !== 0) setFirstLoad(false)
+        console.log(Object.keys(error).length)
+    }, [error])
+
+    let [firstLoad, setFirstLoad] = useState(true);
     
     const handleChange = (e, name) => {
         setSelected({...selected, [name]: e.target.value})
+        setFirstLoad(false)
+        console.log((!selected.detail && !firstLoad))
     }
     const provinceApi = "https://provinces.open-api.vn/api/";
     const districtApi = (code) => `https://provinces.open-api.vn/api/p/${code}?depth=2`
@@ -89,33 +98,33 @@ const TransportInfo =  forwardRef(({props, error, userMail, _ref}) => {
                     <div style={{display: 'flex', flexDirection: 'row', alignItems: 'flex-start', gap: '15px'}}>
                         <div style={{width: '50%'}}>
                             <TextInput placeHolder={'Họ và tên'} type={"type_2"} value={selected.name} handleChange={(e) => handleChange(e, "name")}/>
-                            {(error.name || !selected.name) && <span style={{display: 'flex', 'flexDirection': 'row', alignItems: 'center', fontSize: '14px', color: '#a9252b', marginTop: '4px'}}><AiFillExclamationCircle className="mr-1"/>Vui lòng nhập họ và tên</span>}
+                            {!firstLoad && error.name && !selected.name && <span style={{display: 'flex', 'flexDirection': 'row', alignItems: 'center', fontSize: '14px', color: '#a9252b', marginTop: '4px'}}><AiFillExclamationCircle className="mr-1"/>Vui lòng nhập họ và tên</span>}
                         </div>
                         <div style={{width: '50%'}}>
                             <TextInput placeHolder={'Số điện thoại'} type={"type_2"} value={selected.phoneNumber} handleChange={(e) => handleChange(e, "phoneNumber")}/>
-                            {(error.phoneNumber || !selected.phoneNumber) && <span style={{display: 'flex', 'flexDirection': 'row', alignItems: 'center', fontSize: '14px', color: '#a9252b', marginTop: '4px'}}><AiFillExclamationCircle classphoneNumber="mr-1"/>Vui lòng nhập số điện thoại</span>}
+                            {!firstLoad && error.phoneNumber && !selected.phoneNumber && <span style={{display: 'flex', 'flexDirection': 'row', alignItems: 'center', fontSize: '14px', color: '#a9252b', marginTop: '4px'}}><AiFillExclamationCircle classphoneNumber="mr-1"/>Vui lòng nhập số điện thoại</span>}
                         </div>
                     </div>
                     <div>
                         <TextInput placeHolder={'Email'} type={"type_2"} value={selected.email} handleChange={(e) => handleChange(e, "email")}/>
-                        {(error.email || !selected.email) && <span style={{display: 'flex', 'flexDirection': 'row', alignItems: 'center', fontSize: '14px', color: '#a9252b', marginTop: '4px'}}><AiFillExclamationCircle className="mr-1"/>Vui lòng nhập địa chỉ email</span>}
+                        {!firstLoad && error.email && !selected.email && <span style={{display: 'flex', 'flexDirection': 'row', alignItems: 'center', fontSize: '14px', color: '#a9252b', marginTop: '4px'}}><AiFillExclamationCircle className="mr-1"/>Vui lòng nhập địa chỉ email</span>}
                     </div>
                     <div>
                             <TextInput placeHolder={'Địa chỉ'} type={"type_2"} value={selected.detail} handleChange={(e) => handleChange(e, "detail")}/>
-                            {(error.detail || !selected.detail) && <span style={{display: 'flex', 'flexDirection': 'row', alignItems: 'center', fontSize: '14px', color: '#a9252b', marginTop: '4px'}}><AiFillExclamationCircle className="mr-1"/>Vui lòng nhập chi tiết địa chỉ</span>}
+                            {!firstLoad && error.detail && !selected.detail && <span style={{display: 'flex', 'flexDirection': 'row', alignItems: 'center', fontSize: '14px', color: '#a9252b', marginTop: '4px'}}><AiFillExclamationCircle className="mr-1"/>Vui lòng nhập chi tiết địa chỉ</span>}
                     </div>
                     <div className={cx('outer-address')} >
                         <div className={cx('addressItem')}>
                             <ComboBox listItems={provinces} placeHolder={'Chọn Tỉnh/Thành phố'} selectedItem={selected.province} type={'list'} filterValueSelected={filterProvince}/>
-                            {(error.province || !selected.province) && <span style={{display: 'flex', 'flexDirection': 'row', alignItems: 'center', fontSize: '14px', color: '#a9252b', marginTop: '4px'}}><AiFillExclamationCircle className="mr-1"/>Vui lòng chọn tỉnh</span>}
+                            {!firstLoad && error.province && !selected.province && <span style={{display: 'flex', 'flexDirection': 'row', alignItems: 'center', fontSize: '14px', color: '#a9252b', marginTop: '4px'}}><AiFillExclamationCircle className="mr-1"/>Vui lòng chọn tỉnh</span>}
                         </div>
                         <div className={cx('addressItem')}>
                             <ComboBox listItems={districts} placeHolder={'Chọn Quận/Huyện'} selectedItem={selected.district} type={'list'} filterValueSelected={filterDistrict}/>    
-                            {(error.district || !selected.district) && <span style={{display: 'flex', 'flexDirection': 'row', alignItems: 'center', fontSize: '14px', color: '#a9252b', marginTop: '4px'}}><AiFillExclamationCircle className="mr-1"/>Vui lòng chọn quận/huyện</span>}
+                            {!firstLoad && error.district && !selected.district && <span style={{display: 'flex', 'flexDirection': 'row', alignItems: 'center', fontSize: '14px', color: '#a9252b', marginTop: '4px'}}><AiFillExclamationCircle className="mr-1"/>Vui lòng chọn quận/huyện</span>}
                         </div>
                         <div className={cx('addressItem')}>
                             <ComboBox listItems={wards} placeHolder={'Chọn Phường/Xã'} selectedItem={selected.ward} type={'list'} filterValueSelected={(e)=> {setSelected({...selected, 'ward': e.name})}}/>          
-                            {(error.ward || !selected.ward) && <span style={{display: 'flex', 'flexDirection': 'row', alignItems: 'center', fontSize: '14px', color: '#a9252b', marginTop: '4px'}}><AiFillExclamationCircle className="mr-1"/>Vui lòng chọn phường/xã</span>}
+                            {!firstLoad && error.ward && !selected.ward && <span style={{display: 'flex', 'flexDirection': 'row', alignItems: 'center', fontSize: '14px', color: '#a9252b', marginTop: '4px'}}><AiFillExclamationCircle className="mr-1"/>Vui lòng chọn phường/xã</span>}
                         </div>
                     </div>
                     <div>

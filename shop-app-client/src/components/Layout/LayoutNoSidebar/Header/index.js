@@ -1,7 +1,7 @@
 import { Link, useNavigate } from "react-router-dom";
 import styles from "./Header.module.scss";
 import classNames from "classnames/bind";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { IoSearch, IoBagHandle } from "react-icons/io5";
 import { IoMdClose } from "react-icons/io";
 import DetailPopup from './DetailPopup';
@@ -9,9 +9,11 @@ import SearchPopup from './SearchPopup';
 import SettingPopup from './SettingPopup';
 import Modal from "~/components/Modal";
 import { Login, SignUp, ChangePass } from "~/pages/auth";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { BiAlignLeft } from "react-icons/bi";
 import { FaUserCircle } from "react-icons/fa";
+import CartPopup from "./CartPopup";
+import { getCartProducts } from "~/redux/api/userRequest";
 
 const cx = classNames.bind(styles);
 
@@ -23,9 +25,11 @@ function Header() {
   const hideOverLay = () => {
     overLay.current.checked = false
   }
+  let cartProducts = useSelector(state => state.user?.cart?.cartProducts)
   const [indexCategoryActive, setIndexCategoryActive] = useState(-1);
   const [showDetailPopUp, setShowDetailPopup] = useState(false)
   const [showSearchPopUp, setShowSearchPopup] = useState(false)
+  const [showCartPopUp, setShowCartPopup] = useState(false)
   const [valueSearch, setValueSearch] = useState('');
   const [popup, setPopup] = useState("login")
   const handleCategoryClick = (index) => {
@@ -144,6 +148,10 @@ function Header() {
       ]
     }
   ]
+  const dispatch = useDispatch()
+  useEffect(() => {
+    getCartProducts(currentUser, dispatch)
+}, []) 
 
   const handleMouseOver = (index) => {
     setIndexCategoryActive(index);
@@ -261,11 +269,16 @@ function Header() {
               ) : null}
             </div>
           </label>
-          <Link to="/cart">
-            <div style={{ cursor: "pointer" }}>
+          <div onClick={() => navigate("/cart")}>
+            <div style={{ cursor: "pointer", position: 'relative' }} onMouseMove={() => {setShowCartPopup(true)}}>
               <IoBagHandle style={{ color: "#fff", fontSize: "24px" }} />
+              <span className={cx("counts", "site-header__cartcount")}>{cartProducts ? cartProducts.length : 0}</span>
+                {
+                    showCartPopUp &&
+                    <CartPopup onMouseLeave={() => setShowCartPopup(false)} cartProducts={cartProducts}/>
+                }
             </div>
-          </Link>
+          </div>
         </div>
       </div>
     </div>

@@ -8,14 +8,14 @@ const cx = classNames.bind(styles);
 function LayoutSidebarUser({children}) {
     return ( 
         <div>
-            {/* <Header/> */}
+            <Header/>
             <div  className={cx('container')} >
                 <div  className={cx('sidebar')}>
                     <Sidebar  />
                 </div>
                 <div className={cx('content')} >{children}</div>
             </div>
-            {/* <Footer/> */}
+            <Footer/>
         </div>
         );
 }
