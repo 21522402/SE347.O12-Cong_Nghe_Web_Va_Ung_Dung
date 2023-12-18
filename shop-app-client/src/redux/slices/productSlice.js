@@ -58,7 +58,7 @@ const slice = createSlice({
                 ...state.currentUpdateProduct,
                 colors: [...state.currentUpdateProduct.colors, {
                     colorName: '',
-                    colorCode: '',
+                    colorCode: '#000000',
                     images: [],
                     sizes: [],
                     changeImage: false,

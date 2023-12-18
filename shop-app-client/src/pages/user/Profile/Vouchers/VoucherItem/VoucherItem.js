@@ -1,11 +1,10 @@
-import { Link } from 'react-router-dom';
 import styles from './VoucherItem.module.scss';
 import classNames from 'classnames/bind';
-import { useState } from 'react';
+// import { useState } from 'react';
 const cx = classNames.bind(styles);
 
 function VoucherItem({props, onClickCondition} ) {
-    const [popup, setPopup] = useState(false)
+    // const [popup, setPopup] = useState(false)
     const convertDate = (d) => {
         const date = new Date(d);
 

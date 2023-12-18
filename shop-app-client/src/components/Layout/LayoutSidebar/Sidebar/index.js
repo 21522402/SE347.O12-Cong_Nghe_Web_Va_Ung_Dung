@@ -1,5 +1,5 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import styles from './Sidebar.module.scss'
 import classNames from 'classnames/bind';
 import {
@@ -11,19 +11,35 @@ import {
 import {PiShirtFolded} from 'react-icons/pi'
 import { MdOutlineAnalytics,MdOutlineRateReview } from "react-icons/md";
 import { BsPeople } from "react-icons/bs";
-import {BiMessageError} from 'react-icons/bi'
+import {BiLogOut, BiMessageError} from 'react-icons/bi'
 import { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { ToastContainer, toast } from 'react-toastify';
+import { logoutUser } from '~/redux/api/authRequest';
 const cx = classNames.bind(styles);
 function Sidebar() {
     const [activeItem , setActiveItem ] = useState('Dashboard')
     const handleClickItem = (item) =>{
         setActiveItem(item)
     }
+    let currentUser = useSelector((state) => state.auth.login.currentUser)
+    const navigate = useNavigate()
+    const dispatch = useDispatch()
+    const handleLogout = async () => {
+        try{
+            logoutUser(currentUser?._id, dispatch, currentUser?.accessToken, navigate)
+        }
+        catch (err){
+            notify("error", err)
+        }
+    }
+    const notify = (type, message) => toast(message, {type: type});
     return (
 
         <div  className={cx(`sidebar-container` )}  style={{ width: "250px", position: 'fixed', top:0, left: 0, bottom:0 }}>
+            <ToastContainer/>
             <div className={cx(`header-logo` )} >
-                    <Link onClick={()=>{handleClickItem('Dashboard')}} to="/admin" style={{ color: 'white', fontWeight: 'bold', fontSize: '20px' }}>
+                    <Link onClick={()=>{handleClickItem('Dashboard')}} to="/admin" style={{ color: 'white', fontWeight: 'bold', fontSize: '26px' }}>
                         Shop<span style={{ backgroundColor: 'white', color: 'black', borderRadius: '3px', padding: '0' }}>App</span>
                     </Link>
                 </div>
@@ -93,15 +109,19 @@ function Sidebar() {
                         <div>History</div>
                     </Link>
                 </div>
-                
+                <div className={cx('sidebar-item')} onClick={handleLogout}>
+                    <div className={cx('sidebar-item-link', )}>
+                        <BiLogOut className={cx('sidebar-icon')}/>
+                        <div>Logout</div>
+                    </div>
+                </div>
             </div>
             <hr />
-            <div class="dropdown">
-                <Link href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                    <img src="https://github.com/mdo.png" alt="" width="32" height="32" class="rounded-circle me-2" />
+            <div >
+                <div class="d-flex align-items-center text-white text-decoration-none "  >
+                    <img src="https://static.vecteezy.com/system/resources/thumbnails/000/290/610/small_2x/10__2850_29.jpg" alt="" width="32" height="32" class="rounded-circle me-2" />
                     <strong>Admin</strong>
-                </Link>
-                
+                </div>
             </div>
         </div>
 
