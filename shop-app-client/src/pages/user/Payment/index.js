@@ -55,6 +55,7 @@ function Payment() {
 
     const validateAddress = (item) => {
         let count = 0;
+        console.log(item)
         var errIT = {
 
         }

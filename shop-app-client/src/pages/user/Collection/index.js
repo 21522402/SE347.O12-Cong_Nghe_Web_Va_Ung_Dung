@@ -392,7 +392,7 @@ function Collection() {
         }
     
         const existItem = cartProducts.find((cartIT) => cartIT.productId === cartItem.productId && cartIT.size === cartItem.size && cartIT.color === cartItem.color)
-        existItem ? increaseQuantityCartItem(currentUser, existItem, dispatch) : createCartItem(currentUser, cartItem, dispatch)
+        existItem ? increaseQuantityCartItem(currentUser, {...existItem, quantity: 1}, dispatch) : createCartItem(currentUser, cartItem, dispatch)
         
         setSelected({...cartItem, product: product})
         setPopupProductCart(true)
@@ -492,7 +492,7 @@ function Collection() {
                 <div className={cx('list-product-filter')}>
                 {productFilter?.map((item, index) => {
                 return (
-                <div key={index} style={{ width: "100%"}} >
+                <div key={index} style={{ width: "100%"}} onClick={() => {navigate(`/product/${item._id}`)}}>
                 <ItemCollection product={item} handleToCart={handleItemToCart}/>
                 </div>
                 );

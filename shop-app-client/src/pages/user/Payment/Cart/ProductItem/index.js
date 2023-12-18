@@ -113,7 +113,7 @@ export default function ProductItem({props}) {
                             <div className={cx('outerQuantity')}>
                                 <div className={cx('operator')} style={{cursor: 'pointer', userSelect: 'none'}} onClick={() => decreaseQuantityCartItem(currentUser, props, dispatch)}><span>-</span></div>
                                 <div className={cx('operator')}><span>{props.quantity}</span></div>
-                                <div className={cx('operator')} style={{cursor: 'pointer', userSelect: 'none'}} onClick={() => increaseQuantityCartItem(currentUser, props, dispatch)}><span>+</span></div>
+                                <div className={cx('operator')} style={{cursor: 'pointer', userSelect: 'none'}} onClick={() => increaseQuantityCartItem(currentUser, {...props, quantity: 1}, dispatch)}><span>+</span></div>
                             </div>
                             <div style={{display: 'flex', flexDirection: 'column', alignItems: 'flex-end', marginLeft: '10px'}}>
                                 <div style={{fontWeight: '600'}}>{new Intl.NumberFormat('vi-VN', {style: 'currency', currency: 'VND'}).format(props.productPrice)}</div>
