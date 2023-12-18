@@ -1,15 +1,19 @@
 import classNames from "classnames/bind";
 import styles from './ProductDetail.module.scss'
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { BsCartCheck } from "react-icons/bs";
 import { FaAngleRight, FaAngleLeft, FaArrowRight, FaArrowLeft, FaAngleDown } from "react-icons/fa6";
 import Carousel from 'react-multi-carousel';
 import 'react-multi-carousel/lib/styles.css';
 import ItemCarousel from "./ItemCarousel";
 import ItemReview from "./ItemReview";
-
+import baseUrl from "~/utils/baseUrl";
+import { useParams } from "react-router-dom";
+import axios from "axios";
+import formatMoney from "~/utils/formatMoney";
 const cx = classNames.bind(styles);
 function ProductDetail() {
+    const { id } = useParams();
     const responsive = {
         superLargeDesktop: {
             breakpoint: { max: 4000, min: 3000 },
@@ -46,12 +50,20 @@ function ProductDetail() {
 
         );
     };
-
+    const descriptionElement = useRef();
     const [indexColorActive, setIndexColorActive] = useState(0);
     const [indexImageActive, setIndexImageActive] = useState(0);
     const [indexSizeActive, setIndexSizeActive] = useState(-1);
     const [quantityAddCart, setQuantityAddCart] = useState(1);
     const [enableNotiSize, setEnableNotiSize] = useState(false);
+    const [enableNotiSize2, setEnableNotiSize2] = useState(false);
+    const [outOfStock, setOutOfStock] = useState(false)
+    const [filterReview, setFilterReview] = useState({
+        star: 'all',
+        isHasImage: 'all',
+        isResponsed: 'all'
+
+    })
     const handleClickNextImage = () => {
         setIndexImageActive(prev => {
             const length = product.colors[indexColorActive].images.length;
@@ -73,9 +85,24 @@ function ProductDetail() {
     const handleClickBtnAddCart = () => {
         if (indexSizeActive === -1) {
             setEnableNotiSize(true);
+            return;
         }
+        if (product.colors[indexColorActive].sizes[indexSizeActive].quantity === 0) {
+            setOutOfStock(true)
+            return
+        }
+        const cartItem = {
+            product: product._id,
+            productName: product.productName,
+            productPrice: product.discountPerc ? product.exportPrice * (1 - product.discountPerc / 100) : product.exportPrice,
+            size: product.colors[indexColorActive].sizes[indexSizeActive].sizeName,
+            color: product.colors[indexColorActive].colorName,
+            quantity: quantityAddCart
+        }
+        console.log(cartItem)
+        // request api
     }
-    const product = {
+    const product1 = {
         productName: 'Áo khoác thể thao Pro Active',
         productType: 'Áo khoác',
         colors: [
@@ -135,50 +162,121 @@ function ProductDetail() {
         ],
         quantitySold: 120
     }
+    const [product, setProduct] = useState({})
+    const [reviews, setReviews] = useState([])
+    const [reviewsOrigin, setReviewsOrigin] = useState([])
+    const [rate, setRate] = useState(0)
+    const [listProductsByType, setListProducsByType] = useState([]);
+    const getProductsByProductType = async () => {
+        try {
+            const res = await axios.post(`${baseUrl}/api/products/getProductsByType`, { productType: product.productType, productId: product._id });
+            setListProducsByType(res.data.data || [])
+        } catch (error) {
+            console.log(error.message)
+        }
+    }
+    const getProductById = async () => {
+        try {
+            const res = await axios.get(`${baseUrl}/api/products/getProductById/${id}`);
+            setProduct(res.data.data || {})
+        } catch (error) {
+            console.log(error.message)
+        }
+    }
+    const getReviewsByProductId = async () => {
+        try {
+            const res = await axios.get(`${baseUrl}/api/reviews/getReviewsByProductId/${id}`);
+            setReviews(res.data.data || [])
+            setReviewsOrigin(res.data.data || [])
+        } catch (error) {
+            console.log(error.message)
+        }
+    }
+    useEffect(() => {
+        getProductById()
+        getReviewsByProductId()
 
+    }, [])
+    useEffect(() => {
+        const totalRate = reviews.reduce((acc, cur) => {
+            return acc + cur.star
+        }, 0)
+        const rate = (totalRate / reviews.length)
+        setRate(rate)
+    }, [reviews])
+    useEffect(() => {
+        descriptionElement.current.innerHTML = product.description || '';
+        getProductsByProductType()
+    }, [product])
+    const handleChangeFilterReview = (e) => {
+        const name = e.target.name;
+        const value = e.target.value;
+        setFilterReview(prev => ({ ...prev, [name]: value }))
+    }
+    useEffect(() => {
+        console.log(filterReview)
+        let nextStateReviews = [...reviewsOrigin];
+        if (filterReview.star !== 'all') nextStateReviews = nextStateReviews.filter(item => item.star === Number(filterReview.star))
+        if (filterReview.isHasImage !== 'all') nextStateReviews = nextStateReviews.filter(item => item.imagesRv && item.imagesRv.length > 0)
+        if (filterReview.isResponsed !== 'all') nextStateReviews = nextStateReviews.filter(item => item.isResponsed === true)
+        setReviews([...nextStateReviews])
+    }, [filterReview])
+    const hanleClickPlusQuantity = () => {
+        if (indexSizeActive === -1) {
+            setEnableNotiSize(true)
+            setEnableNotiSize2(true)
+            return;
+        }
+        if (product.colors[indexColorActive].sizes[indexSizeActive].quantity === 0) return;
+        setQuantityAddCart(prev => {
+            const quantityAvaiable = product.colors[indexColorActive].sizes[indexSizeActive].quantity
+            if (prev === quantityAvaiable) return prev;
+            else return prev + 1
+        })
+    }
     return (
         <div className={cx('wrapper')}>
 
             <div className={cx('header')}>
                 <span className={cx('span1')} >Trang chủ</span>
-                <span className={cx('span2')} > / Áo thể thao nam</span>
+                <span className={cx('span2')} > / {product.productType}</span>
             </div>
             <div className={cx('body')}>
 
-          
-                    <div className={cx('product-image-wrapper')}>
-                        <ul className={cx('product-list-image')}>
-                            {
-                                product.colors[indexColorActive].images.map((item, index) => {
-                                    return (
-                                        <li key={index}>
-                                            <div onClick={() => setIndexImageActive(index)} className={cx('div-item-img', {
-                                                active: indexImageActive === index
-                                            })}>
-                                                <img src={item} alt="" />
-                                            </div>
-                                        </li>
-                                    )
-                                })
-                            }
-                        </ul>
 
+                <div className={cx('product-image-wrapper')}>
+                    <ul className={cx('product-list-image')}>
                         {
-                            product.colors[indexColorActive].images.map((item, index) => {
+                            product.colors && product.colors[indexColorActive]?.images.map((item, index) => {
                                 return (
-                                    <img alt="" className={cx('image-view', { active: indexImageActive === index })} src={item} key={index} />
+                                    <li key={index}>
+                                        <div onClick={() => setIndexImageActive(index)} className={cx('div-item-img', {
+                                            active: indexImageActive === index
+                                        })}>
+                                            <img src={item} alt="" />
+                                        </div>
+                                    </li>
                                 )
                             })
                         }
-                        <div onClick={handleClickPreviousImage} className={cx('btn-switch', 'left')}>
-                            <FaAngleLeft />
-                        </div>
-                        <div onClick={handleClickNextImage} className={cx('btn-switch', 'right')}>
-                            <FaAngleRight />
-                        </div>
+                    </ul>
 
+                    {
+                        product.colors && product.colors[indexColorActive]?.images.map((item, index) => {
+                            return (
+                                <img alt="" className={cx('image-view', { active: indexImageActive === index })} src={item} key={index} />
+                            )
+                        })
+                    }
+                    <div onClick={handleClickPreviousImage} className={cx('btn-switch', 'left')}>
+                        <FaAngleLeft />
                     </div>
-              
+                    <div onClick={handleClickNextImage} className={cx('btn-switch', 'right')}>
+                        <FaAngleRight />
+                    </div>
+
+                </div>
+
 
 
                 <div className={cx('section-info')}>
@@ -186,27 +284,55 @@ function ProductDetail() {
                         {product.productName}
                     </h2>
                     <div style={{ display: 'flex', gap: '20px', alignItems: 'center' }}>
-                        <div className={cx('reviews-rating')}>
-                            <img src='https://www.coolmate.me/images/star.svg?2a5188496861d26e5547c524320ec875' className={cx('reviews-rating-star')} alt="" />
-                            <img src='https://www.coolmate.me/images/star.svg?2a5188496861d26e5547c524320ec875' className={cx('reviews-rating-star')} alt="" />
-                            <img src='https://www.coolmate.me/images/star.svg?2a5188496861d26e5547c524320ec875' className={cx('reviews-rating-star')} alt="" />
-                        </div>
-                        <span>|</span>
+                        {
+
+                            !Number.isNaN(rate) &&
+                            <div className={cx('reviews-rating')}>
+
+                                {
+                                    [...Array(Math.round(rate) || 0)].map((item, index) => {
+                                        return <img key={index} src='https://www.coolmate.me/images/star.svg?2a5188496861d26e5547c524320ec875' className={cx('reviews-rating-star')} alt="" />
+                                    })
+                                }
+
+
+
+                            </div>
+
+                        }
+
+                        {
+                            !Number.isNaN(rate) &&
+                            <span>|</span>
+                        }
                         <div style={{ fontSize: '12px', fontWeight: '500' }}>Đã bán: {product.quantitySold}</div>
                     </div>
                     <div className={cx('price')}>
-                        <span className={cx('price1')}>469.000đ</span>
-                        <span className={cx('price2')}>499.000đ</span>
-                        <span className={cx('percent')}>-6%</span>
+                        {
+                            product.discountPerc ?
+                                <>
+                                    <span className={cx('price1')}>{formatMoney(product.exportPrice * (1 - product.discountPerc / 100))}</span>
+                                    <span className={cx('price2')}>{formatMoney(product.exportPrice)}</span>
+                                </>
+                                :
+                                <>
+                                    <span className={cx('price1')}>{formatMoney(product.exportPrice)}</span>
+                                </>
+                        }
+
+                        {
+                            product.discountPerc &&
+                            <span className={cx('percent')}>-{product.discountPerc}%</span>
+                        }
                     </div>
                     <div style={{ marginTop: '8px' }}>
                         <div>
                             <span style={{ fontSize: '14px', fontWeight: '500' }}>Màu sắc: </span>
-                            <span style={{ fontWeight: '700', fontSize: '14px', marginLeft: '6px' }}>{product.colors[indexColorActive].colorName}</span>
+                            <span style={{ fontWeight: '700', fontSize: '14px', marginLeft: '6px' }}>{product.colors && product.colors[indexColorActive]?.colorName}</span>
                         </div>
                         <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginTop: '8px' }}>
                             {
-                                product.colors.map((item, index) => {
+                                product.colors?.map((item, index) => {
                                     return (
                                         <div key={index} className={cx('img-color-wrapper', { active: index === indexColorActive })}>
                                             <img onClick={() => { setIndexColorActive(index); setIndexSizeActive(0); setIndexImageActive(0) }} alt="" src={item.images[0]} className={cx('img-color')} />
@@ -224,22 +350,40 @@ function ProductDetail() {
                         </div>
                         <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginTop: '8px' }}>
                             {
-                                product.colors[indexColorActive].sizes.map((item, index) => {
+                                product.colors && product.colors[indexColorActive]?.sizes.map((item, index) => {
                                     return (
-                                        <div onClick={() => { setIndexSizeActive(index); setEnableNotiSize(false) }} className={cx('size-wrapper', { active: index === indexSizeActive })}>
-                                            {item.name}
+                                        <div onClick={() => { setIndexSizeActive(index); setEnableNotiSize(false); setEnableNotiSize2(false); setOutOfStock(false) }} className={cx('size-wrapper', { active: index === indexSizeActive })}>
+                                            {item.sizeName}
                                         </div>
                                     )
                                 })
                             }
                         </div>
                     </div>
+                    {
+                        enableNotiSize && enableNotiSize2 &&
+                        <p style={{ marginTop: '12px', fontSize: '14px', color: 'red' }}>Vui lòng chọn kích thước</p>
+                    }
+
+                    {
+                        indexSizeActive !== -1 &&
+                        <div style={{ marginTop: '8px' }}>
+                            <div>
+                                <span style={{ fontSize: '14px', fontWeight: '500' }}>Số lượng có sẵn: <strong>{product.colors && product.colors[indexColorActive]?.sizes[indexSizeActive]?.quantity || 0}</strong></span>
+                            </div>
+
+                        </div>
+                    }
+                    {
+                        outOfStock &&
+                        <p style={{ marginTop: '12px', fontSize: '14px', color: 'red' }}>Sản phẩm đã hết hàng</p>
+                    }
 
                     <div style={{ marginTop: '32px', padding: '16px 0', display: 'flex', alignItems: 'center', gap: '16px' }}>
                         <div style={{ display: 'inline-flex', borderRadius: '30px', height: '40px', width: '100px', alignItems: 'center', justifyContent: 'space-between', border: '1px solid #000' }}>
                             <span onClick={() => { if (quantityAddCart === 1) return; setQuantityAddCart(prev => prev - 1) }} style={{ userSelect: 'none', display: 'inline-block', padding: '0px 16px', fontSize: '20px', cursor: 'pointer', fontWeight: '700' }}>-</span>
                             <span style={{ display: 'inline-block', fontWeight: '600' }}>{quantityAddCart}</span>
-                            <span onClick={() => setQuantityAddCart(prev => prev + 1)} style={{ userSelect: 'none', display: 'inline-block', padding: '0px 16px', fontSize: '20px', cursor: 'pointer', fontWeight: 'bold' }}>+</span>
+                            <span onClick={hanleClickPlusQuantity} style={{ userSelect: 'none', display: 'inline-block', padding: '0px 16px', fontSize: '20px', cursor: 'pointer', fontWeight: 'bold' }}>+</span>
                         </div>
                         <div onClick={handleClickBtnAddCart} className={cx('btn-add-cart')} >
                             {indexSizeActive === -1 ? <span>Chọn kích thước</span> : <><BsCartCheck style={{ marginRight: '8px', fontSize: '20px' }} />  <span>Thêm vào giỏ hàng</span> </>}
@@ -328,28 +472,26 @@ function ProductDetail() {
                     <div className={cx('separate')}>
                     </div>
                     <div className={cx('product-description')}>
-                        <div style={{ fontWeight: '600', fontSize: '14px', marginBottom: '16px' }}>Đặc điểm nổi bật</div>
+                        <div ref={descriptionElement} style={{ fontWeight: '600', fontSize: '14px', marginBottom: '16px' }}>Đặc điểm nổi bật</div>
                         {/* Lấy từ csdl */}
-                        <p>- Thành phần: 100% Polyester</p>
+                        {/* <p>- Thành phần: 100% Polyester</p>
                         <p>- Chất liệu áo khoác thể thao có khả năng giữ ấm</p>
                         <p>- Hạn chế xù lông và chống nhăn</p>
                         <p>- Form áo: Regular, ôm nhẹ</p>
                         <p>- Tự hào sản xuất tại Việt Nam</p>
-                        <p>- Người mẫu: 1m77 - 69kg, mặc áo 2XL</p>
+                        <p>- Người mẫu: 1m77 - 69kg, mặc áo 2XL</p> */}
                     </div>
                 </div>
             </div>
             <div className={cx('carsousel-wrapper')}>
-                <h1 >SẢN PHẨM BẠN CÓ THỂ THÍCH</h1>
+                <h1 >SẢN PHẨM CÙNG LOẠI BẠN CÓ THỂ THÍCH</h1>
                 <Carousel itemClass="carousel" responsive={responsive} arrows={false} renderButtonGroupOutside={true} customButtonGroup={<ButtonGroup />}>
-                    <ItemCarousel />
-                    <ItemCarousel />
-                    <ItemCarousel />
-                    <ItemCarousel />
-                    <ItemCarousel />
-                    <ItemCarousel />
-                    <ItemCarousel />
-                    <ItemCarousel />
+
+                    {
+                        listProductsByType.map((item, index) => {
+                            return <ItemCarousel key={index} item={item} />
+                        })
+                    }
                 </Carousel>
             </div>
 
@@ -358,23 +500,23 @@ function ProductDetail() {
                     <div className={cx('title')}>
                         ĐÁNH GIÁ SẢN PHẨM
                     </div>
-                    <div className={cx('rate')}>5</div>
+                    <div className={cx('rate')}>{(rate && rate.toFixed(1)) || 0}</div>
                     <div style={{ display: 'flex', gap: '8px', alignItems: 'center', justifyContent: 'center' }}>
-                        <img src="https://www.coolmate.me/images/star-yellow.svg?8f4d13b24f276e8a788250b192548210" />
-                        <img src="https://www.coolmate.me/images/star-yellow.svg?8f4d13b24f276e8a788250b192548210" />
-                        <img src="https://www.coolmate.me/images/star-yellow.svg?8f4d13b24f276e8a788250b192548210" />
-                        <img src="https://www.coolmate.me/images/star-yellow.svg?8f4d13b24f276e8a788250b192548210" />
-                        <img src="https://www.coolmate.me/images/star-yellow.svg?8f4d13b24f276e8a788250b192548210" />
+                        {
+                            [...Array(Math.round(rate) || 0)].map((item, index) => {
+                                return <img key={index} src="https://www.coolmate.me/images/star-yellow.svg?8f4d13b24f276e8a788250b192548210" />
+                            })
+                        }
                     </div>
                     <div className={cx('quantity-reviews')}>
-                        3 đánh giá
+                        {reviews.length} đánh giá
                     </div>
                 </div>
                 <div className={cx('reviews-rightside')}>
                     <div className={cx('reviews__filter')}>
                         <div className={cx('reviews__select')}>
-                            <select style={{ backgroundImage: 'url(' + { FaAngleDown } + ')' }}>
-                                <option value="">Đánh giá</option>
+                            <select name="star" onChange={handleChangeFilterReview} style={{ backgroundImage: 'url(' + { FaAngleDown } + ')' }}>
+                                <option value="all">Đánh giá</option>
                                 <option value="1">1 sao</option>
                                 <option value="2">2 sao</option>
                                 <option value="3">3 sao</option>
@@ -384,16 +526,16 @@ function ProductDetail() {
                             <FaAngleDown className={cx('icon')} />
                         </div>
                         <div className={cx('reviews__select')}>
-                            <select className={cx('reviews-filter-image')}>
-                                <option value="">Ảnh</option>
+                            <select name="isHasImage" onChange={handleChangeFilterReview} className={cx('reviews-filter-image')}>
+                                <option value="all">Ảnh</option>
                                 <option value="true">Có ảnh</option>
                                 <option value="false">Không ảnh</option>
                             </select>
                             <FaAngleDown className={cx('icon')} />
                         </div>
                         <div className={cx('reviews__select')}>
-                            <select >
-                                <option value="">Phản hồi</option>
+                            <select name="isResponsed" onChange={handleChangeFilterReview}>
+                                <option value="all">Phản hồi</option>
                                 <option value="true">Đã phản hồi</option>
                                 <option value="false">Chưa phản hồi</option>
                             </select>
@@ -403,13 +545,14 @@ function ProductDetail() {
 
                     <div className={cx('reviews-listing')}>
                         <div className={cx('product-reviews-listings')}>
-                            <ItemReview />
-                            <ItemReview />
-                            <ItemReview />
-                            <ItemReview />
-                            <ItemReview />
+
+                            {
+                                reviews.map((item, index) => {
+                                    return <ItemReview key={index} item={item} />
+                                })
+                            }
                         </div>
-                        <div className={cx('reviews-pagination')}>
+                        {/* <div className={cx('reviews-pagination')}>
                             <a href="#" className={cx('reviews-pagination__prev')}>
                                 <FaAngleLeft />
                             </a>
@@ -417,7 +560,7 @@ function ProductDetail() {
                             <a href="#" className={cx('reviews-pagination__next')}>
                                 <FaAngleRight />
                             </a>
-                        </div>
+                        </div> */}
                     </div>
                 </div>
 

@@ -200,6 +200,37 @@ const editProductByType = async (req, res) => {
         })
     }
 }
+const getProductsByType = async(req,res) => {
+    try {
+        const {productType, productId} = req.body;
+        const productsByType = await Product.find({
+            productType,
+            _id: { $ne: productId } 
+          }).limit(10).exec();
+        res.status(200).json({
+            message: 'Get products by productType successfully',
+            data: productsByType
+        })
+    } catch (error) {
+        res.status(400).json({
+            message: error.message
+        })
+    }
+}
+const getProductById = async (req,res) => {
+    try {
+        const {id} = req.params;
+        const product = await Product.findById(id).exec();
+        res.status(200).json({
+            message: 'Get product successfully',
+            data: product
+        })
+    } catch (error) {
+        res.status(400).json({
+            message: error.message
+        })
+    }
+}
 
 module.exports = {
     addProduct,
@@ -207,5 +238,7 @@ module.exports = {
     editProduct,
     editProductByType,
     editStatusProduct,
-    searchProduct
+    searchProduct,
+    getProductById,
+    getProductsByType
 }
