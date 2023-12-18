@@ -76,7 +76,7 @@ function ItemCollection({product, handleToCart}) {
                     <div style={{ display: 'flex', gap: '4px', marginTop: '12px', flexWrap: 'wrap' }}>
                         {
                             product?.colors[indexColorActive]?.sizes?.map((item, index) => {
-                                return <span onClick={() => handleToCart(product, item, product?.colors[indexColorActive])} key={index} className={cx('item-size')}>{item.sizeName}</span>
+                                return <span onClick={(e) => {e.stopPropagation();handleToCart(product, item, product?.colors[indexColorActive])}} key={index} className={cx('item-size')}>{item.sizeName}</span>
                             })
                         }
                     </div>

@@ -8,9 +8,12 @@ import 'react-multi-carousel/lib/styles.css';
 import ItemCarousel from "./ItemCarousel";
 import ItemReview from "./ItemReview";
 import baseUrl from "~/utils/baseUrl";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import formatMoney from "~/utils/formatMoney";
+import { useDispatch, useSelector } from "react-redux";
+import { createCartItem, getCartProducts, increaseQuantityCartItem } from "~/redux/api/userRequest";
+import ProductItem from "../Home/ProductItem";
 const cx = classNames.bind(styles);
 function ProductDetail() {
     const { id } = useParams();
@@ -58,6 +61,10 @@ function ProductDetail() {
     const [enableNotiSize, setEnableNotiSize] = useState(false);
     const [enableNotiSize2, setEnableNotiSize2] = useState(false);
     const [outOfStock, setOutOfStock] = useState(false)
+    const [selected, setSelected] = useState(null)
+    const [popupProductCart, setPopupProductCart] = useState(false)
+
+
     const [filterReview, setFilterReview] = useState({
         star: 'all',
         isHasImage: 'all',
@@ -82,6 +89,16 @@ function ProductDetail() {
             return prev - 1;
         })
     }
+    const setCloseTimer = () => {
+        let t = 3
+        const a = setInterval(() => {
+            if(t-- === 0){
+                clearInterval(a)
+                setPopupProductCart(false)
+                setSelected(null)
+            }
+        }, 1000)
+    }
     const handleClickBtnAddCart = () => {
         if (indexSizeActive === -1) {
             setEnableNotiSize(true);
@@ -100,7 +117,12 @@ function ProductDetail() {
             quantity: quantityAddCart
         }
         console.log(cartItem)
-        // request api
+        const existItem = cartProducts.find((cartIT) => cartIT.productId === cartItem.productId && cartIT.size === cartItem.size && cartIT.color === cartItem.color)
+        existItem ? increaseQuantityCartItem(currentUser, existItem, dispatch) : createCartItem(currentUser, cartItem, dispatch)
+        
+        setSelected({...cartItem, product: product})
+        setPopupProductCart(true)
+        setCloseTimer()
     }
     const product1 = {
         productName: 'Áo khoác thể thao Pro Active',
@@ -192,10 +214,13 @@ function ProductDetail() {
             console.log(error.message)
         }
     }
+    let cartProducts = useSelector(state => state.user?.cart?.cartProducts)
+    let currentUser = useSelector((state) => state.auth.login.currentUser)
+    const dispatch = useDispatch();
     useEffect(() => {
         getProductById()
         getReviewsByProductId()
-
+        currentUser && getCartProducts(currentUser, dispatch)
     }, [])
     useEffect(() => {
         const totalRate = reviews.reduce((acc, cur) => {
@@ -234,9 +259,18 @@ function ProductDetail() {
             else return prev + 1
         })
     }
+    const navigate = useNavigate()
     return (
         <div className={cx('wrapper')}>
-
+            <div className={cx(popupProductCart ? 'bayra' : 'bayvao')} style={{position: 'fixed', zIndex: 1000, top: '16px', right: '16px', borderRadius: '16px', width: '350px', maxHeight: '350px', backgroundColor: 'white', padding: '15px', fontSize: '16px', color: 'black', fontWeight: '600' }}>
+                <div>Đã thêm vào giỏ hàng</div>
+                {selected && <ProductItem props={selected}/>}
+                <div>
+                    <div className={cx('account-info__btn')} onClick={() => navigate("/cart")}>
+                        <span className={cx('account-info__btn-text')}>Xem giỏ hàng</span>
+                    </div>
+                </div>
+            </div>  
             <div className={cx('header')}>
                 <span className={cx('span1')} >Trang chủ</span>
                 <span className={cx('span2')} > / {product.productType}</span>

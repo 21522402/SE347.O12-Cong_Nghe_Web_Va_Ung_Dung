@@ -543,7 +543,7 @@ const increaseQuantityCartItem = async(req, res) => {
             })
         }
 
-        cartIts = cartIts.map(item => item.id === req?.params?.cartItemId ? {...item, quantity: ++item.quantity} : {...item})
+        cartIts = cartIts.map(item => item.id === req?.params?.cartItemId ? {...item, quantity: item.quantity + req?.boby?.quantity} : {...item})
 
         await User.findByIdAndUpdate(req?.params?.id, {cart: cartIts}, {new: true})
 
@@ -552,6 +552,7 @@ const increaseQuantityCartItem = async(req, res) => {
         return errorTemplate(res, error.message)
     }
 }
+
 const decreaseQuantityCartItem = async(req, res) => {
     try {
         const user = await User.findById(req?.params?.id)

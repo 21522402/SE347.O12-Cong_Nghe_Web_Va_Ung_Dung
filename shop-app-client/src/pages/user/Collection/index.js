@@ -3,7 +3,7 @@ import classNames from "classnames/bind";
 import { useEffect, useState } from "react";
 import "react-multi-carousel/lib/styles.css";
 import { useDispatch, useSelector } from 'react-redux';
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import {
     filterListProductsState,
     setListProducts,
@@ -12,6 +12,8 @@ import {
 import baseUrl from '~/utils/baseUrl';
 import styles from './Collection.module.scss';
 import ItemCollection from "./ItemCollection";
+import { createCartItem, getCartProducts, increaseQuantityCartItem } from '~/redux/api/userRequest';
+import ProductItem from '../Home/ProductItem';
 
 const cx = classNames.bind(styles)
 function Collection() {
@@ -21,6 +23,8 @@ function Collection() {
     const listProducts =  useSelector(state => state.product.listProducts)
     const [currentProducts, setCurrentProducts] =  useState([])
     const [productFilter, setProductFilter] =  useState([])
+    let cartProducts = useSelector(state => state.user?.cart?.cartProducts)
+    let currentUser = useSelector((state) => state.auth.login.currentUser)
     const [category, setCategory] = useState(() => {
         return {
             category: 'Áo',
@@ -322,12 +326,25 @@ function Collection() {
     }
     //DUY
     const dispatch = useDispatch();
+    const navigate = useNavigate();
+    const [selected, setSelected] = useState(null)
     const [filter,setFilter] = useState({
         productType: '',
         productCategory: '',
         status: '',
         searchText: ''
     })
+    const setCloseTimer = () => {
+        let t = 3
+        const a = setInterval(() => {
+            if(t-- === 0){
+                clearInterval(a)
+                setPopupProductCart(false)
+                setSelected(null)
+            }
+        }, 1000)
+    }
+    const [popupProductCart, setPopupProductCart] = useState(false)
     const getAllProducts = async () => {
         try {
             const res = await axios.get(`${baseUrl}/api/products/getAllProducts`);
@@ -359,8 +376,40 @@ function Collection() {
         })
     }, [conditions])
 
+    useEffect(() => {
+        currentUser && getCartProducts(currentUser, dispatch)
+      },[])
+
+    const handleItemToCart = (product, b, c) => {
+
+        const cartItem = {
+            product: product._id,
+            productName: product.productName,
+            productPrice: product.exportPrice * (1 - product.discountPerc/100),
+            size: b.sizeName,
+            color: c.colorName,
+            quantity: 1
+        }
+    
+        const existItem = cartProducts.find((cartIT) => cartIT.productId === cartItem.productId && cartIT.size === cartItem.size && cartIT.color === cartItem.color)
+        existItem ? increaseQuantityCartItem(currentUser, existItem, dispatch) : createCartItem(currentUser, cartItem, dispatch)
+        
+        setSelected({...cartItem, product: product})
+        setPopupProductCart(true)
+        setCloseTimer()
+    }
+
     return (
         <div className={cx('wrapper')}>
+            <div className={cx(popupProductCart ? 'bayra' : 'bayvao')} style={{position: 'fixed', zIndex: 1000, top: '16px', right: '16px', borderRadius: '16px', width: '350px', maxHeight: '350px', backgroundColor: 'white', padding: '15px', fontSize: '16px', color: 'black', fontWeight: '600' }}>
+                <div>Đã thêm vào giỏ hàng</div>
+                {selected && <ProductItem props={selected}/>}
+                <div>
+                    <div className={cx('account-info__btn')} onClick={() => navigate("/cart")}>
+                        <span className={cx('account-info__btn-text')}>Xem giỏ hàng</span>
+                    </div>
+                </div>
+            </div>  
             <div className={cx('left-side-wrapper')}>
                 <div className={cx('left-side')}>
                     <div className={cx('quantity')}>
@@ -444,7 +493,7 @@ function Collection() {
                 {productFilter?.map((item, index) => {
                 return (
                 <div key={index} style={{ width: "100%"}} >
-                <ItemCollection product={item}/>
+                <ItemCollection product={item} handleToCart={handleItemToCart}/>
                 </div>
                 );
             })}
