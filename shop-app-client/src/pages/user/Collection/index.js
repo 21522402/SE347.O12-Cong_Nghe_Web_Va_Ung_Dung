@@ -17,6 +17,9 @@ import ProductItem from '../Home/ProductItem';
 
 const cx = classNames.bind(styles)
 function Collection() {
+    useEffect(() => {
+        window.scrollTo(0, 0)
+      }, [])
 
     const {id} = useParams()
 
