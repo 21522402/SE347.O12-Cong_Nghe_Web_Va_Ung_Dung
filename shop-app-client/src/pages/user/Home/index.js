@@ -160,20 +160,17 @@ const handleItemToCart = (product, b, c) => {
         quantity: 1
     }
 
+    const existItem = cartProducts.find((cartIT) => cartIT.productId === cartItem.productId && cartIT.size === cartItem.size && cartIT.color === cartItem.color)
+    existItem ? increaseQuantityCartItem(currentUser, existItem, dispatch) : createCartItem(currentUser, cartItem, dispatch)
+    
     setSelected({...cartItem, product: product})
     setPopupProductCart(true)
     setCloseTimer()
-
-    console.log(cartProducts)
-
-
-    // const existItem = cartProducts.find((cartIT) => cartIT.productId === cartItem.productId && cartIT.size === cartItem.size && cartIT.color === cartItem.color)
-    // existItem ? increaseQuantityCartItem(currentUser, existItem, dispatch) : createCartItem(currentUser, cartItem, dispatch)
 }
 const [popupProductCart, setPopupProductCart] = useState(false)
   return (
     <div>
-        <div className={cx(popupProductCart ? 'bayra' : 'bayvao')} style={{position: 'fixed', zIndex: 1000, top: '16px', right: '16px', borderRadius: '16px', width: '400px', maxHeight: '350px', backgroundColor: 'white', padding: '15px', fontSize: '16px', color: 'black', fontWeight: '600' }}>
+        <div className={cx(popupProductCart ? 'bayra' : 'bayvao')} style={{position: 'fixed', zIndex: 1000, top: '16px', right: '16px', borderRadius: '16px', width: '350px', maxHeight: '350px', backgroundColor: 'white', padding: '15px', fontSize: '16px', color: 'black', fontWeight: '600' }}>
             <div>Đã thêm vào giỏ hàng</div>
             {selected && <ProductItem props={selected}/>}
             <div>
@@ -182,7 +179,6 @@ const [popupProductCart, setPopupProductCart] = useState(false)
                 </div>
             </div>
         </div>  
-        <button onClick={() => setPopupProductCart(!popupProductCart)}>clickme</button>
       {/* Slider */}
 
       <div>

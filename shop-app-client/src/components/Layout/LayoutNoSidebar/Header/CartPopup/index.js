@@ -8,20 +8,14 @@ import ProductItem from './ProductItem';
 import { Link } from 'react-router-dom';
 
 const cx = classNames.bind(styles);
-function CartPopup({ onMouseLeave}) {
-    let cartProducts = useSelector(state => state.user?.cart?.cartProducts)
-    let currentUser = useSelector((state) => state.auth.login.currentUser)
-    const dispatch = useDispatch()
-    useEffect(() => {
-        getCartProducts(currentUser, dispatch)
-    }, []) 
+function CartPopup({ onMouseLeave, cartProducts}) {
     let i = 50
     return ( <>
         <div onMouseLeave={() => onMouseLeave()} className={cx('wrapper')}>
             <div className={cx('inner')}>
                 <div style={{display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between'}}>
                     <div className={cx('title')}>{cartProducts? cartProducts.length : 0} Sản phẩm</div>
-                    <Link to={'/cart'} onClick={() => onMouseLeave()} style={{cursor: 'pointer', fontSize: '12px', color: '#2f5acf'}}>Xem tất cả</Link>
+                    <Link to={'/cart'} onClick={() => onMouseLeave()} style={{cursor: 'pointer', fontSize: '12px', color: '#2f5acf', textDecoration: 'none', fontWeight: '600'}}>Xem tất cả</Link>
                 </div>
                 <div className={cx('list-product-filter')}>
                     {cartProducts.map((item, index) => 

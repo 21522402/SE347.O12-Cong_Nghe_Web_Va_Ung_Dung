@@ -111,7 +111,7 @@ export default function ProductItem({props}) {
                         </div>
                         <div>x{props.quantity}</div>
                     </div>
-                    <div style={{display: 'flex', flexDirection: 'row', alignItems: 'center', gap: '5px', cursor: 'pointer', alignSelf: 'flex-start'}} onClick={() => deleteCartItem(currentUser, props, dispatch)}>
+                    <div style={{display: 'flex', flexDirection: 'row', alignItems: 'center', gap: '5px', cursor: 'pointer', alignSelf: 'flex-start'}} onClick={(e) => {e.stopPropagation() ;deleteCartItem(currentUser, props, dispatch)}}>
                         <GoTrash />
                         <div>Xóa</div>
                     </div>
