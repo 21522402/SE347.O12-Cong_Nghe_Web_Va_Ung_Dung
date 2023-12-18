@@ -15,10 +15,20 @@ const slice = createSlice({
             console.log('payload',action.payload)
             state.listOrders = [...action.payload].map((item,index) => {
                 const totalMoneyGoods = item.orderItem.reduce((acc,cur) => {
-                    return acc + cur.productId.exportPrice*(1-cur.discountPerc)
+        
+                        // if (cur.discountPerc) {
+                        //     return acc + cur.productId.exportPrice*(1-cur.productId.discountPerc/100)
+                        // }
+                        // else {
+                        //     return acc + cur.productId.exportPrice
+                        // }
+                        return acc + cur.productId.exportPrice*(1-cur.productId.discountPerc/100)
+                       
+            
+                    
                 },0)
                 const shipPrice = 0
-                const finalPrice = totalMoneyGoods - shipPrice - item.voucher.voucherPrice
+                const finalPrice = totalMoneyGoods - shipPrice - (item.voucher? item.voucher.voucherPrice : 0)
                 const orderDate = convertDate(item.orderDate);
                 return {...item,
                     totalMoneyGoods,
