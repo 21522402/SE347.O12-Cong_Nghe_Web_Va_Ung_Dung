@@ -31,20 +31,20 @@ function OrderItem({ orderItem, index }) {
                     <span className={cx('quantity')}>
                         Số lượng: <strong style={{ marginLeft: '4px' }}>{orderItem.quantity}</strong>
                     </span>
+
                     {
-                        orderItem.productId?.discountPerc &&
-                        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end' }} >
-                            <span className={cx('price', 'enable')}>
-                                {orderItem?.productId.exportPrice * (1 - orderItem?.productId.discountPerc/100)}</span>
-                            <span className={cx('price', 'price-serapate')}>{orderItem?.productId.exportPrice}</span>
-                        </div>
+                        orderItem.productId.discountPerc !== 0 ?
+                            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end' }} >
+                                <span className={cx('price', 'enable')}>
+                                    {orderItem?.productId.exportPrice * (1 - orderItem?.productId.discountPerc / 100)}</span>
+                                <span className={cx('price', 'price-serapate')}>{orderItem?.productId.exportPrice}</span>
+                            </div>
+                            :
+                            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end' }} >
+                                <span className={cx('price', 'enable')}>{orderItem?.productId.exportPrice}</span>
+                            </div>
                     }
-                    {
-                        !orderItem.productId?.discountPerc &&
-                        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end' }} >
-                            <span className={cx('price', 'enable')}>{orderItem?.productId.exportPrice}</span>
-                        </div>
-                    }
+
                 </div>
             </div>
         </div>
