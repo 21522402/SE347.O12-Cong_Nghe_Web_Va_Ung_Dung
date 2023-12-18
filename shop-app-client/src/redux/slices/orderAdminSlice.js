@@ -12,6 +12,7 @@ const slice = createSlice({
     initialState,
     reducers: {
         setListOrders: (state,action) => {
+            console.log('payload',action.payload)
             state.listOrders = [...action.payload].map((item,index) => {
                 const totalMoneyGoods = item.orderItem.reduce((acc,cur) => {
                     return acc + cur.productId.exportPrice*(1-cur.discountPerc)
@@ -27,6 +28,8 @@ const slice = createSlice({
                     
                 }
             })
+            console.log('state',state.listOrders)
+
             state.listOrdersOrigin = [...state.listOrders]
         },
         handleChangeOrderStatus: (state,action) => {
