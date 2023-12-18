@@ -14,3 +14,5 @@ export { default as zaloPayIcon } from './zalopay.svg'
 export { default as qaCodeIcon } from './qr-code.png'
 export { default as VoucherIcon2 } from './discount-voucher-wallet.svg'
 export { default as SuccessIcon } from './success.png'
+export { default as UnauthoziedIcon } from './unauthozied.png'
+

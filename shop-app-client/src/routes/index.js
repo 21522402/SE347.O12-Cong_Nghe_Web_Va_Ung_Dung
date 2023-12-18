@@ -26,9 +26,23 @@ import Feedbacks from "~/pages/admin/Feedbacks"
 import FeedbackDetail from "~/pages/admin/Feedbacks/FeedbackDetail"
 import Profile from "~/pages/user/Profile"
 import SuccessPayment from "~/pages/user/Payment/SuccessPayment"
+import { RequestLogin, Unauthozied } from "~/pages/auth"
 export const publicRoutes = [
     // user: => path: '/user/[pageName]'
     {path:'/user' , component: Home, layout:LayoutNoSidebar},
+    
+    {path:'/cart' , component: Payment, layout: LayoutNoSidebar},
+    {path:'/product/:id' , component: ProductDetail, layout:LayoutNoSidebar},
+    {path:'/collection/:id' , component: Collection, layout:LayoutNoSidebar},
+    {path:'/successPayment' , component: SuccessPayment, layout:LayoutNoSidebar},
+    {path:'/unauthozied' , component: Unauthozied, layout:LayoutNoSidebar},
+    {path:'/request-login' , component: RequestLogin, layout:LayoutNoSidebar},
+
+    // admin: => path: '/admin/[pageName]'
+    
+
+]
+export const buyerRoutes = [
     {path:'/user-profile' , component: Profile, layout:LayoutSidebarUser},
     {path:'/user-profile/info' , component: Info, layout:LayoutSidebarUser},
     {path:'/user-profile/orders' , component: OrdersUser, layout:LayoutSidebarUser},
@@ -36,12 +50,8 @@ export const publicRoutes = [
     {path:'/user-profile/addresses' , component: Addresses, layout:LayoutSidebarUser},
     {path:'/user-profile/reviews' , component: ReviewsUser, layout:LayoutSidebarUser},
     {path:'/user-profile/policies' , component: Policies, layout:LayoutSidebarUser},
-    {path:'/cart' , component: Payment, layout: LayoutNoSidebar},
-    {path:'/product/:id' , component: ProductDetail, layout:LayoutNoSidebar},
-    {path:'/collection/:id' , component: Collection, layout:LayoutNoSidebar},
-    {path:'/successPayment' , component: SuccessPayment, layout:LayoutNoSidebar},
-
-    // admin: => path: '/admin/[pageName]'
+]
+export const adminRoutes = [
     {path:'/admin/customer-manage' , component: CustomerManage, layout:LayoutSidebar},
     {path:'/admin/vouchers-manage' , component: VouchersAdmin, layout:LayoutSidebar},
     {path:'/admin/reviews' , component: Reviews, layout:LayoutSidebar},
@@ -54,8 +64,4 @@ export const publicRoutes = [
     {path:'/admin/orders' , component: Orders, layout:LayoutSidebar},
     {path:'/admin/history/bill' , component: Bill, layout:LayoutSidebar},
     {path:'/admin/history/import' , component: RentalImport, layout:LayoutSidebar}
-
-]
-export const privateRoutes = [
-
 ]

@@ -166,7 +166,7 @@ function Modal({ setModal, typeModal, getAllProducts, getAllProductCaterogies, f
                 ...product,
                 importPrice: Number(product.importPrice),
                 exportPrice: Number(product.exportPrice),
-                discountPerc: Number(product.discountPerc)/100,
+                discountPerc: Number(product.discountPerc),
                 productName: product.productName.trim()
             }
             if (typeModal === 'add') {

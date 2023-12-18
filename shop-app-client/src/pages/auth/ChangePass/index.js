@@ -15,7 +15,7 @@ function ChangePass({navLogin}) {
                    
                     <form style={{width:'100%', marginTop:'16px', display:'flex', flexDirection:'column'}}>
                         <input placeholder='Email của bạn' type='email' name='username' autoFocus='autoFocus' style={{border:'1px solid #ccc',height:'48px', borderRadius:'100vmax', width:'100%',boxSizing:'border-box', padding:'5px 20px',transition: 'all .2s', marginBottom:'16px'}}/>
-                        <CustomeButton title={'Kiểm tra'} type={'submit'} containStyles={{backgroundColor:'black', color:'white', width:'100%', height:'48px', borderRadius:'100vmax'}} bgHover={'#ccc'}/>
+                        <CustomeButton title={'Kiểm tra'} type={'submit'} containStyles={{backgroundColor:'black',alignItems:'center', display:'flex', justifyContent:'center', color:'white', width:'100%', height:'48px', borderRadius:'100vmax'}} bgHover={'#ccc'}/>
                     </form>
                     <div style={{display:'flex', justifyContent:'space-between',marginTop:'4px' }}>
                         <CustomeButton onClick={() => navLogin("login")} title={'Đăng nhập'} containStyles={{backgroundColor:'white', color:'#2f5acf', width:'fit-content', fontSize:'14px'}}/>

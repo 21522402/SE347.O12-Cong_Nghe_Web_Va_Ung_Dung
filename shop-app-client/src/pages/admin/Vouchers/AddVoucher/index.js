@@ -8,9 +8,12 @@ import { dfImgVoucher } from '~/assets/images';
 import { useState } from 'react';
 import axios from 'axios';
 import baseUrl from '~/utils/baseUrl';
+import { ToastContainer, toast } from 'react-toastify';
 const cx = classNames.bind(styles);
 function AddVoucher({closeFunc, setVoucherList}) {
     const [isPc, setIsPc] = useState(false)
+    const notify = (type, message) => toast(message, {type: type});
+
     const [file, setFile] = useState(null)
     const [img, setImage] = useState(null)
     const [err, setErr] = useState(null)
@@ -54,6 +57,7 @@ function AddVoucher({closeFunc, setVoucherList}) {
             setVoucherList(prev=>[prev, {...data.result}])
             
             closeFunc(false)
+            notify("success", 'Thêm voucher mới thành công!')
 
         } catch (error) {
             setErr(error.response.data.error.message)
@@ -79,10 +83,12 @@ function AddVoucher({closeFunc, setVoucherList}) {
 
     return (
         <div className={cx('wrapper')} style={{ animation: 'dropTop .3s linear' }}>
-            <div style={{ fontWeight: 500, fontSize: '20px', marginBottom: '20px', backgroundColor: 'black', color: 'white', padding: '8px', width: '20%', borderRadius: '4px' }}>Thêm Voucher mới</div>
+            <ToastContainer/>
+
+            <div style={{ fontWeight: 500, fontSize: '18px', marginBottom: '20px', backgroundColor: 'black', color: 'white', padding: '8px', width: '20%', borderRadius: '4px' }}>Thêm Voucher mới</div>
             <div style={{ display: 'flex', alignItems: 'end' }}>
                 <div style={{ paddingLeft: '4rem', marginBottom: '8px' }}>
-                    <img src={img ?? dfImgVoucher} alt='avtVoucher' style={{ width: '300px', height: '200px' }} />
+                    <img src={img ?? dfImgVoucher} alt='avtVoucher' style={{ width: '250px', height: '140px' }} />
                 </div>
                 <input type='file' id='fileImg' hidden title='Choose Image' accept='image/*' onChange={onImageChange} />
                 <label htmlFor='fileImg' style={{ border: '1px dashed #ccc', marginBottom: '8px', borderRadius: '10px', height: '30px', display: 'flex', justifyContent: 'center', alignItems: 'end', padding: '4px', marginLeft: '12px', cursor: 'pointer', justifySelf: 'end' }}>Choose Image</label>

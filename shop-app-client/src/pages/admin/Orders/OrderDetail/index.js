@@ -142,7 +142,7 @@ function OrderDetail({ index, getAllOrders }) {
                         </div>
                         <div className={cx('form-group', 'single')} style={{ width: '30%' }} >
                             <label>Voucher: </label>
-                            <div className={cx('info-value')}>{order.voucher.voucherPrice + ' VNĐ'}</div>
+                            <div className={cx('info-value')}>{order.voucher?.voucherPrice || 0 + ' VNĐ'}</div>
                         </div>
 
                     </div>

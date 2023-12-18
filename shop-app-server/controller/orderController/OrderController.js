@@ -47,12 +47,16 @@ const orderController = {
     // admin
     adminGetAllOrder: async (req, res) => {
         try {
-            const orders = await Order.find({}).populate({
-                path: 'orderItem',
-                populate: {
-                    path: 'productId'
+            const orders = await Order.find({}).populate([
+                {
+                    path: 'orderItem',
+                    model: 'OrderItem',
+                    populate: {
+                        path: 'productId',
+                        model: 'Product'
+                    }
                 }
-            }).exec();
+            ]).exec();
             res.status(200).json({
                 message: "Lấy tất cả orders thành công!",
                 data: orders
@@ -60,6 +64,8 @@ const orderController = {
         } catch (error) {
             return errorTemplate(res, error.message)
         }
+      
+        
     },
     adminEditStatus: async (req, res) => {
         try {
