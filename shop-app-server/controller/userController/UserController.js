@@ -453,7 +453,7 @@ const updateImagesReview = async (id, data) => {
         await Review.findByIdAndUpdate(id, {imagesRv: images}, {new: true})
     }
     catch(err){
-
+        
     }
 }
 

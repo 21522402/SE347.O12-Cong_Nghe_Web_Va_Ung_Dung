@@ -14,6 +14,7 @@ import { BiAlignLeft } from "react-icons/bi";
 import { FaUserCircle } from "react-icons/fa";
 import CartPopup from "./CartPopup";
 import { getCartProducts } from "~/redux/api/userRequest";
+import { toast } from "react-toastify";
 
 const cx = classNames.bind(styles);
 
@@ -311,7 +312,7 @@ function Header() {
             ) : null}
           </div>
         </label>
-        <Link to="/cart">
+        <div onClick={() => {currentUser ? navigate("/cart") :toast("Vui lòng đăng nhập để xem giỏ hàng", {type: "warning"})}}>
           <div
             style={{ cursor: "pointer" }}
             onMouseMove={() => {
@@ -319,11 +320,11 @@ function Header() {
             }}
           >
             <IoBagHandle style={{ color: "#fff", fontSize: "24px" }} />
-            {showCartPopUp && (
+            {currentUser && showCartPopUp && (
               <CartPopup onMouseLeave={() => setShowCartPopup(false)} />
             )}
           </div>
-        </Link>
+        </div>
       </div>
     </div>
   );

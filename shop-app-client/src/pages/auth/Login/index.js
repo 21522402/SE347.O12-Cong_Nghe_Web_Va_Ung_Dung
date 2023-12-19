@@ -24,9 +24,25 @@ function Login({navSignup, navForgot}) {
 
     const handleSubmit = (e) => {
         e.preventDefault()
+        if(values.phoneNumber.trim() === ''){
+            notify("warning", "Vui lòng nhập số điện thoại!")
+            return
+        }
+        if(values.password.trim() === ''){
+            notify("warning", "Vui lòng nhập mật khẩu!")
+            return
+        }
         try{
-            loginUser(values, dispatch, navigate)
-            //notify("success", "Chào mừng bạn quay trở lại!")
+
+            loginUser(values, dispatch, navigate, (res) => {
+                if(res?.response?.status === 404){
+                    notify("error", res.response.data)
+                }
+                else{
+                    notify("success", "Chào mừng bạn quay trở lại!")
+                    navigate("/user-profile/info")
+                }
+            })
 
         }
         catch (err){
