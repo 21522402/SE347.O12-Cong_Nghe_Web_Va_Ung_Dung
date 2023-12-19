@@ -98,7 +98,7 @@ function Bill() {
                         Hóa đơn
                     </div>
                     <div className={cx('tabpanel-item')}>
-                        <Link to="/admin/history/import">Nhập hàng</Link>
+                        <Link to="/admin/history/import" style={{textDecoration: 'none', color: '#000'}}>Nhập hàng</Link>
                     </div>
                 </div>
                 <div className={cx('content-total')}>
