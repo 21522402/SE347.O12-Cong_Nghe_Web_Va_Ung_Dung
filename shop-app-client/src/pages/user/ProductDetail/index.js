@@ -223,27 +223,41 @@ function ProductDetail() {
         currentUser && getCartProducts(currentUser, dispatch)
     }, [])
     useEffect(() => {
-        const totalRate = reviews.reduce((acc, cur) => {
+        const totalRate = reviewsOrigin.reduce((acc, cur) => {
             return acc + cur.star
         }, 0)
-        const rate = (totalRate / reviews.length)
+        const rate = (totalRate / reviewsOrigin.length)
         setRate(rate)
-    }, [reviews])
+    }, [reviewsOrigin])
     useEffect(() => {
         descriptionElement.current.innerHTML = product.description || '';
         getProductsByProductType()
     }, [product])
     const handleChangeFilterReview = (e) => {
         const name = e.target.name;
-        const value = e.target.value;
+        let value = e.target.value;
+        if (name === 'isHasImage') {
+            if (value!=='all') {
+                value = value==='true' ? true : false
+            }
+        }
+        if (name === 'isResponsed') {
+            if (value!=='all') {
+                value = value==='true' ? true : false
+            }
+        }
         setFilterReview(prev => ({ ...prev, [name]: value }))
     }
     useEffect(() => {
         console.log(filterReview)
         let nextStateReviews = [...reviewsOrigin];
+        console.log('origin',reviewsOrigin)
         if (filterReview.star !== 'all') nextStateReviews = nextStateReviews.filter(item => item.star === Number(filterReview.star))
-        if (filterReview.isHasImage !== 'all') nextStateReviews = nextStateReviews.filter(item => item.imagesRv && item.imagesRv.length > 0)
-        if (filterReview.isResponsed !== 'all') nextStateReviews = nextStateReviews.filter(item => item.isResponsed === true)
+        if (filterReview.isHasImage !== 'all') {
+            if (filterReview.isHasImage) nextStateReviews = nextStateReviews.filter(item => item.imagesRv && item.imagesRv.length > 0)
+            else nextStateReviews = nextStateReviews.filter(item =>  !item.imagesRv || item.imagesRv.length === 0)
+        }
+        if (filterReview.isResponsed !== 'all') nextStateReviews = nextStateReviews.filter(item => item.isResponsed === filterReview.isResponsed)
         setReviews([...nextStateReviews])
     }, [filterReview])
     const hanleClickPlusQuantity = () => {
@@ -562,16 +576,16 @@ function ProductDetail() {
                         <div className={cx('reviews__select')}>
                             <select name="isHasImage" onChange={handleChangeFilterReview} className={cx('reviews-filter-image')}>
                                 <option value="all">Ảnh</option>
-                                <option value="true">Có ảnh</option>
-                                <option value="false">Không ảnh</option>
+                                <option value={'true'}>Có ảnh</option>
+                                <option value={'false'}>Không ảnh</option>
                             </select>
                             <FaAngleDown className={cx('icon')} />
                         </div>
                         <div className={cx('reviews__select')}>
                             <select name="isResponsed" onChange={handleChangeFilterReview}>
                                 <option value="all">Phản hồi</option>
-                                <option value="true">Đã phản hồi</option>
-                                <option value="false">Chưa phản hồi</option>
+                                <option value={'true'}>Đã phản hồi</option>
+                                <option value={'false'}>Chưa phản hồi</option>
                             </select>
                             <FaAngleDown className={cx('icon')} />
                         </div>
