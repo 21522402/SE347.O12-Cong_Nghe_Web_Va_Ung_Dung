@@ -1,7 +1,7 @@
 import { Link, useNavigate } from "react-router-dom";
 import styles from "./Header.module.scss";
 import classNames from "classnames/bind";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { IoSearch, IoBagHandle, IoClose } from "react-icons/io5";
 import { IoMdClose } from "react-icons/io";
 import DetailPopup from "./DetailPopup";
@@ -150,12 +150,16 @@ function Header() {
     setIndexCategoryActive(index);
     setShowDetailPopup(true);
   };
+  const dispatch = useDispatch()
 
   const handleNav = (e) => {
     if (e === "login") setPopup("login");
     else if (e === "signup") setPopup("signup");
     else setPopup("forgot");
   };
+  useEffect(() => {
+    getCartProducts(currentUser, dispatch)
+}, []) 
   return (
     <div className={cx("wrapper")}>
       <Modal visible={login} setModal={setLogin}>
@@ -321,7 +325,7 @@ function Header() {
           >
             <IoBagHandle style={{ color: "#fff", fontSize: "24px" }} />
             {currentUser && showCartPopUp && (
-              <CartPopup onMouseLeave={() => setShowCartPopup(false)} />
+              <CartPopup onMouseLeave={() => setShowCartPopup(false)} cartProducts={cartProducts}/>
             )}
           </div>
         </div>

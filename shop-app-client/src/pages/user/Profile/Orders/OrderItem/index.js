@@ -13,7 +13,22 @@ function OrderItem({ props }) {
     let [detailMB, setDetailMB] = useState(false)
 
     function calculateTotal(items){
-        return items.reduce((total, item) => total + (item.price * item.quantity), 0);
+            return items.reduce((total, item) => total + (item.price * item.quantity), 0)
+    }
+
+    const totalMoney = (i) => {
+        var total = 0;
+        i?.orderItem.forEach((it) => {
+            total += it.price * it.quantity 
+        })
+        if(i?.voucher){
+            if (i?.voucher?.isPercent) {
+                return total * (1 - i?.voucher?.voucherPrice/100)
+            }
+            else {
+                return total - i?.voucher?.voucherPrice
+            }
+        }else{ return total}
     }
     return (<>
         <div className={cx('container')}>
@@ -22,7 +37,7 @@ function OrderItem({ props }) {
                     <span className={cx('title')}>Ngày đặt:</span> <br></br>{(new Date(props.orderDate)).getDate() + '/ ' + ((new Date(props.orderDate)).getMonth() + 1) + '/ ' + (new Date(props.orderDate)).getFullYear()}
                 </div>
                 <div>
-                    <span className={cx('title')}>Tổng tiền:</span> <br></br>{new Intl.NumberFormat('vi-VN', {style: 'currency', currency: 'VND'}).format(calculateTotal(props.orderItem))}
+                    <span className={cx('title')}>Tổng tiền:</span> <br></br>{new Intl.NumberFormat('vi-VN', {style: 'currency', currency: 'VND'}).format(totalMoney(props))}
                 </div>
                 <div>
                     <span className={cx('title')}>Trạng thái:</span> <br></br><span style={
@@ -68,9 +83,9 @@ function OrderItem({ props }) {
                                 <div className={cx('info-value')}>{new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(calculateTotal(props.orderItem))}</div>
                             </div>
                             <div className={cx('form-group')}>
-                                <label>Phí ship:
+                                <label>Giá giảm:
                                 </label>
-                                <div className={cx('info-value')}>0</div>
+                                <div className={cx('info-value')}>{props?.voucher? props?.voucher?.isPercent ? props?.voucher?.voucherPrice + "%" : (new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format( props?.voucher?.voucherPrice)) : 0}</div>
                             </div>
 
                         </div>
@@ -79,7 +94,7 @@ function OrderItem({ props }) {
                     <div style={{ width: '60%' }}>
                         <div className={cx('form-group', 'single')} style={{ width: 'calc(100% + 48px)' }}>
                             <label>Tổng tiền: </label>
-                            <div className={cx('info-value')}>{new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(calculateTotal(props.orderItem))}</div>
+                            <div className={cx('info-value')}>{new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(totalMoney(props))}</div>
                         </div>
                     </div>
                 </div>
