@@ -13,6 +13,9 @@ function OrderItem({props}) {
         <div className={cx('container')}>
             <div className={cx('header')}>
                 <div>
+                    <span className={cx('title')}>Đơn hàng:</span> <br></br>#{props?._id?.substring(12)}
+                </div>
+                <div>
                     <span className={cx('title')}>Ngày đặt hàng:</span> <br></br>{(new Date(props.orderDate)).getDate() + '/ ' + ((new Date(props.orderDate)).getMonth() + 1) +'/ ' + (new Date(props.orderDate)).getFullYear()}
                 </div>
                 <div>
@@ -21,7 +24,7 @@ function OrderItem({props}) {
                 <div>
                     <span className={cx('title')}>Trạng thái:</span> <br></br><span style={{color: '#ED232F'}}>{props.status}</span>
                 </div>
-                <div onClick={() => setDetail(!detail)} style={{width: '106px'}}><span className={cx('title')} style={{color: '#4bc7bf', cursor: 'pointer'}}>{detail ? 'Less detail' : 'More detail'}</span></div>
+                {/* <div onClick={() => setDetail(!detail)} style={{width: '106px'}}><span className={cx('title')} style={{color: '#4bc7bf', cursor: 'pointer'}}>{detail ? 'Less detail' : 'More detail'}</span></div> */}
             </div>
             <div className={cx('header-responsive')}>
                 <div>

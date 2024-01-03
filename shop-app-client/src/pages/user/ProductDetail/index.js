@@ -14,6 +14,7 @@ import formatMoney from "~/utils/formatMoney";
 import { useDispatch, useSelector } from "react-redux";
 import { createCartItem, getCartProducts, increaseQuantityCartItem } from "~/redux/api/userRequest";
 import ProductItem from "../Home/ProductItem";
+import { ToastContainer, toast } from 'react-toastify';
 const cx = classNames.bind(styles);
 function ProductDetail() {
     const { id } = useParams();
@@ -108,6 +109,15 @@ function ProductDetail() {
             setOutOfStock(true)
             return
         }
+
+        if(currentUser){
+
+        }
+        else{
+            notify("warning", "Vui lòng đăng nhập để thêm sản phẩm này vào giỏ hàng")
+            return
+        } 
+
         const cartItem = {
             product: product._id,
             productName: product.productName,
@@ -274,8 +284,12 @@ function ProductDetail() {
         })
     }
     const navigate = useNavigate()
+    const notify = (type, message) => toast(message, { type: type });
+
     return (
         <div className={cx('wrapper')}>
+        <ToastContainer />
+
             <div className={cx(popupProductCart ? 'bayra' : 'bayvao')} style={{position: 'fixed', zIndex: 1000, top: '16px', right: '16px', borderRadius: '16px', width: '350px', maxHeight: '350px', backgroundColor: 'white', padding: '15px', fontSize: '16px', color: 'black', fontWeight: '600' }}>
                 <div>Đã thêm vào giỏ hàng</div>
                 {selected && <ProductItem props={selected}/>}

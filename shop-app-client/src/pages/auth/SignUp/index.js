@@ -27,12 +27,66 @@ function SignUp({navLogin}) {
         setValues({...values, [name]: e.target.value})
     }
 
+    const validateEmail = (email) => {
+        return String(email)
+          .toLowerCase()
+          .match(
+            /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+          );
+      };
+    const validatePhoneNumber = (phone) => {
+        return String(phone)
+          .toLowerCase()
+          .match(
+                /^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/im
+          );
+      };
+
     const handleSubmit = async (e) => {
         e.preventDefault()
+        if(values.fullName.trim() === ''){
+            notify("warning", "Vui lòng nhập họ và tên")
+            return
+        }
+        if(values.phoneNumber.trim() === ''){
+            notify("warning", "Vui lòng nhập số điện thoại")
+            return
+        }
+        if(!validatePhoneNumber(values.phoneNumber)){
+            notify("warning", "Vui lòng đúng định dạng số điện thoại")
+            return
+        }
+        if(values.email.trim() === ''){
+            notify("warning", "Vui lòng nhập email")
+            return
+        }
+
+        if(!validateEmail(values.email)){
+            notify("warning", "Vui lòng nhập đúng định dạng email (Vd: info@gmail.com)")
+            return
+        }
+
+        if(values.password.trim() === ''){
+            notify("warning", "Vui lòng nhập mật khẩu")
+            return
+        }
+        if(values.repassword.trim().toLowerCase() !== values.password.trim().toLowerCase()){
+            notify("warning", "Mật khẩu nhập lại không đúng")
+            return
+        }
+        
         try{
             console.log(values)
-            registerUser(values, dispatch, navigate, navLogin("login"))
-            //notify("success", "Chúc mừng bạn đăng ký thành công!")
+            registerUser(values, dispatch, navigate, (res) => {
+                console.log(res)
+                if(res?.response?.status === 404 || res?.response?.status === 500){
+                    notify("error", res.response.data)
+                }
+                else{
+                    notify("success", "Chúc mừng bạn đăng ký thành công, hãy đăng nhập lại!")
+                    navLogin("login")
+                }
+            })
 
         }
         catch (err){

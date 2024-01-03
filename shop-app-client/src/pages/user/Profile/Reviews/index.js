@@ -6,258 +6,50 @@ import { useEffect } from 'react';
 import { getAllOrderReview } from '~/redux/api/userRequest';
 import { BiArrowBack } from 'react-icons/bi';
 import { Link } from 'react-router-dom';
+import { resetSuccess } from '~/redux/slices/userSlice';
+import { ToastContainer, toast } from 'react-toastify';
 const cx = classNames.bind(styles);
 
 function Reviews() {
-    // const orders = [
-    //     {
-    //         orderId: "#01796773327",
-    //         orderDate: "12:00 16/01/2023",
-    //         address: {
-    //             province: 'Quảng Ngãi',
-    //             district: 'Tư Nghĩa',
-    //             ward: 'Nghĩa Phương',
-    //             detail: 'Gần trung tâm đăng kiểm',
-    //             name: 'Lê Quang Nhân',
-    //             phoneNum: '0868008460'
-    //         },
-    //         orderItem: [
-    //             {
-    //                 orderItemId: "1",
-    //                 productId: "1",
-    //                 productName: 'Shorts thể thao 7" Movement',
-    //                 images: 'https://media.coolmate.me/cdn-cgi/image/width=320,height=362,quality=80/image/August2023/AT220-1.jpg',
-    //                 size: "S",
-    //                 color: "Nâu",
-    //                 quantity: 2,
-    //                 price: 120000,
-    //                 discountPerc: 0.2,
-    //                 review: {
-    //                     reviewId: "5",
-    //                     star: 4,
-    //                     content: "Không lẽ anh nói sản phẩm này như cặt, mặc thoái mái, màu cũng đẹp lắm em.",
-    //                     image: ["https://media.coolmate.me/cdn-cgi/image/width=320,height=362,quality=80/image/August2023/AT220-1.jpg", "https://media.coolmate.me/cdn-cgi/image/width=320,height=362,quality=80/image/August2023/AT220-1.jpg", "https://media.coolmate.me/cdn-cgi/image/width=320,height=362,quality=80/image/August2023/AT220-1.jpg"],
-    //                     reviewDate: "16/01/2023 12:00",
-    //                     response: "Nói chung là thái độ của em rất mất dạy nhưng vì em đã ủng hộ shop nên anh bỏ qua, lần sau ghé shop mua nữa nhé.... Cảm ơn em :3"
-    //                 }
-    //             },
-    //             {
-    //                 orderItemId: "2",
-    //                 productId: "3",
-    //                 productName: 'Shorts thể thao 7" Movement',
-    //                 images: 'https://media.coolmate.me/cdn-cgi/image/width=320,height=362,quality=80/image/August2023/AT220-1.jpg',
-    //                 size: "S",
-    //                 color: "Nâu",
-    //                 quantity: 2,
-    //                 price: 120000,
-    //                 discountPerc: 0.2,
-    //             }
-    //         ],
-    //         voucher: {
-    //             voucherId: "1",
-    //             price: 50000,
-    //             voucherCode: "CN1123",
-    //             expDate: "25/11/2023",
-    //             minPrice: 499000,
-    //             description: "Không có gì",
-    //             startDate: "26/12/2022",
-    //         },
-    //         status: "Đã giao",
-    //     },
-    //     {
-    //         orderId: "#01796773327",
-    //         orderDate: "12:00 16/01/2023",
-    //         address: {
-    //             province: 'Quảng Ngãi',
-    //             district: 'Tư Nghĩa',
-    //             ward: 'Nghĩa Phương',
-    //             detail: 'Gần trung tâm đăng kiểm',
-    //             name: 'Lê Quang Nhân',
-    //             phoneNum: '0868008460'
-    //         },
-    //         orderItem: [
-    //             {
-    //                 orderItemId: "1",
-    //                 productId: "1",
-    //                 productName: 'Shorts thể thao 7" Movement',
-    //                 images: 'https://media.coolmate.me/cdn-cgi/image/width=320,height=362,quality=80/image/August2023/AT220-1.jpg',
-    //                 size: "S",
-    //                 color: "Nâu",
-    //                 quantity: 2,
-    //                 price: 120000,
-    //                 discountPerc: 0.2,
-    //                 review: {
-    //                     reviewId: "1",
-    //                     star: 4,
-    //                     content: "Không lẽ anh nói sản phẩm này như cặt, mặc thoái mái, màu cũng đẹp lắm em.",
-    //                     image: ["https://media.coolmate.me/cdn-cgi/image/width=320,height=362,quality=80/image/August2023/AT220-1.jpg", "https://media.coolmate.me/cdn-cgi/image/width=320,height=362,quality=80/image/August2023/AT220-1.jpg", "https://media.coolmate.me/cdn-cgi/image/width=320,height=362,quality=80/image/August2023/AT220-1.jpg"],
-    //                     reviewDate: "16/01/2023 12:00",
-    //                 }
-    //             },
-    //             {
-    //                 orderItemId: "2",
-    //                 productId: "3",
-    //                 productName: 'Shorts thể thao 7" Movement',
-    //                 images: 'https://media.coolmate.me/cdn-cgi/image/width=320,height=362,quality=80/image/August2023/AT220-1.jpg',
-    //                 size: "S",
-    //                 color: "Nâu",
-    //                 quantity: 2,
-    //                 price: 120000,
-    //                 discountPerc: 0.2,
-    //             },
-    //             {
-    //                 orderItemId: "2",
-    //                 productId: "3",
-    //                 productName: 'Shorts thể thao 7" Movement',
-    //                 images: 'https://media.coolmate.me/cdn-cgi/image/width=320,height=362,quality=80/image/August2023/AT220-1.jpg',
-    //                 size: "S",
-    //                 color: "Nâu",
-    //                 quantity: 2,
-    //                 price: 120000,
-    //                 discountPerc: 0.2,
-    //             },
-    //             {
-    //                 orderItemId: "2",
-    //                 productId: "3",
-    //                 productName: 'Shorts thể thao 7" Movement',
-    //                 images: 'https://media.coolmate.me/cdn-cgi/image/width=320,height=362,quality=80/image/August2023/AT220-1.jpg',
-    //                 size: "S",
-    //                 color: "Nâu",
-    //                 quantity: 2,
-    //                 price: 120000,
-    //                 discountPerc: 0.2,
-    //             }
-    //         ],
-    //         voucher: {
-    //             voucherId: "1",
-    //             price: 50000,
-    //             voucherCode: "CN1123",
-    //             expDate: "25/11/2023",
-    //             minPrice: 499000,
-    //             description: "Không có gì",
-    //             startDate: "26/12/2022",
-    //         },
-    //         status: "Đã giao",
-    //     },
-    //     {
-    //         orderId: "#01796773327",
-    //         orderDate: "12:00 16/01/2023",
-    //         address: {
-    //             province: 'Quảng Ngãi',
-    //             district: 'Tư Nghĩa',
-    //             ward: 'Nghĩa Phương',
-    //             detail: 'Gần trung tâm đăng kiểm',
-    //             name: 'Lê Quang Nhân',
-    //             phoneNum: '0868008460'
-    //         },
-    //         orderItem: [
-    //             {
-    //                 orderItemId: "1",
-    //                 productId: "1",
-    //                 productName: 'Shorts thể thao 7" Movement',
-    //                 images: 'https://media.coolmate.me/cdn-cgi/image/width=320,height=362,quality=80/image/August2023/AT220-1.jpg',
-    //                 size: "S",
-    //                 color: "Nâu",
-    //                 quantity: 2,
-    //                 price: 120000,
-    //                 discountPerc: 0.2,
-    //                 review: {
-    //                     reviewId: "1",
-    //                     star: 4,
-    //                     content: "Không lẽ anh nói sản phẩm này như cặt, mặc thoái mái, màu cũng đẹp lắm em.",
-    //                     image: ["https://media.coolmate.me/cdn-cgi/image/width=320,height=362,quality=80/image/August2023/AT220-1.jpg", "https://media.coolmate.me/cdn-cgi/image/width=320,height=362,quality=80/image/August2023/AT220-1.jpg", "https://media.coolmate.me/cdn-cgi/image/width=320,height=362,quality=80/image/August2023/AT220-1.jpg"],
-    //                     reviewDate: "16/01/2023 12:00",
-    //                 }
-    //             },
-    //             {
-    //                 orderItemId: "2",
-    //                 productId: "3",
-    //                 productName: 'Shorts thể thao 7" Movement',
-    //                 images: 'https://media.coolmate.me/cdn-cgi/image/width=320,height=362,quality=80/image/August2023/AT220-1.jpg',
-    //                 size: "S",
-    //                 color: "Nâu",
-    //                 quantity: 2,
-    //                 price: 120000,
-    //                 discountPerc: 0.2,
-    //                 review: {
-    //                     reviewId: "2",
-    //                     star: 4,
-    //                     content: "Không lẽ anh nói sản phẩm này như cặt, mặc thoái mái, màu cũng đẹp lắm em.",
-    //                     image: ["https://media.coolmate.me/cdn-cgi/image/width=320,height=362,quality=80/image/August2023/AT220-1.jpg", "https://media.coolmate.me/cdn-cgi/image/width=320,height=362,quality=80/image/August2023/AT220-1.jpg", "https://media.coolmate.me/cdn-cgi/image/width=320,height=362,quality=80/image/August2023/AT220-1.jpg"],
-    //                     reviewDate: "16/01/2023 12:00",
-    //                 }
-    //             }
-    //         ],
-    //         voucher: {
-    //             voucherId: "1",
-    //             price: 50000,
-    //             voucherCode: "CN1123",
-    //             expDate: "25/11/2023",
-    //             minPrice: 499000,
-    //             description: "Không có gì",
-    //             startDate: "26/12/2022",
-    //         },
-    //         status: "Đã giao",
-    //     },
-    //     {
-    //         orderId: "#01796773327",
-    //         orderDate: "12:00 16/01/2023",
-    //         address: {
-    //             province: 'Quảng Ngãi',
-    //             district: 'Tư Nghĩa',
-    //             ward: 'Nghĩa Phương',
-    //             detail: 'Gần trung tâm đăng kiểm',
-    //             name: 'Lê Quang Nhân',
-    //             phoneNum: '0868008460'
-    //         },
-    //         orderItem: [
-    //             {
-    //                 orderItemId: "1",
-    //                 productId: "1",
-    //                 productName: 'Shorts thể thao 7" Movement',
-    //                 images: 'https://media.coolmate.me/cdn-cgi/image/width=320,height=362,quality=80/image/August2023/AT220-1.jpg',
-    //                 size: "S",
-    //                 color: "Nâu",
-    //                 quantity: 2,
-    //                 price: 120000,
-    //                 discountPerc: 0.2,
-    //             },
-    //             {
-    //                 orderItemId: "2",
-    //                 productId: "3",
-    //                 productName: 'Shorts thể thao 7" Movement',
-    //                 images: 'https://media.coolmate.me/cdn-cgi/image/width=320,height=362,quality=80/image/August2023/AT220-1.jpg',
-    //                 size: "S",
-    //                 color: "Nâu",
-    //                 quantity: 2,
-    //                 price: 120000,
-    //                 discountPerc: 0.2,
-    //             }
-    //         ],
-    //         voucher: {
-    //             voucherId: "1",
-    //             price: 50000,
-    //             voucherCode: "CN1123",
-    //             expDate: "25/11/2023",
-    //             minPrice: 499000,
-    //             description: "Không có gì",
-    //             startDate: "26/12/2022",
-    //         },
-    //         status: "Đã giao",
-    //     }
-    // ]
 
     const dispatch = useDispatch()
     let currentUser = useSelector((state) => state.auth.login.currentUser)
     let orders = useSelector((state) => state.user.orderReview.orders)
+    let isSuccessCR = useSelector((state) => state.user.orderReview.isSuccessCR)
 
     useEffect(() => {
         getAllOrderReview(currentUser, dispatch)
     }, [])
+    useEffect(() => {
+        if(isSuccessCR){
+            getAllOrderReview(currentUser, dispatch)
+            setTimeout(() => {
+                console.log("đô")
+                getAllOrderReview(currentUser, dispatch)
+            }, 3000)
+            resetSuccess()
+            setTimeout(() => {
+                console.log("đô2")
+                getAllOrderReview(currentUser, dispatch)
+            }, 7000)
+
+            setTimeout(() => {
+                console.log("đô3")
+                getAllOrderReview(currentUser, dispatch)
+            }, 10000)
+
+            setTimeout(() => {
+                console.log("đô4")
+                getAllOrderReview(currentUser, dispatch)
+            }, 20000)
+            resetSuccess()
+        }
+    }, [isSuccessCR])
 
     return (
         <>
             <div className={cx('container')}>
+                <ToastContainer/>
                 <Link to={'/user-profile'} className={cx('account-page__icon')}>
                     <BiArrowBack />
                 </Link>

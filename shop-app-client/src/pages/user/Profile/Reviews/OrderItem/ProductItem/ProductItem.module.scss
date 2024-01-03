@@ -3,7 +3,19 @@
     flex-direction: row;
     align-items: flex-start;
 }
+.animate-spin{
+    animation: spin 1s linear infinite;
+}
 
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
 .container {
     display: flex;
     flex-direction: row;

@@ -5,6 +5,12 @@ let refreshTokens = []
 const authController = {
     registerUser: async (req, res) => {
         try{
+            const userPhone = await User.findOne({ phoneNumber: req?.body?.phoneNumber })
+            
+            if(userPhone){
+                return res.status(404).json("Số điện thoại đã có người sử dụng");
+            }
+
             const salt = bcrypt.genSaltSync(10);
             const hashed = bcrypt.hashSync(req.body.password, salt)
 
@@ -55,10 +61,14 @@ const authController = {
             const user = await User.findOne({ phoneNumber: req?.body?.phoneNumber }).populate('vouchers')
             
             if(!user){
-                return res.status(404).json("User is not exist");
+                return res.status(404).json("Số điện thoại không đúng");
             }
 
             console.log(req.body.password, user.password)
+
+            if(req.body.password.length > 5){
+                return res.status(404).json("Mật khẩu không đúng");
+            }
             
             const validPassword = bcrypt.compare(
                 req.body.password, 
@@ -66,7 +76,7 @@ const authController = {
             )
 
             if(!validPassword){
-                return res.status(404).json("Wrong password!");
+                return res.status(404).json("Mật khẩu không đúng");
             }
             if(!user?.isActive) return res.status(404).json("Tài khoản của bạn đã bị khóa!");
             

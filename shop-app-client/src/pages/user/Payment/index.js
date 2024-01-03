@@ -125,7 +125,7 @@ function Payment() {
             } : null
         }
         console.log("payment successfully")
-        // createOrder(currentUser, order, dispatch)
+        createOrder(currentUser, order, dispatch)
         console.log(order)
     }
     const notify = (type, message) => toast(message, { type: type });

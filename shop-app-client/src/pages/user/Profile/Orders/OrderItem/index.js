@@ -13,19 +13,37 @@ function OrderItem({ props }) {
     let [detailMB, setDetailMB] = useState(false)
 
     function calculateTotal(items){
-        return items.reduce((total, item) => total + (item.price * item.quantity), 0);
+            return items.reduce((total, item) => total + (item.price * item.quantity), 0)
+    }
+
+    const totalMoney = (i) => {
+        var total = 0;
+        i?.orderItem.forEach((it) => {
+            total += it.price * it.quantity 
+        })
+        if(i?.voucher){
+            if (i?.voucher?.isPercent) {
+                return total * (1 - i?.voucher?.voucherPrice/100)
+            }
+            else {
+                return total - i?.voucher?.voucherPrice
+            }
+        }else{ return total}
     }
     return (<>
         <div className={cx('container')}>
             <div className={cx('header')} >
                 <div>
-                    <span className={cx('title')}>Order place:</span> <br></br>{(new Date(props.orderDate)).getDate() + '/ ' + ((new Date(props.orderDate)).getMonth() + 1) + '/ ' + (new Date(props.orderDate)).getFullYear()}
+                    <span className={cx('title')}>Ngày đặt:</span> <br></br>{(new Date(props.orderDate)).getDate() + '/ ' + ((new Date(props.orderDate)).getMonth() + 1) + '/ ' + (new Date(props.orderDate)).getFullYear()}
                 </div>
                 <div>
-                    <span className={cx('title')}>Order total:</span> <br></br>{new Intl.NumberFormat('vi-VN', {style: 'currency', currency: 'VND'}).format(calculateTotal(props.orderItem))}
+                    <span className={cx('title')}>Tổng tiền:</span> <br></br>{new Intl.NumberFormat('vi-VN', {style: 'currency', currency: 'VND'}).format(totalMoney(props))}
                 </div>
                 <div>
-                    <span className={cx('title')}>Order status:</span> <br></br><span style={{ color: '#ED232F' }}>{props.status}</span>
+                    <span className={cx('title')}>Trạng thái:</span> <br></br><span style={
+                        props?.status === "Đang xử lý" ? { color: '#ED232F' } :
+                        { color: '#4bc7bf' }
+                    }>{props.status}</span>
                 </div>
                 <div onClick={() => setDetail(!detail)} style={{ width: '106px' }}><span className={cx('title')} style={{ color: '#4bc7bf', cursor: 'pointer' }}>{detail ? 'Less detail' : 'More detail'}</span></div>
             </div>
@@ -42,7 +60,10 @@ function OrderItem({ props }) {
             <div className={cx('body')}>
                 <div className={cx(detail ? 'address-active' : 'address')}>
                     <div style={{ fontSize: '16px', fontWeight: 'bold', color: '#4bac4d' }}>
-                        Đơn đặt hàng #DH_{props._id} <span style={{ color: '#000' }} />/ <span style={{ color: '#ED232F', marginLeft: '5px' }}>{props.status}</span>
+                        Đơn đặt hàng #{props?._id?.substring(12)} <span style={{ color: '#000' }} />/ <span style={
+                            props?.status === "Đang xử lý" ? { color: '#ED232F', marginLeft: '5px' } :
+                            { color: '#4bc7bf', marginLeft: '5px' }
+                        }>{props.status}</span>
                     </div>
                     <div style={{ display: 'flex', gap: '48px', marginTop: '8px' }}>
                         <div style={{ width: '30%' }}>
@@ -62,9 +83,9 @@ function OrderItem({ props }) {
                                 <div className={cx('info-value')}>{new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(calculateTotal(props.orderItem))}</div>
                             </div>
                             <div className={cx('form-group')}>
-                                <label>Phí ship:
+                                <label>Giá giảm:
                                 </label>
-                                <div className={cx('info-value')}>0</div>
+                                <div className={cx('info-value')}>{props?.voucher? props?.voucher?.isPercent ? props?.voucher?.voucherPrice + "%" : (new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format( props?.voucher?.voucherPrice)) : 0}</div>
                             </div>
 
                         </div>
@@ -73,7 +94,7 @@ function OrderItem({ props }) {
                     <div style={{ width: '60%' }}>
                         <div className={cx('form-group', 'single')} style={{ width: 'calc(100% + 48px)' }}>
                             <label>Tổng tiền: </label>
-                            <div className={cx('info-value')}>{new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(calculateTotal(props.orderItem))}</div>
+                            <div className={cx('info-value')}>{new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(totalMoney(props))}</div>
                         </div>
                     </div>
                 </div>
