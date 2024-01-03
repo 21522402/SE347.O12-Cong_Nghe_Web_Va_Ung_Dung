@@ -141,7 +141,7 @@ export const increaseQuantityCartItem = async (user, cartItem, dispatch) => {
             headers: {token: "Bearer " + user.accessToken}
         })
         if(!res?.data?.result) return;
-        dispatch(increaseCartItemSuccess(cartItem._id))
+        dispatch(increaseCartItemSuccess({"cartItemId": cartItem._id, "quantity": res?.data?.result}))
     }   
     catch(err){
         dispatch(increaseCartItemFailed())

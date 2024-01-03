@@ -263,7 +263,7 @@ function Reviews() {
                 </Link>
                 <h1 className={cx('account-page__title')}>Đánh giá và phản hồi</h1>
                 {
-                    orders?.map((item, index) => {
+                    orders?.filter(i=>i.status==='Giao thành công')?.map((item, index) => {
                         return <div key={index} style={{ margin: '10px 0px' }}>
                             <OrderItem props={item} />
                         </div>

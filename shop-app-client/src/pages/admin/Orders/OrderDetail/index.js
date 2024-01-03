@@ -31,6 +31,27 @@ function OrderDetail({ index, getAllOrders }) {
         setStatus(item)
         // dispatch(handleChangeOrderStatus({index, status: item}))
     }
+    useEffect(() => {
+        let res = [];
+        switch (order.status) {
+            case 'Đang xử lý':
+                res = ['Đang xử lý', 'Đã xác nhận', 'Đã hủy']
+                break;
+            case 'Đã xác nhận':
+                res = ['Đã xác nhận', 'Đang giao hàng', 'Đã hủy']
+                break;
+            case 'Đang giao hàng':
+                res = ['Giao thành công', 'Đã hủy']
+                break;
+            case 'Giao thành công':
+                res = []
+                break;
+            case 'Đã hủy':
+                res = []
+                break;
+        }
+        setListStatus([...res])
+    }, [order.status])
     const statusElement = useRef(null);
     useEffect(() => {
         const handleClickOutSide = (e) => {
@@ -46,26 +67,26 @@ function OrderDetail({ index, getAllOrders }) {
     }, [statusElement])
     const handleClickSave = async () => {
         try {
-            const res = await axios.patch(`${baseUrl}/api/orders/adminEditStatus`,{id: order._id, status:status })
+            const res = await axios.patch(`${baseUrl}/api/orders/adminEditStatus`, { id: order._id, status: status })
             if (res) {
                 console.log(res.data)
                 getAllOrders();
                 toast.success('Thay đổi trạng thái đơn hàng thành công!')
-                
+
             }
         } catch (error) {
-            
+
         }
     }
 
     return (
         <div className={cx('wrapper')}>
-         <ToastContainer
-                    position='top-right'
-                    autoClose={1000}
-                    hideProgressBar={true}
-                    draggable={false}
-                />
+            <ToastContainer
+                position='top-right'
+                autoClose={1000}
+                hideProgressBar={true}
+                draggable={false}
+            />
             {/* Header */}
             <div className={cx('header')}>
                 <div className={cx('tabpanel')}>Thông tin</div>
@@ -76,7 +97,7 @@ function OrderDetail({ index, getAllOrders }) {
                 <div className={cx('order-container')}>
                     <div style={{ fontSize: '16px', fontWeight: 'bold', color: '#4bac4d' }}>
                         Đơn đặt hàng {`#${order._id.substring(12)}`} <span style={{ color: '#000' }}>/ Trạng thái
-                            <div ref={statusElement} className={cx('product-category-select', { active: showListStatus })} onClick={() => setShowListStatus(prev => !prev)}>
+                            <div ref={statusElement} className={cx('product-category-select', { active: showListStatus })} onClick={() => {if (order.status !== 'Đã hủy' && order.status!=='Giao thành công') {setShowListStatus(prev => !prev)}}}>
                                 <span style={{ color: status === 'Chờ xác nhận' || status === 'Đã hủy' ? 'red' : '#4eb7f5' }}>{status}</span>
                                 <span> {!showListStatus ? <AiFillCaretDown /> : <AiFillCaretUp />}</span>
                                 {showListStatus && <DropDown items={listStatus} style={{ width: '100%', left: '0', top: '35px', fontWeight: '500' }} onClick={handleClickItemStatus} />}
@@ -121,7 +142,7 @@ function OrderDetail({ index, getAllOrders }) {
                         </div>
                         <div className={cx('form-group', 'single')} style={{ width: '30%' }} >
                             <label>Voucher: </label>
-                            <div className={cx('info-value')}>{order.voucher.voucherPrice + ' VNĐ'}</div>
+                            <div className={cx('info-value')}>{order.voucher?.voucherPrice || 0 + ' VNĐ'}</div>
                         </div>
 
                     </div>
@@ -144,7 +165,7 @@ function OrderDetail({ index, getAllOrders }) {
                         <div style={{ marginTop: '16px', marginLeft: '32px' }}>
                             <label style={{ fontSize: '16px', fontWeight: '600', marginLeft: '32px', marginBottom: '16px' }}>Thông tin giao hàng</label>
                             <div style={{ borderLeft: '3px solid #4bac4d', height: '100%', paddingLeft: '32px', fontSize: '14px' }}>
-                             
+
                                 <div style={{ marginTop: '12px', display: 'flex', alignItems: 'center' }}>
                                     <img style={{ width: '100px', height: '100px' }} src="https://png.pngtree.com/png-vector/20191101/ourmid/pngtree-cartoon-color-simple-male-avatar-png-image_1934459.jpg" />
 

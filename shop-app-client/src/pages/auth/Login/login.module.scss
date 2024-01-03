@@ -2,6 +2,7 @@
     width: 60vw;
     max-width: 900px;
     background-color: #fff;
+    color: black;
     overflow-x: auto;
     overflow-y: hidden;
     padding: 2rem;
@@ -13,8 +14,8 @@
         max-width: 100%;
         height: auto;
     }
-}
-.col {
-    width: 50%;
-    
+    .col {
+        width: 50%;
+        color:black;
+    }
 }

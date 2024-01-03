@@ -68,7 +68,8 @@ const authController = {
             if(!validPassword){
                 return res.status(404).json("Wrong password!");
             }
-
+            if(!user?.isActive) return res.status(404).json("Tài khoản của bạn đã bị khóa!");
+            
             if(user && validPassword){
                 const accessToken = authController.generateAccessToken(user)
                 const refreshToken = authController.generateRefreshToken(user)

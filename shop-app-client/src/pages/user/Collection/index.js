@@ -3,7 +3,7 @@ import classNames from "classnames/bind";
 import { useEffect, useState } from "react";
 import "react-multi-carousel/lib/styles.css";
 import { useDispatch, useSelector } from 'react-redux';
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import {
     filterListProductsState,
     setListProducts,
@@ -12,14 +12,22 @@ import {
 import baseUrl from '~/utils/baseUrl';
 import styles from './Collection.module.scss';
 import ItemCollection from "./ItemCollection";
+import { createCartItem, getCartProducts, increaseQuantityCartItem } from '~/redux/api/userRequest';
+import ProductItem from '../Home/ProductItem';
 
 const cx = classNames.bind(styles)
 function Collection() {
+    useEffect(() => {
+        window.scrollTo(0, 0)
+      }, [])
 
     const {id} = useParams()
 
     const listProducts =  useSelector(state => state.product.listProducts)
     const [currentProducts, setCurrentProducts] =  useState([])
+    const [productFilter, setProductFilter] =  useState([])
+    let cartProducts = useSelector(state => state.user?.cart?.cartProducts)
+    let currentUser = useSelector((state) => state.auth.login.currentUser)
     const [category, setCategory] = useState(() => {
         return {
             category: 'Áo',
@@ -95,10 +103,142 @@ function Collection() {
     })
     const [condititonsSelected, setCondititonsSelected] = useState([]);
     useEffect(() => {
-        !id.includes("type") ?
-        setCurrentProducts(listProducts.filter((item) => item.productCategory === id)) :
-        setCurrentProducts(listProducts.filter((item) => item.productType === id.replace("type=", "") ))
+        if(id)
+            if(!id.includes("type")) {
+                const listFilter = listProducts.filter((item) => item.productCategory === id)
+                setCurrentProducts(listFilter) 
+                setProductFilter(listFilter)
+                const types = listFilter.map(item => item.productType).reduce((acc, e) => {
+                    if (acc.indexOf(e) === -1) {
+                        acc.push(e)
+                    }
+                    return acc
+                  }, []).map(item => ({
+                    name: item,
+                    checked: false
+                }))
+
+                const colors = listFilter
+                .map(item => item.colors)
+                .reduce(function (acc, e) {
+                        return acc.concat(e)
+                  }, [])
+                .reduce((acc2, e2) => {
+                    if (acc2.find(item => item.colorName === e2.colorName) === undefined) {
+                        acc2.push(e2)
+                    }
+                    return acc2
+                }, [])
+                .map(item => ({
+                        colorName: item.colorName,
+                        colorCode: item.colorCode
+                }))
+                console.log(colors)
+                setCategory({...category, type: types, color: colors})
+            }
+            else{
+                const productType = id.replace("type=", "")
+                const listFilter = listProducts.filter((item) => item.productType === productType )
+                setCurrentProducts(listFilter) 
+                setProductFilter(listFilter)
+            }
+        handleRemoveFilter()
     }, [id])
+
+    useEffect(() => {
+        if(!id.includes("type")) {
+            if(conditions.size.length === 0 && conditions.color === '' && conditions.type.length === 0) {
+                setProductFilter(currentProducts)
+            }
+            else{
+                let listFilter = [...currentProducts]
+
+                if(conditions.type.length !== 0){
+                    listFilter = currentProducts.filter(item => conditions.type?.includes(item.productType))
+                }
+
+                if(conditions.size.length !== 0){
+                    let listItemAdapt = []
+                    for(let i = 0; i < listFilter.length; i++){
+                        let item = {...listFilter[i]}  // item hiện tại
+
+                        let colorsSizes = listFilter[i].colors; // list màu của item
+
+                        let listColorAdapt = []
+
+                        for(let j = 0; j < colorsSizes.length; j++){
+                            let colorsSizeItem = {...colorsSizes[j]}; // màu hiện tại
+
+                            let sizes = colorsSizes[j].sizes;  // sizes của màu
+                            sizes = sizes.filter(size => conditions.size.includes(size.sizeName)) //filter size
+
+                            if(sizes.length !== 0){
+                                colorsSizeItem.sizes = sizes
+                                listColorAdapt.push(colorsSizeItem)
+                            }
+                        }
+                        
+                        if(listColorAdapt.length !== 0){
+                            item.colors = listColorAdapt
+                            listItemAdapt.push(item)
+                        }
+                    }
+                    listFilter = listItemAdapt
+                }
+                
+                if(conditions.color !== '' )
+                    listFilter = listFilter.filter(item => item.colors?.map(color => color.colorName)?.includes(conditions.color))
+                 
+
+                
+                setProductFilter(listFilter)
+            }
+        }
+        else{
+            if(conditions.size.length === 0 && conditions.color === '' && conditions.type.length === 0) {
+                setProductFilter(currentProducts)
+            }
+            else{
+                let listFilter = [...currentProducts]
+
+                if(conditions.size.length !== 0){
+                    let listItemAdapt = []
+                    for(let i = 0; i < listFilter.length; i++){
+                        let item = {...listFilter[i]}  // item hiện tại
+
+                        let colorsSizes = listFilter[i].colors; // list màu của item
+
+                        let listColorAdapt = []
+
+                        for(let j = 0; j < colorsSizes.length; j++){
+                            let colorsSizeItem = {...colorsSizes[j]}; // màu hiện tại
+
+                            let sizes = colorsSizes[j].sizes;  // sizes của màu
+                            sizes = sizes.filter(size => conditions.size.includes(size.sizeName)) //filter size
+
+                            if(sizes.length !== 0){
+                                colorsSizeItem.sizes = sizes
+                                listColorAdapt.push(colorsSizeItem)
+                            }
+                        }
+                        
+                        if(listColorAdapt.length !== 0){
+                            item.colors = listColorAdapt
+                            listItemAdapt.push(item)
+                        }
+                    }
+                    listFilter = listItemAdapt
+                }
+                
+                if(conditions.color !== '' )
+                    listFilter = listFilter.filter(item => item.colors?.map(color => color.colorName)?.includes(conditions.color))
+                 
+
+                
+                setProductFilter(listFilter)
+            }
+        }
+    }, [conditions])
     
     const handleClickType = (type, index) => {
         let state;
@@ -120,12 +260,6 @@ function Collection() {
             return nextState;
         })
     }
-    // useEffect(() => {
-    //     !id.includes("size") ?
-    //     setCurrentProducts(listProducts.filter((item) => item.productCategory === id)) :
-    //     setCurrentProducts(listProducts.filter((item) => item.size === id.replace("size=", "") ))
-        
-    // }, [id])
     const handleClickSize = (size, index) => {
         let state;
         setCategory(prev => {
@@ -195,25 +329,37 @@ function Collection() {
     }
     //DUY
     const dispatch = useDispatch();
+    const navigate = useNavigate();
+    const [selected, setSelected] = useState(null)
     const [filter,setFilter] = useState({
         productType: '',
         productCategory: '',
         status: '',
         searchText: ''
-    
     })
-    const getAllProducts = async () => {
-    try {
-        const res = await axios.get(`${baseUrl}/api/products/getAllProducts`);
-        if (res && res.data) {
-            dispatch(setListProducts(res.data.data))
-            dispatch(setListProductsState(res.data.data))
-            dispatch(filterListProductsState({filter}));
-        }
-    } catch (error) {
-        console.log(error.message)
+    const setCloseTimer = () => {
+        let t = 3
+        const a = setInterval(() => {
+            if(t-- === 0){
+                clearInterval(a)
+                setPopupProductCart(false)
+                setSelected(null)
+            }
+        }, 1000)
     }
-}
+    const [popupProductCart, setPopupProductCart] = useState(false)
+    const getAllProducts = async () => {
+        try {
+            const res = await axios.get(`${baseUrl}/api/products/getAllProducts`);
+            if (res && res.data) {
+                dispatch(setListProducts(res.data.data))
+                dispatch(setListProductsState(res.data.data))
+                dispatch(filterListProductsState({filter}));
+            }
+        } catch (error) {
+            console.log(error.message)
+        }
+    }
     useEffect(() => {
         // getAllProductsCategories()
         getAllProducts()
@@ -229,17 +375,48 @@ function Collection() {
                     if (value) nextState.push({ name: value, key });
                 }
             }
-            console.log(nextState);
             return nextState;
         })
     }, [conditions])
 
+    useEffect(() => {
+        currentUser && getCartProducts(currentUser, dispatch)
+      },[])
+
+    const handleItemToCart = (product, b, c) => {
+
+        const cartItem = {
+            product: product._id,
+            productName: product.productName,
+            productPrice: product.exportPrice * (1 - product.discountPerc/100),
+            size: b.sizeName,
+            color: c.colorName,
+            quantity: 1
+        }
+    
+        const existItem = cartProducts.find((cartIT) => cartIT.productId === cartItem.productId && cartIT.size === cartItem.size && cartIT.color === cartItem.color)
+        existItem ? increaseQuantityCartItem(currentUser, {...existItem, quantity: 1}, dispatch) : createCartItem(currentUser, cartItem, dispatch)
+        
+        setSelected({...cartItem, product: product})
+        setPopupProductCart(true)
+        setCloseTimer()
+    }
+
     return (
         <div className={cx('wrapper')}>
+            <div className={cx(popupProductCart ? 'bayra' : 'bayvao')} style={{position: 'fixed', zIndex: 1000, top: '16px', right: '16px', borderRadius: '16px', width: '350px', maxHeight: '350px', backgroundColor: 'white', padding: '15px', fontSize: '16px', color: 'black', fontWeight: '600' }}>
+                <div>Đã thêm vào giỏ hàng</div>
+                {selected && <ProductItem props={selected}/>}
+                <div>
+                    <div className={cx('account-info__btn')} onClick={() => navigate("/cart")}>
+                        <span className={cx('account-info__btn-text')}>Xem giỏ hàng</span>
+                    </div>
+                </div>
+            </div>  
             <div className={cx('left-side-wrapper')}>
                 <div className={cx('left-side')}>
                     <div className={cx('quantity')}>
-                        21 kết quả
+                        {productFilter? productFilter.length : 0} kết quả
                     </div>
                     <div className={cx('filter')}>
                         <div className={cx('filter-item')}>
@@ -299,7 +476,7 @@ function Collection() {
             <div className={cx('right-side')}>
                 <h1 className={cx('heading')}>{id.includes("type") ? id.replace("type=", "") : id}</h1>
                 <div className={cx('selected')}>
-                    <h5>{currentProducts ? currentProducts.length : 0} kết quả</h5>
+                    <h5>{productFilter ? productFilter.length : 0} kết quả</h5>
 
                     <div className={'wrapper-item-selected'}>
                         {
@@ -316,10 +493,10 @@ function Collection() {
                     }
                 </div>
                 <div className={cx('list-product-filter')}>
-                {currentProducts?.map((item, index) => {
+                {productFilter?.map((item, index) => {
                 return (
-                <div key={index} style={{ width: "100%"}} >
-                <ItemCollection product={item}/>
+                <div key={index} style={{ width: "100%"}} onClick={() => {navigate(`/product/${item._id}`)}}>
+                <ItemCollection product={item} handleToCart={handleItemToCart}/>
                 </div>
                 );
             })}

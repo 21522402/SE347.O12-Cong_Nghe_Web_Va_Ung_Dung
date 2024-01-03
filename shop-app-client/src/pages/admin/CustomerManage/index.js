@@ -17,6 +17,7 @@ const cbb = [
 ]
 
 function CustomerManage() {
+
     const [currentPage, setCurrentPage] = useState(1);
     const [customerList, setCustomerList] = useState([]);
     const [selectedTextFilter, setSelectedTextFilter] = useState('')
@@ -50,6 +51,7 @@ function CustomerManage() {
 
     return (
         <div className={cx('wrapper')} >
+
             <div className={cx('container')}>
                 <div>
                     <h1>QUẢN LÝ KHÁCH HÀNG</h1>

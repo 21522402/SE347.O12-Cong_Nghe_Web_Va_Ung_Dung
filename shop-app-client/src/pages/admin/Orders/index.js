@@ -19,8 +19,9 @@ const cx = classNames.bind(styles)
 function Orders() {
     const dispatch = useDispatch()
     const listOrders = useSelector(state => state.orderAdmin.listOrders)
+    console.log(listOrders)
     const [inputFocus, setInputFocus] = useState(false);
-    const listStatus = ['Tất cả', 'Đã xác nhận', 'Đang giao hàng', 'Giao thành công','Đã hủy']
+    const listStatus = ['Tất cả', 'Đang xử lý','Đã xác nhận', 'Đang giao hàng', 'Giao thành công','Đã hủy']
     const [showStatus, setShowStatus] = useState(false)
     const filterStatus = useRef(null)
     const dateInputElement = useRef(null);
@@ -74,7 +75,7 @@ function Orders() {
         try {
             const res = await axios.get(`${baseUrl}/api/orders/adminGetAllOrder`)
             if (res) {
-                console.log(res.data)
+
                 dispatch(setListOrders(res.data.data))
                 
             }

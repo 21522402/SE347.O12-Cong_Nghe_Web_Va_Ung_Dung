@@ -45,24 +45,24 @@ function Login({navSignup, navForgot}) {
                 <div style={{padding:'2rem 1.5rem 2.5rem 2.5rem'}}>
                     <h1 style={{fontWeight:900, fontSize:'30px', marginBottom:'20px'}}>Đăng nhập</h1>
                     <p style={{fontSize:'14px', paddingRight:'30px', marginBottom:'20px'}}>Đăng nhập để không bỏ lỡ quyền lợi tích luỹ và hoàn tiền cho bất kỳ đơn hàng nào.</p>
-                    <h3 style={{fontWeight:'700', fontSize:'17px'}}>Đăng nhập hoặc đăng ký (miễn phí)</h3>
-                    <div style={{display:'flex', margin:'12px 0 20px 0'}}>
+                    <h3 style={{fontWeight:'700', fontSize:'17px', marginBottom:'40px'}}>Đăng nhập hoặc đăng ký (miễn phí)</h3>
+                    {/* <div style={{display:'flex', margin:'12px 0 20px 0'}}>
                         <CustomeButton containStyles={{backgroundColor:'white', color:'white', border:'1px solid #ccc',marginRight:'8px', padding:'8px', height:'50px', width:'50px'}}>
                             <img src='https://mcdn.coolmate.me/image/September2023/mceclip1_21.png'  alt='img'/>
                         </CustomeButton>
                         <CustomeButton containStyles={{backgroundColor:'white', color:'white', border:'1px solid #ccc', padding:'8px', height:'50px', width:'50px'}}>
                             <img src='https://mcdn.coolmate.me/image/September2023/mceclip0_86.png'  alt='img' width={'20px'}/>
                         </CustomeButton>
-                    </div>
-                    <div style={{display:'flex', width:'100%', alignItems:'center'}}>
+                    </div> */}
+                    {/* <div style={{display:'flex', width:'100%', alignItems:'center'}}>
                         <div style={{width:'20%', height:'0.5px' , backgroundColor:'#ccc'}}></div>
                         <div style={{margin:'0 4px'}}>Hoặc</div>
                         <div style={{width:'70%', height:'0.5px' , backgroundColor:'#ccc'}}></div>
-                    </div>
+                    </div> */}
                     <form onSubmit={handleSubmit} style={{width:'100%', marginTop:'16px'}}>
                         <input onChange={handleChange("phoneNumber")} placeholder='Email/SĐT của bạn' type='text' name='username' autoFocus='autoFocus' style={{border:'1px solid #ccc',height:'48px', borderRadius:'100vmax', width:'100%',boxSizing:'border-box', padding:'5px 20px',transition: 'all .2s', marginBottom:'16px'}}/>
                         <input onChange={handleChange("password")} placeholder='Mật khẩu'  type='password' name='password' autoFocus='autoFocus' style={{border:'1px solid #ccc',height:'48px', borderRadius:'100vmax', width:'100%',boxSizing:'border-box', padding:'5px 20px',transition: 'all .2s', marginBottom:'16px'}}/>
-                        <CustomeButton title={' Đăng nhập '} type={'Submit'} containStyles={{backgroundColor:'black', color:'white', width:'100%', height:'48px', borderRadius:'100vmax'}} bgHover={'#ccc'}/>
+                        <CustomeButton title={' Đăng nhập '} type={'Submit'} containStyles={{backgroundColor:'black', color:'white', width:'100%', height:'48px', borderRadius:'100vmax', alignItems:'center', display:'flex', justifyContent:'center'}} bgHover={'#ccc'}/>
                     </form>
                     <div style={{display:'flex', justifyContent:'space-between',marginTop:'4px' }}>
                         <CustomeButton onClick={() => navSignup("signup")} title={'Đăng ký tài khoản mới'} containStyles={{backgroundColor:'white', color:'#2f5acf', width:'fit-content', fontSize:'14px'}}/>

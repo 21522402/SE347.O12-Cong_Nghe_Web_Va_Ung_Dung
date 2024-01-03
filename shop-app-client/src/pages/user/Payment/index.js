@@ -55,6 +55,7 @@ function Payment() {
 
     const validateAddress = (item) => {
         let count = 0;
+        console.log(item)
         var errIT = {
 
         }
@@ -107,7 +108,7 @@ function Payment() {
         const order = {
             "orderItem": cartProducts.map((item) => {
                 return {
-                    productId: item._id,
+                    productId: item.product._id,
                     size: item.size,
                     image: item.product.colors.find((i) => i.colorName === item.color).images[0],
                     quantity: item.quantity,
@@ -124,7 +125,8 @@ function Payment() {
             } : null
         }
         console.log("payment successfully")
-        createOrder(currentUser, order, dispatch)
+        // createOrder(currentUser, order, dispatch)
+        console.log(order)
     }
     const notify = (type, message) => toast(message, { type: type });
     return ( <>

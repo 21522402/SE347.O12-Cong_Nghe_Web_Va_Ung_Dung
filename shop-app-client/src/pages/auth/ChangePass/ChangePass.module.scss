@@ -7,14 +7,15 @@
     padding: 2rem;
     display: flex;
     border-radius: 20px;
-}
-.col {
-    width: 50%;
-    
-}
-img{
-    border-style: none;
-    vertical-align: middle;
-    max-width: 100%;
-    height: auto;
+    color: black;
+    .col {
+        width: 50%;
+        color: black;
+    }
+    img{
+        border-style: none;
+        vertical-align: middle;
+        max-width: 100%;
+        height: auto;
+    }
 }

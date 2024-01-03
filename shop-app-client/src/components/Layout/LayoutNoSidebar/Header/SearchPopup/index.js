@@ -7,39 +7,18 @@ import styles from './SearchPopup.module.scss';
 
 const cx = classNames.bind(styles);
 
-
-// function SearchPopup({ onMouseLeave }) {
-//     return (
-//         <div onMouseMove={() => onMouseLeave()} className={cx('wrapper')}>
-//             <div onMouseMove={(e) => e.stopPropagation()} className={cx('inner')}>
-//                 <div className={cx('separate')}>
-
-//                 </div>
-
-//                 <div className={cx('title')}>
-//                     Sản phẩm
-//                 </div>
-
-//                 <div className={cx('list-product-filter')}>
-//                     <ItemSearch />
-//                     <ItemSearch />
-//                     <ItemSearch />
-//                     <ItemSearch />
-//                 </div>
-//                 <div style={{textAlign: 'center', marginTop: '16px'}}>
-//                     <div className={cx('btn-view-all')}>Xem tất cả</div>
-//                 </div>
-//             </div>
-//         </div>
-//     );
-// }
-
-// export default SearchPopup;
-
 function SearchPopup({ onMouseLeave , searchKey }) {
     const [searchResults, setSearchResults] = useState([]);
     const [loading, setLoading] = useState(false);
-  
+    const [withWindow,setWithWindow] = useState(window.innerWidth)
+    useEffect(() => {
+      function handleResize() {
+        setWithWindow(window.innerWidth)
+      }
+    
+      window.addEventListener('resize', handleResize);
+      return () => window.removeEventListener('resize', handleResize);
+    }, []);
     const handleSearch = async () => {
       console.log(searchKey)
       try {
@@ -60,7 +39,6 @@ function SearchPopup({ onMouseLeave , searchKey }) {
     };
   
     useEffect(() => {
-      // Call handleSearch or perform other actions on search query change
       handleSearch();
     }, [searchKey]);
   
@@ -70,9 +48,18 @@ function SearchPopup({ onMouseLeave , searchKey }) {
           <div className={cx('separate')}></div>
           <div className={cx('title')}>Sản phẩm</div>
           <div className={cx('list-product-filter')}>
-            {searchResults?.map((result) => (
-              <ItemSearch key={result._id} result={result} />
-            ))}
+            {searchResults?.map((result, index) => {
+              if (withWindow >= 768) {
+                if (index <= 2) {
+                  return <ItemSearch key={result._id} result={result} />;
+                }
+              }
+              else {
+                if (index === 0) {
+                  return <ItemSearch key={result._id} result={result} />;
+                }
+              }
+            })}
           </div>
           <div style={{ textAlign: 'center', marginTop: '16px' }}>
             <div className={cx('btn-view-all')}>Xem tất cả</div>

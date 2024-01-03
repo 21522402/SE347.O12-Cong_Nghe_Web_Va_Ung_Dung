@@ -203,8 +203,8 @@ const userSlice = createSlice({
         increaseCartItemSuccess: (state, action) => {
             state.cart.isLoading = false;
             state.cart.cartProducts = state.cart.cartProducts.map((item) => {
-                if(item.id === action?.payload) {
-                    return{...item, quantity: item.quantity + 1}
+                if(item.id === action?.payload?.cartItemId) {
+                    return{...item, quantity: item.quantity + action?.payload?.quantity}
                 }
                 return {...item}
             })

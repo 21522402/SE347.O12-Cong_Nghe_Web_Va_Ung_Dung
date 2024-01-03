@@ -5,7 +5,7 @@ import convertDate from "~/utils/convertDate";
 
 const cx = classNames.bind(styles)
 
-function BillDetailCus({ item, cusId }) {
+function BillDetailCus({ item, cusId ,totalAmount}) {
     const [address, setAddress] = useState('')
 
     useEffect(() => {
@@ -30,17 +30,20 @@ function BillDetailCus({ item, cusId }) {
         const formattedDate = `${day}/${month}/${year} ${h}:${m}`;
         return formattedDate;
     }
-    const totalMoney = (item) => {
+    console.log(item)
+    const totalMoney = (i) => {
         var total = 0;
-        item?.orderItem.forEach((i) => {
-            total += i.price * i.quantity 
+        i?.orderItem.forEach((it) => {
+            total += it.price * it.quantity 
         })
-        if (item?.voucher?.isPercent) {
-            return total * (1 - item?.voucher?.voucherPrice)
-        }
-        else {
-            return total - item?.voucher?.voucherPrice
-        }
+        if(i?.voucher){
+            if (i?.voucher?.isPercent) {
+                return total * (1 - i?.voucher?.voucherPrice/100)
+            }
+            else {
+                return total - i?.voucher?.voucherPrice
+            }
+        }else{ return total}
     }
     return (
         <div className={cx('wrapper')}>
@@ -56,11 +59,11 @@ function BillDetailCus({ item, cusId }) {
                     </div>
                     <div style={{ marginTop: '8px' }}>
                         <div className={cx('wrap-form-groups')}>
-                            <div className={cx('form-group', 'no-border')} style={{ width: '30%' }}>
+                            <div className={cx('form-group', 'no-border')} style={{ width: '20%' }}>
                                 <label>Mã khách hàng: </label>
                                 <div className={cx('info-value')}>{cusId}</div>
                             </div>
-                            <div className={cx('form-group', 'no-border')} style={{ width: '30%' }}>
+                            <div className={cx('form-group', 'no-border')} style={{ width: '50%' }}>
                                 <label>Họ và tên: </label>
                                 <div className={cx('info-value')}>{item.fullName}</div>
                             </div>
@@ -72,11 +75,11 @@ function BillDetailCus({ item, cusId }) {
 
                         </div>
                         <div className={cx('wrap-form-groups')}>
-                            <div className={cx('form-group')} style={{ width: '30%' }}>
+                            <div className={cx('form-group')} style={{ width: '20%' }}>
                                 <label>Ngày đăng ký: </label>
                                 <div className={cx('info-value')}>{convertDate(item.createdAt)}</div>
                             </div>
-                            <div className={cx('form-group')} style={{ width: '30%' }}>
+                            <div className={cx('form-group')} style={{ width: '50%' }}>
                                 <label>Địa chỉ: </label>
                                 <div className={cx('info-value')}>{address}</div>
                             </div>
@@ -87,13 +90,13 @@ function BillDetailCus({ item, cusId }) {
 
                         </div>
                         <div className={cx('wrap-form-groups')}>
-                            <div className={cx('form-group')} style={{ width: '30%' }}>
+                            <div className={cx('form-group')} style={{ width: '20%' }}>
                                 <label>Số đơn hàng</label>
                                 <div className={cx('info-value')}>{item.orders.length}</div>
                             </div>
-                            <div className={cx('form-group')} style={{ width: '30%' }}>
+                            <div className={cx('form-group')} style={{ width: '50%' }}>
                                 <label>Tổng giao dịch: </label>
-                                <div className={cx('info-value')}>4,000,000 VNĐ</div>
+                                <div className={cx('info-value')}>{totalAmount} VNĐ</div>
                             </div>
                             <div className={cx('form-group')} style={{ width: '30%' }}>
                                 <label> </label>
@@ -119,16 +122,16 @@ function BillDetailCus({ item, cusId }) {
                             </thead>
                             <tbody>
 
-                                {item?.orders.map((item, index) => {
+                                {item?.orders.map((i, index) => {
                                     return (
-                                        <tr key={item} className={cx('product-item')}>
-                                            <td className={cx('code')}>HD{item._id.slice(16)}</td>
-                                            <td className={cx('date')}>{convertDate(item?.orderDate)}</td>
+                                        <tr key={index} className={cx('product-item')}>
+                                            <td className={cx('code')}>HD{i._id.slice(16)}</td>
+                                            <td className={cx('date')}>{convertDate(i?.orderDate)}</td>
                                             <td className={cx('payMethod')}>Thanh toán trực tiếp</td>
-                                            <td className={cx('customerName')}>{item?.address?.name}</td>
-                                            <td className={cx('customerPhone')}>{item?.address?.phoneNumber}</td>
-                                            <td className={cx('status')}>{item?.status}</td>
-                                            <td className={cx('totalPrice')}>{totalMoney(item)} đ</td>
+                                            <td className={cx('customerName')}>{i?.address?.name}</td>
+                                            <td className={cx('customerPhone')}>{i?.address?.phoneNumber}</td>
+                                            <td className={cx('status')}>{i?.status}</td>
+                                            <td className={cx('totalPrice')}>{totalMoney(i)} đ</td>
                                         </tr>
                                     )
                                 })}

@@ -158,16 +158,22 @@ const addAddressCtrl = async (req, res) => {
             throw new Error('User is not existed. Please log in!');
         }
         let addresses = user.address
-        if(req?.body?.default) addresses.map(item => {
-            if(item.default){
-                let newAd = item
-                newAd.default = false
-                return newAd
-            }
-            else 
-                return item
-        })
-        addresses.push({...req?.body})
+        if(addresses.length === 0)
+        {
+            addresses.push({...req?.body, default: true})
+        }
+        else{
+            if(req?.body?.default) addresses.map(item => {
+                if(item.default){
+                    let newAd = item
+                    newAd.default = false
+                    return newAd
+                }
+                else 
+                    return item
+            })
+            addresses.push({...req?.body})
+        }
         
         const updateAddress = await User.findByIdAndUpdate(userId, {
             address: addresses
@@ -543,15 +549,25 @@ const increaseQuantityCartItem = async(req, res) => {
             })
         }
 
-        cartIts = cartIts.map(item => item.id === req?.params?.cartItemId ? {...item, quantity: ++item.quantity} : {...item})
+        cartIts = cartIts.map(item => {
+            if(item.id === req?.params?.cartItemId){
+                let a = item
+                a.quantity = a.quantity + req?.body?.quantity
+                console.log(a)
+                return a
+            } 
+            else 
+                return {...item}
+        })
 
         await User.findByIdAndUpdate(req?.params?.id, {cart: cartIts}, {new: true})
 
-        return successTemplate(res, product._id, "Update cart successfully!", 200)
+        return successTemplate(res, req?.body?.quantity, "Update cart successfully!", 200)
     } catch (error) {
         return errorTemplate(res, error.message)
     }
 }
+
 const decreaseQuantityCartItem = async(req, res) => {
     try {
         const user = await User.findById(req?.params?.id)

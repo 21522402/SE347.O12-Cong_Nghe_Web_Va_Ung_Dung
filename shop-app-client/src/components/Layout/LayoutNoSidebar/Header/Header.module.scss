@@ -1,4 +1,21 @@
 // Mobile: width < 768 px
+
+.counts {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 100px;
+    position: absolute;
+    right: -5px;
+    bottom: -5px;
+    width: 15px;
+    height: 15px;
+    background-color: #f9f86c;
+    color: #000;
+    font-size: 10px;
+    font-weight: 700;
+    pointer-events: none;
+}
 @media only screen and (max-width: 767px) {
     .wrapper {
         display: flex;
@@ -16,6 +33,51 @@
         .icon-menu {
             display: block;
             font-size: 26px;
+            &:hover {
+                opacity: 0.7;
+                cursor: pointer;
+            }
+        }
+        .icon-close {
+            right: 0;
+            margin: 20px 0;
+            width: 80vw;
+            font-size: 30px;
+            &:hover {
+                opacity: 0.7;
+                cursor: pointer;
+            }
+        }
+        .overlay-sidebar {
+            background-color: rgba(47, 47, 47, 0.7);
+            height: 100vh;
+            top: 0px;
+            left: 0;
+            position: fixed;
+            z-index:1000000;
+            width: 100vw;
+        }
+        .sidebar-wrapper {
+            background-color: #212121;
+            width: 50vw;
+            height: 100vh;
+        }
+        .list-categorys {
+
+            padding: 10px 0;
+            border-top: 1px solid #ccc;
+         
+            width: 100%;
+           
+            .item-list-category {
+                color: #fff;              
+                padding: 10px 30px;
+                width: 100%;
+                &:hover {
+                    background-color: #ff5605;
+                    cursor: pointer;
+                }
+            }
         }
         .logo-wrapper {
             cursor: pointer;

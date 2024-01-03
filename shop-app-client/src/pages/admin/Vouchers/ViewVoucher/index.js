@@ -26,10 +26,10 @@ function ViewVoucher({ item }) {
     }
     return (
         <div className={cx('wrapper')} style={{ animation: 'dropTop .3s linear' }}>
-            <div style={{ fontWeight: 500, fontSize: '20px', marginBottom: '20px', backgroundColor: 'black', color: 'white', padding: '8px', width: '15%', borderRadius: '4px' }}>Xem Voucher</div>
+            <div style={{ fontWeight: 500, fontSize: '18px', marginBottom: '20px', backgroundColor: 'black', color: 'white', padding: '8px', width: '15%', borderRadius: '4px' }}>Xem Voucher</div>
             <div style={{ display: 'flex', alignItems: 'end' }}>
                 <div style={{ paddingLeft: '4rem', marginBottom: '8px' }}>
-                    <img src={item.voucherImage} alt='avtVoucher' style={{ width: '300px', height: '200px' }} />
+                    <img src={item.voucherImage} alt='avtVoucher' style={{ width: '200px', height: '140px' }} />
                 </div>
             </div>
             <div style={{ padding: '2rem 4rem 2.5rem 4rem', width: '100%' }}>
@@ -78,7 +78,7 @@ function ViewVoucher({ item }) {
                     </div>
 
                 </div>
-                <div className={cx('row-input')} >
+                <div className={cx('row-input')} style={{height: 'auto'}} >
                     <div style={{ width: '100%', display: 'flex', flexDirection: 'column' }} >
                         <div className={cx('label-input')}>Mô tả <HiOutlineInformationCircle fontSize={'18px'} /> </div>
                         <textarea rows={4} name='description' id='description' type='text' value={item.description} disabled placeholder='Sale ngày phụ nữ việt nam. Áp dụng để giảm tiền trực tiếp cho đơn hàng!' style={{ marginTop: '12px', border: '1px solid #ccc', padding: '8px' }} />

@@ -16,10 +16,13 @@ import baseUrl from '~/utils/baseUrl';
 import ItemCollection from "../Collection/ItemCollection";
 import styles from "./Home.module.scss";
 import { FaCircleArrowRight } from "react-icons/fa6";
+import ProductItem from './ProductItem';
+import { createCartItem, getCartProducts, increaseQuantityCartItem } from '~/redux/api/userRequest';
 
 const cx = classNames.bind(styles);
 
 function Home() {
+  const [withWindow,setWithWindow] = useState(window.innerWidth)
   const linkImagesSlider = [
     "https://media.coolmate.me/cdn-cgi/image/width=1920,quality=90,format=auto/uploads/November2023/141920x788.jpg",
     "https://media.coolmate.me/cdn-cgi/image/width=1920,quality=90,format=auto/uploads/November2023/kkGraphic_Special_(1).png",
@@ -27,6 +30,10 @@ function Home() {
   ];
 
   const listProducts =  useSelector(state => state.product.listProducts)
+  let cartProducts = useSelector(state => state.user?.cart?.cartProducts)
+  let currentUser = useSelector((state) => state.auth.login.currentUser)
+
+  const [selected, setSelected] = useState(null)
   const navigate=useNavigate();
 
   const banners = [
@@ -43,38 +50,34 @@ function Home() {
     },
     {
       url: images.Ao,
-      route: "./collection/1",
+      route: "/collection/Áo",
     },
     {
       url: images.Quan,
-      route: "./collection/1",
+      route: "/collection/Quần",
     },
     {
       url: images.DoLot,
-      route: "./collection/1",
+      route: "/collection/Đồ lót",
     },
   ];
 
   const contents = [
     {
       titleSlider: "SẢN PHẨM NỔI BẬT",
-      listProduct: ["item 1", "item 2", "item 3", "item 4", "item 5", "item 6"],
-      urlBanner: banners[0],
+      urlBanner: "https://media.coolmate.me/cdn-cgi/image/quality=80,format=auto/uploads/October2023/mceclip0_74.png",
     },
     {
       titleSlider: "SẢN PHẨM COOLEXTRA",
-      listProduct: ["item 1", "item 2", "item 3", "item 4", "item 5", "item 6"],
-      urlBanner: banners[1],
+      urlBanner: "https://media.coolmate.me/cdn-cgi/image/quality=80,format=auto/uploads/October2023/mceclip0_87.png",
     },
     {
       titleSlider: "SẢN PHẨM THU ĐÔNG",
-      listProduct: ["item 1", "item 2", "item 3", "item 4", "item 5", "item 6"],
-      urlBanner: banners[2],
+      urlBanner: "https://mcdn.coolmate.me/image/September2023/mceclip4_64.jpg",
     },
     {
       titleSlider: "SẢN PHẨM THỂ THAO",
-      listProduct: ["item 1", "item 2", "item 3", "item 4", "item 5", "item 6"],
-      urlBanner: banners[3],
+      urlBanner: "https://mcdn.coolmate.me/image/March2023/mceclip0_137.jpg",
     },
   ];
 
@@ -84,11 +87,11 @@ function Home() {
       items: 1,
     },
     tablet: {
-      breakpoint: { max: 1024, min: 464 },
+      breakpoint: { max: 1024, min: 768 },
       items: 1,
     },
     mobile: {
-      breakpoint: { max: 464, min: 0 },
+      breakpoint: { max: 767, min: 0 },
       items: 1,
     },
   };
@@ -103,8 +106,8 @@ function Home() {
       items: 3,
     },
     mobile: {
-      breakpoint: { max: 768, min: 0 },
-      items: 1,
+      breakpoint: { max: 767, min: 0 },
+      items: 2,
     },
   };
   //DUyY
@@ -129,10 +132,60 @@ function Home() {
     }
 }
 useEffect(() => {
-  getAllProducts()
+  function handleResize() {
+    setWithWindow(window.innerWidth)
+  }
+
+  window.addEventListener('resize', handleResize);
+  return () => window.removeEventListener('resize', handleResize);
+}, []);
+useEffect(() => {
+  getAllProducts();
+  currentUser && getCartProducts(currentUser, dispatch)
+  console.log(listProducts)
 },[])
+
+const setCloseTimer = () => {
+    let t = 3
+    const a = setInterval(() => {
+        if(t-- === 0){
+            clearInterval(a)
+            setPopupProductCart(false)
+            setSelected(null)
+        }
+    }, 1000)
+}
+const handleItemToCart = (product, b, c) => {
+
+    const cartItem = {
+        product: product._id,
+        productName: product.productName,
+        productPrice: product.exportPrice * (1 - product.discountPerc/100),
+        size: b.sizeName,
+        color: c.colorName,
+        quantity: 1
+    }
+
+    const existItem = cartProducts.find((cartIT) => cartIT.productId === cartItem.productId && cartIT.size === cartItem.size && cartIT.color === cartItem.color)
+    existItem ? increaseQuantityCartItem(currentUser, {...existItem, quantity: 1}, dispatch) : createCartItem(currentUser, cartItem, dispatch)
+    
+    setSelected({...cartItem, product: product})
+    setPopupProductCart(true)
+    setCloseTimer()
+}
+const [popupProductCart, setPopupProductCart] = useState(false)
   return (
     <div>
+        <div className={cx(popupProductCart ? 'bayra' : 'bayvao')} style={{position: 'fixed', zIndex: 1000, top: '16px', right: '16px', borderRadius: '16px', width: '350px', maxHeight: '350px', backgroundColor: 'white', padding: '15px', fontSize: '16px', color: 'black', fontWeight: '600' }}>
+            <div>Đã thêm vào giỏ hàng</div>
+            {selected && <ProductItem props={selected}/>}
+            <div>
+                <div className={cx('account-info__btn')} onClick={() => navigate("/cart")}>
+                    <span className={cx('account-info__btn-text')}>Xem giỏ hàng</span>
+                </div>
+            </div>
+        </div>  
+        {/* <button onClick={() => setPopupProductCart(!popupProductCart)}>clickme</button> */}
       {/* Slider */}
 
       <div>
@@ -142,6 +195,7 @@ useEffect(() => {
           draggable={false}
           responsive={responsiveBanner}
           autoPlay
+          arrows={withWindow >=1024 ? true : false }
           ssr={true} // means to render carousel on server-side.
           infinite={true}
           autoPlaySpeed={3000}
@@ -162,13 +216,14 @@ useEffect(() => {
                 itemClass={cx("carousel-item")}
                 swipeable={true}
                 draggable={false}
+                arrows={withWindow >=1024 ? true : false }
                 responsive={responsive}
                 ssr={true}
               >
                 {listProducts.map((item, index) => {
                   return (
                     <div key={index} className={cx("width-item")}>
-                      <ItemCollection product={item}/>
+                      <ItemCollection handleToCart={handleItemToCart} product={item}/>
                     </div>
                   );
                 })}
@@ -187,10 +242,8 @@ useEffect(() => {
           return (
             <div className={cx("container-item")}>
               <img className={cx("itemIMG")} src={item.url} alt="all" />
-              <div className={cx("btn-item")}>
-                <a href={item.route}>
-                  <FaCircleArrowRight />
-                </a>
+              <div className={cx("btn-item")} onClick={() => navigate(item.route)}>
+                <FaCircleArrowRight />
               </div>
             </div>
           );
