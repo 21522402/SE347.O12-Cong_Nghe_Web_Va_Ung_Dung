@@ -1,5 +1,5 @@
 import axios from "axios";
-import { createAddressFailed, createAddressStart, createAddressSuccess, createCartItemFailed, createCartItemStart, createCartItemSuccess, createOrderFailed, createOrderStart, createOrderSuccess, createReviewFailed, createReviewStart, createReviewSuccess, decreaseCartItemFailed, decreaseCartItemStart, decreaseCartItemSuccess, deleteAddressFailed, deleteAddressStart, deleteAddressSuccess, deleteCartItemFailed, deleteCartItemStart, deleteCartItemSuccess, getAllAddressFailed, getAllAddressStart, getAllAddressSuccess, getAllOrderFailed, getAllOrderReviewFailed, getAllOrderReviewStart, getAllOrderReviewSuccess, getAllOrderStart, getAllOrderSuccess, getAllVoucherFailed, getAllVoucherStart, getAllVoucherSuccess, getCartProductsFailed, getCartProductsStart, getCartProductsSuccess, getDefaultAddressFailed, getDefaultAddressStart, getDefaultAddressSuccess, getForUProductCartFailed, getForUProductCartStart, getForUProductCartSuccess, increaseCartItemFailed, increaseCartItemStart, increaseCartItemSuccess, resetSuccess, updateAddressFailed, updateAddressStart, updateAddressSuccess } from "../slices/userSlice";
+import { createAddressFailed, createAddressStart, createAddressSuccess, createCartItemFailed, createCartItemStart, createCartItemSuccess, createOrderFailed, createOrderStart, createOrderSuccess, createReviewFailed, getAPIMoMoStart, getAPIMoMoSuccess, getAPIMoMoFailed ,createReviewStart, createReviewSuccess, decreaseCartItemFailed, decreaseCartItemStart, decreaseCartItemSuccess, deleteAddressFailed, deleteAddressStart, deleteAddressSuccess, deleteCartItemFailed, deleteCartItemStart, deleteCartItemSuccess, getAllAddressFailed, getAllAddressStart, getAllAddressSuccess, getAllOrderFailed, getAllOrderReviewFailed, getAllOrderReviewStart, getAllOrderReviewSuccess, getAllOrderStart, getAllOrderSuccess, getAllVoucherFailed, getAllVoucherStart, getAllVoucherSuccess, getCartProductsFailed, getCartProductsStart, getCartProductsSuccess, getDefaultAddressFailed, getDefaultAddressStart, getDefaultAddressSuccess, getForUProductCartFailed, getForUProductCartStart, getForUProductCartSuccess, increaseCartItemFailed, increaseCartItemStart, increaseCartItemSuccess, resetSuccess, updateAddressFailed, updateAddressStart, updateAddressSuccess } from "../slices/userSlice";
 import baseUrl from "~/utils/baseUrl";
 
 //orders
@@ -221,6 +221,16 @@ export const createOrder = async (user, data, dispatch) => {
     }   
     catch(err){
         dispatch(createOrderFailed())
+    }
+}
+export const getAPIMoMo = async (user, data, dispatch) => {
+    dispatch(getAPIMoMoStart())
+    try{
+        const res = await axios.post(baseUrl + "/api/users/getApiMoMo/" + user._id, data)
+        dispatch(getAPIMoMoSuccess(res?.data?.data))
+    }   
+    catch(err){
+        dispatch(getAPIMoMoFailed())
     }
 }
 

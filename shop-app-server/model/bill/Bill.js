@@ -5,8 +5,10 @@ const billSchema = new mongoose.Schema({
     time: Date,
     method: String,
     money: Number,
-    customerName: String,
-    phoneNumber: String
+    user: {
+        type: mongoose.Schema.ObjectId,
+        ref: 'User'
+    }
 
 }, {
     toJSON: {

@@ -32,6 +32,7 @@ const userSlice = createSlice({
             address: [],
             error: false,
             isSuccess: false,
+            
         },
     },
     reducers: {
@@ -316,6 +317,22 @@ const userSlice = createSlice({
             state.cart.error = true;
             state.cart.isSuccessPayment = false;
         },
+        getAPIMoMoStart: (state,action) => {
+            state.cart.isLoading = true
+            state.cart.error = false;
+            state.cart.isSuccessGetMoMo = false
+        },
+        getAPIMoMoSuccess: (state, action) => {
+            state.cart.isLoading = false;
+            state.cart.isSuccessGetMoMo = true;
+            state.cart.urlMoMo = action.payload
+        },
+        
+        getAPIMoMoFailed: (state) => {
+            state.cart.isLoading = false;
+            state.cart.error = true;
+            state.cart.isSuccessGetMoMo = false;
+        },
     }
 })
 
@@ -368,7 +385,10 @@ export const {
     getDefaultAddressFailed,
     createOrderStart,
     createOrderSuccess,
-    createOrderFailed
+    createOrderFailed,
+    getAPIMoMoStart,
+    getAPIMoMoSuccess,
+    getAPIMoMoFailed
 } = userSlice.actions;
 
 export default userSlice.reducer;
