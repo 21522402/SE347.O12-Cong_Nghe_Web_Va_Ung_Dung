@@ -12,8 +12,16 @@ import {
   FaYoutube,
 } from "react-icons/fa";
 import CustomeButton from "~/components/CustomeButton/CustomeButton";
+import ModalReport from "~/components/ModalReport/index.js";
+
 const cx = classNames.bind(styles);
 function Footer() {
+  const [openModal, setOpenModal] = useState(false);
+
+  const handleOpenModal = () => {
+    setOpenModal(true);
+  };
+
   return (
     <footer className={cx("wrapper")}>
       <div className={cx("container")}>
@@ -29,6 +37,7 @@ function Footer() {
                 </p>
                 <div>
                   <CustomeButton
+                    onClick={handleOpenModal}
                     title={"Đóng góp ý kiến"}
                     bgHover={"white"}
                     textColorHover={"black"}
@@ -84,28 +93,27 @@ function Footer() {
               </div>
               <div className={cx("separate")}></div>
             </div>
-            
 
             <div className={cx("footer-social")}>
               <a href="#" className={cx("footer-social-icon")}>
                 {" "}
-                <FaFacebook/>{" "}
+                <FaFacebook />{" "}
               </a>
               <a href="#" className={cx("footer-social-icon")}>
                 {" "}
-                <FaInstagram/>{" "}
+                <FaInstagram />{" "}
               </a>
               <a href="#" className={cx("footer-social-icon")}>
                 {" "}
-                <FaYoutube/>{" "}
+                <FaYoutube />{" "}
               </a>
               <a href="#" className={cx("footer-social-icon")}>
                 {" "}
-                <FaTiktok/>{" "}
+                <FaTiktok />{" "}
               </a>
               <a href="#" className={cx("footer-social-icon")}>
                 {" "}
-                <FaLinkedin/>{" "}
+                <FaLinkedin />{" "}
               </a>
             </div>
           </div>
@@ -219,7 +227,9 @@ function Footer() {
 
           <div className={cx("footer-final")}>
             <div className={cx("footer-final1")}>
-              <div style={{fontWeight: 'bold'}}>@ CÔNG TY TNHH FASTECH ASIA</div>
+              <div style={{ fontWeight: "bold" }}>
+                @ CÔNG TY TNHH FASTECH ASIA
+              </div>
               <div style={{ fontSize: "11px" }}>
                 Mã số doanh nghiệp: 0108617038. Giấy chứng nhận đăng ký doanh
                 nghiệp do Sở Kế hoạch và Đầu tư TP Hà Nội cấp lần đầu ngày
@@ -235,6 +245,7 @@ function Footer() {
           </div>
         </div>
       </div>
+      {openModal && <ModalReport setOpenModal={setOpenModal} />}
     </footer>
   );
 }

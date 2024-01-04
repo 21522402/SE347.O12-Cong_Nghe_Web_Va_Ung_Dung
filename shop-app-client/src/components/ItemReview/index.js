@@ -106,7 +106,7 @@ function ItemReview({ item , getReviewsById}) {
           <div style={{ display: 'flex', marginTop: '6px', fontWeight: '300', fontSize: '13px', color: '#909090' }}>
             <div >{convertDate(item.reviewDate)}</div>
             <div style={{ marginLeft: '4px' }}>
-              | Loại: {item.color} / {item.size}
+              | Loại: ( {item.color} / {item.size} )
             </div>
           </div>
         </div>

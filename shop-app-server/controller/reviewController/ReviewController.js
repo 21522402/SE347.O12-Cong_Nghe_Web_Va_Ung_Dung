@@ -1,7 +1,7 @@
 const Review = require("../../model/review/Review");
 const successTemplate = require("../../templates/succesTemplate");
 const errorTemplate = require("../../templates/errorTemplate");
-const cloudinaryCustom = require('../../utils/cloudinaryCustom');
+const cloudinaryCustom = require("../../utils/cloudinaryCustom");
 
 const getAllReviews = async (req, res) => {
   try {
@@ -68,9 +68,9 @@ const getAllReviews = async (req, res) => {
       return {
         ...item,
         averageStar:
-          item.reviews.reduce((acc, cur) => {
+          (item.reviews.reduce((acc, cur) => {
             return acc + cur.star;
-          }, 0) / item.reviews.length,
+          }, 0) / item.reviews.length).toFixed(1),
         OneStar: CountStar(item.reviews, 1),
         TwoStar: CountStar(item.reviews, 2),
         ThreeStar: CountStar(item.reviews, 3),
@@ -127,9 +127,10 @@ const responseReview = async (req, res) => {
 };
 
 const getReviewsByProductId = async (req, res) => {
-    try {
-      const {id} = req.params;
-      const reviews = await Review.find({}).populate([
+  try {
+    const { id } = req.params;
+    const reviews = await Review.find({})
+      .populate([
         {
           path: "user",
           model: "User",
@@ -140,24 +141,23 @@ const getReviewsByProductId = async (req, res) => {
           populate: {
             path: "productId",
             match: {
-              _id: id
+              _id: id,
             },
             model: "Product",
           },
         },
       ])
       .exec();
-      res.status(200).json({
-        message: 'Get reviews by productId successfullly',
-        data: reviews
-      })
-    } catch (error) {
-      res.status(400).json({
-        message: error.message
-      })
-    }
-    
-}
+    res.status(200).json({
+      message: "Get reviews by productId successfullly",
+      data: reviews,
+    });
+  } catch (error) {
+    res.status(400).json({
+      message: error.message,
+    });
+  }
+};
 
 const CountStar = (arr, star) => {
   let temp = 0;
@@ -166,7 +166,9 @@ const CountStar = (arr, star) => {
       temp = temp + 1;
     }
   }
-  return (temp / arr.length) * 100;
+
+  let res = (temp / arr.length) * 100;
+  return res.toFixed(1);
 };
 
 const CountResponsed = (arr) => {
@@ -177,10 +179,11 @@ const CountResponsed = (arr) => {
     }
   }
   return temp;
-}
+};
+
 
 module.exports = {
   getAllReviews,
   responseReview,
-  getReviewsByProductId
+  getReviewsByProductId,
 };

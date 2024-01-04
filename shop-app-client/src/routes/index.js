@@ -27,6 +27,7 @@ import FeedbackDetail from "~/pages/admin/Feedbacks/FeedbackDetail"
 import Profile from "~/pages/user/Profile"
 import SuccessPayment from "~/pages/user/Payment/SuccessPayment"
 import { RequestLogin, Unauthozied } from "~/pages/auth"
+
 export const publicRoutes = [
     // user: => path: '/user/[pageName]'
     {path:'/user' , component: Home, layout:LayoutNoSidebar},
@@ -39,7 +40,6 @@ export const publicRoutes = [
     {path:'/request-login' , component: RequestLogin, layout:LayoutNoSidebar},
 
     // admin: => path: '/admin/[pageName]'
-    
 
 ]
 export const buyerRoutes = [

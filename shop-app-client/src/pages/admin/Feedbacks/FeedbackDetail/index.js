@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useRef, useState } from "react";
 import classNames from "classnames/bind";
 import styles from "./FeedbackDetail.module.scss";
@@ -6,13 +6,20 @@ import { AiFillCloseCircle } from "react-icons/ai";
 import TextareaAutosize from "react-textarea-autosize";
 import { BsFillSendFill, BsFillImageFill } from "react-icons/bs";
 import ContentItemFeedback from "~/components/ContentItemFeedback";
+import axios from "axios";
+import baseUrl from "~/utils/baseUrl";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import HashLoader from "react-spinners/HashLoader";
 const cx = classNames.bind(styles);
 
-function FeedbackDetail({ itemFeedbackActive, send }) {
+function FeedbackDetail({ itemFeedbackActive, getAllFeedbacks }) {
   const [images, setImages] = useState([]);
   const fileInputRef = useRef(null);
   const [text, setText] = useState("");
-
+  const [textValidate, setTextValidate] = useState("");
+  const [showTextValidate, setShowTextValidate] = useState(false);
+  const [loading, setLoading] = useState(false);
   function selectFiles() {
     fileInputRef.current.click();
   }
@@ -43,112 +50,185 @@ function FeedbackDetail({ itemFeedbackActive, send }) {
     setImages((prevImages) => prevImages.filter((_, i) => i !== index));
   }
 
-  function sendFeedback() {
-    let timeRes = Date.now();
-    itemFeedbackActive.response.date = timeRes;
-    itemFeedbackActive.response.content = text;
-    const newListImage = images.map((itemp) => {
-      return itemp.imageBase64;
-    });
-    itemFeedbackActive.response.imagesRsp = [...newListImage];
-    send({ ...itemFeedbackActive });
-  }
-  return (
-    <div className={cx("wrapper")}>
-      <div style={{ marginTop: "10px" }}>
-        <ContentItemFeedback contentFeedback={itemFeedbackActive} />
+  const sendFeedback = async () => {
+    if (text.trim().length === 0 && images.length === 0) {
+      setTextValidate("Vui lòng nhập đầy đủ thông tin để đóng góp ý kiến !");
+      setShowTextValidate(true);
+    } else {
+      setTextValidate("");
+      setShowTextValidate(false);
 
-        {itemFeedbackActive.isResponsed ? (
-          <div className={cx("container-reply")}>
-            <div className={cx("container-res")}>
-              <div style={{ display: "flex", marginLeft: "8px" }}>Phản hồi</div>
-              <span
-                className={cx("message-review")}
-                style={{ marginLeft: "8px" }}
-              >
-                {itemFeedbackActive.response.content}
-              </span>
-              {itemFeedbackActive.response.imagesRsp.map((item, index) => {
-                return (
-                  <div className={cx("images-list")} key={index}>
-                    <img className={cx("image")} src={item} alt="img" />
-                  </div>
-                );
-              })}
+      setLoading(true);
+      try {
+        const newListImage = images.map((itemp) => {
+          return itemp.imageBase64;
+        });
+        const data = {
+          email: itemFeedbackActive.user.email,
+          title: itemFeedbackActive.title,
+          content: text,
+          images: [...newListImage],
+        };
+        const res = await axios.patch(
+          `${baseUrl}/api/feedbacks/responseFeedback/${itemFeedbackActive._id}`,
+          data
+        );
+        if (res) {
+          toast.success("Phản hồi thành công", {
+            position: toast.POSITION.TOP_RIGHT,
+            autoClose: 3000,
+          });
+        }
+        getAllFeedbacks();
+        setLoading(false);
+      } catch (error) {
+        setLoading(false);
+        console.log(error.message);
+      }
+    }
+  };
+
+
+  useEffect(() => {
+    toast.success("Phản hồi thành công", {
+      position: toast.POSITION.TOP_RIGHT,
+      autoClose: 3000,
+    });
+  }, [])
+
+  return (
+    <>
+      <div className={cx("wrapper")}>
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            flexDirection: "column",
+          }}
+        >
+          <ContentItemFeedback contentFeedback={itemFeedbackActive} />
+
+          {itemFeedbackActive.isResponsed ? (
+            <div className={cx("container-reply")}>
+              <div className={cx("container-res")}>
+                <div style={{ display: "flex", marginLeft: "8px" }}>
+                  Phản hồi
+                </div>
+                <span
+                  className={cx("message-review")}
+                  style={{ marginLeft: "8px" }}
+                >
+                  {itemFeedbackActive.response.content}
+                </span>
+                {itemFeedbackActive.response.imagesRsp.map((item, index) => {
+                  return (
+                    <div className={cx("images-list")} key={index}>
+                      <img className={cx("image")} src={item} alt="img" />
+                    </div>
+                  );
+                })}
+              </div>
             </div>
-          </div>
-        ) : (
-          <div
-            style={{
-              display: "flex",
-              flexDirection: "row-reverse",
-              alignItems: "center",
-              width: "93%",
-              margin: "10px 100px 30px 00px",
-            }}
-          >
+          ) : (
             <div
               style={{
                 display: "flex",
-                alignSelf: "flex-end",
-                marginBottom: "12px",
-                cursor: "pointer",
+                flexDirection: "row-reverse",
+                alignItems: "center",
+                justifyContent: "center",
+                width: "100%",
+                margin: "10px 0px 5px",
               }}
             >
-              <div onClick={sendFeedback}>
-                <BsFillSendFill size={24} style={{ marginRight: "10px" }} />
-              </div>
-              <div onClick={selectFiles}>
-                <BsFillImageFill size={24} style={{ marginRight: "10px" }} />
-              </div>
-              <input
-                type="file"
-                name="file"
-                multiple
-                hidden
-                ref={fileInputRef}
-                onChange={onFileSelect}
-              />
-            </div>
-            <div style={{ width: "85%" }}>
               <div
                 style={{
-                  width: "98%",
-                  height: "auto",
                   display: "flex",
-                  alignItems: "flex-start",
-                  justifyContent: "flex-start",
-                  flexWrap: "wrap",
-                  padding: "20px 12px",
-                  border: "0.5px solid #8c8c8c",
-                  borderRadius: "4px 4px 0 4px",
+                  alignSelf: "flex-end",
+                  margin: "12px",
+                  cursor: "pointer",
                 }}
               >
-                {images.map((image, index) => (
-                  <div className={cx("images-list")} key={index}>
-                    <img
-                      className={cx("image")}
-                      src={image.url}
-                      alt={image.name}
-                    />
-                    <AiFillCloseCircle
-                      className={cx("delete-img")}
-                      onClick={() => deleteImage(index)}
-                    />
-                  </div>
-                ))}
-                <TextareaAutosize
-                  className={cx("input-text")}
-                  placeholder="Nhập nội dung"
-                  onChange={(e) => setText(e.target.value)}
-                  value={text}
+                <div onClick={sendFeedback}>
+                  <BsFillSendFill size={24} style={{ marginRight: "10px" }} />
+                </div>
+                <div onClick={selectFiles}>
+                  <BsFillImageFill size={24} style={{ marginRight: "10px" }} />
+                </div>
+                <input
+                  type="file"
+                  name="file"
+                  multiple
+                  hidden
+                  ref={fileInputRef}
+                  onChange={onFileSelect}
                 />
               </div>
+
+              <div style={{ width: "100%" }}>
+                <div
+                  style={{
+                    width: "100%",
+                    height: "auto",
+                    display: "flex",
+                    alignItems: "flex-start",
+                    justifyContent: "flex-start",
+                    flexWrap: "wrap",
+                    padding: "5px 12px 10px",
+                    border: "0.5px solid #8c8c8c",
+                    borderRadius: "4px 4px 0 4px",
+                  }}
+                >
+                  {images.map((image, index) => (
+                    <div className={cx("images-list")} key={index}>
+                      <img
+                        className={cx("image")}
+                        src={image.url}
+                        alt={image.name}
+                      />
+                      <AiFillCloseCircle
+                        className={cx("delete-img")}
+                        onClick={() => deleteImage(index)}
+                      />
+                    </div>
+                  ))}
+                  <TextareaAutosize
+                    className={cx("input-text")}
+                    placeholder="Nhập nội dung"
+                    onChange={(e) => setText(e.target.value)}
+                    value={text}
+                  />
+                </div>
+              </div>
             </div>
-          </div>
-        )}
+          )}
+          {showTextValidate && (
+            <span
+              style={{
+                width: "100%",
+                textAlign: "center",
+                fontSize: "12px",
+                color: "red",
+              }}
+            >
+              {textValidate}
+            </span>
+          )}
+        </div>
       </div>
-    </div>
+      {loading && (
+        <div className={cx("container-loader")}>
+          <HashLoader
+            color="#000"
+            loading={loading}
+            size={80}
+            aria-label="Loading Spinner"
+            data-testid="loader"
+            className={cx("loader-feedback")}
+          />
+        </div>
+      )}
+    </>
   );
 }
 

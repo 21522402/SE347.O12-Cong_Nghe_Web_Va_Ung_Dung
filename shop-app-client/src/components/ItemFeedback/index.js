@@ -12,15 +12,7 @@ function ItemFeedback({ item , getAllFeedbacks}) {
   const handleClickFeedbackItem = () => {
     setOpenDetail(prev => !prev);
   }
-  const handleSendFeeback = async (item) => {
-    try {
-      await axios.patch(`${baseUrl}/api/feedbacks/responseFeedback`,item)
-      getAllFeedbacks();
-
-    } catch (error) {
-      console.log(error.message);
-    }
-  };
+  
   return (
     <>
       <tr className={cx('row-item')}>
@@ -52,9 +44,7 @@ function ItemFeedback({ item , getAllFeedbacks}) {
         openDetail &&
         <tr className={cx('feedback-detail')}>
           <td colSpan={3} style={{ padding: '0' }}>
-            <FeedbackDetail
-              itemFeedbackActive={item}
-              send={handleSendFeeback} />
+            <FeedbackDetail itemFeedbackActive={item} getAllFeedbacks={getAllFeedbacks}/>
           </td>
         </tr>
       }

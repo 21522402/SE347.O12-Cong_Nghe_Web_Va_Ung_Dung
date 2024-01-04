@@ -61,7 +61,7 @@ function DetailReview() {
     if (cbbRes === "Responsed")
     {
       const arrSearch = listItemReviewTmp.filter((item) => {
-        console.log(item.star, Number(cbbStar))
+
         return item.star === Number(cbbStar) && item.isResponsed === true;
       })
       setItemReview({...itemReview, reviews: arrSearch})
@@ -69,7 +69,6 @@ function DetailReview() {
     else if (cbbRes === "UnResponsed")
     {
       const arrSearch = listItemReviewTmp.filter((item) => {
-        console.log(item.star, Number(cbbStar))
         return item.star === Number(cbbStar) && item.isResponsed === false;
       })
       setItemReview({...itemReview, reviews: arrSearch})
@@ -120,7 +119,7 @@ function DetailReview() {
                 <div >
                   <div className={cx("product-name")}>{itemReview.product?.productName}</div>
                   <div className={cx("product-price")}>{formatMoney(itemReview.product?.exportPrice)}</div>
-                  <i >Đã bán: {itemReview.product?.quantitySold}</i>
+                  <span>Đã bán: <b>{itemReview.product?.quantitySold}</b></span>
                 </div>
               </div>
               {/* Sizes */}
