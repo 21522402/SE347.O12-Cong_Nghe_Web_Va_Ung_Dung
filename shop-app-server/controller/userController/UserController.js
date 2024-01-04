@@ -11,6 +11,7 @@ const Review = require('../../model/review/Review');
 const cloudinaryUploadImage = require('../../utils/cloudinary');
 const Product = require('../../model/product/Product');
 const Voucher = require('../../model/voucher/Voucher');
+const Bill = require('../../model/bill/Bill');
 const sendMail = require('../../utils/email')
 
 
@@ -333,7 +334,8 @@ const createOrderCtrl = async (req, res) => {
         const { orderItem, ...other } = req?.body
         const order = await Order.create({
             ...other,
-            orderDate: new Date()
+            orderDate: new Date(),
+            userId: user._id
         })
 
         const orderIds = user.orders
@@ -535,11 +537,18 @@ const handlePaymentMomoSuccess = async (req, res) => {
                     throw new Error('User is not existed. Please log in!');
                 }
                 const {orderItem, ...other} = decode
+                const orderDate = new Date()
                 const order = await Order.create({
                     ...other,
-                    orderDate: new Date()
+                    orderDate: orderDate,
+                    userId: user._id
                 })
-        
+                await Bill.create({
+                    orderId: order._id,
+                    time: orderDate,
+                    method: 'Thanh toán trực tuyến',
+                    money: decode.money,
+                })
                 const orderIds = user.orders
                 if (!orderIds) orderIds = []
                 if (!orderIds.includes(order.id)) {
@@ -573,6 +582,7 @@ const handlePaymentMomoSuccess = async (req, res) => {
                 })
         
                 await User.findByIdAndUpdate(userId, {orders: orderIds, cart: []})
+                
                 await sendMail({
                     email: decode.address.email,
                     subject: '[SHOP-APP]: ĐƠN ĐẶT HÀNG CỦA BẠN',

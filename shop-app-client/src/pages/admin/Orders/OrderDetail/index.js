@@ -41,7 +41,7 @@ function OrderDetail({ index, getAllOrders }) {
                 res = ['Đã xác nhận', 'Đang giao hàng', 'Đã hủy']
                 break;
             case 'Đang giao hàng':
-                res = ['Giao thành công', 'Đã hủy']
+                res = ['Đang giao hàng','Giao thành công']
                 break;
             case 'Giao thành công':
                 res = []
@@ -66,17 +66,20 @@ function OrderDetail({ index, getAllOrders }) {
         }
     }, [statusElement])
     const handleClickSave = async () => {
-        try {
-            const res = await axios.patch(`${baseUrl}/api/orders/adminEditStatus`, { id: order._id, status: status })
-            if (res) {
-                console.log(res.data)
-                getAllOrders();
-                toast.success('Thay đổi trạng thái đơn hàng thành công!')
-
+        if (status!== order.status) {
+            try {
+                const res = await axios.patch(`${baseUrl}/api/orders/adminEditStatus`, { id: order._id, status: status })
+                if (res) {
+                    console.log(res.data)
+                    getAllOrders();
+                    toast.success('Thay đổi trạng thái đơn hàng thành công!')
+    
+                }
+            } catch (error) {
+    
             }
-        } catch (error) {
-
         }
+        
     }
 
     return (
