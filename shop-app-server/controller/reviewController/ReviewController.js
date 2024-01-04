@@ -127,10 +127,10 @@ const responseReview = async (req, res) => {
 };
 
 const getReviewsByProductId = async (req, res) => {
-  try {
-    const { id } = req.params;
-    const reviews = await Review.find({})
-      .populate([
+    try {
+      const {id} = req.params;
+      debugger
+      const reviews = await Review.find({}).populate([
         {
           path: "user",
           model: "User",
@@ -140,24 +140,26 @@ const getReviewsByProductId = async (req, res) => {
           model: "OrderItem",
           populate: {
             path: "productId",
-            match: {
-              _id: id,
-            },
+            // match: {
+            //   _id: id
+            // },
             model: "Product",
           },
         },
       ])
       .exec();
-    res.status(200).json({
-      message: "Get reviews by productId successfullly",
-      data: reviews,
-    });
-  } catch (error) {
-    res.status(400).json({
-      message: error.message,
-    });
-  }
-};
+      const res2 = reviews.filter(item => item.orderItem.productId._id.toString() === id);
+      res.status(200).json({
+        message: 'Get reviews by productId successfullly',
+        data: res2
+      })
+    } catch (error) {
+      res.status(400).json({
+        message: error.message
+      })
+    }
+    
+}
 
 const CountStar = (arr, star) => {
   let temp = 0;

@@ -6,20 +6,50 @@ import { useEffect } from 'react';
 import { getAllOrderReview } from '~/redux/api/userRequest';
 import { BiArrowBack } from 'react-icons/bi';
 import { Link } from 'react-router-dom';
+import { resetSuccess } from '~/redux/slices/userSlice';
+import { ToastContainer, toast } from 'react-toastify';
 const cx = classNames.bind(styles);
 
 function Reviews() {
+
     const dispatch = useDispatch()
     let currentUser = useSelector((state) => state.auth.login.currentUser)
     let orders = useSelector((state) => state.user.orderReview.orders)
+    let isSuccessCR = useSelector((state) => state.user.orderReview.isSuccessCR)
 
     useEffect(() => {
         getAllOrderReview(currentUser, dispatch)
     }, [])
+    useEffect(() => {
+        if(isSuccessCR){
+            getAllOrderReview(currentUser, dispatch)
+            setTimeout(() => {
+                console.log("đô")
+                getAllOrderReview(currentUser, dispatch)
+            }, 3000)
+            resetSuccess()
+            setTimeout(() => {
+                console.log("đô2")
+                getAllOrderReview(currentUser, dispatch)
+            }, 7000)
+
+            setTimeout(() => {
+                console.log("đô3")
+                getAllOrderReview(currentUser, dispatch)
+            }, 10000)
+
+            setTimeout(() => {
+                console.log("đô4")
+                getAllOrderReview(currentUser, dispatch)
+            }, 20000)
+            resetSuccess()
+        }
+    }, [isSuccessCR])
 
     return (
         <>
             <div className={cx('container')}>
+                <ToastContainer/>
                 <Link to={'/user-profile'} className={cx('account-page__icon')}>
                     <BiArrowBack />
                 </Link>

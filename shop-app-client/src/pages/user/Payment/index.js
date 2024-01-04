@@ -5,7 +5,7 @@ import { useEffect, useRef, useState } from 'react';
 import PaymentForm from './PaymentForm';
 import Cart from './Cart';
 import { BiLeftArrow } from 'react-icons/bi';
-import { createOrder, getDefaultAddress } from '~/redux/api/userRequest';
+import { createOrder, getDefaultAddress, getAPIMoMo } from '~/redux/api/userRequest';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
@@ -20,10 +20,14 @@ function Payment() {
     let currentUser = useSelector((state) => state.auth.login.currentUser)
     let cartProducts = useSelector(state => state.user?.cart?.cartProducts)
     let isSuccessPayment = useSelector(state => state.user?.cart?.isSuccessPayment)
+    let isSuccessGetMoMo = useSelector(state => state.user?.cart?.isSuccessGetMoMo)
+    let urlMoMo = useSelector(state => state.user?.cart?.urlMoMo)
+    
     let isLoading = useSelector(state => state.user?.cart?.isLoading)
 
     const [addressSL, setAddress] = useState();
     const [addressPopup, setAddressPopup] = useState(false);
+    const [money,setMoney] = useState(0)
 
 
     const dispatch = useDispatch()
@@ -44,8 +48,14 @@ function Payment() {
     useEffect(() => {
         if(isSuccessPayment){
            navigate("/successPayment")
+
         }
     }, [isSuccessPayment])
+    useEffect(() => {
+        if(isSuccessGetMoMo){
+            window.location.href = urlMoMo
+        }
+    },[isSuccessGetMoMo])
 
     let transportInfo = useRef();
     let voucherInfo = useRef();
@@ -91,11 +101,21 @@ function Payment() {
         setErrAD(errIT)
         return false;
     }
-
+    const handleChangeMoney = (money) => {
+        setMoney(money)
+    }
+    const handleKeyCOD = (currentUser,order,dispatch) => {
+        createOrder(currentUser, order, dispatch)
+    }
+    const handleKeyMoMo = (currentUser,order,dispatch) => {
+        getAPIMoMo(currentUser,order,dispatch)
+    }
     const handlePayment = (paymentMethod) => {
+        
+
         const voucherIF = voucherInfo?.current?.getChildVoucher()
         const {id, _id, ...main} = transportInfo?.current?.getChildSelected()
-        
+
         if(!validateAddress(main)){
             return;
         }
@@ -104,7 +124,6 @@ function Payment() {
             notify("warning", "Bạn chưa có sản phẩm nào trong giỏ hàng")
             return;
         }
-
         const order = {
             "orderItem": cartProducts.map((item) => {
                 return {
@@ -113,7 +132,8 @@ function Payment() {
                     image: item.product.colors.find((i) => i.colorName === item.color).images[0],
                     quantity: item.quantity,
                     color: item.color,
-                    price: item.productPrice
+                    price: item.productPrice,
+                    productName: item.productName
                 }
             }),
             "status": "Đang xử lý",
@@ -124,9 +144,21 @@ function Payment() {
                 voucherCode: voucherIF.voucherCode,
             } : null
         }
-        console.log("payment successfully")
-        // createOrder(currentUser, order, dispatch)
+        let totalMoney = cartProducts.reduce((acc,cur) => {
+            return acc + cur.productPrice*cur.quantity
+        },0);
+        if (voucherIF) {
+            totalMoney -= voucherIF.isPercent ? voucherIF.voucherPrice/100 * totalMoney : voucherIF.voucherPrice
+        }
+        order.money = totalMoney
         console.log(order)
+        if (paymentMethod.key === 'COD') {
+            handleKeyCOD(currentUser,order, dispatch);
+        }
+        if (paymentMethod.key === 'MoMo') {
+            handleKeyMoMo(currentUser,order, dispatch)
+        }
+    
     }
     const notify = (type, message) => toast(message, { type: type });
     return ( <>

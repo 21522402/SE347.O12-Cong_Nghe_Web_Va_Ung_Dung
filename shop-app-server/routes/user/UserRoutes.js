@@ -23,7 +23,9 @@ const {
     deleteCartItem,
     getAllCartItem,
     getDefaultAddress,
-    checkVoucherDiscountCode
+    checkVoucherDiscountCode,
+    getApiMoMo,
+    handlePaymentMomoSuccess
 } = require('../../controller/userController/UserController');
 
 const verify = require('../../middlewares/auth/verify');
@@ -69,6 +71,11 @@ userRoutes.post('/reviews/createReview/:id/:orderItemId', createReviewCtrl);
 userRoutes.get('/getAllOrders/:id', getAllOrderCtrl);
 
 userRoutes.post('/createOrder/:id', createOrderCtrl);
+userRoutes.post('/getApiMoMo/:id', getApiMoMo);
+userRoutes.post('/handlePaymentMomoSuccess', handlePaymentMomoSuccess);
+
+
+
 
 userRoutes.put('/cancelOrder/:orderId', cancelOrderCtrl);
 

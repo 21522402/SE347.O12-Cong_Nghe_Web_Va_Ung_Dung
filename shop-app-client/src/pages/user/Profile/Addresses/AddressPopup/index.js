@@ -101,12 +101,20 @@ function AddressPopup({props, onClose, isAdd, reload, onCloseAndReload, list}) {
             });
     }, [reload])
 
+    const validatePhoneNumber = (phone) => {
+        return String(phone)
+          .toLowerCase()
+          .match(
+                /^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/im
+          );
+      };
+
     const onSubmitForm = (data) => {
         if(selected.province === ""){
             setERProvince(selected.province === "");
             return;
         }
-        if(selected.province === ""){
+        if(selected.district === ""){
             setERDictrict(selected.district === "");
             return;
         }

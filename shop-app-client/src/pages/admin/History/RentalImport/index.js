@@ -112,7 +112,7 @@ function RentalImport() {
                 </div>
                 <div className={cx('tabpanel')}>
                     <div className={cx('tabpanel-item')}>
-                        <Link to="/admin/history/bill">Hóa đơn</Link>
+                        <Link to="/admin/history/bill" style={{textDecoration: 'none', color: '#000'}}>Hóa đơn</Link>
                     </div>
                     <div className={cx('tabpanel-item', 'active')}>
                         Nhập hàng

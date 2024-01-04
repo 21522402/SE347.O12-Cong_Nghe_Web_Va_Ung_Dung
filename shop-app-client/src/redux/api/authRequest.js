@@ -2,17 +2,17 @@ import axios from "axios";
 import { loginFailed, loginStart, loginSuccess, logoutFailed, logoutStart, logoutSuccess, registerFailed, registerStart, registerSuccess } from "../slices/authSlice";
 import baseUrl from "~/utils/baseUrl";
 
-export const loginUser = async (user, dispatch, navigate) => {
+export const loginUser = async (user, dispatch, navigate, callback) => {
     dispatch(loginStart())
     try{
         const res = await axios.post(baseUrl + "/api/auth/login", user)
-
         console.log(res)
         dispatch(loginSuccess(res.data))
         if(res?.data?.role==='Admin') navigate("/Admin")
-        else navigate("/user-profile/info")
+        else callback(res)
     }   
     catch(err){
+        callback(err)
         dispatch(loginFailed())
     }
 }
@@ -20,11 +20,12 @@ export const loginUser = async (user, dispatch, navigate) => {
 export const registerUser = async (user, dispatch, navigate, callback) => {
     dispatch(registerStart())
     try{
-        await axios.post(baseUrl + '/api/auth/register', user)
+        const res = await axios.post(baseUrl + '/api/auth/register', user)
         dispatch(registerSuccess())
-        callback()
+        callback(res)
     }   
     catch(err){
+        callback(err)
         dispatch(registerFailed())
     }
 }
