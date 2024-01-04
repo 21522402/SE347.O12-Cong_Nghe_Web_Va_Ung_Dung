@@ -67,10 +67,11 @@ const getAllReviews = async (req, res) => {
     listGroupReview = listGroupReview.map((item) => {
       return {
         ...item,
-        averageStar:
-          (item.reviews.reduce((acc, cur) => {
+        averageStar: (
+          item.reviews.reduce((acc, cur) => {
             return acc + cur.star;
-          }, 0) / item.reviews.length).toFixed(1),
+          }, 0) / item.reviews.length
+        ).toFixed(1),
         OneStar: CountStar(item.reviews, 1),
         TwoStar: CountStar(item.reviews, 2),
         ThreeStar: CountStar(item.reviews, 3),
@@ -127,10 +128,11 @@ const responseReview = async (req, res) => {
 };
 
 const getReviewsByProductId = async (req, res) => {
-    try {
-      const {id} = req.params;
-      debugger
-      const reviews = await Review.find({}).populate([
+  try {
+    const { id } = req.params;
+    debugger;
+    const reviews = await Review.find({})
+      .populate([
         {
           path: "user",
           model: "User",
@@ -148,18 +150,38 @@ const getReviewsByProductId = async (req, res) => {
         },
       ])
       .exec();
-      const res2 = reviews.filter(item => item.orderItem.productId._id.toString() === id);
-      res.status(200).json({
-        message: 'Get reviews by productId successfullly',
-        data: res2
-      })
-    } catch (error) {
-      res.status(400).json({
-        message: error.message
-      })
+    const res2 = reviews.filter(
+      (item) => item.orderItem.productId._id.toString() === id
+    );
+    res.status(200).json({
+      message: "Get reviews by productId successfullly",
+      data: res2,
+    });
+  } catch (error) {
+    res.status(400).json({
+      message: error.message,
+    });
+  }
+};
+
+const deleteReviewById = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const reviews = await Review.findByIdAndDelete(id);
+
+    if (!reviews) {
+      return res.status(404).json({ message: "Không tìm thấy comment này!" });
     }
-    
-}
+    return res.status(200).json({
+      message: "Xóa thành công",
+      data: "Thành công"
+    });
+  } catch (error) {
+    return res.status(400).json({
+      message: error.message,
+    });
+  }
+};
 
 const CountStar = (arr, star) => {
   let temp = 0;
@@ -183,9 +205,9 @@ const CountResponsed = (arr) => {
   return temp;
 };
 
-
 module.exports = {
   getAllReviews,
   responseReview,
   getReviewsByProductId,
+  deleteReviewById,
 };

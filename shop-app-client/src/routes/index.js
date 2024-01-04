@@ -40,7 +40,6 @@ export const publicRoutes = [
     {path:'/request-login' , component: RequestLogin, layout:LayoutNoSidebar},
 
     // admin: => path: '/admin/[pageName]'
-
 ]
 export const buyerRoutes = [
     {path:'/user-profile' , component: Profile, layout:LayoutSidebarUser},

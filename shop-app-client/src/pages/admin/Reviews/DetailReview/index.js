@@ -130,35 +130,35 @@ function DetailReview() {
                   <div className={cx("star-num")}>5</div>
                   <MdStar color="orange" size={26} />
                   <div className={cx("star-percent")}>
-                    <ProgressBar borderRadius='6px' completed={itemReview.FiveStar === 0 ? 0 : itemReview.FiveStar + '%'} bgColor='orange' labelColor='black' labelAlignment="outside" customLabelStyles={{ fontWeight: '400', width: '40px' }} />
+                    <ProgressBar borderRadius='6px' completed={itemReview.FiveStar === 0 ? 0 : itemReview.FiveStar} bgColor='orange' labelColor='black' labelAlignment="outside" customLabelStyles={{ fontWeight: '400', width: '40px' }} />
                   </div>
                 </div>
                 <div className={cx("star-item")}>
                   <div className={cx("star-num")}>4</div>
                   <MdStar color="orange" size={26} />
                   <div className={cx("star-percent")}>
-                    <ProgressBar borderRadius='6px' completed={itemReview.FourStar === 0 ? 0 : itemReview.FourStar + '%'} bgColor='orange' labelColor='black' labelAlignment="outside" customLabelStyles={{ fontWeight: '400', width: '40px' }} />
+                    <ProgressBar borderRadius='6px' completed={itemReview.FourStar === 0 ? 0 : itemReview.FourStar} bgColor='orange' labelColor='black' labelAlignment="outside" customLabelStyles={{ fontWeight: '400', width: '40px' }} />
                   </div>
                 </div>
                 <div className={cx("star-item")}>
                   <div className={cx("star-num")}>3</div>
                   <MdStar color="orange" size={26} />
                   <div className={cx("star-percent")}>
-                    <ProgressBar borderRadius='6px' completed={itemReview.ThreeStar === 0 ? 0 : itemReview.ThreeStar + '%'} bgColor='orange' labelColor='black' labelAlignment="outside" customLabelStyles={{ fontWeight: '400', width: '40px' }} />
+                    <ProgressBar borderRadius='6px' completed={itemReview.ThreeStar === 0 ? 0 : itemReview.ThreeStar} bgColor='orange' labelColor='black' labelAlignment="outside" customLabelStyles={{ fontWeight: '400', width: '40px' }} />
                   </div>
                 </div>
                 <div className={cx("star-item")}>
                   <div className={cx("star-num")}>2</div>
                   <MdStar color="orange" size={26} />
                   <div className={cx("star-percent")}>
-                    <ProgressBar borderRadius='6px' completed={itemReview.TwoStar === 0 ? 0 : itemReview.TwoStar + '%'} bgColor='orange' labelColor='black' labelAlignment="outside" customLabelStyles={{ fontWeight: '400', width: '40px' }} />
+                    <ProgressBar borderRadius='6px' completed={itemReview.TwoStar === 0 ? 0 : itemReview.TwoStar} bgColor='orange' labelColor='black' labelAlignment="outside" customLabelStyles={{ fontWeight: '400', width: '40px' }} />
                   </div>
                 </div>
                 <div className={cx("star-item")}>
                   <div className={cx("star-num")}>1</div>
                   <MdStar color="orange" size={26} />
                   <div className={cx("star-percent")}>
-                    <ProgressBar borderRadius='6px' completed={itemReview.OneStar === 0 ? 0 : itemReview.OneStar + '%'} bgColor='orange' labelColor='black' labelAlignment="outside" customLabelStyles={{ fontWeight: '400', width: '40px' }} />
+                    <ProgressBar borderRadius='6px' completed={itemReview.OneStar === 0 ? 0 : itemReview.OneStar} bgColor='orange' labelColor='black' labelAlignment="outside" customLabelStyles={{ fontWeight: '400', width: '40px' }} />
                   </div>
                 </div>
               </div>
@@ -190,6 +190,7 @@ function DetailReview() {
                     key={index}
                     item={item}
                     getReviewsById={getReviewsById}
+                    list={itemReview.reviews}
                   />
                 })
               }

@@ -8,8 +8,6 @@ import { BsFillSendFill, BsFillImageFill } from "react-icons/bs";
 import ContentItemFeedback from "~/components/ContentItemFeedback";
 import axios from "axios";
 import baseUrl from "~/utils/baseUrl";
-import { toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 import HashLoader from "react-spinners/HashLoader";
 const cx = classNames.bind(styles);
 
@@ -73,12 +71,6 @@ function FeedbackDetail({ itemFeedbackActive, getAllFeedbacks }) {
           `${baseUrl}/api/feedbacks/responseFeedback/${itemFeedbackActive._id}`,
           data
         );
-        if (res) {
-          toast.success("Phản hồi thành công", {
-            position: toast.POSITION.TOP_RIGHT,
-            autoClose: 3000,
-          });
-        }
         getAllFeedbacks();
         setLoading(false);
       } catch (error) {
@@ -87,14 +79,6 @@ function FeedbackDetail({ itemFeedbackActive, getAllFeedbacks }) {
       }
     }
   };
-
-
-  useEffect(() => {
-    toast.success("Phản hồi thành công", {
-      position: toast.POSITION.TOP_RIGHT,
-      autoClose: 3000,
-    });
-  }, [])
 
   return (
     <>

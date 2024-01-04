@@ -2,6 +2,8 @@ const Order = require('../../model/order/Order');
 const Product = require('../../model/product/Product');
 const OrderItem = require('../../model/orderItem/OrderItem');
 const validationId = require('../../utils/validationId');
+const successTemplate = require("../../templates/succesTemplate");
+const errorTemplate = require("../../templates/errorTemplate");
 const orderController = {
     createOrder: async (req, res) => {
         try {
