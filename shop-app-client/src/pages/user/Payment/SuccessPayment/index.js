@@ -7,41 +7,43 @@ function SuccessPayment() {
     const extraData = url.searchParams.get('extraData');
     const orderId = url.searchParams.get('orderId');
     const resultCode = url.searchParams.get('resultCode');
-    const [time,setTime] = useState(1)
+    const [time, setTime] = useState(1)
 
     const handleSuccess = async (body) => {
         try {
-            
+
             const url = `${baseUrl}/api/users/handlePaymentMomoSuccess`;
             const res = await axios.post(url, body);
-            setTime(prev => prev +1 )
+            setTime(prev => prev + 1)
         } catch (error) {
             console.log(error);
         }
     };
     useEffect(() => {
-  
-        if (time===1) {
-            if (parseInt(resultCode)===0) {
-                handleSuccess({extraData, orderId})
+
+        if (resultCode) {
+            if (time === 1) {
+                if (parseInt(resultCode) === 0) {
+                    handleSuccess({ extraData, orderId })
+                }
             }
         }
 
     }, [])
-    return ( <>
-        <div style={{display: 'flex', flexDirection: 'column', justifyContent: 'center', textAlign: 'center'}}>
-            <div style={{margin: '150px 0px', display: 'flex', flexDirection: 'column', justifyContent: 'center'}}>
+    return (<>
+        <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', textAlign: 'center' }}>
+            <div style={{ margin: '150px 0px', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
                 <div>
-                    <img src={SuccessIcon} style={{width: '100px'}} alt=""/>
+                    <img src={SuccessIcon} style={{ width: '100px' }} alt="" />
                 </div>
-                <div style={{marginTop: '10px',fontSize: '28px', color: '#696969', fontWeight: '500'}}>Success!</div>
-                <div style={{fontSize: '20px'}}>Your request has been processed successfully</div>
-                <div style={{ marginTop: '20px',height: '50px', width: '200px', alignSelf: 'center', backgroundColor: '#224057', borderRadius: '5px', display: 'flex', justifyContent: 'center', alignItems: 'center', cursor: 'pointer'}}>
-                    <a href="/user" style={{color: 'white', textDecoration:'none'}}>Continue shopping</a>
+                <div style={{ marginTop: '10px', fontSize: '28px', color: '#696969', fontWeight: '500' }}>Success!</div>
+                <div style={{ fontSize: '20px' }}>Your request has been processed successfully</div>
+                <div style={{ marginTop: '20px', height: '50px', width: '200px', alignSelf: 'center', backgroundColor: '#224057', borderRadius: '5px', display: 'flex', justifyContent: 'center', alignItems: 'center', cursor: 'pointer' }}>
+                    <a href="/user" style={{ color: 'white', textDecoration: 'none' }}>Continue shopping</a>
                 </div>
             </div>
         </div>
-    </> );
+    </>);
 }
 
 export default SuccessPayment;
