@@ -12,7 +12,6 @@ const slice = createSlice({
     initialState,
     reducers: {
         setListOrders: (state,action) => {
-            console.log('payload',action.payload)
             state.listOrders = [...action.payload].map((item,index) => {
                 const totalMoneyGoods = item.orderItem.reduce((acc,cur) => {
         
@@ -28,7 +27,10 @@ const slice = createSlice({
                     
                 },0)
                 const shipPrice = 0
-                const finalPrice = totalMoneyGoods - shipPrice - (item.voucher? item.voucher.voucherPrice : 0)
+                let finalPrice = totalMoneyGoods - shipPrice;
+                if (item.voucher) {
+                    finalPrice -= item.voucher.isPercent ? item.voucher.voucherPrice/100 * finalPrice : item.voucher.voucherPrice 
+                }
                 const orderDate = convertDate(item.orderDate);
                 return {...item,
                     totalMoneyGoods,
@@ -38,7 +40,6 @@ const slice = createSlice({
                     
                 }
             })
-            console.log('state',state.listOrders)
 
             state.listOrdersOrigin = [...state.listOrders]
         },

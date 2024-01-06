@@ -140,12 +140,13 @@ function OrderDetail({ index, getAllOrders }) {
                     <div style={{ display: 'flex', gap: '48px' }}>
 
                         <div className={cx('form-group', 'single')} style={{ width: '30%' }}>
-                            <label>Tổng tiền: </label>
+                            <label>Thành tiền: </label>
                             <div className={cx('info-value')}>{order.finalPrice + ' VNĐ'}</div>
                         </div>
                         <div className={cx('form-group', 'single')} style={{ width: '30%' }} >
                             <label>Voucher: </label>
-                            <div className={cx('info-value')}>{order.voucher?.voucherPrice || 0 + ' VNĐ'}</div>
+                          
+                            <div className={cx('info-value')}>{order.voucher ? (  order.voucher.isPercent ? order.voucher.voucherPrice/100 * order.totalMoneyGoods : order.voucher.voucherPrice) : 0} VNĐ</div>
                         </div>
 
                     </div>

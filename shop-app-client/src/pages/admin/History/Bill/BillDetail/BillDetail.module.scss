@@ -1,6 +1,7 @@
 
 .wrapper {
 font-size: 13px;
+padding-bottom: 16px;
 // overflow: hidden;
 
 }
@@ -394,7 +395,7 @@ font-size: 13px;
     
     
     th.code {
-        width: 110px;
+        width: 180px;
         padding-left: 10px;
         text-align: center;
     }
@@ -405,47 +406,25 @@ font-size: 13px;
     }
     
     th.type {
-        width: 120px;
+        width: 180px;
+        text-align: center;
     }
     
     th.color-size {
-        width: 100px;
+        width: 180px;
         text-align: center;
     
        
     }
     
     th.quantity {
-        width: 70px;
-    
+        width: 140px;
+        
         text-align: center;
     }
     
     
-    
-    
-    th.unitPrice {
-        width: 100px;
-        text-align: right;
-    
-    }
-    th.discountPrice {
-        width: 100px;
-        text-align: right;
-    
-    }
-    th.sellPrice {
-        width: 100px;
-        text-align: right;
-     
-    }
-    th.price {
-        width: 120px;
-        padding-right: 20px;
-        text-align: right;
-    
-       
-    }
+ 
  
 }
 

@@ -12,17 +12,17 @@ import BillRow from "./BillRow";
 const cx = classNames.bind(styles)
 
 function Bill() {
-    const [listBill,setListBill] = useState([])
-    const [listBillOrigin,setListBillOrigin] = useState([])
+    const [listBill, setListBill] = useState([])
+    const [listBillOrigin, setListBillOrigin] = useState([])
     const [inputFocus, setInputFocus] = useState(false);
     const dateInputElement = useRef(null);
     const nowDate = convertDate(new Date())
 
-    const [filter,setFilter] = useState({
+    const [filter, setFilter] = useState({
         textSearch: '',
         date: null,
 
-    }) 
+    })
 
     const handleMouseOverDateFilter = () => {
         dateInputElement.current?.showPicker();
@@ -37,12 +37,12 @@ function Bill() {
     const handleChangeDateInput = (e) => {
         let value = e.target.value;
         if (!value) {
-            setFilter(prev => ({...prev, date: ''}))
+            setFilter(prev => ({ ...prev, date: '' }))
             return;
         }
         const res = convertDate2(value);
 
-        setFilter(prev => ({...prev, date: res}))
+        setFilter(prev => ({ ...prev, date: res }))
 
     }
 
@@ -55,36 +55,41 @@ function Bill() {
                     return {
                         ...item,
                         time,
+                        customerName: item.orderId?.userId?.fullName || 'Khách vãng lai',
+                        customerPhone: item.orderId?.userId?.phoneNumber || ''
+
                     }
                 })
                 setListBill([...tmp])
                 setListBillOrigin([...tmp])
-                
+
             }
         } catch (error) {
-            
+
         }
     }
     useEffect(() => {
         getAllBills()
-    },[])
+    }, [])
 
     useEffect(() => {
-        setFilter(prev => ({...prev, date: ''}))
+        setFilter(prev => ({ ...prev, date: '' }))
     }, [])
     useEffect(() => {
         let tmp = [...listBillOrigin]
-        if (filter.date!=='') {
+        if (filter.date !== '') {
             tmp = tmp.filter(item => item.time.split(' ')[0] === filter.date)
         }
-        if (filter.textSearch.trim()!=='') {
-            tmp = tmp.filter(item => ('#' + item._id).includes(filter.textSearch.trim())
-            ||  ('#' + item.orderId).includes(filter.textSearch.trim())
-            ||  (item.customerName.toLowerCase()).includes(filter.textSearch.trim().toLowerCase())
-            ||  (item.phoneNumber).includes(filter.textSearch.trim()))
+
+        if (filter.textSearch.trim() !== '') {
+
+            tmp = tmp.filter(item => {
+                return ('#' + item.id).includes(filter.textSearch.trim()) || ('#' + item.orderId._id).includes(filter.textSearch.trim()) || (item.customerName.toLowerCase()).includes(filter.textSearch.trim().toLowerCase()) || (item.method.toLowerCase()).includes(filter.textSearch.trim().toLowerCase())
+
+            })
         }
         setListBill([...tmp])
-    },[filter])
+    }, [filter])
     return (
 
         <div className={cx('wrapper')} >
@@ -98,7 +103,7 @@ function Bill() {
                         Hóa đơn
                     </div>
                     <div className={cx('tabpanel-item')}>
-                        <Link to="/admin/history/import" style={{textDecoration: 'none', color: '#000'}}>Nhập hàng</Link>
+                        <Link to="/admin/history/import" style={{ textDecoration: 'none', color: '#000' }}>Nhập hàng</Link>
                     </div>
                 </div>
                 <div className={cx('content-total')}>
@@ -111,7 +116,7 @@ function Bill() {
                                         'input-focus': inputFocus
                                     })}>
                                         <AiOutlineSearch className={cx('icon')} />
-                                        <input onChange={(e) => setFilter(prev => ({...prev,textSearch: e.target.value }))} onFocus={() => setInputFocus(true)} onBlur={() => setInputFocus(false)} type="text" placeholder="Theo mã hóa đơn, đơn hàng, tên khách hàng,..." className={cx('search-input')} />
+                                        <input onChange={(e) => setFilter(prev => ({ ...prev, textSearch: e.target.value }))} onFocus={() => setInputFocus(true)} onBlur={() => setInputFocus(false)} type="text" placeholder="Theo mã hóa đơn, đơn hàng, tên khách hàng,..." className={cx('search-input')} />
                                         <AiFillCaretDown className={cx('icon')} />
                                     </div>
 
@@ -123,12 +128,12 @@ function Bill() {
                                         </div>
                                         <input onChange={handleChangeDateInput} ref={dateInputElement} type="date" style={{ opacity: '0', top: '6px', left: '6px', right: '0', position: 'absolute' }} />
 
-                           
+
 
                                     </div>
                                 </div>
 
-                             
+
                             </div>
 
                             <div className={cx('tableView')}>
@@ -141,7 +146,6 @@ function Bill() {
                                             <th className={cx('date')}>Thời gian</th>
                                             <th className={cx('payMethod')}>Phương thức thanh toán</th>
                                             <th className={cx('customerName')}>Tên khách hàng</th>
-                                            <th className={cx('customerPhone')}>Số điện thoại</th>
                                             <th className={cx('totalPrice')}>Tiền thanh toán</th>
 
                                         </tr>
@@ -150,7 +154,7 @@ function Bill() {
 
                                         {listBill.map((item, index) => {
                                             return (
-                                                <BillRow key={index} itemBill={item}/>
+                                                <BillRow key={index} itemBill={item} />
                                             )
                                         })}
 
