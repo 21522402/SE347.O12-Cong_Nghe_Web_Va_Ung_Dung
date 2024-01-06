@@ -7,6 +7,8 @@ import axios from "axios";
 import convertDate from "~/utils/convertDate";
 import styles from './RentalImport.module.scss'
 import RentalImportRow from "./RentalImportRow";
+import { CSVLink} from 'react-csv'
+import formatMoney from "~/utils/formatMoney";
 
 const cx = classNames.bind(styles)
 
@@ -14,6 +16,7 @@ function RentalImport() {
     const [inputFocus, setInputFocus] = useState(false);
     const [listImport,setListImport] = useState([])
     const [listImportOrigin,setListImportOrigin] = useState([])
+    const [listImportExport,setListImportExport] = useState([])
     const dateInputElement = useRef(null);
     const nowDate = convertDate(new Date()).substring(3);
 
@@ -102,6 +105,52 @@ function RentalImport() {
         }
         setListImport([...tmp])
     },[filter])
+    useEffect(() => {
+        console.log(listImport)
+        setListImportExport(prev => {
+           
+            const nextState = [];
+            [...listImport].forEach(row => {
+                nextState.push({
+                            'MPN': '#' + row._id.substring(12),
+                            'NN': row.date,
+                            'SSPN': row.productQuantity,
+                            'SMHN': row.itemQuantity,
+                            'TTH': formatMoney(row.totalMoneyGoods),
+                })
+                row.listImportProducts.forEach(subRow => {
+                    nextState.push({
+                        'MSP': subRow.productCode,
+                        'TSP': subRow.productName,
+                        'L': subRow.productType,
+                        'M': subRow.color,
+                        'S': subRow.size,
+                        'SL': subRow.quantity,
+                        'DGN': formatMoney(subRow.unitPriceImport),
+                        'TT': formatMoney(subRow.unitPriceImport*subRow.quantity)
+                    })
+                })
+            })
+            return nextState
+        })
+    },[listImport])
+    const headers = [
+        { label: 'Mã phiếu nhập', key: 'MPN' },
+        { label: 'Ngày nhập', key: 'NN' },
+        { label: 'Số sản phẩm nhập', key: 'SSPN' },
+        { label: 'Số mặt hàng nhập', key: 'SMHN' },
+        { label: 'Tổng tiền', key: 'TTH' },
+
+        // Nếu có bảng con, thêm cột cho nó
+        { label: 'Mã sản phẩm', key: 'MSP', parentKey: 'subTable' },
+        { label: 'Tên sản phẩm', key: 'TSP', parentKey: 'subTable' },
+        { label: 'Loại', key: 'L', parentKey: 'subTable' },
+        { label: 'Màu', key: 'M', parentKey: 'subTable' },
+        { label: 'Size', key: 'S', parentKey: 'subTable' },
+        { label: 'Số lượng', key: 'SL', parentKey: 'subTable' },
+        { label: 'Đơn giá nhập', key: 'DGN', parentKey: 'subTable' },
+        { label: 'Thành tiền', key: 'TT', parentKey: 'subTable' },
+      ];
     return (
 
         <div className={cx('wrapper')} >
@@ -143,7 +192,7 @@ function RentalImport() {
                                     </div>
                                 </div>
 
-                           
+                                <CSVLink filename={"phieunhap.csv"} headers={headers} data={listImportExport} className={cx('btn','btn-succeed')} style={{textDecoration: 'none'}}>Xuất file Excel</CSVLink>
                             </div>
 
                             <div className={cx('tableView')}>

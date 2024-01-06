@@ -8,12 +8,14 @@ import baseUrl from '~/utils/baseUrl';
 import axios from "axios";
 import styles from './Bill.module.scss'
 import BillRow from "./BillRow";
-
+import { CSVLink} from 'react-csv'
+import formatMoney from "~/utils/formatMoney";
 const cx = classNames.bind(styles)
 
 function Bill() {
     const [listBill, setListBill] = useState([])
     const [listBillOrigin, setListBillOrigin] = useState([])
+    const [listBillExport,setListBillExport] = useState([])
     const [inputFocus, setInputFocus] = useState(false);
     const dateInputElement = useRef(null);
     const nowDate = convertDate(new Date())
@@ -90,6 +92,49 @@ function Bill() {
         }
         setListBill([...tmp])
     }, [filter])
+    useEffect(() => {
+        setListBillExport(prev => {
+            const nextState = [];
+            [...listBill].forEach(row => {
+                nextState.push({
+                            'MHD': '#' + row._id.substring(12),
+                            'KH': row.customerName,
+                            'TGTT': row.time,
+                            'PTTT': row.method,
+                            'STTT': formatMoney(row.money),
+                           
+                            'MDH': '#' + row.orderId._id.substring(12),
+                })
+                row.orderId.orderItem.forEach(subRow => {
+                    nextState.push({
+                        'MSP': subRow.productId.productCode,
+                        'TSP': subRow.productId.productName,
+                        'LSP':subRow.productId.productType,
+                        'M': subRow.color,
+                        'S': subRow.size,
+                        'SL': subRow.quantity,
+                    })
+                })
+            })
+            return nextState
+        })
+    },[listBill])
+    const headers = [
+        { label: 'Mã hóa đơn', key: 'MHD' },
+        { label: 'Khách hàng', key: 'KH' },
+        { label: 'Thời gian thanh toán', key: 'TGTT' },
+        { label: 'Phương thức thanh toán', key: 'PTTT' },
+        { label: 'Số tiền thanh toán', key: 'STTT' },
+        { label: 'Mã đơn hàng', key: 'MDH' },
+
+        // Nếu có bảng con, thêm cột cho nó
+        { label: 'Mã sản phẩm', key: 'MSP', parentKey: 'subTable' },
+        { label: 'Tên sản phẩm', key: 'TSP', parentKey: 'subTable' },
+        { label: 'Loại sản phẩm', key: 'LSP', parentKey: 'subTable' },
+        { label: 'Màu', key: 'M', parentKey: 'subTable' },
+        { label: 'Size', key: 'S', parentKey: 'subTable' },
+        { label: 'Số lượng', key: 'SL', parentKey: 'subTable' },
+      ];
     return (
 
         <div className={cx('wrapper')} >
@@ -132,7 +177,7 @@ function Bill() {
 
                                     </div>
                                 </div>
-
+                                <CSVLink filename={"hoadon.csv"} headers={headers} data={listBillExport} className={cx('btn','btn-succeed')} style={{textDecoration: 'none'}}>Xuất file Excel</CSVLink>
 
                             </div>
 
