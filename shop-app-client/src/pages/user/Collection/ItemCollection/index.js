@@ -1,13 +1,17 @@
 import classNames from "classnames/bind";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import styles from './ItemCollection.module.scss';
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import baseUrl from "~/utils/baseUrl";
 
 
 const cx = classNames.bind(styles)
 
 function ItemCollection({product, handleToCart}) {
     const [indexColorActive, setIndexColorActive] = useState(0);
+  
+
     const navigate = useNavigate()
     return (
         <div className={cx('wrapper')} onClick={() => window.location.href = `/product/${product._id}`}>
