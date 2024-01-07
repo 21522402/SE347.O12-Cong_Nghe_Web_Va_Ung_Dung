@@ -15,7 +15,7 @@ const cx = classNames.bind(styles);
 function ItemDashboard({ title, percent, value, isIncrease = true }) {
   return (
     <div className={cx("container-item")}>
-      <div style={{ display: "flex", justifyContent: "space-between" }}>
+      <div style={{ display: "flex", justifyContent: "space-between", width:'250px' }}>
         <span
           style={{
             marginRight: "10px",
@@ -26,35 +26,7 @@ function ItemDashboard({ title, percent, value, isIncrease = true }) {
         >
           {title}
         </span>
-        {isIncrease ? (
-          <div
-            style={{
-              marginLeft: "10px",
-              fontSize: "14px",
-              color: "#1E7E63",
-              fontWeight: "500",
-              display: "flex",
-              alignItems: "center",
-            }}
-          >
-            <AiOutlineRise style={{ marginRight: "4px", fontSize: "17px" }} />
-            <span>{percent} %</span>
-          </div>
-        ) : (
-          <div
-            style={{
-              marginLeft: "10px",
-              fontSize: "14px",
-              color: "#f07660",
-              fontWeight: "500",
-              display: "flex",
-              alignItems: "center",
-            }}
-          >
-            <AiOutlineFall style={{ marginRight: "4px", fontSize: "17px" }} />
-            <span>{percent} %</span>
-          </div>
-        )}
+        
       </div>
       <div
         style={{

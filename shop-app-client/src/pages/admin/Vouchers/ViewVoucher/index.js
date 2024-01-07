@@ -76,7 +76,10 @@ function ViewVoucher({ item }) {
                             {checkStatus(item)?'Hết hạn':"Còn hạn"}
                         </div>
                     </div>
-
+                    <div className={cx('input-field-right')} >
+                        <div className={cx('label-input')}>Áp dụng cho <HiOutlineInformationCircle fontSize={'18px'} /> </div>
+                        <div style={{borderBottom:'none'}} className={cx('input')}>{item?.applyFor === 'new' ? 'Khách hàng mới' : item?.applyFor === 'close' ? 'Khách hàng thân thiết' :'Tất cả'}</div>
+                    </div>
                 </div>
                 <div className={cx('row-input')} style={{height: 'auto'}} >
                     <div style={{ width: '100%', display: 'flex', flexDirection: 'column' }} >

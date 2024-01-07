@@ -22,13 +22,58 @@ function LayoutNoSidebar({ children }) {
     const checkStatus = (item) => {
         if (item.quanlity <= 0) return false;
         const expirationDate = new Date(item.expiredDate);
-
+        const createdAt = new Date(currentUser?.createdAt);
         // Lấy ngày hôm nay
         const today = new Date();
+        var soOrders = []
+        var soOrders = currentUser?.orders ? currentUser?.orders.filter(item => item?.status === 'Giao thành công') : []
+
         if (today > expirationDate) return false;
+
+        if (item?.applyFor === 'new') {
+
+            var soMiliGiay = today - createdAt;
+
+            // Tính số ngày
+            var soNgay = soMiliGiay / (1000 * 60 * 60 * 24);
+            if (soNgay >= 30) return false;
+            if (soOrders.length >= 3) return false;
+
+        }
+
+        if (item?.applyFor === 'close') {
+            var currentMonth = today.getMonth() + 1;
+            var ordersCountByMonth = {};
+
+            soOrders.forEach(function (order) {
+                var orderMonth = new Date(order?.orderDate).getMonth() + 1;
+
+                // Kiểm tra nếu đơn hàng nằm trong 2 tháng gần đây
+                if (currentMonth < orderMonth) currentMonth += 12;
+                if (currentMonth - orderMonth <= 2 && currentMonth - orderMonth > 0) {
+                    // Tăng đếm đơn hàng cho tháng tương ứng
+                    ordersCountByMonth[orderMonth] = (ordersCountByMonth[orderMonth] || 0) + 1;
+                }
+            });
+            if (Object.keys(ordersCountByMonth).length === 0) return false;
+
+            // Kiểm tra xem có ít nhất 2 đơn hàng trong mỗi tháng không
+            for (var i = 1; i < 3; i++) {
+                var c = today.getMonth() + 1;
+                if (c <= i) c += 12;
+                if (ordersCountByMonth[c - i] < 2) {
+                    return false;
+                }
+            }
+
+        }
         return true;
     }
     const handleSaveVoucherBuyer = async (id) => {
+        if (currentUser === null) {
+            notify("error", 'Bạn cần phải đăng nhập để lưu mã!')
+            return;
+        }
         let isWrong = false;
         currentUser.vouchers.forEach(item => {
             if ((item.id).toString() === id.toString()) {
@@ -62,6 +107,7 @@ function LayoutNoSidebar({ children }) {
                 const config = {}
                 const { data } = await axios.get(`${baseUrl}/api/vouchers`, config)
                 console.log(data)
+                console.log(currentUser)
                 setVoucherList([...data.result])
             } catch (error) {
                 notify("error", error)
@@ -88,7 +134,7 @@ function LayoutNoSidebar({ children }) {
                 </div>
                 <div style={{ padding: '2.5rem', backgroundColor: 'white' }}>
                     <div style={{ display: 'flex', gap: '3rem', boxSizing: 'border-box', userSelect: 'none', WebkitOverflowScrolling: 'touch', overflowX: 'scroll', whiteSpace: 'nowrap', width: '100%' }}>
-                        {(voucherList.filter(item => checkStatus(item))).slice(0, 4).map((item, index) =>
+                        {(voucherList.filter(item => checkStatus(item))).slice(0, 10).map((item, index) =>
                             <div key={index} style={{ width: '380px', height: '210px', borderRadius: '12px', position: 'relative', backgroundColor: '#ccc', padding: '2rem' }}>
                                 <div style={{ fontSize: '28px', fontWeight: 'bold', color: 'black', marginTop: '50px', zIndex: '300' }}>Giảm {item.voucherPrice}{item.isPercent ? '%' : 'K'}</div>
                                 <div style={{ zIndex: '300' }}>Cho đơn hàng từ {item.minPrice}K</div>
