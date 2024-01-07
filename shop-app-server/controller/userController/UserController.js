@@ -9,6 +9,7 @@ const Review = require('../../model/review/Review');
 const cloudinaryUploadImage = require('../../utils/cloudinary');
 const Product = require('../../model/product/Product');
 const Voucher = require('../../model/voucher/Voucher');
+const ImportProduct = require('../../model/importProduct/ImportProduct');
 
 const userRegisterCtrl = async (req, res) => {
     try {
@@ -729,6 +730,56 @@ const saveVoucherBuyer = async (req, res) => {
         return errorTemplate(res, error.message)
     }
 }
+const getDataStatistical = async (req, res) => {
+    try {
+        const buyers = await User.find({ role: 'Buyer' }).populate({
+            path: 'orders',
+            populate: {
+                path: 'orderItem'
+            }
+        });
+        const orders = await Order.find({}).populate([
+            {
+                path: 'orderItem',
+                model: 'OrderItem',
+                populate: {
+                    path: 'productId',
+                    model: 'Product'
+                }
+            }
+        ]).exec();
+        const allImports = await ImportProduct.find().exec();
+        const years = [];
+        buyers.forEach(item=> {
+            var month = new Date(item?.createdAt).getFullYear();
+            if(!years?.includes(month)){
+                years.push(month)
+            }
+        })
+        orders.forEach(item=> {
+            var month = new Date(item?.orderDate).getFullYear();
+            if(!years?.includes(month)){
+                years.push(month)
+            }
+        })
+        allImports.forEach(item=> {
+            var month = new Date(item?.date).getFullYear();
+            if(!years?.includes(month)){
+                years.push(month)
+            }
+        })
+        years.sort((a, b) => b - a);
+        const data = {
+            years: years,
+            allImports: allImports,
+            orders:orders,
+            buyers: buyers
+        }
+        return successTemplate(res, data, "Lấy dữ liệu thống kê thành công!", 200)
+    } catch (error) {
+        return errorTemplate(res, error.message)
+    }
+}
 module.exports = {
     userLoginCtrl,
     userRegisterCtrl,
@@ -755,5 +806,6 @@ module.exports = {
     createCartItem,
     getAllCartItem,
     getDefaultAddress,
-    checkVoucherDiscountCode
+    checkVoucherDiscountCode,
+    getDataStatistical
 }

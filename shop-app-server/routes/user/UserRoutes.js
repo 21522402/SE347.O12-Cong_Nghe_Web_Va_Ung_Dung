@@ -23,7 +23,8 @@ const {
     deleteCartItem,
     getAllCartItem,
     getDefaultAddress,
-    checkVoucherDiscountCode
+    checkVoucherDiscountCode,
+    getDataStatistical
 } = require('../../controller/userController/UserController');
 
 const verify = require('../../middlewares/auth/verify');
@@ -35,6 +36,8 @@ userRoutes.get('/', verify.verifyToken, getAllUser);
 userRoutes.delete('/:id', verify.verifyTokenAndAdmin, deleteUser);
 
 userRoutes.get('/get-all-buyers', getAllBuyer);
+
+userRoutes.get('/get-data-statisical', getDataStatistical);
 
 userRoutes.get('/:id', getUserInfo);
 

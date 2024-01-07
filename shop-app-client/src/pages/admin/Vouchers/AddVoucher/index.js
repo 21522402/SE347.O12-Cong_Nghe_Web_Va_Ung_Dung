@@ -1,6 +1,7 @@
 import styles from './AddVoucher.module.scss';
 import { HiOutlineInformationCircle } from 'react-icons/hi'
 import classNames from 'classnames/bind';
+import Select from 'react-select';
 import { CustomeButton } from '~/components';
 import { MdAdd } from 'react-icons/md';
 import { useForm } from 'react-hook-form';
@@ -10,10 +11,10 @@ import axios from 'axios';
 import baseUrl from '~/utils/baseUrl';
 import { ToastContainer, toast } from 'react-toastify';
 const cx = classNames.bind(styles);
-function AddVoucher({closeFunc, setVoucherList}) {
+function AddVoucher({ closeFunc, setVoucherList }) {
     const [isPc, setIsPc] = useState(false)
-    const notify = (type, message) => toast(message, {type: type});
-
+    const notify = (type, message) => toast(message, { type: type });
+    const [applyFor, setApplyFor] = useState('all')
     const [file, setFile] = useState(null)
     const [img, setImage] = useState(null)
     const [err, setErr] = useState(null)
@@ -35,6 +36,7 @@ function AddVoucher({closeFunc, setVoucherList}) {
         formData.append('minPrice', dt.minPrice);
         formData.append('quanlity', dt.quanlity);
         formData.append('description', dt.description);
+        formData.append('applyFor', applyFor);
         setErr(null)
         const sd = new Date(dt.startDate)
         const ed = new Date(dt.endDate)
@@ -54,8 +56,8 @@ function AddVoucher({closeFunc, setVoucherList}) {
 
         try {
             const { data } = await axios.post(`${baseUrl}/api/vouchers/addVoucher`, formData, config);
-            setVoucherList(prev=>[prev, {...data.result}])
-            
+            setVoucherList(prev => [prev, { ...data.result }])
+
             closeFunc(false)
             notify("success", 'Thêm voucher mới thành công!')
 
@@ -80,18 +82,36 @@ function AddVoucher({closeFunc, setVoucherList}) {
         }
     }
 
-
+    const cbb = [
+        { value: 'all', label: 'Tất cả' },
+        { value: 'new', label: 'Khách hàng mới' },
+        { value: 'close', label: 'Khách hàng thân thiết' }
+    ]
+    const handleChangeCombobox = (selectedOption) => {
+       setApplyFor(selectedOption.value)
+    }
     return (
         <div className={cx('wrapper')} style={{ animation: 'dropTop .3s linear' }}>
-            <ToastContainer/>
+            <ToastContainer />
 
             <div style={{ fontWeight: 500, fontSize: '18px', marginBottom: '20px', backgroundColor: 'black', color: 'white', padding: '8px', width: '20%', borderRadius: '4px' }}>Thêm Voucher mới</div>
-            <div style={{ display: 'flex', alignItems: 'end' }}>
-                <div style={{ paddingLeft: '4rem', marginBottom: '8px' }}>
-                    <img src={img ?? dfImgVoucher} alt='avtVoucher' style={{ width: '250px', height: '140px' }} />
+            <div style={{ display: 'flex' }}>
+                <div style={{ display: 'flex', alignItems: 'end', width: '50%' }}>
+                    <div style={{ paddingLeft: '4rem', marginBottom: '8px' }}>
+                        <img src={img ?? dfImgVoucher} alt='avtVoucher' style={{ width: '250px', height: '140px' }} />
+                    </div>
+                    <input type='file' id='fileImg' hidden title='Choose Image' accept='image/*' onChange={onImageChange} />
+                    <label htmlFor='fileImg' style={{ border: '1px dashed #ccc', marginBottom: '8px', borderRadius: '10px', height: '30px', display: 'flex', justifyContent: 'center', alignItems: 'end', padding: '4px', marginLeft: '12px', cursor: 'pointer', justifySelf: 'end' }}>Choose Image</label>
                 </div>
-                <input type='file' id='fileImg' hidden title='Choose Image' accept='image/*' onChange={onImageChange} />
-                <label htmlFor='fileImg' style={{ border: '1px dashed #ccc', marginBottom: '8px', borderRadius: '10px', height: '30px', display: 'flex', justifyContent: 'center', alignItems: 'end', padding: '4px', marginLeft: '12px', cursor: 'pointer', justifySelf: 'end' }}>Choose Image</label>
+                <div style={{ display: 'flex', alignItems: 'end', width: '50%' , padding:'0px 45px 0px 45px', marginBottom:'10px'}}>
+                    <div className={cx('input-field-left')} >
+                        <label  className={cx('label-input')}>Áp dụng cho <HiOutlineInformationCircle fontSize={'18px'} /> </label>
+                        <Select options={cbb}
+                                defaultValue={cbb[0]}
+                                onChange={handleChangeCombobox}
+                                className={cx('cbb')}  />
+                    </div>
+                </div>
             </div>
             {err && <div className={cx('error')} style={{ marginLeft: '40px' }}>{err}</div>}
             <form onSubmit={handleSubmit(onSubmit)} style={{ padding: '2rem 4rem 2.5rem 4rem', width: '100%' }}>

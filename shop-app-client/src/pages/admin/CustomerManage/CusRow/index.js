@@ -18,9 +18,7 @@ function CusRow({ item, index, currentPage, setCustomerList }) {
 
     // const [isActive, setIsActive] = useState(item.isActive)
     const [openDetail, setOpenDetail] = useState(false);
-    const [MaKH] = useState((index + (currentPage - 1) * 10 + 1).toString().length === 1
-        ? `KH0${index + (currentPage - 1) * 10 + 1}`
-        : 'KH' + (index + (currentPage - 1) * 10 + 1));
+    const [MaKH] = useState('KH_'+ item?._id.substring(16))
     const handleClickProducItem = () => {
         setOpenDetail(prev => !prev);
     }
@@ -65,7 +63,7 @@ function CusRow({ item, index, currentPage, setCustomerList }) {
             <ToastContainer />
 
             <tr className={cx('row-item', { showDetail: openDetail })} ref={element}>
-                <td style={{ paddingLeft: '22px', width: '10%' }}>{MaKH}</td>
+                <td style={{ paddingLeft: '22px', width: '10%', color:'blue' }}>{MaKH}</td>
                 <td style={{ width: '20%' }}>{item.fullName}</td>
                 <td style={{ width: '17%' }}>{item.phoneNumber}</td>
                 <td style={{ width: '14%' }}>{convertDate(item.createdAt)}</td>

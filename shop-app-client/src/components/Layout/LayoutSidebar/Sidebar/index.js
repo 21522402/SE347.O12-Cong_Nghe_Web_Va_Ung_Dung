@@ -44,7 +44,7 @@ function Sidebar() {
                     </Link>
                 </div>
             <hr />
-            <div class="d-flex nav nav-pills flex-column mb-auto pt-2">
+            <div className="d-flex nav nav-pills flex-column mb-auto pt-2">
                 <div className={cx('sidebar-item')} >
                     <Link to={'/admin'}  className={cx(`sidebar-item-link`, {
                         'active-item':activeItem==='Dashboard'
@@ -118,8 +118,8 @@ function Sidebar() {
             </div>
             <hr />
             <div >
-                <div class="d-flex align-items-center text-white text-decoration-none "  >
-                    <img src="https://static.vecteezy.com/system/resources/thumbnails/000/290/610/small_2x/10__2850_29.jpg" alt="" width="32" height="32" class="rounded-circle me-2" />
+                <div className="d-flex align-items-center text-white text-decoration-none "  >
+                    <img src="https://static.vecteezy.com/system/resources/thumbnails/000/290/610/small_2x/10__2850_29.jpg" alt="" width="32" height="32" className="rounded-circle me-2" />
                     <strong>Admin</strong>
                 </div>
             </div>
