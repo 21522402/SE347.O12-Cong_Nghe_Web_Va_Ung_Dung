@@ -182,7 +182,6 @@ export const createCartItem = async (user, cart, dispatch) => {
     try{
         const res = await axios.post(baseUrl + "/api/users/cart/createCartItem/" + user._id, cart)
         if(!res?.data?.result) return;
-        console.log(res?.data?.result)
         dispatch(createCartItemSuccess(res?.data?.result))
     }   
     catch(err){
@@ -212,11 +211,19 @@ export const getDefaultAddress = async (user, dispatch) => {
     }
 }
 
-
-export const createOrder = async (user, data, dispatch) => {
+export const createOrder = async (user, data, dispatch) => {    
     dispatch(createOrderStart())
     try{
-        const res = await axios.post(baseUrl + "/api/users/createOrder/" + user._id, data)
+        var res;
+        console.log("dô")
+
+        if(user){
+            res = await axios.post(baseUrl + "/api/users/createOrder/" + user._id, data)
+        }
+        else{
+            console.log("dô")
+            res = await axios.post(baseUrl + "/api/users/createOrderNonUser", data)
+        }
         dispatch(createOrderSuccess(res?.data?.result))
     }   
     catch(err){

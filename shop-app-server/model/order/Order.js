@@ -40,6 +40,10 @@ const orderSchema = new mongoose.Schema(
                 isPercent: Boolean,
                 voucherCode: String
             }
+        },
+        userId: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "User"
         }
     }
 )

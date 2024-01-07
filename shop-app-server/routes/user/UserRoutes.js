@@ -26,6 +26,10 @@ const {
     checkVoucherDiscountCode
 } = require('../../controller/userController/UserController');
 
+const { 
+    createOrderNonUserCtrl,
+} = require('../../controller/NonUserController/nonUserController');
+
 const verify = require('../../middlewares/auth/verify');
 
 const userRoutes = express.Router();
@@ -99,5 +103,7 @@ userRoutes.get('/cart/:id', getAllCartItem);
 userRoutes.get('/cart/defaultAddress/:id', getDefaultAddress);
 
 userRoutes.get('/cart/checkVoucherDiscountCode', checkVoucherDiscountCode)
+
+userRoutes.post('/createOrderNonUser', createOrderNonUserCtrl)
 
 module.exports = userRoutes;

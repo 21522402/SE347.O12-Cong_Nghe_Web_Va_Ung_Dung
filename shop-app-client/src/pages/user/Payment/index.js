@@ -19,6 +19,7 @@ function Payment() {
 
     let currentUser = useSelector((state) => state.auth.login.currentUser)
     let cartProducts = useSelector(state => state.user?.cart?.cartProducts)
+    let cartProductsNonUser = useSelector(state => state.nonUser?.cart?.cartProductsNonUser)
     let isSuccessPayment = useSelector(state => state.user?.cart?.isSuccessPayment)
     let isLoading = useSelector(state => state.user?.cart?.isLoading)
 
@@ -36,10 +37,6 @@ function Payment() {
     useEffect(() => {
        if(address) setAddress(address)
     }, [address])
-
-    useEffect(() => {
-        getDefaultAddress(currentUser, dispatch)
-    }, [])
 
     useEffect(() => {
         if(isSuccessPayment){
@@ -99,14 +96,32 @@ function Payment() {
         if(!validateAddress(main)){
             return;
         }
-
-        if(cartProducts.length === 0){
-            notify("warning", "Bạn chưa có sản phẩm nào trong giỏ hàng")
-            return;
+        if(currentUser){
+            if(cartProducts.length === 0){
+                notify("warning", "Bạn chưa có sản phẩm nào trong giỏ hàng")
+                return;
+            }
+        }
+        else{
+            if(cartProductsNonUser.length === 0){
+                notify("warning", "Bạn chưa có sản phẩm nào trong giỏ hàng")
+                return;
+            }
         }
 
+
         const order = {
-            "orderItem": cartProducts.map((item) => {
+            "orderItem": currentUser ? cartProducts.map((item) => {
+                return {
+                    productId: item.product._id,
+                    size: item.size,
+                    image: item.product.colors.find((i) => i.colorName === item.color).images[0],
+                    quantity: item.quantity,
+                    color: item.color,
+                    price: item.productPrice
+                }
+            }) : 
+            cartProductsNonUser.map((item) => {
                 return {
                     productId: item.product._id,
                     size: item.size,
@@ -125,8 +140,8 @@ function Payment() {
             } : null
         }
         console.log("payment successfully")
-        // createOrder(currentUser, order, dispatch)
         console.log(order)
+        createOrder(currentUser, order, dispatch)
     }
     const notify = (type, message) => toast(message, { type: type });
     return ( <>
@@ -136,12 +151,15 @@ function Payment() {
                 <div>
                     <div style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between'}}>
                         <span className={cx('title')}>Thông tin vận chuyển</span>
-                        <div style={{display: 'flex', flexDirection: 'row', alignItems: 'center', gap: '5px', cursor: 'pointer'}} onClick={() => setAddressPopup(true)}>
-                            <img src={"https://www.coolmate.me/images/address_book_icon.svg"} alt='' style={{width: '16px', height: '16px'}}/>
-                            <span style={{color: '#2f5acf', fontSize: '14px'}}>Chọn từ sổ địa chỉ</span>
-                        </div>
+                        {
+                            currentUser &&
+                            <div style={{display: 'flex', flexDirection: 'row', alignItems: 'center', gap: '5px', cursor: 'pointer'}} onClick={() => setAddressPopup(true)}>
+                                <img src={"https://www.coolmate.me/images/address_book_icon.svg"} alt='' style={{width: '16px', height: '16px'}}/>
+                                <span style={{color: '#2f5acf', fontSize: '14px'}}>Chọn từ sổ địa chỉ</span>
+                            </div>
+                        }
                     </div>
-                    <TransportInfo _ref={transportInfo} error={errAD} props={addressSL} userMail={currentUser.email}/>
+                    <TransportInfo _ref={transportInfo} error={errAD} props={currentUser? addressSL : null} userMail={currentUser? currentUser.email : ''}/>
                 </div>
                 <div style={{marginTop: '20px'}}>
                     <span className={cx('title')}>Hình thức thanh toán</span>
@@ -166,11 +184,14 @@ function Payment() {
                 </div>
                 <Cart _ref={voucherInfo}/>
             </div>
-            <Modal visible={addressPopup} setModal={setAddressPopup}>
-                <div className={cx('outer-address-popup')} style={{backgroundColor: 'white', width: '700px'}}>
-                    <Addresses payment onClickAddress={(item) => {setAddress(item); setAddressPopup(false)}}/>  
-                </div>
-            </Modal>
+            {
+                currentUser && 
+                    <Modal visible={addressPopup} setModal={setAddressPopup}>
+                        <div className={cx('outer-address-popup')} style={{backgroundColor: 'white', width: '700px'}}>
+                            <Addresses payment onClickAddress={(item) => {setAddress(item); setAddressPopup(false)}}/>  
+                        </div>
+                    </Modal>
+            }
         </div>
     </> );
 }

@@ -14,9 +14,19 @@ import styles from './Collection.module.scss';
 import ItemCollection from "./ItemCollection";
 import { createCartItem, getCartProducts, increaseQuantityCartItem } from '~/redux/api/userRequest';
 import ProductItem from '../Home/ProductItem';
+import { BsCheck } from 'react-icons/bs';
+import { createCartItemNonUser, increaseQuantityCartItemNonUser } from '~/redux/api/nonUserRequest';
 
 const cx = classNames.bind(styles)
 function Collection() {
+    const listPrices = [{id: 0, name: "Tất cả giá", min: null, max: null}
+    , {id: 1, name: "Dưới 100,000", min: null, max: 100000},
+    {id: 2, name: "Từ 100,000 - 200,000",  min: 100000, max: 200000},
+    {id: 3, name: "Từ 200,000 - 400,000",  min: 200000, max: 400000},
+    {id: 4, name: "Từ 400,000 - 600,000",  min: 400000, max: 600000},
+    {id: 5, name: "Từ 600,000 - 1,000,000",  min: 600000, max: 1000000},
+    {id: 7, name: "Trên 1,000,000",  min: 1000000, max: null},
+    ]
     useEffect(() => {
         window.scrollTo(0, 0)
       }, [])
@@ -28,6 +38,7 @@ function Collection() {
     const [productFilter, setProductFilter] =  useState([])
     let cartProducts = useSelector(state => state.user?.cart?.cartProducts)
     let currentUser = useSelector((state) => state.auth.login.currentUser)
+    let cartProductsNonUser = useSelector(state => state.nonUser?.cart?.cartProductsNonUser)
     const [category, setCategory] = useState(() => {
         return {
             category: 'Áo',
@@ -99,7 +110,7 @@ function Collection() {
     const [conditions, setConditions] = useState({
         size: [],
         color: '',
-        type: []
+        type: [],
     })
     const [condititonsSelected, setCondititonsSelected] = useState([]);
     useEffect(() => {
@@ -147,7 +158,7 @@ function Collection() {
 
     useEffect(() => {
         if(!id.includes("type")) {
-            if(conditions.size.length === 0 && conditions.color === '' && conditions.type.length === 0) {
+            if(conditions.size.length === 0 && conditions.color === '' && conditions.type.length === 0 && conditions.price && Object.keys(conditions.price).length === 0) {
                 setProductFilter(currentProducts)
             }
             else{
@@ -189,13 +200,38 @@ function Collection() {
                 if(conditions.color !== '' )
                     listFilter = listFilter.filter(item => item.colors?.map(color => color.colorName)?.includes(conditions.color))
                  
-
+                if(conditions.price && Object.keys(conditions.price).length !== 0)
+                    listFilter = listFilter.filter(item => {
+                        const mainPrice =  item?.exportPrice * (100 - item?.discountPerc) / 100;
+                        if(conditions.price.min){
+                            if(conditions.price.max){
+                                if(mainPrice > conditions.price.min && mainPrice < conditions.price.max)
+                                    return true;
+                                return false;
+                            }
+                            else{
+                                if(mainPrice > conditions.price.min)
+                                    return true;
+                                return false;
+                            }
+                        }
+                        else{
+                            if(conditions.price.max){
+                                if(mainPrice < conditions.price.max)
+                                    return true;
+                                return false;
+                            }
+                            else{
+                                return true;
+                            }
+                        }
+                    })
                 
                 setProductFilter(listFilter)
             }
         }
         else{
-            if(conditions.size.length === 0 && conditions.color === '' && conditions.type.length === 0) {
+            if(conditions.size.length === 0 && conditions.color === '' && conditions.type.length === 0 && conditions.price && Object.keys(conditions.price).length === 0) {
                 setProductFilter(currentProducts)
             }
             else{
@@ -232,6 +268,28 @@ function Collection() {
                 
                 if(conditions.color !== '' )
                     listFilter = listFilter.filter(item => item.colors?.map(color => color.colorName)?.includes(conditions.color))
+
+                if(conditions.price && Object.keys(conditions.price).length !== 0)
+                    listFilter = listFilter.filter(item => {
+                        const mainPrice =  item?.exportPrice * (100 - item?.discountPerc) / 100;
+                        if(conditions.price.min){
+                            if(conditions.price.max){
+                                if(mainPrice > conditions.price.min && mainPrice < conditions.price.max)
+                                    return true;
+                                return false;
+                            }
+                            else{
+                                if(mainPrice > conditions.price.min)
+                                    return true;
+                                return false;
+                            }
+                        }
+                        else{
+                            if(mainPrice < conditions.price.max)
+                                return true;
+                            return false;
+                        }
+                    })
                  
 
                 
@@ -295,11 +353,15 @@ function Collection() {
                 nextState.color = '';
             }
             else {
-                nextState[key] = [...nextState[key]].filter(item => item !== name);
+                if (key === 'price') {
+                    delete nextState['price'];
+                }
+                else
+                    nextState[key] = [...nextState[key]].filter(item => item !== name);
             }
             return nextState;
         })
-        if (key !== 'color') {
+        if (key !== 'color' && key !== 'price') {
             setCategory(prev => {
                 const nextState = { ...prev };
                 nextState[key] = [...nextState[key]].map((item) => {
@@ -317,7 +379,7 @@ function Collection() {
         setConditions({
             size: [],
             color: '',
-            type: []
+            type: [],
         });
         setCategory(prev => {
             return {
@@ -367,12 +429,17 @@ function Collection() {
             let nextState = [];
             for (var key in conditions) {
                 const value = conditions[key];
-                if (key !== 'color') {
-                    const add = value.map(item => ({ name: item, key }));
-                    nextState = nextState.concat(add)
-                }
-                else {
-                    if (value) nextState.push({ name: value, key });
+                
+                if (value){
+                    if(key === 'price')
+                        nextState.push({ name: value.name, key });
+                    else
+                        if(key === 'color')
+                            nextState.push({ name: value, key });
+                        else {
+                            const add = value.map(item => ({ name: item, key }));
+                            nextState = nextState.concat(add)
+                        }
                 }
             }
             return nextState;
@@ -394,9 +461,14 @@ function Collection() {
             quantity: 1
         }
     
-        const existItem = cartProducts.find((cartIT) => cartIT.productId === cartItem.productId && cartIT.size === cartItem.size && cartIT.color === cartItem.color)
-        existItem ? increaseQuantityCartItem(currentUser, {...existItem, quantity: 1}, dispatch) : createCartItem(currentUser, cartItem, dispatch)
-        
+        if(currentUser){
+            const existItem = cartProducts.find((cartIT) => cartIT.product?._id === cartItem.product && cartIT.size === cartItem.size && cartIT.color === cartItem.color)
+            existItem ? increaseQuantityCartItem(currentUser, {...existItem, quantity: 1}, dispatch) : createCartItem(currentUser, cartItem, dispatch)
+        }
+        else{
+            const existItem = cartProductsNonUser?.find((cartIT) => cartIT.product?._id === cartItem.product && cartIT.size === cartItem.size && cartIT.color === cartItem.color)
+            existItem ? increaseQuantityCartItemNonUser({...existItem, quantity: 1}, dispatch) : createCartItemNonUser({...cartItem, product: product}, dispatch)
+        }
         setSelected({...cartItem, product: product})
         setPopupProductCart(true)
         setCloseTimer()
@@ -445,6 +517,29 @@ function Collection() {
                                                 <label className={cx('filter-select-color__label')}>{item.colorName}</label>
                                             </div>
                                         </li>
+                                    })
+                                }
+                            </ul>
+                        </div>
+                        <div className={cx('filter-item')}>
+                            <h5 className={cx('filter-heading')}>Mức giá</h5>   
+                            <ul className={cx('filter-price')}>
+                                {
+                                    listPrices.map((item, index) => {
+                                        return <div key={index} onClick={() => {setConditions({...conditions, price: item})}} className={cx('outer-filter-select-price__item')}>
+                                                <div className={cx('filter-select-price__check')}>
+                                                    <div className={cx('filter-select-price__dot')}>
+
+                                                    </div>
+                                                    {
+                                                        conditions?.price?.id === item.id &&
+                                                            <div className={cx('filter-select-price__dot', 'active-dot')}>
+                                                                <BsCheck color='white'/>
+                                                            </div>
+                                                    }
+                                                </div>
+                                                <label className={cx('filter-select-price__label')}>{item.name}</label>
+                                            </div>
                                     })
                                 }
                             </ul>

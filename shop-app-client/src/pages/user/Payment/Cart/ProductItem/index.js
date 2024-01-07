@@ -5,6 +5,7 @@ import { ComboBox } from '~/components/Input';
 import { GoTrash } from "react-icons/go";
 import { useDispatch, useSelector } from 'react-redux';
 import { decreaseQuantityCartItem, deleteCartItem, increaseQuantityCartItem } from '~/redux/api/userRequest';
+import { decreaseQuantityCartItemNonUser, deleteCartItemNonUser, increaseQuantityCartItemNonUser } from '~/redux/api/nonUserRequest';
 const cx = classNames.bind(styles);
 export default function ProductItem({props}) {
     const dispatch = useDispatch();
@@ -24,6 +25,13 @@ export default function ProductItem({props}) {
             setColors(createListColorCBB())
         }
     }, [])
+
+    useEffect(() => {
+        if(props){
+            getDefaultSelection();
+            setColors(createListColorCBB())
+        }
+    }, [props])
 
     function createListColorCBB(){
         const list = props?.product
@@ -111,9 +119,19 @@ export default function ProductItem({props}) {
                                 <ComboBox listItems={sizes} placeHolder={''} selectedItem={props.size} type={'list-gray'} filterValueSelected={onSizeChange}/>
                             </div>
                             <div className={cx('outerQuantity')}>
-                                <div className={cx('operator')} style={{cursor: 'pointer', userSelect: 'none'}} onClick={() => decreaseQuantityCartItem(currentUser, props, dispatch)}><span>-</span></div>
+                                <div className={cx('operator')} style={{cursor: 'pointer', userSelect: 'none'}} onClick={() => {
+                                    currentUser ?
+                                    decreaseQuantityCartItem(currentUser, props, dispatch)
+                                    :
+                                    decreaseQuantityCartItemNonUser(props, dispatch)
+                                }}><span>-</span></div>
                                 <div className={cx('operator')}><span>{props.quantity}</span></div>
-                                <div className={cx('operator')} style={{cursor: 'pointer', userSelect: 'none'}} onClick={() => increaseQuantityCartItem(currentUser, {...props, quantity: 1}, dispatch)}><span>+</span></div>
+                                <div className={cx('operator')} style={{cursor: 'pointer', userSelect: 'none'}} onClick={() => {
+                                    currentUser ?
+                                    increaseQuantityCartItem(currentUser, {...props, quantity: 1}, dispatch)
+                                    :
+                                    increaseQuantityCartItemNonUser({...props, quantity: 1}, dispatch)
+                                }}><span>+</span></div>
                             </div>
                             <div style={{display: 'flex', flexDirection: 'column', alignItems: 'flex-end', marginLeft: '10px'}}>
                                 <div style={{fontWeight: '600'}}>{new Intl.NumberFormat('vi-VN', {style: 'currency', currency: 'VND'}).format(props.productPrice)}</div>
@@ -121,7 +139,14 @@ export default function ProductItem({props}) {
                             </div>  
                         </div>
                     </div>
-                    <div style={{display: 'flex', flexDirection: 'row', alignItems: 'center', gap: '5px', cursor: 'pointer', alignSelf: 'flex-start'}} onClick={() => deleteCartItem(currentUser, props, dispatch)}>
+                    <div style={{display: 'flex', flexDirection: 'row', alignItems: 'center', gap: '5px', cursor: 'pointer', alignSelf: 'flex-start'}} onClick={() => 
+                        {
+                            currentUser ?
+                            deleteCartItem(currentUser, props, dispatch)
+                            :
+                            deleteCartItemNonUser(props, dispatch)
+                            
+                        }}>
                         <GoTrash />
                         <div>Xóa</div>
                     </div>

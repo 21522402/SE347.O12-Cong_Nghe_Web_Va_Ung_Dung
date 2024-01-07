@@ -26,13 +26,13 @@ function Header() {
     overLay.current.checked = false
   }
   let cartProducts = useSelector(state => state.user?.cart?.cartProducts)
+  let cartProductsNonUser = useSelector(state => state.nonUser?.cart?.cartProductsNonUser)
   const [indexCategoryActive, setIndexCategoryActive] = useState(-1);
   const [showDetailPopUp, setShowDetailPopup] = useState(false);
   const [showSearchPopUp, setShowSearchPopup] = useState(false);
   const [showCartPopUp, setShowCartPopup] = useState(false);
   const [valueSearch, setValueSearch] = useState("");
   const [popup, setPopup] = useState("login");
-
   const [openSideBar, setOpenSidebar] = useState(true);
 
   const handleCategoryClick = (index) => {
@@ -155,6 +155,7 @@ function Header() {
     else if (e === "signup") setPopup("signup");
     else setPopup("forgot");
   };
+
   return (
     <div className={cx("wrapper")}>
       <Modal visible={login} setModal={setLogin}>
@@ -320,7 +321,7 @@ function Header() {
           >
             <IoBagHandle style={{ color: "#fff", fontSize: "24px" }} />
             {showCartPopUp && (
-              <CartPopup onMouseLeave={() => setShowCartPopup(false)} />
+              <CartPopup cartProducts={currentUser ? cartProducts : cartProductsNonUser} onMouseLeave={() => setShowCartPopup(false)} />
             )}
           </div>
         </Link>

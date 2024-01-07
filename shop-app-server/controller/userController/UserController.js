@@ -332,6 +332,7 @@ const createOrderCtrl = async (req, res) => {
         const {orderItem, ...other} = req?.body
         const order = await Order.create({
             ...other,
+            userId: userId,
             orderDate: new Date()
         })
 
@@ -350,16 +351,16 @@ const createOrderCtrl = async (req, res) => {
                 "discountPerc": item?.discountPerc
             })
 
-            await Product.updateOne({
-                _id: item.productId, 
-                "colors.colorName": item?.color,
-                "colors.sizes.sizeName": item?.size
-            },{$inc: {
-                'colors.$[].sizes.$[xxx].quantity': -item?.quantity
-            }},
-            {arrayFilters: [
-                {"xxx.sizeName": item?.size}
-            ]})
+            // await Product.updateOne({
+            //     _id: item.productId, 
+            //     "colors.colorName": item?.color,
+            //     "colors.sizes.sizeName": item?.size
+            // },{$inc: {
+            //     'colors.$[].sizes.$[xxx].quantity': -item?.quantity
+            // }},
+            // {arrayFilters: [
+            //     {"xxx.sizeName": item?.size}
+            // ]})
             
             resolve(orderItem.id)
         });
@@ -377,11 +378,11 @@ const createOrderCtrl = async (req, res) => {
             await updateOrderItem(order.id,data)
         })
 
-        if(req?.body?.voucher){
-            await Voucher.findOneAndUpdate({voucherCode: req?.body?.voucher?.voucherCode}, {$inc: {
-                'quanlity': -1
-            }})
-        }
+        // if(req?.body?.voucher){
+        //     await Voucher.findOneAndUpdate({voucherCode: req?.body?.voucher?.voucherCode}, {$inc: {
+        //         'quanlity': -1
+        //     }})
+        // }
 
         await User.findByIdAndUpdate(userId, {orders: orderIds, cart: []})
 
