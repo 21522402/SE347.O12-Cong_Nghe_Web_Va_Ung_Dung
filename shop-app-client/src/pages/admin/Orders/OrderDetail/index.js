@@ -41,7 +41,7 @@ function OrderDetail({ index, getAllOrders }) {
                 res = ['Đã xác nhận', 'Đang giao hàng', 'Đã hủy']
                 break;
             case 'Đang giao hàng':
-                res = ['Giao thành công', 'Đã hủy']
+                res = ['Đang giao hàng','Giao thành công']
                 break;
             case 'Giao thành công':
                 res = []
@@ -66,17 +66,20 @@ function OrderDetail({ index, getAllOrders }) {
         }
     }, [statusElement])
     const handleClickSave = async () => {
-        try {
-            const res = await axios.patch(`${baseUrl}/api/orders/adminEditStatus`, { id: order._id, status: status })
-            if (res) {
-                console.log(res.data)
-                getAllOrders();
-                toast.success('Thay đổi trạng thái đơn hàng thành công!')
-
+        if (status!== order.status) {
+            try {
+                const res = await axios.patch(`${baseUrl}/api/orders/adminEditStatus`, { id: order._id, status: status })
+                if (res) {
+                    console.log(res.data)
+                    getAllOrders();
+                    toast.success('Thay đổi trạng thái đơn hàng thành công!')
+    
+                }
+            } catch (error) {
+    
             }
-        } catch (error) {
-
         }
+        
     }
 
     return (
@@ -137,12 +140,13 @@ function OrderDetail({ index, getAllOrders }) {
                     <div style={{ display: 'flex', gap: '48px' }}>
 
                         <div className={cx('form-group', 'single')} style={{ width: '30%' }}>
-                            <label>Tổng tiền: </label>
+                            <label>Thành tiền: </label>
                             <div className={cx('info-value')}>{order.finalPrice + ' VNĐ'}</div>
                         </div>
                         <div className={cx('form-group', 'single')} style={{ width: '30%' }} >
                             <label>Voucher: </label>
-                            <div className={cx('info-value')}>{order.voucher?.voucherPrice || 0 + ' VNĐ'}</div>
+                          
+                            <div className={cx('info-value')}>{order.voucher ? (  order.voucher.isPercent ? order.voucher.voucherPrice/100 * order.totalMoneyGoods : order.voucher.voucherPrice) : 0} VNĐ</div>
                         </div>
 
                     </div>

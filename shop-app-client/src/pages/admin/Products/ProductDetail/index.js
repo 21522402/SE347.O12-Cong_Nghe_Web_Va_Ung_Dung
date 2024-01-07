@@ -193,7 +193,10 @@ function ProductDetail({index, getAllProducts}) {
                     <div className={cx('product-cz')}>
                         {/* Form group */}
                         <div className={cx('form-group-color-size')}>
-                            <div><label>Tồn kho:</label> <span><strong>{quantityStorage}</strong></span></div>
+                            <div style={{display: 'flex', justifyContent: 'space-between'}}>
+                                <div><label>Tồn kho:</label> <span><strong>{quantityStorage}</strong></span></div>
+                                <div><label>Đã bán:</label> <span><strong>{product.quantitySold}</strong></span></div>
+                            </div>
                             <div style={{ marginTop: '10px' }}>
                                 <ColorSize list={listStorage} />
                             </div>

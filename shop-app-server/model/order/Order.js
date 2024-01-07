@@ -42,9 +42,9 @@ const orderSchema = new mongoose.Schema(
             }
         },
         userId: {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: "User"
-        }
+            type: mongoose.Schema.ObjectId,
+            ref: 'User'
+        },
     }
 )
 const Order = mongoose.model('Order', orderSchema);

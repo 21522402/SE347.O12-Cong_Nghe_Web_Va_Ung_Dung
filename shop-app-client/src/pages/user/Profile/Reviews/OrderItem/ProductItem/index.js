@@ -8,6 +8,7 @@ import { AiOutlineClose } from 'react-icons/ai';
 import { IoMdAdd } from 'react-icons/io';
 import { useDispatch, useSelector } from 'react-redux';
 import { createReview, getAllOrderReview } from '~/redux/api/userRequest';
+import { ToastContainer, toast } from 'react-toastify';
 const cx = classNames.bind(styles);
 function ProductItem({props}) {
     let [item, setItem] = useState({})
@@ -31,11 +32,14 @@ function ProductItem({props}) {
 
     const dispatch = useDispatch()
     let currentUser = useSelector((state) => state.auth.login.currentUser)
+    let isLoadingCR = useSelector((state) => state.user.orderReview.isLoadingCR)
+    let id = useSelector((state) => state.user.orderReview.id)
+
 
     const handleChange = (e) => {
         setContent(e.target.value)
     }
-
+    const notify = (type, message) => toast(message, { type: type });
     const handlePreviewImage = (event) => {
         if (event.target.files[0]) {
             const file = event.target.files[0];
@@ -57,12 +61,15 @@ function ProductItem({props}) {
             "imagesRv": imagesRv, 
             "isResponsed": false,
         }
-        createReview(currentUser, props._id, reviewData, dispatch, (res) => {
-            getAllOrderReview(currentUser, dispatch)
+        createReview(currentUser, props._id, reviewData, props.productId, dispatch, (res) => {
+            console.log("success", "Tạo đánh giá thành công!")
+            notify("success", "Tạo đánh giá thành công!")
         })
     }
 
     const arr = [1, 2, 3, 4, 5]
+
+    //const notify = (type, message) => toast(message, { type: type });
 
     return ( 
         <>
@@ -106,7 +113,7 @@ function ProductItem({props}) {
                                 <div>
                                     {
                                         props.review.imagesRv ? 
-                                            <div style={{display: 'flex', flexDirection: 'row', gap: '7px', alignItems: 'center', marginBottom: '8px'}}>
+                                            <div style={{display: 'flex', flexDirection: 'row', gap: '7px', alignItems: 'center', marginBottom: '8px', overflow: 'auto'}}>
                                                 {
                                                     props.review.imagesRv.map((item, index) => {
                                                         return <img src={item} className={cx('img-review')}  alt=''/>
@@ -157,7 +164,18 @@ function ProductItem({props}) {
                                                             <span className={cx('account-info__btn-text_cancel')}>Hủy</span>
                                                         </div>
                                                         <div className={cx('account-info__btn')} style={{width: '50%'}} onClick={handleSubmit}>
-                                                            <span className={cx('account-info__btn-text')} >Tạo</span>
+                                                            {
+                                                                (id === props.productId && isLoadingCR) ? 
+                                                                <div style={{display: 'flex', flexDirection: 'row', alignItems: 'center', gap: '10px'}}>
+                                                                    <svg style={{height: '20px', width: '20px', color: 'white'}} className={cx("animate-spin")} xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                                                        <circle style={{opacity: '25%'}} cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                                                                        <path style={{opacity: '75%%'}} fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                                                    </svg>
+                                                                </div>
+                                                                :
+                                                                <span className={cx('account-info__btn-text')} >Tạo</span>
+
+                                                            }
                                                         </div>
                                                     </div>
                                                 </div>

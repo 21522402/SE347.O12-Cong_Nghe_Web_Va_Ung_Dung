@@ -1,12 +1,13 @@
 const mongoose = require('mongoose');
 
 const billSchema = new mongoose.Schema({
-    orderId: String,
+    orderId: {
+        type: mongoose.Schema.ObjectId,
+        ref: 'Order'
+    },
     time: Date,
     method: String,
     money: Number,
-    customerName: String,
-    phoneNumber: String
 
 }, {
     toJSON: {

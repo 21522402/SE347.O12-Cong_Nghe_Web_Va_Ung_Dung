@@ -32,6 +32,7 @@ const userSlice = createSlice({
             address: [],
             error: false,
             isSuccess: false,
+            
         },
     },
     reducers: {
@@ -57,6 +58,7 @@ const userSlice = createSlice({
             state.address.isSuccess = false
             state.orderReview.isSuccess = false
             state.cart.isSuccess = false
+            state.orderReview.isSuccessCR = false
         },
         getAllAddressStart: (state) => {
             state.address.isLoading = true;
@@ -79,7 +81,6 @@ const userSlice = createSlice({
         createAddressSuccess: (state, action) => {
             state.address.isLoading = false;
             state.address.isSuccess = true;
-
         },
         createAddressFailed: (state) => {
             state.address.isLoading = false;
@@ -134,19 +135,20 @@ const userSlice = createSlice({
             state.orderReview.error = true;
         },
 
-        createReviewStart: (state) => {
-            state.orderReview.isLoading = true;
+        createReviewStart: (state, action) => {
+            state.orderReview.id = action?.payload;
+            state.orderReview.isLoadingCR = true;
             state.orderReview.error = false;
-            state.address.isSuccess = false;
+            state.orderReview.isSuccessCR = false;
         },
         createReviewSuccess: (state, action) => {
-            state.orderReview.isLoading = false;
-            state.address.isSuccess = true;
+            state.orderReview.isLoadingCR = false;
+            state.orderReview.isSuccessCR = true;
         },
         createReviewFailed: (state) => {
-            state.orderReview.isLoading = false;
+            state.orderReview.isLoadingCR = false;
             state.orderReview.error = true;
-            state.address.isSuccess = false;
+            state.orderReview.isSuccessCR = false;
         },
 
         //cart
@@ -315,6 +317,22 @@ const userSlice = createSlice({
             state.cart.error = true;
             state.cart.isSuccessPayment = false;
         },
+        getAPIMoMoStart: (state,action) => {
+            state.cart.isLoading = true
+            state.cart.error = false;
+            state.cart.isSuccessGetMoMo = false
+        },
+        getAPIMoMoSuccess: (state, action) => {
+            state.cart.isLoading = false;
+            state.cart.isSuccessGetMoMo = true;
+            state.cart.urlMoMo = action.payload
+        },
+        
+        getAPIMoMoFailed: (state) => {
+            state.cart.isLoading = false;
+            state.cart.error = true;
+            state.cart.isSuccessGetMoMo = false;
+        },
     }
 })
 
@@ -367,7 +385,10 @@ export const {
     getDefaultAddressFailed,
     createOrderStart,
     createOrderSuccess,
-    createOrderFailed
+    createOrderFailed,
+    getAPIMoMoStart,
+    getAPIMoMoSuccess,
+    getAPIMoMoFailed
 } = userSlice.actions;
 
 export default userSlice.reducer;

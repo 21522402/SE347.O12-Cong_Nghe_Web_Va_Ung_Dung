@@ -58,27 +58,38 @@ function DetailReview() {
   }
 
   useEffect(() => {
-    if (cbbRes === "Responsed")
-    {
-      const arrSearch = listItemReviewTmp.filter((item) => {
-        console.log(item.star, Number(cbbStar))
-        return item.star === Number(cbbStar) && item.isResponsed === true;
-      })
-      setItemReview({...itemReview, reviews: arrSearch})
+    console.log(cbbStar,cbbRes)
+    let arrSearch = [...listItemReviewTmp];
+    if (cbbStar!=='All') {
+      arrSearch = arrSearch.filter(item => item.star === Number(cbbStar))
     }
-    else if (cbbRes === "UnResponsed")
-    {
-      const arrSearch = listItemReviewTmp.filter((item) => {
-        console.log(item.star, Number(cbbStar))
-        return item.star === Number(cbbStar) && item.isResponsed === false;
-      })
-      setItemReview({...itemReview, reviews: arrSearch})
+    if (cbbRes!='All') {
+      arrSearch = arrSearch.filter(item => item.isResponsed === (cbbRes === "UnResponsed"? false : true ))
     }
-    else
-    {
-      const arrSearch = listItemReviewTmp;
-      setItemReview({...itemReview, reviews: arrSearch})
-    }
+    setItemReview({...itemReview, reviews: arrSearch})
+    // if (cbbRes === "Responsed")
+    // {
+    //   const arrSearch = listItemReviewTmp.filter((item) => {
+    //     console.log(item.star, Number(cbbStar))
+    //     return item.star === Number(cbbStar) && item.isResponsed === true;
+    //   })
+    //   setItemReview({...itemReview, reviews: arrSearch})
+    // }
+    // else if (cbbRes === "UnResponsed")
+    // {
+    //   const arrSearch = listItemReviewTmp.filter((item) => {
+    //     console.log(item.star, Number(cbbStar))
+    //     return item.star === Number(cbbStar) && item.isResponsed === false;
+    //   })
+    //   setItemReview({...itemReview, reviews: arrSearch})
+    // }
+    // else
+    // {
+    //   const arrSearch = listItemReviewTmp.filter((item) => {
+    //     return item.star === Number(cbbStar)
+    //   })
+    //   setItemReview({...itemReview, reviews: arrSearch})
+    // }
   }, [cbbStar, cbbRes])
 
   useEffect(() => {
@@ -136,41 +147,41 @@ function DetailReview() {
                   <div>4XL</div>
                 </div>
               </div>
-              <div className={cx("product-baseOn")}><b>{itemReview.averageStar === false ? 0 : itemReview.averageStar} sao</b> dựa trên {itemReview.reviews?.length} đánh giá</div>
+              <div className={cx("product-baseOn")}><b>{itemReview.averageStar === false ? 0 : itemReview.averageStar?.toFixed(1)} sao</b> dựa trên {itemReview.reviews?.length} đánh giá</div>
               <div className={cx("product-stars")}>
                 <div className={cx("star-item")}>
                   <div className={cx("star-num")}>5</div>
                   <MdStar color="orange" size={26} />
                   <div className={cx("star-percent")}>
-                    <ProgressBar borderRadius='6px' completed={itemReview.FiveStar} bgColor='orange' labelColor='black' labelAlignment="outside" customLabelStyles={{ fontWeight: '400', width: '40px' }} />
+                    <ProgressBar borderRadius='6px' completed={itemReview.FiveStar === 0 ? 0 : itemReview.FiveStar?.toFixed(1) + '%'} bgColor='orange' labelColor='black' labelAlignment="outside" customLabelStyles={{ fontWeight: '400', width: '40px' }} />
                   </div>
                 </div>
                 <div className={cx("star-item")}>
                   <div className={cx("star-num")}>4</div>
                   <MdStar color="orange" size={26} />
                   <div className={cx("star-percent")}>
-                    <ProgressBar borderRadius='6px' completed={itemReview.FourStar} bgColor='orange' labelColor='black' labelAlignment="outside" customLabelStyles={{ fontWeight: '400', width: '40px' }} />
+                    <ProgressBar borderRadius='6px' completed={itemReview.FourStar === 0 ? 0 : itemReview.FourStar?.toFixed(1) + '%'} bgColor='orange' labelColor='black' labelAlignment="outside" customLabelStyles={{ fontWeight: '400', width: '40px' }} />
                   </div>
                 </div>
                 <div className={cx("star-item")}>
                   <div className={cx("star-num")}>3</div>
                   <MdStar color="orange" size={26} />
                   <div className={cx("star-percent")}>
-                    <ProgressBar borderRadius='6px' completed={itemReview.ThreeStar} bgColor='orange' labelColor='black' labelAlignment="outside" customLabelStyles={{ fontWeight: '400', width: '40px' }} />
+                    <ProgressBar borderRadius='6px' completed={itemReview.ThreeStar === 0 ? 0 : itemReview.ThreeStar?.toFixed(1) + '%'} bgColor='orange' labelColor='black' labelAlignment="outside" customLabelStyles={{ fontWeight: '400', width: '40px' }} />
                   </div>
                 </div>
                 <div className={cx("star-item")}>
                   <div className={cx("star-num")}>2</div>
                   <MdStar color="orange" size={26} />
                   <div className={cx("star-percent")}>
-                    <ProgressBar borderRadius='6px' completed={itemReview.TwoStar} bgColor='orange' labelColor='black' labelAlignment="outside" customLabelStyles={{ fontWeight: '400', width: '40px' }} />
+                    <ProgressBar borderRadius='6px' completed={itemReview.TwoStar === 0 ? 0 : itemReview.TwoStar?.toFixed(1) + '%'} bgColor='orange' labelColor='black' labelAlignment="outside" customLabelStyles={{ fontWeight: '400', width: '40px' }} />
                   </div>
                 </div>
                 <div className={cx("star-item")}>
                   <div className={cx("star-num")}>1</div>
                   <MdStar color="orange" size={26} />
                   <div className={cx("star-percent")}>
-                    <ProgressBar borderRadius='6px' completed={itemReview.OneStar} bgColor='orange' labelColor='black' labelAlignment="outside" customLabelStyles={{ fontWeight: '400', width: '40px' }} />
+                    <ProgressBar borderRadius='6px' completed={itemReview.OneStar === 0 ? 0 : itemReview.OneStar?.toFixed(1) + '%'} bgColor='orange' labelColor='black' labelAlignment="outside" customLabelStyles={{ fontWeight: '400', width: '40px' }} />
                   </div>
                 </div>
               </div>

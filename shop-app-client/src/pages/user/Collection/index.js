@@ -14,6 +14,7 @@ import styles from './Collection.module.scss';
 import ItemCollection from "./ItemCollection";
 import { createCartItem, getCartProducts, increaseQuantityCartItem } from '~/redux/api/userRequest';
 import ProductItem from '../Home/ProductItem';
+import { ToastContainer, toast } from 'react-toastify';
 import { BsCheck } from 'react-icons/bs';
 import { createCartItemNonUser, increaseQuantityCartItemNonUser } from '~/redux/api/nonUserRequest';
 
@@ -451,7 +452,13 @@ function Collection() {
     }, [])
 
     const handleItemToCart = (product, b, c) => {
+        if(currentUser){
 
+        }
+        else{
+            notify("warning", "Vui lòng đăng nhập để thêm sản phẩm này vào giỏ hàng")
+            return
+        }   
         const cartItem = {
             product: product._id,
             productName: product.productName,
@@ -473,10 +480,13 @@ function Collection() {
         setPopupProductCart(true)
         setCloseTimer()
     }
+    const notify = (type, message) => toast(message, { type: type });
 
     return (
         <div className={cx('wrapper')}>
-            <div className={cx(popupProductCart ? 'bayra' : 'bayvao')} style={{ position: 'fixed', zIndex: 1000, top: '16px', right: '16px', borderRadius: '16px', width: '350px', maxHeight: '350px', backgroundColor: 'white', padding: '15px', fontSize: '16px', color: 'black', fontWeight: '600' }}>
+        <ToastContainer />
+
+            <div className={cx(popupProductCart ? 'bayra' : 'bayvao')} style={{position: 'fixed', zIndex: 1000, top: '16px', right: '16px', borderRadius: '16px', width: '350px', maxHeight: '350px', backgroundColor: 'white', padding: '15px', fontSize: '16px', color: 'black', fontWeight: '600' }}>
                 <div>Đã thêm vào giỏ hàng</div>
                 {selected && <ProductItem props={selected} />}
                 <div>

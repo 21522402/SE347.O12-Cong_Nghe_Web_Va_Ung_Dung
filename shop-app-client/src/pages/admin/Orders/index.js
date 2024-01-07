@@ -12,25 +12,26 @@ import { useDispatch, useSelector } from "react-redux";
 import baseUrl from '~/utils/baseUrl';
 import axios from "axios";
 import { setListOrders, filterListOrder } from "~/redux/slices/orderAdminSlice";
-
+import { CSVLink } from 'react-csv'
+import formatMoney from "~/utils/formatMoney";
 
 const cx = classNames.bind(styles)
 
 function Orders() {
     const dispatch = useDispatch()
     const listOrders = useSelector(state => state.orderAdmin.listOrders)
-    console.log(listOrders)
+    const [listOrdersExport, setListOrdersExport] = useState([])
     const [inputFocus, setInputFocus] = useState(false);
-    const listStatus = ['Tất cả', 'Đang xử lý','Đã xác nhận', 'Đang giao hàng', 'Giao thành công','Đã hủy']
+    const listStatus = ['Tất cả', 'Đang xử lý', 'Đã xác nhận', 'Đang giao hàng', 'Giao thành công', 'Đã hủy']
     const [showStatus, setShowStatus] = useState(false)
     const filterStatus = useRef(null)
     const dateInputElement = useRef(null);
-    const [filter,setFilter] = useState({
+    const [filter, setFilter] = useState({
         status: '',
         textSearch: '',
         date: null,
 
-    }) 
+    })
 
     const handleMouseOverDateFilter = () => {
         dateInputElement.current?.showPicker();
@@ -46,19 +47,75 @@ function Orders() {
     const handleChangeDateInput = (e) => {
         let value = e.target.value;
         if (!value) {
-            setFilter(prev => ({...prev, date: ''}))
+            setFilter(prev => ({ ...prev, date: '' }))
             return;
         }
         const res = convertDate2(value);
 
-        setFilter(prev => ({...prev, date: res}))
+        setFilter(prev => ({ ...prev, date: res }))
 
     }
 
     useEffect(() => {
-        setFilter(prev => ({...prev, date: ''}))
+        setFilter(prev => ({ ...prev, date: '' }))
 
     }, [])
+    useEffect(() => {
+        console.log(listOrders)
+        setListOrdersExport(prev => {
+            // const nextState = [...listOrders].map(item => {
+            //     return {
+            //         'Mã đơn hàng': '#' + item._id.substring(12),
+            //         'Ngày đặt hàng': item.orderDate,
+            //         'Các mặt hàng': item.orderItem.map(i => {
+            //             return `${i.quantity} ${i.productId?.productName} ${i.color}/${i.size}`
+            //         }).join(' | '),
+            //         'Trị giá đơn hàng': formatMoney(item.finalPrice),
+            //         'Thông tin người nhận': `${item.address?.name}, ${item.address?.phoneNumber}, ${item.address?.ward}, ${item.address?.district}, ${item.address?.province}/${item.address?.detail}`,
+            //         'Trạng thái': item.status
+
+            //     }
+            // })
+            // console.log(nextState)
+            const nextState = [];
+            [...listOrders].forEach(row => {
+                nextState.push({
+                    'MDH': '#' + row._id.substring(12),
+                    'NDH': row.orderDate,
+                    'TGDH': formatMoney(row.finalPrice),
+                    'TTNN': `${row.address?.name}, ${row.address?.phoneNumber}, ${row.address?.ward}, ${row.address?.district}, ${row.address?.province}/${row.address?.detail}`,
+                    'TT': row.status,
+                })
+                row.orderItem.forEach(subRow => {
+                    nextState.push({
+                        'MSP': subRow.productId.productCode,
+                        'TSP': subRow.productId.productName,
+                        'LSP': subRow.productId.productType,
+                        'M': subRow.color,
+                        'S': subRow.size,
+                        'SL': subRow.quantity,
+                    })
+                })
+    
+            })
+            return nextState
+        })
+    }, [listOrders])
+    const headers = [
+        { label: 'Mã đơn hàng', key: 'MDH' },
+        { label: 'Ngày đặt hàng', key: 'NDH' },
+        { label: 'Trị giá đơn hàng', key: 'TGDH' },
+        { label: 'Thông tin người nhận', key: 'TTNN' },
+        { label: 'Trạng thái', key: 'TT' },
+
+        // Nếu có bảng con, thêm cột cho nó
+        { label: 'Mã sản phẩm', key: 'MSP', parentKey: 'subTable' },
+        { label: 'Tên sản phẩm', key: 'TSP', parentKey: 'subTable' },
+        { label: 'Loại sản phẩm', key: 'LSP', parentKey: 'subTable' },
+        { label: 'Màu', key: 'M', parentKey: 'subTable' },
+        { label: 'Size', key: 'S', parentKey: 'subTable' },
+        { label: 'Số lượng', key: 'SL', parentKey: 'subTable' },
+      ];
     useEffect(() => {
         const handleClickOutSide = (e) => {
             if (filterStatus.current && !filterStatus.current.contains(e.target)) {
@@ -67,20 +124,20 @@ function Orders() {
         }
         document.addEventListener("mousedown", handleClickOutSide)
         return () => {
-        document.removeEventListener("mousedown", handleClickOutSide)
+            document.removeEventListener("mousedown", handleClickOutSide)
 
         }
-    },[filterStatus])
+    }, [filterStatus])
     const getAllOrders = async () => {
         try {
             const res = await axios.get(`${baseUrl}/api/orders/adminGetAllOrder`)
             if (res) {
 
                 dispatch(setListOrders(res.data.data))
-                
+
             }
         } catch (error) {
-            
+
         }
     }
 
@@ -89,7 +146,7 @@ function Orders() {
     }, [])
     useEffect(() => {
         dispatch(filterListOrder(filter))
-    },[filter])
+    }, [filter])
     return (
         <div className={cx('wrapper')}>
             <div className={cx('container')}>
@@ -105,18 +162,18 @@ function Orders() {
                                 'input-focus': inputFocus
                             })}>
                                 <AiOutlineSearch className={cx('icon')} />
-                                <input onChange={(e) => setFilter(prev => ({...prev, textSearch: e.target.value}))} onFocus={() => setInputFocus(true)} onBlur={() => setInputFocus(false)} type="text" placeholder="Theo mã, tên khách hàng" className={cx('search-input')} />
+                                <input onChange={(e) => setFilter(prev => ({ ...prev, textSearch: e.target.value }))} onFocus={() => setInputFocus(true)} onBlur={() => setInputFocus(false)} type="text" placeholder="Theo mã, tên khách hàng" className={cx('search-input')} />
                                 <AiFillCaretDown className={cx('icon')} />
                             </div>
 
                             {/* nhóm hàng */}
-                            <div  ref={filterStatus} className={cx('product-category')} onClick={() => setShowStatus(prev => !prev)}>
+                            <div ref={filterStatus} className={cx('product-category')} onClick={() => setShowStatus(prev => !prev)}>
                                 <div className={cx('function-button')}>
                                     <span className={cx('btn', 'btn-succeed')}>{filter.status || 'Trạng thái'} <AiFillCaretDown /></span>
                                 </div>
 
 
-                                {showStatus && <DropDown items={listStatus} onClick={(item) => setFilter(prev => ({...prev, status: item}))}/>}
+                                {showStatus && <DropDown items={listStatus} onClick={(item) => setFilter(prev => ({ ...prev, status: item }))} />}
                             </div>
 
                             {/* Loại hàng */}
@@ -126,14 +183,16 @@ function Orders() {
                                 </div>
                                 <input onChange={handleChangeDateInput} ref={dateInputElement} type="date" style={{ opacity: '0', top: '6px', left: '6px', right: '0', position: 'absolute' }} />
 
-                              
-                        
+
+
 
                             </div>
+
                         </div>
 
                         {/* function */}
-                     
+                        <CSVLink filename={"donhang.csv"} data={listOrdersExport} headers={headers} className={cx('btn', 'btn-succeed')} style={{ textDecoration: 'none' }}>Xuất file Excel</CSVLink>
+
                     </div>
 
                     <div className={cx('tableView')}>
@@ -154,7 +213,7 @@ function Orders() {
 
                                 {listOrders.map((item, index) => {
                                     return (
-                                        <OrderRow key={index} index={index} getAllOrders={getAllOrders}/>
+                                        <OrderRow key={index} index={index} getAllOrders={getAllOrders} />
                                     )
                                 })}
 
