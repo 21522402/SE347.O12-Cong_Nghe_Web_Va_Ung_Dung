@@ -144,7 +144,7 @@ function Feedbacks() {
                   }}
                 >
                   <th className={cx("col-tbl")} style={{ paddingLeft: "20px" }}>
-                    Feedback
+                    Phản hồi
                   </th>
                   <th className={cx("col-tbl")}>Tình trạng</th>
                   <th className={cx("col-tbl")} style={{ paddingLeft: "20px" }}>

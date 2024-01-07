@@ -1,5 +1,6 @@
 .wrapper {
     width: 100%;
+    padding: 20px 40px;
 }
 .container-item {
     margin: 20px 0px 20px 20px;
@@ -46,13 +47,13 @@
 }
 .images-list {
     display: flex;
-    margin-left: -8px;
     position: relative;
+    margin-top: 10px;
     img{
         width: 80px;
         height: 80px;
         position: relative; 
-        margin: 0 10px;
+        margin: 10px;
     }
 }
 
@@ -67,12 +68,12 @@
 
 .delete-img {
     position: absolute;
-    top: -20px;
+    top: -6px;
     right: 0;
     font-size: 30px;
     cursor: pointer;
-    margin-top: 4px;
     height: 24px;
+    right: -4px;
     font-weight: bold;
 }
 
@@ -91,7 +92,7 @@
 }
 
 .container-reply {
-    width: 87%;
+    width: 100%;
     height: auto;
     margin: 10px 90px;
     margin-bottom: 30px;
@@ -112,10 +113,26 @@
     align-items: flex-start;
     justify-content: flex-start;
     flex-wrap: wrap;
-    padding: 12px  ;
+    padding: 12px ;
     background-color: rgb(243, 243, 243);
     border-radius: 2px;
     color: #000;
     font-weight: 600;
     
+}
+
+.container-loader {
+    background-color: transparent;
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    z-index: 1200;
+    .loader-feedback {
+        margin-top: calc(11% + 50px);
+    }
 }

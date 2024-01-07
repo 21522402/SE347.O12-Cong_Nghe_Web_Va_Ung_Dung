@@ -543,13 +543,6 @@ function ProductDetail() {
                     </div>
                     <div className={cx('product-description')}>
                         <div ref={descriptionElement} style={{ fontWeight: '600', fontSize: '14px', marginBottom: '16px' }}>Đặc điểm nổi bật</div>
-                        {/* Lấy từ csdl */}
-                        {/* <p>- Thành phần: 100% Polyester</p>
-                        <p>- Chất liệu áo khoác thể thao có khả năng giữ ấm</p>
-                        <p>- Hạn chế xù lông và chống nhăn</p>
-                        <p>- Form áo: Regular, ôm nhẹ</p>
-                        <p>- Tự hào sản xuất tại Việt Nam</p>
-                        <p>- Người mẫu: 1m77 - 69kg, mặc áo 2XL</p> */}
                     </div>
                 </div>
             </div>
@@ -622,15 +615,6 @@ function ProductDetail() {
                                 })
                             }
                         </div>
-                        {/* <div className={cx('reviews-pagination')}>
-                            <a href="#" className={cx('reviews-pagination__prev')}>
-                                <FaAngleLeft />
-                            </a>
-                            <span>1/1</span>
-                            <a href="#" className={cx('reviews-pagination__next')}>
-                                <FaAngleRight />
-                            </a>
-                        </div> */}
                     </div>
                 </div>
 

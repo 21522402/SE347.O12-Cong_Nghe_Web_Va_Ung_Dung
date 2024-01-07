@@ -40,13 +40,6 @@ function Home() {
   const [selected, setSelected] = useState(null)
   const navigate=useNavigate();
 
-  const banners = [
-    "https://media.coolmate.me/cdn-cgi/image/quality=80,format=auto/uploads/October2023/mceclip0_74.png",
-    "https://media.coolmate.me/cdn-cgi/image/quality=80,format=auto/uploads/October2023/mceclip0_87.png",
-    "https://mcdn.coolmate.me/image/September2023/mceclip4_64.jpg",
-    "https://mcdn.coolmate.me/image/March2023/mceclip0_137.jpg",
-  ];
-
   const navPages = [
     {
       url: images.TatCaSP,
@@ -114,9 +107,9 @@ function Home() {
       items: 2,
     },
   };
-  //DUyY
+
   const dispatch = useDispatch();
-  const [filter,setFilter] = useState({
+  const [filter, setFilter] = useState({
         productType: '',
         productCategory: '',
         status: '',
@@ -203,8 +196,6 @@ const notify = (type, message) => toast(message, { type: type });
                 </div>
             </div>
         </div>  
-        {/* <button onClick={() => setPopupProductCart(!popupProductCart)}>clickme</button> */}
-      {/* Slider */}
 
       <div>
         <Carousel
@@ -214,7 +205,7 @@ const notify = (type, message) => toast(message, { type: type });
           responsive={responsiveBanner}
           autoPlay
           arrows={withWindow >=1024 ? true : false }
-          ssr={true} // means to render carousel on server-side.
+          ssr={true} 
           infinite={true}
           autoPlaySpeed={3000}
           transitionDuration={500}
