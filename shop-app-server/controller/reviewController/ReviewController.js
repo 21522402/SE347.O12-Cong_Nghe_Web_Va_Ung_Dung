@@ -2,6 +2,8 @@ const Review = require("../../model/review/Review");
 const successTemplate = require("../../templates/succesTemplate");
 const errorTemplate = require("../../templates/errorTemplate");
 const cloudinaryCustom = require("../../utils/cloudinaryCustom");
+const User = require("../../model/user/User");
+const OrderItem = require("../../model/orderItem/OrderItem");
 
 const getAllReviews = async (req, res) => {
   try {
@@ -167,11 +169,32 @@ const getReviewsByProductId = async (req, res) => {
 const deleteReviewById = async (req, res) => {
   try {
     const { id } = req.params;
-    const reviews = await Review.findByIdAndDelete(id);
-
-    if (!reviews) {
+    const itemReview = await Review.findByIdAndDelete(id);
+    if (!itemReview) {
       return res.status(404).json({ message: "Không tìm thấy comment này!" });
     }
+
+    const users = await User.findOne({
+      reviews: {
+        $in: [id]
+      }
+    })
+
+    const arr = users.reviews.filter(review => review.toString() !== id)
+
+    await User.findByIdAndUpdate(users._id, {
+      reviews: arr
+    })
+    const orderItem = await OrderItem.findOne({
+      review: id
+    })
+
+    await OrderItem.findOneAndUpdate(
+      { _id: orderItem._id },
+      { $unset: { review: 1 } }, // Use $unset to remove the 'review' field
+      { new: true } // Return the modified document
+    );
+
     return res.status(200).json({
       message: "Xóa thành công",
       data: "Thành công"
