@@ -24,9 +24,14 @@ const {
     getAllCartItem,
     getDefaultAddress,
     checkVoucherDiscountCode,
+    getDataStatistical,
     getApiMoMo,
     handlePaymentMomoSuccess
 } = require('../../controller/userController/UserController');
+
+const { 
+    createOrderNonUserCtrl,
+} = require('../../controller/NonUserController/nonUserController');
 
 const verify = require('../../middlewares/auth/verify');
 
@@ -37,6 +42,8 @@ userRoutes.get('/', verify.verifyToken, getAllUser);
 userRoutes.delete('/:id', verify.verifyTokenAndAdmin, deleteUser);
 
 userRoutes.get('/get-all-buyers', getAllBuyer);
+
+userRoutes.get('/get-data-statisical', getDataStatistical);
 
 userRoutes.get('/:id', getUserInfo);
 
@@ -106,5 +113,7 @@ userRoutes.get('/cart/:id', getAllCartItem);
 userRoutes.get('/cart/defaultAddress/:id', getDefaultAddress);
 
 userRoutes.get('/cart/checkVoucherDiscountCode', checkVoucherDiscountCode)
+
+userRoutes.post('/createOrderNonUser', createOrderNonUserCtrl)
 
 module.exports = userRoutes;

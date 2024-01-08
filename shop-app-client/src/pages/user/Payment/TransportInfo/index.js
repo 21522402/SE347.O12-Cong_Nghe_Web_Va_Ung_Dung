@@ -48,7 +48,7 @@ const TransportInfo =  forwardRef(({props, error, userMail, _ref}) => {
     const [wards, setWard] = useState([])
 
     useEffect(() => {
-       props && fetch(provinceApi)
+       props ? fetch(provinceApi)
             .then((res) => res.json())
             .then((json) => {
                 setProvince(json)
@@ -66,7 +66,13 @@ const TransportInfo =  forwardRef(({props, error, userMail, _ref}) => {
                                     setWard(json.wards)
                                 });
                         });
-            });
+            }) 
+        :
+            fetch(provinceApi)
+            .then((res) => res.json())
+            .then((json) => {
+                setProvince(json)
+            })
     }, [props])
 
     const filterProvince = (e) => {

@@ -11,8 +11,9 @@ const Review = require('../../model/review/Review');
 const cloudinaryUploadImage = require('../../utils/cloudinary');
 const Product = require('../../model/product/Product');
 const Voucher = require('../../model/voucher/Voucher');
+const Bill = require('../../model/bill/Bill');
 const sendMail = require('../../utils/email')
-
+const ImportProduct = require('../../model/importProduct/ImportProduct');
 
 const userRegisterCtrl = async (req, res) => {
     try {
@@ -333,7 +334,8 @@ const createOrderCtrl = async (req, res) => {
         const { orderItem, ...other } = req?.body
         const order = await Order.create({
             ...other,
-            orderDate: new Date()
+            orderDate: new Date(),
+            userId: user._id
         })
 
         const orderIds = user.orders
@@ -535,11 +537,18 @@ const handlePaymentMomoSuccess = async (req, res) => {
                     throw new Error('User is not existed. Please log in!');
                 }
                 const {orderItem, ...other} = decode
+                const orderDate = new Date()
                 const order = await Order.create({
                     ...other,
-                    orderDate: new Date()
+                    orderDate: orderDate,
+                    userId: user._id
                 })
-        
+                await Bill.create({
+                    orderId: order._id,
+                    time: orderDate,
+                    method: 'Thanh toán trực tuyến',
+                    money: decode.money,
+                })
                 const orderIds = user.orders
                 if (!orderIds) orderIds = []
                 if (!orderIds.includes(order.id)) {
@@ -573,6 +582,7 @@ const handlePaymentMomoSuccess = async (req, res) => {
                 })
         
                 await User.findByIdAndUpdate(userId, {orders: orderIds, cart: []})
+                
                 await sendMail({
                     email: decode.address.email,
                     subject: '[SHOP-APP]: ĐƠN ĐẶT HÀNG CỦA BẠN',
@@ -1000,6 +1010,56 @@ const templateHTMLOrder = (order) => {
     </html>
     `
 }
+const getDataStatistical = async (req, res) => {
+    try {
+        const buyers = await User.find({ role: 'Buyer' }).populate({
+            path: 'orders',
+            populate: {
+                path: 'orderItem'
+            }
+        });
+        const orders = await Order.find({}).populate([
+            {
+                path: 'orderItem',
+                model: 'OrderItem',
+                populate: {
+                    path: 'productId',
+                    model: 'Product'
+                }
+            }
+        ]).exec();
+        const allImports = await ImportProduct.find().exec();
+        const years = [];
+        buyers.forEach(item=> {
+            var month = new Date(item?.createdAt).getFullYear();
+            if(!years?.includes(month)){
+                years.push(month)
+            }
+        })
+        orders.forEach(item=> {
+            var month = new Date(item?.orderDate).getFullYear();
+            if(!years?.includes(month)){
+                years.push(month)
+            }
+        })
+        allImports.forEach(item=> {
+            var month = new Date(item?.date).getFullYear();
+            if(!years?.includes(month)){
+                years.push(month)
+            }
+        })
+        years.sort((a, b) => b - a);
+        const data = {
+            years: years,
+            allImports: allImports,
+            orders:orders,
+            buyers: buyers
+        }
+        return successTemplate(res, data, "Lấy dữ liệu thống kê thành công!", 200)
+    } catch (error) {
+        return errorTemplate(res, error.message)
+    }
+}
 module.exports = {
     userLoginCtrl,
     userRegisterCtrl,
@@ -1028,5 +1088,6 @@ module.exports = {
     getDefaultAddress,
     checkVoucherDiscountCode,
     getApiMoMo,
-    handlePaymentMomoSuccess
+    handlePaymentMomoSuccess,
+    getDataStatistical
 }

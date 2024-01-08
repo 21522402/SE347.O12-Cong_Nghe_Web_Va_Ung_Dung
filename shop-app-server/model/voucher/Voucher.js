@@ -33,6 +33,10 @@ const voucherSchema = new mongoose.Schema({
         type: Number,
         default:100
     },
+    applyFor:{
+        type: String,
+        default:'all'
+    },
     description: {
         type: String,
         require: [true, 'Voucher description is required.']

@@ -20,6 +20,7 @@ import ProductItem from './ProductItem';
 import { createCartItem, getCartProducts, increaseQuantityCartItem } from '~/redux/api/userRequest';
 import { ToastContainer, toast } from 'react-toastify';
 
+import { createCartItemNonUser, increaseQuantityCartItemNonUser } from '~/redux/api/nonUserRequest';
 
 const cx = classNames.bind(styles);
 
@@ -33,6 +34,7 @@ function Home() {
 
   const listProducts =  useSelector(state => state.product.listProducts)
   let cartProducts = useSelector(state => state.user?.cart?.cartProducts)
+  let cartProductsNonUser = useSelector(state => state.nonUser?.cart?.cartProductsNonUser)
   let currentUser = useSelector((state) => state.auth.login.currentUser)
 
   const [selected, setSelected] = useState(null)
@@ -151,13 +153,6 @@ const setCloseTimer = () => {
     }, 1000)
 }
 const handleItemToCart = (product, b, c) => {
-    if(currentUser){
-
-    }
-    else{
-        notify("warning", "Vui lòng đăng nhập để thêm sản phẩm này vào giỏ hàng")
-        return
-    }
     const cartItem = {
         product: product._id,
         productName: product.productName,
@@ -166,9 +161,14 @@ const handleItemToCart = (product, b, c) => {
         color: c.colorName,
         quantity: 1
     }
-
-    const existItem = cartProducts.find((cartIT) => cartIT.productId === cartItem.productId && cartIT.size === cartItem.size && cartIT.color === cartItem.color)
-    existItem ? increaseQuantityCartItem(currentUser, {...existItem, quantity: 1}, dispatch) : createCartItem(currentUser, cartItem, dispatch)
+    if(currentUser){
+        const existItem = cartProducts.find((cartIT) => cartIT.product?._id === cartItem.product && cartIT.size === cartItem.size && cartIT.color === cartItem.color)
+        existItem ? increaseQuantityCartItem(currentUser, {...existItem, quantity: 1}, dispatch) : createCartItem(currentUser, cartItem, dispatch)
+    }
+    else{
+        const existItem = cartProductsNonUser?.find((cartIT) => cartIT.product?._id === cartItem.product && cartIT.size === cartItem.size && cartIT.color === cartItem.color)
+        existItem ? increaseQuantityCartItemNonUser({...existItem, quantity: 1}, dispatch) : createCartItemNonUser({...cartItem, product: product}, dispatch)
+    }
     
     setSelected({...cartItem, product: product})
     setPopupProductCart(true)

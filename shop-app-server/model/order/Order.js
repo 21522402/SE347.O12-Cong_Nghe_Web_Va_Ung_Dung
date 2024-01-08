@@ -40,7 +40,11 @@ const orderSchema = new mongoose.Schema(
                 isPercent: Boolean,
                 voucherCode: String
             }
-        }
+        },
+        userId: {
+            type: mongoose.Schema.ObjectId,
+            ref: 'User'
+        },
     }
 )
 const Order = mongoose.model('Order', orderSchema);

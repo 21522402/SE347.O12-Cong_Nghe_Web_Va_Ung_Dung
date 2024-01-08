@@ -1,31 +1,32 @@
 import { SuccessIcon } from "~/assets/icons";
 import axios from "axios";
 import baseUrl from "~/utils/baseUrl";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 function SuccessPayment() {
     const url = new URL(window.location.href);
     const extraData = url.searchParams.get('extraData');
     const orderId = url.searchParams.get('orderId');
     const resultCode = url.searchParams.get('resultCode');
-    const [time, setTime] = useState(1)
-
+    const element = useRef(false)
     const handleSuccess = async (body) => {
         try {
 
             const url = `${baseUrl}/api/users/handlePaymentMomoSuccess`;
             const res = await axios.post(url, body);
-            setTime(prev => prev + 1)
         } catch (error) {
             console.log(error);
         }
     };
     useEffect(() => {
 
-        if (resultCode) {
-            if (time === 1) {
+        if (!element.current) {
+            element.current = true
+            if (resultCode) {
+
                 if (parseInt(resultCode) === 0) {
                     handleSuccess({ extraData, orderId })
                 }
+
             }
         }
 

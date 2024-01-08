@@ -15,20 +15,31 @@ import ItemCollection from "./ItemCollection";
 import { createCartItem, getCartProducts, increaseQuantityCartItem } from '~/redux/api/userRequest';
 import ProductItem from '../Home/ProductItem';
 import { ToastContainer, toast } from 'react-toastify';
+import { BsCheck } from 'react-icons/bs';
+import { createCartItemNonUser, increaseQuantityCartItemNonUser } from '~/redux/api/nonUserRequest';
 
 const cx = classNames.bind(styles)
 function Collection() {
+    const listPrices = [{id: 0, name: "Tất cả giá", min: null, max: null}
+    , {id: 1, name: "Dưới 100,000", min: null, max: 100000},
+    {id: 2, name: "Từ 100,000 - 200,000",  min: 100000, max: 200000},
+    {id: 3, name: "Từ 200,000 - 400,000",  min: 200000, max: 400000},
+    {id: 4, name: "Từ 400,000 - 600,000",  min: 400000, max: 600000},
+    {id: 5, name: "Từ 600,000 - 1,000,000",  min: 600000, max: 1000000},
+    {id: 7, name: "Trên 1,000,000",  min: 1000000, max: null},
+    ]
     useEffect(() => {
         window.scrollTo(0, 0)
-      }, [])
+    }, [])
 
-    const {id} = useParams()
+    const { id } = useParams()
 
-    const listProducts =  useSelector(state => state.product.listProducts)
-    const [currentProducts, setCurrentProducts] =  useState([])
-    const [productFilter, setProductFilter] =  useState([])
+    const listProducts = useSelector(state => state.product.listProducts)
+    const [currentProducts, setCurrentProducts] = useState([])
+    const [productFilter, setProductFilter] = useState([])
     let cartProducts = useSelector(state => state.user?.cart?.cartProducts)
     let currentUser = useSelector((state) => state.auth.login.currentUser)
+    let cartProductsNonUser = useSelector(state => state.nonUser?.cart?.cartProductsNonUser)
     const [category, setCategory] = useState(() => {
         return {
             category: 'Áo',
@@ -100,147 +111,194 @@ function Collection() {
     const [conditions, setConditions] = useState({
         size: [],
         color: '',
-        type: []
+        type: [],
     })
     const [condititonsSelected, setCondititonsSelected] = useState([]);
     useEffect(() => {
-        if(id)
-            if(!id.includes("type")) {
+        if (id)
+            if (!id.includes("type")) {
                 const listFilter = listProducts.filter((item) => item.productCategory === id)
-                setCurrentProducts(listFilter) 
+                setCurrentProducts(listFilter)
                 setProductFilter(listFilter)
                 const types = listFilter.map(item => item.productType).reduce((acc, e) => {
                     if (acc.indexOf(e) === -1) {
                         acc.push(e)
                     }
                     return acc
-                  }, []).map(item => ({
+                }, []).map(item => ({
                     name: item,
                     checked: false
                 }))
 
                 const colors = listFilter
-                .map(item => item.colors)
-                .reduce(function (acc, e) {
+                    .map(item => item.colors)
+                    .reduce(function (acc, e) {
                         return acc.concat(e)
-                  }, [])
-                .reduce((acc2, e2) => {
-                    if (acc2.find(item => item.colorName === e2.colorName) === undefined) {
-                        acc2.push(e2)
-                    }
-                    return acc2
-                }, [])
-                .map(item => ({
+                    }, [])
+                    .reduce((acc2, e2) => {
+                        if (acc2.find(item => item.colorName === e2.colorName) === undefined) {
+                            acc2.push(e2)
+                        }
+                        return acc2
+                    }, [])
+                    .map(item => ({
                         colorName: item.colorName,
                         colorCode: item.colorCode
-                }))
+                    }))
                 console.log(colors)
-                setCategory({...category, type: types, color: colors})
+                setCategory({ ...category, type: types, color: colors })
             }
-            else{
+            else {
                 const productType = id.replace("type=", "")
-                const listFilter = listProducts.filter((item) => item.productType === productType )
-                setCurrentProducts(listFilter) 
+                const listFilter = listProducts.filter((item) => item.productType === productType)
+                setCurrentProducts(listFilter)
                 setProductFilter(listFilter)
             }
         handleRemoveFilter()
     }, [id])
 
     useEffect(() => {
-        if(!id.includes("type")) {
-            if(conditions.size.length === 0 && conditions.color === '' && conditions.type.length === 0) {
+        if (!id.includes("type")) {
+            if (conditions.size.length === 0 && conditions.color === '' && conditions.type.length === 0 && conditions.price && Object.keys(conditions.price).length === 0) {
                 setProductFilter(currentProducts)
             }
-            else{
+            else {
                 let listFilter = [...currentProducts]
 
-                if(conditions.type.length !== 0){
+                if (conditions.type.length !== 0) {
                     listFilter = currentProducts.filter(item => conditions.type?.includes(item.productType))
                 }
 
-                if(conditions.size.length !== 0){
+                if (conditions.size.length !== 0) {
                     let listItemAdapt = []
-                    for(let i = 0; i < listFilter.length; i++){
-                        let item = {...listFilter[i]}  // item hiện tại
+                    for (let i = 0; i < listFilter.length; i++) {
+                        let item = { ...listFilter[i] }  // item hiện tại
 
                         let colorsSizes = listFilter[i].colors; // list màu của item
 
                         let listColorAdapt = []
 
-                        for(let j = 0; j < colorsSizes.length; j++){
-                            let colorsSizeItem = {...colorsSizes[j]}; // màu hiện tại
+                        for (let j = 0; j < colorsSizes.length; j++) {
+                            let colorsSizeItem = { ...colorsSizes[j] }; // màu hiện tại
 
                             let sizes = colorsSizes[j].sizes;  // sizes của màu
                             sizes = sizes.filter(size => conditions.size.includes(size.sizeName)) //filter size
 
-                            if(sizes.length !== 0){
+                            if (sizes.length !== 0) {
                                 colorsSizeItem.sizes = sizes
                                 listColorAdapt.push(colorsSizeItem)
                             }
                         }
-                        
-                        if(listColorAdapt.length !== 0){
+
+                        if (listColorAdapt.length !== 0) {
                             item.colors = listColorAdapt
                             listItemAdapt.push(item)
                         }
                     }
                     listFilter = listItemAdapt
                 }
-                
-                if(conditions.color !== '' )
-                    listFilter = listFilter.filter(item => item.colors?.map(color => color.colorName)?.includes(conditions.color))
-                 
 
-                
+                if (conditions.color !== '')
+                    listFilter = listFilter.filter(item => item.colors?.map(color => color.colorName)?.includes(conditions.color))
+
+                if(conditions.price && Object.keys(conditions.price).length !== 0)
+                    listFilter = listFilter.filter(item => {
+                        const mainPrice =  item?.exportPrice * (100 - item?.discountPerc) / 100;
+                        if(conditions.price.min){
+                            if(conditions.price.max){
+                                if(mainPrice > conditions.price.min && mainPrice < conditions.price.max)
+                                    return true;
+                                return false;
+                            }
+                            else{
+                                if(mainPrice > conditions.price.min)
+                                    return true;
+                                return false;
+                            }
+                        }
+                        else{
+                            if(conditions.price.max){
+                                if(mainPrice < conditions.price.max)
+                                    return true;
+                                return false;
+                            }
+                            else{
+                                return true;
+                            }
+                        }
+                    })
+
                 setProductFilter(listFilter)
             }
         }
-        else{
-            if(conditions.size.length === 0 && conditions.color === '' && conditions.type.length === 0) {
+        else {
+            if (conditions.size.length === 0 && conditions.color === '' && conditions.type.length === 0 && conditions.price && Object.keys(conditions.price).length === 0) {
                 setProductFilter(currentProducts)
             }
-            else{
+            else {
                 let listFilter = [...currentProducts]
 
-                if(conditions.size.length !== 0){
+                if (conditions.size.length !== 0) {
                     let listItemAdapt = []
-                    for(let i = 0; i < listFilter.length; i++){
-                        let item = {...listFilter[i]}  // item hiện tại
+                    for (let i = 0; i < listFilter.length; i++) {
+                        let item = { ...listFilter[i] }  // item hiện tại
 
                         let colorsSizes = listFilter[i].colors; // list màu của item
 
                         let listColorAdapt = []
 
-                        for(let j = 0; j < colorsSizes.length; j++){
-                            let colorsSizeItem = {...colorsSizes[j]}; // màu hiện tại
+                        for (let j = 0; j < colorsSizes.length; j++) {
+                            let colorsSizeItem = { ...colorsSizes[j] }; // màu hiện tại
 
                             let sizes = colorsSizes[j].sizes;  // sizes của màu
                             sizes = sizes.filter(size => conditions.size.includes(size.sizeName)) //filter size
 
-                            if(sizes.length !== 0){
+                            if (sizes.length !== 0) {
                                 colorsSizeItem.sizes = sizes
                                 listColorAdapt.push(colorsSizeItem)
                             }
                         }
-                        
-                        if(listColorAdapt.length !== 0){
+
+                        if (listColorAdapt.length !== 0) {
                             item.colors = listColorAdapt
                             listItemAdapt.push(item)
                         }
                     }
                     listFilter = listItemAdapt
                 }
-                
-                if(conditions.color !== '' )
-                    listFilter = listFilter.filter(item => item.colors?.map(color => color.colorName)?.includes(conditions.color))
-                 
 
-                
+                if (conditions.color !== '')
+                    listFilter = listFilter.filter(item => item.colors?.map(color => color.colorName)?.includes(conditions.color))
+
+                if(conditions.price && Object.keys(conditions.price).length !== 0)
+                    listFilter = listFilter.filter(item => {
+                        const mainPrice =  item?.exportPrice * (100 - item?.discountPerc) / 100;
+                        if(conditions.price.min){
+                            if(conditions.price.max){
+                                if(mainPrice > conditions.price.min && mainPrice < conditions.price.max)
+                                    return true;
+                                return false;
+                            }
+                            else{
+                                if(mainPrice > conditions.price.min)
+                                    return true;
+                                return false;
+                            }
+                        }
+                        else{
+                            if(mainPrice < conditions.price.max)
+                                return true;
+                            return false;
+                        }
+                    })
+
+
+
                 setProductFilter(listFilter)
             }
         }
     }, [conditions])
-    
+
     const handleClickType = (type, index) => {
         let state;
         setCategory(prev => {
@@ -296,11 +354,15 @@ function Collection() {
                 nextState.color = '';
             }
             else {
-                nextState[key] = [...nextState[key]].filter(item => item !== name);
+                if (key === 'price') {
+                    delete nextState['price'];
+                }
+                else
+                    nextState[key] = [...nextState[key]].filter(item => item !== name);
             }
             return nextState;
         })
-        if (key !== 'color') {
+        if (key !== 'color' && key !== 'price') {
             setCategory(prev => {
                 const nextState = { ...prev };
                 nextState[key] = [...nextState[key]].map((item) => {
@@ -318,7 +380,7 @@ function Collection() {
         setConditions({
             size: [],
             color: '',
-            type: []
+            type: [],
         });
         setCategory(prev => {
             return {
@@ -332,7 +394,7 @@ function Collection() {
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const [selected, setSelected] = useState(null)
-    const [filter,setFilter] = useState({
+    const [filter, setFilter] = useState({
         productType: '',
         productCategory: '',
         status: '',
@@ -341,7 +403,7 @@ function Collection() {
     const setCloseTimer = () => {
         let t = 3
         const a = setInterval(() => {
-            if(t-- === 0){
+            if (t-- === 0) {
                 clearInterval(a)
                 setPopupProductCart(false)
                 setSelected(null)
@@ -355,7 +417,7 @@ function Collection() {
             if (res && res.data) {
                 dispatch(setListProducts(res.data.data))
                 dispatch(setListProductsState(res.data.data))
-                dispatch(filterListProductsState({filter}));
+                dispatch(filterListProductsState({ filter }));
             }
         } catch (error) {
             console.log(error.message)
@@ -368,12 +430,17 @@ function Collection() {
             let nextState = [];
             for (var key in conditions) {
                 const value = conditions[key];
-                if (key !== 'color') {
-                    const add = value.map(item => ({ name: item, key }));
-                    nextState = nextState.concat(add)
-                }
-                else {
-                    if (value) nextState.push({ name: value, key });
+                
+                if (value){
+                    if(key === 'price')
+                        nextState.push({ name: value.name, key });
+                    else
+                        if(key === 'color')
+                            nextState.push({ name: value, key });
+                        else {
+                            const add = value.map(item => ({ name: item, key }));
+                            nextState = nextState.concat(add)
+                        }
                 }
             }
             return nextState;
@@ -382,7 +449,7 @@ function Collection() {
 
     useEffect(() => {
         currentUser && getCartProducts(currentUser, dispatch)
-      },[])
+    }, [])
 
     const handleItemToCart = (product, b, c) => {
         if(currentUser){
@@ -395,15 +462,20 @@ function Collection() {
         const cartItem = {
             product: product._id,
             productName: product.productName,
-            productPrice: product.exportPrice * (1 - product.discountPerc/100),
+            productPrice: product.exportPrice * (1 - product.discountPerc / 100),
             size: b.sizeName,
             color: c.colorName,
             quantity: 1
         }
     
-        const existItem = cartProducts.find((cartIT) => cartIT.productId === cartItem.productId && cartIT.size === cartItem.size && cartIT.color === cartItem.color)
-        existItem ? increaseQuantityCartItem(currentUser, {...existItem, quantity: 1}, dispatch) : createCartItem(currentUser, cartItem, dispatch)
-        
+        if(currentUser){
+            const existItem = cartProducts.find((cartIT) => cartIT.product?._id === cartItem.product && cartIT.size === cartItem.size && cartIT.color === cartItem.color)
+            existItem ? increaseQuantityCartItem(currentUser, {...existItem, quantity: 1}, dispatch) : createCartItem(currentUser, cartItem, dispatch)
+        }
+        else{
+            const existItem = cartProductsNonUser?.find((cartIT) => cartIT.product?._id === cartItem.product && cartIT.size === cartItem.size && cartIT.color === cartItem.color)
+            existItem ? increaseQuantityCartItemNonUser({...existItem, quantity: 1}, dispatch) : createCartItemNonUser({...cartItem, product: product}, dispatch)
+        }
         setSelected({...cartItem, product: product})
         setPopupProductCart(true)
         setCloseTimer()
@@ -416,17 +488,17 @@ function Collection() {
 
             <div className={cx(popupProductCart ? 'bayra' : 'bayvao')} style={{position: 'fixed', zIndex: 1000, top: '16px', right: '16px', borderRadius: '16px', width: '350px', maxHeight: '350px', backgroundColor: 'white', padding: '15px', fontSize: '16px', color: 'black', fontWeight: '600' }}>
                 <div>Đã thêm vào giỏ hàng</div>
-                {selected && <ProductItem props={selected}/>}
+                {selected && <ProductItem props={selected} />}
                 <div>
                     <div className={cx('account-info__btn')} onClick={() => navigate("/cart")}>
                         <span className={cx('account-info__btn-text')}>Xem giỏ hàng</span>
                     </div>
                 </div>
-            </div>  
+            </div>
             <div className={cx('left-side-wrapper')}>
                 <div className={cx('left-side')}>
                     <div className={cx('quantity')}>
-                        {productFilter? productFilter.length : 0} kết quả
+                        {productFilter ? productFilter.length : 0} kết quả
                     </div>
                     <div className={cx('filter')}>
                         <div className={cx('filter-item')}>
@@ -459,27 +531,50 @@ function Collection() {
                                 }
                             </ul>
                         </div>
-                        {
-                            id.includes("type") ? null
-                            :
-                            <div className={cx('filter-item')}>
-                            
-                            <h5 className={cx('filter-heading')} style={{ marginBottom: '16px' }}>Loại sản phẩm</h5>
-                            <ul className={cx('filter-type')}>
+                        <div className={cx('filter-item')}>
+                            <h5 className={cx('filter-heading')}>Mức giá</h5>   
+                            <ul className={cx('filter-price')}>
                                 {
-                                    category.type.map((item, index) => {
-                                        return <li key={index} style={{ position: 'relative', marginBottom: '6px', cursor: 'pointer' }}>
-                                            <div onClick={() => handleClickType(item.name, index)} className={cx('filter-type-item')}>
-                                                <div className={cx('filter-type-checkbox', { checked: item.checked })}></div>
-                                                <label className={cx('filter-type-label')}>{item.name}</label>
+                                    listPrices.map((item, index) => {
+                                        return <div key={index} onClick={() => {setConditions({...conditions, price: item})}} className={cx('outer-filter-select-price__item')}>
+                                                <div className={cx('filter-select-price__check')}>
+                                                    <div className={cx('filter-select-price__dot')}>
+
+                                                    </div>
+                                                    {
+                                                        conditions?.price?.id === item.id &&
+                                                            <div className={cx('filter-select-price__dot', 'active-dot')}>
+                                                                <BsCheck color='white'/>
+                                                            </div>
+                                                    }
+                                                </div>
+                                                <label className={cx('filter-select-price__label')}>{item.name}</label>
                                             </div>
-                                        </li>
                                     })
                                 }
                             </ul>
                         </div>
+                        {
+                            id.includes("type") ? null
+                                :
+                                <div className={cx('filter-item')}>
+
+                                    <h5 className={cx('filter-heading')} style={{ marginBottom: '16px' }}>Loại sản phẩm</h5>
+                                    <ul className={cx('filter-type')}>
+                                        {
+                                            category.type.map((item, index) => {
+                                                return <li key={index} style={{ position: 'relative', marginBottom: '6px', cursor: 'pointer' }}>
+                                                    <div onClick={() => handleClickType(item.name, index)} className={cx('filter-type-item')}>
+                                                        <div className={cx('filter-type-checkbox', { checked: item.checked })}></div>
+                                                        <label className={cx('filter-type-label')}>{item.name}</label>
+                                                    </div>
+                                                </li>
+                                            })
+                                        }
+                                    </ul>
+                                </div>
                         }
-                        
+
                     </div>
                 </div>
             </div>
@@ -503,13 +598,13 @@ function Collection() {
                     }
                 </div>
                 <div className={cx('list-product-filter')}>
-                {productFilter?.map((item, index) => {
-                return (
-                <div key={index} style={{ width: "100%"}} onClick={() => {navigate(`/product/${item._id}`)}}>
-                <ItemCollection product={item} handleToCart={handleItemToCart}/>
-                </div>
-                );
-            })}
+                    {productFilter?.map((item, index) => {
+                        return (
+                            <div key={index} style={{ width: "100%" }} onClick={() => { navigate(`/product/${item._id}`) }}>
+                                <ItemCollection product={item} handleToCart={handleItemToCart} />
+                            </div>
+                        );
+                    })}
                 </div>
             </div>
         </div>

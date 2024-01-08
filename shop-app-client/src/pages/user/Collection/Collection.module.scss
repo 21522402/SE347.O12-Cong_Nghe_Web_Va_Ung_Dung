@@ -35,9 +35,9 @@
     .left-side {
 
         padding-right: 15px;
-        position: sticky;
-        position: -webkit-sticky;
-        top: 0;
+        // position: sticky;
+        // position: -webkit-sticky;
+        // top: 0;
         z-index: 100;
 
         .quantity {
@@ -167,8 +167,44 @@
 
                
             }
-            
+
+            .filter-price{
+                display: flex;
+                flex-direction: column;
+                gap: 5px;
+                padding: 0;
+            }
+
+            .outer-filter-select-price__item{
+                display: flex;
+                flex-direction: row;
+                align-items: center;
+                .filter-select-price__check{
+                    position: relative;
+                    .filter-select-price__dot{
+                        border: 1px #939393 solid;
+                        border-radius: 5px;
+                        width: 14px;
+                        height: 14px;
+                        position: absolute;
+                    }
+                    .active-dot{
+                        border: 1px rgb(47, 90, 207) solid;
+                        display: flex ;
+                        justify-content: center;
+                        align-items: center;
+                        background-color: rgb(47, 90, 207);
+                    }
+                }
+                .filter-select-price__label{
+                    position: relative;
+                    top: 7px;
+                    left: 26px;
+                }
+            }
+
            }
+
         }
     }
     .right-side {

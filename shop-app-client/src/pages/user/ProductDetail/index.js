@@ -15,6 +15,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { createCartItem, getCartProducts, increaseQuantityCartItem } from "~/redux/api/userRequest";
 import ProductItem from "../Home/ProductItem";
 import { ToastContainer, toast } from 'react-toastify';
+import { createCartItemNonUser, increaseQuantityCartItemNonUser } from "~/redux/api/nonUserRequest";
 const cx = classNames.bind(styles);
 function ProductDetail() {
     const { id } = useParams();
@@ -64,6 +65,7 @@ function ProductDetail() {
     const [outOfStock, setOutOfStock] = useState(false)
     const [selected, setSelected] = useState(null)
     const [popupProductCart, setPopupProductCart] = useState(false)
+    let cartProductsNonUser = useSelector(state => state.nonUser?.cart?.cartProductsNonUser)
 
 
     const [filterReview, setFilterReview] = useState({
@@ -126,10 +128,16 @@ function ProductDetail() {
             color: product.colors[indexColorActive].colorName,
             quantity: quantityAddCart
         }
-        console.log(cartItem)
-        const existItem = cartProducts.find((cartIT) => cartIT.productId === cartItem.productId && cartIT.size === cartItem.size && cartIT.color === cartItem.color)
-        existItem ? increaseQuantityCartItem(currentUser, {...existItem, quantity: quantityAddCart}, dispatch) : createCartItem(currentUser, cartItem, dispatch)
-        
+
+        if(currentUser){
+            const existItem = cartProducts.find((cartIT) => cartIT.product?._id === cartItem.product && cartIT.size === cartItem.size && cartIT.color === cartItem.color)
+            existItem ? increaseQuantityCartItem(currentUser, {...existItem, quantity: quantityAddCart}, dispatch) : createCartItem(currentUser, cartItem, dispatch)
+        }
+        else{
+            const existItem = cartProductsNonUser?.find((cartIT) => cartIT.product?._id === cartItem.product && cartIT.size === cartItem.size && cartIT.color === cartItem.color)
+            existItem ? increaseQuantityCartItemNonUser({...existItem, quantity: quantityAddCart}, dispatch) : createCartItemNonUser({...cartItem, product: product}, dispatch)
+        }
+
         setSelected({...cartItem, product: product})
         setPopupProductCart(true)
         setCloseTimer()

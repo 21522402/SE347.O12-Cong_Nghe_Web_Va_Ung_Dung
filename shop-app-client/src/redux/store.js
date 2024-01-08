@@ -1,6 +1,7 @@
 import {combineReducers, configureStore} from '@reduxjs/toolkit'
 import authReducer from './slices/authSlice'
 import userReducer from './slices/userSlice'
+import nonUserReducer from './slices/nonUserSlice'
 import productReducer from './slices/productSlice'
 import importProductsReducer from './slices/importProductsSlice'
 import orderAdminReducer from './slices/orderAdminSlice'
@@ -22,6 +23,7 @@ import {
 const rootReducer = combineReducers({
     auth: authReducer,
     user: userReducer,
+    nonUser: nonUserReducer,
     product: productReducer,
     importProduct: importProductsReducer,
     orderAdmin: orderAdminReducer
@@ -32,7 +34,7 @@ const rootReducer = combineReducers({
 const persistConfig = {
     key: 'root',
     version: 1,
-    whitelist: ['auth'],
+    whitelist: ['auth', 'nonUser'],
     storage,
     stateReconciler: autoMergeLevel2
 }

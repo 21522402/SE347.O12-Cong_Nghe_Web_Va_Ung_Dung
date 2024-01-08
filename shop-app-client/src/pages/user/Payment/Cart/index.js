@@ -10,11 +10,17 @@ import { createCartItem, getAllVoucher, getCartProducts, getForUProduct, increas
 import { toast } from 'react-toastify';
 import { Modal } from '~/components';
 import Vouchers from '../../Profile/Vouchers';
+import { createCartItemNonUser, increaseQuantityCartItemNonUser } from '~/redux/api/nonUserRequest';
+import { resetCurrentProduct } from '~/redux/slices/productSlice';
+import { resetCartProduct } from '~/redux/slices/nonUserSlice';
 const cx = classNames.bind(styles);
 const Cart = forwardRef(({_ref}) => {
 
     let cartProducts = useSelector(state => state.user?.cart?.cartProducts)
     let forUProducts = useSelector(state => state.user?.cart?.forUProducts)
+
+    let cartProductsNonUser = useSelector(state => state.nonUser?.cart?.cartProductsNonUser)
+
     let currentUser = useSelector((state) => state.auth.login.currentUser)
     const vouchers = useSelector(state => state.user?.cart?.vouchers)
 
@@ -46,9 +52,19 @@ const Cart = forwardRef(({_ref}) => {
         calculateTotal()
     }, [cartProducts])
 
+    useEffect(() => {
+        calculateTotal()
+    }, [cartProductsNonUser])
+
     function calculateTotal(){
-        preTotal = cartProducts?.reduce((total, item) => total + item.productPrice * item.quantity, 0)
-        setPreTotal(preTotal)
+        if(currentUser){
+            preTotal = cartProducts?.reduce((total, item) => total + item.productPrice * item.quantity, 0)
+            setPreTotal(preTotal)
+        }
+        else{
+            preTotal = cartProductsNonUser?.reduce((total, item) => total + item.productPrice * item.quantity, 0)
+            setPreTotal(preTotal)
+        }
     }
 
     function handleItemToOrder(item, selection){
@@ -61,8 +77,14 @@ const Cart = forwardRef(({_ref}) => {
             quantity: 1
         }
 
-        const existItem = cartProducts.find((cartIT) => cartIT.productId === cartItem.productId && cartIT.size === cartItem.size && cartIT.color === cartItem.color)
-        existItem ? increaseQuantityCartItem(currentUser, {...existItem, quantity: 1}, dispatch) : createCartItem(currentUser, cartItem, dispatch)
+        if(currentUser){
+            const existItem = cartProducts.find((cartIT) => cartIT.product?._id === cartItem.product && cartIT.size === cartItem.size && cartIT.color === cartItem.color)
+            existItem ? increaseQuantityCartItem(currentUser, {...existItem, quantity: 1}, dispatch) : createCartItem(currentUser, cartItem, dispatch)
+        }
+        else{
+            const existItem = cartProductsNonUser?.find((cartIT) => cartIT.product?._id === cartItem.product && cartIT.size === cartItem.size && cartIT.color === cartItem.color)
+            existItem ? increaseQuantityCartItemNonUser({...existItem, quantity: 1}, dispatch) : createCartItemNonUser({...cartItem, product: item}, dispatch)
+        }
     }
 
     async function handleCheckVoucher(){
@@ -108,13 +130,21 @@ const Cart = forwardRef(({_ref}) => {
         {/* <button onClick={() => console.log(cartProducts)}>clickme</button> */}
             <div>
                 {
-                    cartProducts?.map((item, index) => {
-                        return (
-                            <div style={{position: 'relative', zIndex: i--}}>
-                                <ProductItem key={index} props={item}/>
-                            </div>
-                        )
-                    })       
+                    currentUser ? 
+                        cartProducts?.map((item, index) => {
+                            return (
+                                <div style={{position: 'relative', zIndex: i--}}>
+                                    <ProductItem key={index} props={item}/>
+                                </div>
+                            )
+                        }) : 
+                        cartProductsNonUser?.map((item, index) => {
+                            return (
+                                <div style={{position: 'relative', zIndex: i--}}>
+                                    <ProductItem key={index} props={item}/>
+                                </div>
+                            )
+                        }) 
                 }
             </div>
             <hr style={{width: 'calc(100% + 10px)', height: '1px', backgroundColor: '#f9f9f9', margin: '10px -10px'}}/>
@@ -161,16 +191,19 @@ const Cart = forwardRef(({_ref}) => {
                 }
             </div>
 
-            <div style={{display: 'flex', margin: '14px 0'}} onClick={() => setVoucherPopup(true)}>
-                <div style={{display: 'flex', flexDirection: 'row', alignItems: 'center', border: '1px solid #2f5acf', borderRadius: '30px', padding: '6px 12px', cursor: 'pointer'}}>
-                    <div style={{width: '19px', height: '17px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#2f5acf'}}>
-                        <img src={VoucherIcon2} alt='' style={{width: '14px', height: '14px'}}/>
+            {
+                currentUser &&
+                <div style={{display: 'flex', margin: '14px 0'}} onClick={() => setVoucherPopup(true)}>
+                    <div style={{display: 'flex', flexDirection: 'row', alignItems: 'center', border: '1px solid #2f5acf', borderRadius: '30px', padding: '6px 12px', cursor: 'pointer'}}>
+                        <div style={{width: '19px', height: '17px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#2f5acf'}}>
+                            <img src={VoucherIcon2} alt='' style={{width: '14px', height: '14px'}}/>
+                        </div>
+                        <span style={{color: '#2f5acf', fontSize: '14px'}}>Ví voucher</span>
                     </div>
-                    <span style={{color: '#2f5acf', fontSize: '14px'}}>Ví voucher</span>
                 </div>
-            </div>
+            }
 
-            <div className={cx('discount-box')}>
+            <div className={cx('discount-box')} style={{marginTop: '5px'}}>
                 <input type="text" placeholder='Nhập mã giảm giá' value={discountCode} onChange={(e) => setDiscountCode(e.target.value)}/>
                 <button datavoucher disabled={discountCode ? false: true} onClick={handleCheckVoucher}>Áp dụng</button>
             </div>
@@ -193,11 +226,13 @@ const Cart = forwardRef(({_ref}) => {
                 <span className={cx('titleMoney')}>Tổng</span>
                 <span className={cx('money', 'totalMoney')}>{new Intl.NumberFormat('vi-VN', {style: 'currency', currency: 'VND'}).format(isPercent ? preTotal - preTotal * discount / 100 + delivery : preTotal - discount + delivery)}</span>
             </div>
-            <Modal visible={voucherPopup} setModal={setVoucherPopup}>
-                <div className={cx('outer-voucher-popup')}>
-                    <Vouchers onClickVoucher={(item) => {setDiscountCode(item.voucherCode); setVoucherPopup(false); console.log(item)}}/>         
-                </div>
-            </Modal>
+            {
+                currentUser && <Modal visible={voucherPopup} setModal={setVoucherPopup}>
+                    <div className={cx('outer-voucher-popup')}>
+                        <Vouchers onClickVoucher={(item) => {setDiscountCode(item.voucherCode); setVoucherPopup(false); console.log(item)}}/>         
+                    </div>
+                </Modal>
+            }
         </>
     );
 })
