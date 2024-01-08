@@ -5,6 +5,7 @@
     padding-right: 25px;
     display: flex;
     border-bottom: 0.5px solid #ccc;
+    position: relative;
 }
 
 .avt-img {
@@ -123,4 +124,30 @@
     color: #000;
     font-weight: 600;
 
+}
+.icon-delete {
+    position: absolute;
+    top: 0;
+    right: 0;
+    font-size: 30px;
+    color: #6c6c6c;
+    &:hover {
+        cursor: pointer;
+        color: #000;
+    }
+}
+.container-loader {
+    background-color: transparent;
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    z-index: 1200;
+    .loader-feedback {
+        margin-top: calc(11% + 50px);
+    }
 }

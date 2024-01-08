@@ -20,6 +20,7 @@ import ProductItem from './ProductItem';
 import { createCartItem, getCartProducts, increaseQuantityCartItem } from '~/redux/api/userRequest';
 import { ToastContainer, toast } from 'react-toastify';
 
+import { createCartItemNonUser, increaseQuantityCartItemNonUser } from '~/redux/api/nonUserRequest';
 
 const cx = classNames.bind(styles);
 
@@ -33,17 +34,11 @@ function Home() {
 
   const listProducts =  useSelector(state => state.product.listProducts)
   let cartProducts = useSelector(state => state.user?.cart?.cartProducts)
+  let cartProductsNonUser = useSelector(state => state.nonUser?.cart?.cartProductsNonUser)
   let currentUser = useSelector((state) => state.auth.login.currentUser)
 
   const [selected, setSelected] = useState(null)
   const navigate=useNavigate();
-
-  const banners = [
-    "https://media.coolmate.me/cdn-cgi/image/quality=80,format=auto/uploads/October2023/mceclip0_74.png",
-    "https://media.coolmate.me/cdn-cgi/image/quality=80,format=auto/uploads/October2023/mceclip0_87.png",
-    "https://mcdn.coolmate.me/image/September2023/mceclip4_64.jpg",
-    "https://mcdn.coolmate.me/image/March2023/mceclip0_137.jpg",
-  ];
 
   const navPages = [
     {
@@ -112,9 +107,9 @@ function Home() {
       items: 2,
     },
   };
-  //DUyY
+
   const dispatch = useDispatch();
-  const [filter,setFilter] = useState({
+  const [filter, setFilter] = useState({
         productType: '',
         productCategory: '',
         status: '',
@@ -158,13 +153,6 @@ const setCloseTimer = () => {
     }, 1000)
 }
 const handleItemToCart = (product, b, c) => {
-    if(currentUser){
-
-    }
-    else{
-        notify("warning", "Vui lòng đăng nhập để thêm sản phẩm này vào giỏ hàng")
-        return
-    }
     const cartItem = {
         product: product._id,
         productName: product.productName,
@@ -173,9 +161,14 @@ const handleItemToCart = (product, b, c) => {
         color: c.colorName,
         quantity: 1
     }
-
-    const existItem = cartProducts.find((cartIT) => cartIT.productId === cartItem.productId && cartIT.size === cartItem.size && cartIT.color === cartItem.color)
-    existItem ? increaseQuantityCartItem(currentUser, {...existItem, quantity: 1}, dispatch) : createCartItem(currentUser, cartItem, dispatch)
+    if(currentUser){
+        const existItem = cartProducts.find((cartIT) => cartIT.product?._id === cartItem.product && cartIT.size === cartItem.size && cartIT.color === cartItem.color)
+        existItem ? increaseQuantityCartItem(currentUser, {...existItem, quantity: 1}, dispatch) : createCartItem(currentUser, cartItem, dispatch)
+    }
+    else{
+        const existItem = cartProductsNonUser?.find((cartIT) => cartIT.product?._id === cartItem.product && cartIT.size === cartItem.size && cartIT.color === cartItem.color)
+        existItem ? increaseQuantityCartItemNonUser({...existItem, quantity: 1}, dispatch) : createCartItemNonUser({...cartItem, product: product}, dispatch)
+    }
     
     setSelected({...cartItem, product: product})
     setPopupProductCart(true)
@@ -196,8 +189,6 @@ const notify = (type, message) => toast(message, { type: type });
                 </div>
             </div>
         </div>  
-        {/* <button onClick={() => setPopupProductCart(!popupProductCart)}>clickme</button> */}
-      {/* Slider */}
 
       <div>
         <Carousel
@@ -207,7 +198,7 @@ const notify = (type, message) => toast(message, { type: type });
           responsive={responsiveBanner}
           autoPlay
           arrows={withWindow >=1024 ? true : false }
-          ssr={true} // means to render carousel on server-side.
+          ssr={true} 
           infinite={true}
           autoPlaySpeed={3000}
           transitionDuration={500}

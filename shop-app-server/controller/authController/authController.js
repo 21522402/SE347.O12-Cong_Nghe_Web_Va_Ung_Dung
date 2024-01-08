@@ -58,7 +58,12 @@ const authController = {
 
     loginUser: async (req, res) => {
         try{
-            const user = await User.findOne({ phoneNumber: req?.body?.phoneNumber }).populate('vouchers')
+            const user = await User.findOne({ phoneNumber: req?.body?.phoneNumber }).populate('vouchers').populate({
+                path: 'orders',
+                populate: {
+                    path: 'orderItem'
+                }
+            });
             
             if(!user){
                 return res.status(404).json("Số điện thoại không đúng");

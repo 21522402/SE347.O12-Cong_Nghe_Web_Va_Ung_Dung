@@ -1,87 +1,127 @@
-const Feedback = require("../../model/feedback/Feedback")
-const successTemplate = require('../../templates/succesTemplate');
+const Feedback = require("../../model/feedback/Feedback");
+const successTemplate = require("../../templates/succesTemplate");
 const errorTemplate = require("../../templates/errorTemplate");
-const cloudinaryCustom = require('../../utils/cloudinaryCustom');
-var nodemailer = require('nodemailer');
-
+const cloudinaryCustom = require("../../utils/cloudinaryCustom");
+var nodemailer = require("nodemailer");
 
 const sendMail = (email, title, content, images) => {
-    var transporter = nodemailer.createTransport({
-        service: 'gmail',
-        auth: {
-          user: '21522683@gm.uit.edu.vn',
-          pass: '1707098619'
-        }
-      });
-      
-      var mailOptions = {
-        from: '21522683@gm.uit.edu.vn',
-        to: email,
-        subject: title,
-        html: images ? htmlHasImage(content, images) : htmlNoImage(content)
-      }
-      
-      transporter.sendMail(mailOptions, function(error, info){
-        if (error) {
-          console.log(error);
-        } else {
-          console.log('Email sent: ' + info.response);
-        }
-      });
-}
+  var transporter = nodemailer.createTransport({
+    service: "gmail",
+    auth: {
+      user: "21522683@gm.uit.edu.vn",
+      pass: "1707098619",
+    },
+  });
 
+  var mailOptions = {
+    from: "21522683@gm.uit.edu.vn",
+    to: email,
+    subject: title,
+    html: images ? htmlHasImage(content, images) : htmlNoImage(content),
+  };
+
+  transporter.sendMail(mailOptions, function (error, info) {
+    if (error) {
+      console.log(error);
+    } else {
+      console.log("Email sent: " + info.response);
+    }
+  });
+};
 
 const getAllFeedbacks = async (req, res) => {
-    try {
-        const feedbacks = await Feedback.find({}).populate("user").exec();
-        return successTemplate(res, feedbacks, "Get all feedbacks successfully!", 200)
-    } catch (error) {
-        return errorTemplate(res, error.message)
-    }
-}
+  try {
+    const feedbacks = await Feedback.find({}).populate("user").exec();
+    return successTemplate(
+      res,
+      feedbacks,
+      "Get all feedbacks successfully!",
+      200
+    );
+  } catch (error) {
+    return errorTemplate(res, error.message);
+  }
+};
 const responseFeedback = async (req, res) => {
-    try {
-        const imageBuffer = [];
-        const listImageBase64 = req.body.response.imagesRsp;
-        for (let i =0; i<listImageBase64.length; i++) {
-            const result = await cloudinaryCustom.uploader.upload(listImageBase64[i], {
-                folder: 'public/images/feedbacks'
-            })
-            imageBuffer.push(result.secure_url)
+  try {
+    const feedbackId = req.params.id;
+    const { email, title, content, images } = req.body;
+    const imageBuffer = [];
+    const listImageBase64 = images;
+    for (let i = 0; i < listImageBase64.length; i++) {
+      const result = await cloudinaryCustom.uploader.upload(
+        listImageBase64[i],
+        {
+          folder: "public/images/feedbacks",
         }
-        const fb = await Feedback.findByIdAndUpdate(
-          { _id: req.body._id },
-          {
-            $set: {
-              response: {
-                content: req.body.response.content,
-                date: new Date(),
-                imagesRsp: imageBuffer,
-              },
-              isResponsed: true,
-            },
-          }
-        ).exec();
-        sendMail(req.body.user.email, req.body.title, req.body.response.content, imageBuffer);
-        fb.save();
-        return successTemplate(res, fb, "Responsed feedback successfully!", 200)
-    } catch (error) {
-        return errorTemplate(res, error.message)
+      );
+      imageBuffer.push(result.secure_url);
     }
-}
+    const fb = await Feedback.findByIdAndUpdate(
+      { _id: feedbackId },
+      {
+        $set: {
+          response: {
+            content: content,
+            date: new Date(),
+            imagesRsp: imageBuffer,
+          },
+          isResponsed: true,
+        },
+      }
+    ).exec();
+    const titleRes = "Phản hồi: " + title;
+    sendMail(
+      email,
+      titleRes,
+      content,
+      imageBuffer
+    );
+    fb.save();
+    return successTemplate(res, fb, "Responsed feedback successfully!", 200);
+  } catch (error) {
+    return errorTemplate(res, error.message);
+  }
+};
+const feedbackOfUser = async (req, res) => {
+  try {
+    const userId = req.params.id;
+    const { title, content, images } = req.body;
 
+    const imageBuffer = [];
+    const listImageBase64 = images;
+    for (let i = 0; i < listImageBase64.length; i++) {
+      const result = await cloudinaryCustom.uploader.upload(
+        listImageBase64[i],
+        {
+          folder: "public/images/feedback",
+        }
+      );
+      imageBuffer.push(result.secure_url);
+    }
+    let date = new Date();
+    const feedback = await Feedback.create({
+      user: userId,
+      title: title,
+      content: content,
+      isResponsed: false,
+      feedbackDate: date,
+      imagesRv: imageBuffer,
+    });
+    return successTemplate(res, feedback, "Đóng góp ý kiến thành công!", 200);
+  } catch (error) {
+    return errorTemplate(res, error.message);
+  }
+};
 
 function htmlHasImage(content, images) {
+  let temp = images.map((item) => {
+    return `<img src=${item} alt="cc"/>`;
+  });
 
-    let temp = images.map(item => {
-        return `<img src=${item} alt="cc"/>`
-    })
+  let html = temp.join(" ");
 
-    let html = temp.join(' ');
-
-
-
-    return `<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional //EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+  return `<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional //EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
     <html xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office">
     <head>
       <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -345,9 +385,9 @@ function htmlHasImage(content, images) {
     </body>
     </html>
     `;
-} 
+}
 function htmlNoImage(content) {
-    return `<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional //EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+  return `<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional //EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
     <html xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office">
     <head>
       <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -612,10 +652,10 @@ function htmlNoImage(content) {
     
     </html>
     `;
-} 
-
+}
 
 module.exports = {
-    getAllFeedbacks,
-    responseFeedback,
-}
+  getAllFeedbacks,
+  responseFeedback,
+  feedbackOfUser,
+};
