@@ -82,67 +82,17 @@ function Feedbacks() {
           <div className={cx("header-content")}>
             <div style={{ display: "flex" }}>
               <form className={cx("search-field")}>
-                <BiSearch
-                  fontSize={20}
-                  style={{
-                    position: "absolute",
-                    top: "0",
-                    left: 0,
-                    marginTop: "20px",
-                    marginLeft: "18px",
-                  }}
-                />
-                <input
-                  type="text"
-                  name="searchField"
-                  id="searchField"
-                  className={cx("search-input")}
-                  placeholder="Tìm kiếm"
-                  value={textSearch}
-                  onChange={handleChangeTextSearch}
-                />
+                <BiSearch fontSize={20} style={{position: "absolute", top: "0", left: 0, marginTop: "20px", marginLeft: "18px",}}/>
+                <input type="text" name="searchField" id="searchField" className={cx("search-input")} 
+                       placeholder="Tìm kiếm" value={textSearch} onChange={handleChangeTextSearch}/>
               </form>
-              <Select
-                options={cbb}
-                defaultValue={cbb[0]}
-                className={cx("combobox")}
-                onChange={handleChangeCbb}
-              />
+              <Select options={cbb} defaultValue={cbb[0]} className={cx("combobox")} onChange={handleChangeCbb}/>
             </div>
           </div>
-          <div
-            style={{
-              padding: "10px 32px 40px",
-              width: "100%",
-              minHeight: "550px",
-            }}
-          >
-            <table
-              style={{
-                width: "100%",
-                borderRadius: "10px",
-                borderColor: "transparent",
-                border: "none",
-                position: "relative",
-              }}
-            >
-              <thead
-                className={cx("thead")}
-                style={{
-                  width: "100%",
-                  borderRadius: "10px",
-                  borderColor: "transparent",
-                  border: "none",
-                }}
-              >
-                <tr
-                  style={{
-                    width: "100%",
-                    backgroundColor: "#e6f1fe",
-                    color: "black",
-                    borderRadius: "10px",
-                  }}
-                >
+          <div style={{padding: "10px 32px 40px", width: "100%", minHeight: "550px",}}>
+            <table style={{ width: "100%", borderRadius: "10px", borderColor: "transparent", border: "none", position: "relative",}}>
+              <thead className={cx("thead")} style={{ width: "100%", borderRadius: "10px", borderColor: "transparent",border: "none",}}>
+                <tr style={{width: "100%", backgroundColor: "#e6f1fe", color: "black", borderRadius: "10px",}}>
                   <th className={cx("col-tbl")} style={{ paddingLeft: "20px" }}>
                     Phản hồi
                   </th>
