@@ -51,6 +51,7 @@ function Bill() {
     const getAllBills = async () => {
         try {
             const res = await axios.get(`${baseUrl}/api/bill/getAllBills`)
+            console.log(res.data.data)
             if (res) {
                 const tmp = [...res.data.data].map(item => {
                     const time = convertDateTime(item.time)
@@ -59,7 +60,6 @@ function Bill() {
                         time,
                         customerName: item.orderId?.userId?.fullName || 'Khách vãng lai',
                         customerPhone: item.orderId?.userId?.phoneNumber || ''
-
                     }
                 })
                 setListBill([...tmp])
