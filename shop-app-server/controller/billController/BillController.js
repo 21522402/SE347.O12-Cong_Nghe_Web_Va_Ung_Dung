@@ -4,19 +4,20 @@ const Bill = require('../../model/bill/Bill')
 const getAllBills = async (req, res) => {
     try {
         const allBills = await Bill.find({})
-        .populate({
-            path: 'orderId',
-            populate: {
-                path: 'userId'
-            },
-            populate: {
-                path: 'orderItem',
-                populate: {
-                    path: 'productId'
-                }
-            }
-        })
-        .exec();
+            .populate({
+                path: 'orderId',
+                populate: [
+                    {
+                        path: 'userId'
+                    },
+                    {
+                        path: 'orderItem',
+                        populate: {
+                            path: 'productId'
+                        }
+                    }]
+            })
+            .exec();
         res.status(200).json({
             message: 'Get all bills successfully',
             data: allBills
