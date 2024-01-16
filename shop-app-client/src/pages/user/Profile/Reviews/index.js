@@ -24,22 +24,18 @@ function Reviews() {
         if(isSuccessCR){
             getAllOrderReview(currentUser, dispatch)
             setTimeout(() => {
-                console.log("đô")
                 getAllOrderReview(currentUser, dispatch)
             }, 3000)
             resetSuccess()
             setTimeout(() => {
-                console.log("đô2")
                 getAllOrderReview(currentUser, dispatch)
             }, 7000)
 
             setTimeout(() => {
-                console.log("đô3")
                 getAllOrderReview(currentUser, dispatch)
             }, 10000)
 
             setTimeout(() => {
-                console.log("đô4")
                 getAllOrderReview(currentUser, dispatch)
             }, 20000)
             resetSuccess()

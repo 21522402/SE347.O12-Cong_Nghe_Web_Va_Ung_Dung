@@ -1,4 +1,5 @@
 import {createSlice} from "@reduxjs/toolkit"
+import { useNavigate } from "react-router-dom";
 
 const authSlice = createSlice({
     name: 'auth',
@@ -19,6 +20,9 @@ const authSlice = createSlice({
         }
     },
     reducers: {
+        resetUser: (state) => {
+            state.login.currentUser = null;
+        },
         loginStart: (state) => {
             state.login.isLoading = true;
         },
@@ -75,7 +79,8 @@ export const {
     registerFailed,
     logoutStart,
     logoutSuccess,
-    logoutFailed
+    logoutFailed,
+    resetUser
 } = authSlice.actions;
 
 export default authSlice.reducer;

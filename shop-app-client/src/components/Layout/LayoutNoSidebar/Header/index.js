@@ -314,7 +314,7 @@ function Header() {
             ) : null}
           </div>
         </label>
-        <div onClick={() => {currentUser ? navigate("/cart") :toast("Vui lòng đăng nhập để xem giỏ hàng", {type: "warning"})}}>
+        <div onClick={() => {navigate("/cart")}}>
           <div
             style={{ cursor: "pointer" }}
             onMouseMove={() => {
