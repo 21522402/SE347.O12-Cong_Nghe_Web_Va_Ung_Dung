@@ -51,7 +51,7 @@ function ItemCollection({product, handleToCart}) {
                 {
                     reviews.length !== 0 &&
                     <div className={cx('rating-star')}>
-                        <span className={cx('rating')}>{rate} <img style={{marginBottom: '4px'}} src="https://www.coolmate.me/images/star-new.svg?08a379c24952a980d5430515abb8be4e"/></span>
+                        <span className={cx('rating')}>{rate.toFixed(1)} <img style={{marginBottom: '4px'}} src="https://www.coolmate.me/images/star-new.svg?08a379c24952a980d5430515abb8be4e"/></span>
                         
                         <span className={cx('num-review')}>({reviews.length})</span>
                     </div>

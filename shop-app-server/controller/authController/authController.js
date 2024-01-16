@@ -11,15 +11,12 @@ const authController = {
                 return res.status(404).json("Số điện thoại đã có người sử dụng");
             }
 
-            const salt = bcrypt.genSaltSync(10);
-            const hashed = bcrypt.hashSync(req.body.password, salt)
-
             // create usser
             const newuser = new User({
                 fullName: req?.body?.fullName,
                 phoneNumber: req?.body?.phoneNumber,
                 email: req?.body?.email,
-                password: hashed,
+                password: req?.body?.password,
                 address: req?.body?.address
             })
 
@@ -64,27 +61,23 @@ const authController = {
                     path: 'orderItem'
                 }
             });
+
             
             if(!user){
                 return res.status(404).json("Số điện thoại không đúng");
             }
 
-            console.log(req.body.password, user.password)
-
-            if(req.body.password.length > 5){
-                return res.status(404).json("Mật khẩu không đúng");
-            }
-            
-            const validPassword = bcrypt.compare(
+            const validPassword = await bcrypt.compare(
                 req.body.password, 
                 user.password
             )
-
+            
             if(!validPassword){
                 return res.status(404).json("Mật khẩu không đúng");
             }
             if(!user?.isActive) return res.status(404).json("Tài khoản của bạn đã bị khóa!");
-            
+
+
             if(user && validPassword){
                 const accessToken = authController.generateAccessToken(user)
                 const refreshToken = authController.generateRefreshToken(user)

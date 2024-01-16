@@ -101,13 +101,50 @@ function LayoutNoSidebar({ children }) {
             notify("error", error)
         }
     }
+
+    const checkUserType = (currUser) => {
+        if(currUser.orders){
+            if(currUser.orders.map(item => item.status === "Giao thành công").length <= 2 && differDays(new Date(currentUser.createdAt), new Date()) / 30  < 1){
+                return -1;
+            }
+            else{
+                if(checkOldUser(currUser) && differDays(new Date(currentUser.createdAt), new Date()) / 30  >= 2){
+                    return 1;
+                }
+                return 0;
+            }
+        }
+        else{
+            return -1;
+        }
+    }
+
+    const differDays = (date1, date2) => {
+        const diffTime = Math.abs(date2 - date1);
+        const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+        return diffDays;
+    }
+
+    const getVoucherViaUser = (voucherList, currUser) => {
+        const userType = checkUserType(currUser)
+        if(userType === -1){
+            return voucherList.filter(item => checkStatus(item) && (item.applyFor === "all" || item.applyFor === "new")).slice(0, 10)
+        }
+        else{
+            if(userType === 0){
+                return voucherList.filter(item => checkStatus(item) && (item.applyFor === "all")).slice(0, 10)
+            }
+            else{
+                return voucherList.filter(item => checkStatus(item) && (item.applyFor === "all" || item.applyFor === "close")).slice(0, 10)
+            }
+        }
+    }
+
     useEffect(() => {
         const getAllVouchers = async () => {
             try {
                 const config = {}
                 const { data } = await axios.get(`${baseUrl}/api/vouchers`, config)
-                console.log(data)
-                console.log(currentUser)
                 setVoucherList([...data.result])
             } catch (error) {
                 notify("error", error)
@@ -115,39 +152,70 @@ function LayoutNoSidebar({ children }) {
         }
         getAllVouchers()
     }, [])
+
+    const checkOldUser = (currUser) => {
+        let arrOrderDate = currUser.orders.map(item => item.orderDate.split("T")[0].split("-")).map(item => Number(item[0]) + "" + Number(item[1]))
+
+        let createDate = new Date(currUser.createdAt);
+        let now = new Date();
+        
+        let startyear = createDate.getFullYear();
+        let gapYear = now.getFullYear() - createDate.getFullYear()
+        
+        let startMonth = createDate.getMonth() + 1;
+        let endMonth = now.getMonth() + 1 + gapYear * 12;
+
+        let arr = []
+
+        for(let i = startMonth; i <= endMonth; i++){
+            arr.push(startyear + "" + (i % 12 !== 0 ? i % 12 : 12))
+            if(i % 12 === 0) startyear++
+        }
+        console.log(arr)
+
+        arr = arr.map(item => arrOrderDate.reduce((acc, i) => (i === item ? ++acc : acc), 0))
+        console.log(arr)
+        return arr.every(item => item >= 0)
+    }
     return (
         <>
             <Header />
             <ToastContainer />
-            <div style={{ paddingTop: '30px' }}>{children}</div>
-            <div style={{ position: 'fixed', bottom: 0, left: 0, width: '100%', zIndex: openGridVoucher ? 304 : 301, transition: 'all 0.3s', transform: openGridVoucher ? 'translatey(0)' : 'translatey(100%)' }}>
-                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', position: 'absolute', bottom: '100%', left: '50%', transform: 'translateX(-50%)', backgroundColor: '#2f5acf', color: 'white', width: '100%', maxWidth: '563px', padding: '0 1.5rem', height: '50px', fontSize: '16px', borderRadius: '0.5rem 0.5rem 0 0', textTransform: 'uppercase', fontWeight: 'bold', letterSpacing: '0.1em' }}>
-                    <div style={{ display: 'flex', alignItems: 'center' }}>
-                        <RiCoupon3Fill size={18} style={{ marginRight: '12px' }} />
-                        VOUCHER DÀNH CHO BẠN
-                    </div>
-                    {
-                        openGridVoucher
-                            ? <FaArrowDown style={{ cursor: 'pointer' }} onClick={() => setOpenGridVoucher(false)} />
-                            : <FaArrowUp style={{ cursor: 'pointer' }} onClick={() => setOpenGridVoucher(true)} />
-                    }
-                </div>
-                <div style={{ padding: '2.5rem', backgroundColor: 'white' }}>
-                    <div style={{ display: 'flex', gap: '3rem', boxSizing: 'border-box', userSelect: 'none', WebkitOverflowScrolling: 'touch', overflowX: 'scroll', whiteSpace: 'nowrap', width: '100%' }}>
-                        {(voucherList.filter(item => checkStatus(item))).slice(0, 10).map((item, index) =>
-                            <div key={index} style={{ width: '380px', height: '210px', borderRadius: '12px', position: 'relative', backgroundColor: '#ccc', padding: '2rem' }}>
-                                <div style={{ fontSize: '28px', fontWeight: 'bold', color: 'black', marginTop: '50px', zIndex: '300' }}>Giảm {item.voucherPrice}{item.isPercent ? '%' : 'K'}</div>
-                                <div style={{ zIndex: '300' }}>Cho đơn hàng từ {item.minPrice}K</div>
-                                <div style={{ borderTop: '1px solid #efefef', marginTop: '20px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingTop: '10px', zIndex: '300' }}>
-                                    <div style={{ zIndex: '300' }}>{item.voucherCode}</div>
-                                    <button onClick={() => { handleSaveVoucherBuyer(item.id) }} style={{ border: 'none', backgroundColor: 'white', borderRadius: '20px', padding: '4px 14px', cursor: 'pointer', zIndex: '300' }}>Lưu mã</button>
-                                </div>
-                                {/* <img src={item.voucherImage} style={{width:'380px', height:'210px', position:'absolute', opacity:'0.5', top:0, left:0, borderRadius:'12px', zIndex:'3'}}/> */}
-                            </div>)}
 
+            <div style={{ paddingTop: '30px' }}>{children}</div>
+            {
+                currentUser && 
+                <div style={{ position: 'fixed', bottom: 0, left: 0, width: '100%', zIndex: openGridVoucher ? 304 : 301, transition: 'all 0.3s', transform: openGridVoucher ? 'translatey(0)' : 'translatey(100%)' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', position: 'absolute', bottom: '100%', left: '50%', transform: 'translateX(-50%)', backgroundColor: '#2f5acf', color: 'white', width: '100%', maxWidth: '563px', padding: '0 1.5rem', height: '50px', fontSize: '16px', borderRadius: '0.5rem 0.5rem 0 0', textTransform: 'uppercase', fontWeight: 'bold', letterSpacing: '0.1em' }}>
+                        <div style={{ display: 'flex', alignItems: 'center' }}>
+                            <RiCoupon3Fill size={18} style={{ marginRight: '12px' }} />
+                            VOUCHER DÀNH CHO BẠN
+                        </div>
+                        {
+                            openGridVoucher
+                                ? <FaArrowDown style={{ cursor: 'pointer' }} onClick={() => setOpenGridVoucher(false)} />
+                                : <FaArrowUp style={{ cursor: 'pointer' }} onClick={() => setOpenGridVoucher(true)} />
+                        }
                     </div>
-                </div>
-            </div >
+                    <div style={{ padding: '2.5rem', backgroundColor: 'white' }}>
+                        <div style={{ display: 'flex', gap: '3rem', boxSizing: 'border-box', userSelect: 'none', WebkitOverflowScrolling: 'touch', overflowX: 'scroll', whiteSpace: 'nowrap', width: '100%' }}>
+                            {
+                                getVoucherViaUser(voucherList, currentUser).map((item, index) =>
+                                    <div key={index} style={{ width: '380px', height: '210px', borderRadius: '12px', position: 'relative', backgroundColor: '#ccc', padding: '2rem' }}>
+                                        <div style={{ fontSize: '28px', fontWeight: 'bold', color: 'black', marginTop: '50px', zIndex: '300' }}>Giảm {item.voucherPrice}{item.isPercent ? '%' : 'K'}</div>
+                                        <div style={{ zIndex: '300' }}>Cho đơn hàng từ {item.minPrice}K</div>
+                                        <div style={{ borderTop: '1px solid #efefef', marginTop: '20px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingTop: '10px', zIndex: '300' }}>
+                                            <div style={{ zIndex: '300' }}>{item.voucherCode}</div>
+                                            <button onClick={() => { handleSaveVoucherBuyer(item.id) }} style={{ border: 'none', backgroundColor: 'white', borderRadius: '20px', padding: '4px 14px', cursor: 'pointer', zIndex: '300' }}>Lưu mã</button>
+                                        </div>
+                                        {/* <img src={item.voucherImage} style={{width:'380px', height:'210px', position:'absolute', opacity:'0.5', top:0, left:0, borderRadius:'12px', zIndex:'3'}}/> */}
+                                    </div>)
+                            }
+
+                        </div>
+                    </div>
+                </div >
+            }
             <div id="xsngxWrapperOverlayVoucherOpen" onClick={handleClose} style={{ opacity: openGridVoucher ? 1 : 0, visibility: openGridVoucher ? 'visible' : 'hidden', pointerEvents: openGridVoucher ? 'visible' : 'none', position: 'fixed', top: 0, left: 0, width: '100%', height: '100%', backgroundColor: '#0006', transition: 'all .3s', zIndex: openGridVoucher ? 303 : 300 }}></div>
             <Footer />
         </>

@@ -111,15 +111,7 @@ function ProductDetail() {
             setOutOfStock(true)
             return
         }
-
-        if(currentUser){
-
-        }
-        else{
-            notify("warning", "Vui lòng đăng nhập để thêm sản phẩm này vào giỏ hàng")
-            return
-        } 
-
+        
         const cartItem = {
             product: product._id,
             productName: product.productName,
