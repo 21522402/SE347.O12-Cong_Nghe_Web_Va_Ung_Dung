@@ -2,6 +2,7 @@ const Order = require('../../model/order/Order');
 const Product = require('../../model/product/Product');
 const OrderItem = require('../../model/orderItem/OrderItem');
 const Bill = require('../../model/bill/Bill');
+const Voucher = require('../../model/voucher/Voucher');
 const validationId = require('../../utils/validationId');
 const successTemplate = require("../../templates/succesTemplate");
 const errorTemplate = require("../../templates/errorTemplate");
@@ -140,12 +141,27 @@ const orderController = {
             if (order.status === 'Đã hủy') {
                 const order2 = await Order.findById(id)
                     .populate('orderItem')
+                    .populate('userId')
                     .exec();
-                await sendMail({
-                    email: req.body.address.email,
-                    subject: '[SHOP-APP]: THÔNG BÁO HỦY ĐƠN ĐẶT HÀNG',
-                    html: templateHTMLCancelOrder(order2)
-                })
+                    let totalMoney = order2.orderItem.reduce((acc, cur) => {
+                        return acc + cur.price * cur.quantity
+                    }, 0);
+                    order2.money = totalMoney;
+                if (order2.userId) {
+                    await sendMail({
+                        email: order2.userId.email,
+                        subject: '[SHOP-APP]: THÔNG BÁO HỦY ĐƠN ĐẶT HÀNG',
+                        html: templateHTMLCancelOrder(order2)
+                    })
+                }
+                else {
+                    await sendMail({
+                        email: order2.address.email,
+                        subject: '[SHOP-APP]: THÔNG BÁO HỦY ĐƠN ĐẶT HÀNG',
+                        html: templateHTMLCancelOrder(order2)
+                    })
+                }
+                
             }
             if (order.status === 'Giao thành công') {
                 const bill = await Bill.findOne({ orderId: order._id }).exec()
@@ -174,6 +190,7 @@ const orderController = {
             })
 
         } catch (error) {
+            debugger
             return errorTemplate(res, error.message)
         }
     }

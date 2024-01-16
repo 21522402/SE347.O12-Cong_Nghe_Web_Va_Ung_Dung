@@ -136,7 +136,6 @@ function Bill() {
         { label: 'Số lượng', key: 'SL', parentKey: 'subTable' },
       ];
     return (
-
         <div className={cx('wrapper')} >
             <div className={cx('container')}>
                 <div>
@@ -161,31 +160,26 @@ function Bill() {
                                         'input-focus': inputFocus
                                     })}>
                                         <AiOutlineSearch className={cx('icon')} />
-                                        <input onChange={(e) => setFilter(prev => ({ ...prev, textSearch: e.target.value }))} onFocus={() => setInputFocus(true)} onBlur={() => setInputFocus(false)} type="text" placeholder="Theo mã hóa đơn, đơn hàng, tên khách hàng,..." className={cx('search-input')} />
+                                        <input onChange={(e) => setFilter(prev => ({ ...prev, textSearch: e.target.value }))} 
+                                        onFocus={() => setInputFocus(true)} onBlur={() => setInputFocus(false)} type="text" 
+                                        placeholder="Theo mã hóa đơn, đơn hàng, tên khách hàng,..." className={cx('search-input')} />
                                         <AiFillCaretDown className={cx('icon')} />
                                     </div>
 
-
-                                    {/* Loại hàng */}
                                     <div className={cx('product-type')} onClick={handleMouseOverDateFilter}>
                                         <div className={cx('function-button')}>
                                             <span className={cx('btn', 'btn-succeed')} >{filter.date || nowDate}<AiFillCaretDown style={{ marginLeft: '4px' }} /></span>
                                         </div>
                                         <input onChange={handleChangeDateInput} ref={dateInputElement} type="date" style={{ opacity: '0', top: '6px', left: '6px', right: '0', position: 'absolute' }} />
-
-
-
                                     </div>
                                 </div>
                                 <CSVLink filename={"hoadon.csv"} headers={headers} data={listBillExport} className={cx('btn','btn-succeed')} style={{textDecoration: 'none'}}>Xuất file Excel</CSVLink>
 
                             </div>
-
                             <div className={cx('tableView')}>
                                 <table className={cx('table')}>
                                     <thead className={cx('thead')}>
                                         <tr>
-                                            {/* <th className={cx('delete')}></th> */}
                                             <th className={cx('billCode')}>Mã hóa đơn</th>
                                             <th className={cx('orderCode')}>Mã đơn hàng</th>
                                             <th className={cx('date')}>Thời gian</th>

@@ -65,7 +65,7 @@ function Modal({ setModal, indexItemImport }) {
                         break;
                     }
                     else {
-                        if (Number(importItem.colors[i].sizes[x].quantity.trim())===0) {
+                        if (Number(importItem.colors[i].sizes[x].quantity.trim()) === 0) {
                             errors.quantity = `Size ${importItem.colors[i].sizes[x].sizeName} màu ${importItem.colors[i].colorName}: Số lượng phải là một số > 0`
                             isError = true;
                             break;
@@ -133,11 +133,7 @@ function Modal({ setModal, indexItemImport }) {
                                                 }
                                                 <div className={cx('form-group')}>
                                                     <label>Màu</label>
-                                                    {/* <div className={cx('input-color-wrapper', { active: itemA.showDropColor })} onClick={() => handleDropdownColor(indexA)} >
-                                                        <span style={{ marginLeft: '16px' }}>{itemA.color}</span>
-                                                        <span> {!itemA.showDropColor ? <AiFillCaretDown /> : <AiFillCaretUp />}</span>
-                                                        {itemA.showDropColor && <DropDown items={listColorCategoryDefault} style={{ width: '100%', left: '0', top: '35px' }} onClick={handleClickItemColorCategory} indexA={indexA} />}
-                                                    </div> */}
+
                                                     <div className={cx('custom-selector')}>
                                                         <select className={cx('select-size')} onChange={(e) => dispatch(handleChangeColorName({ index: indexItemImport, indexColor: indexA, colorName: e.target.value }))} value={itemA.colorName}>
                                                             <option value={''} selected>Chọn màu</option>
@@ -162,7 +158,11 @@ function Modal({ setModal, indexItemImport }) {
 
                                             {/* Sỉze */}
                                             <div style={{ padding: '28px', paddingTop: '0px' }}>
-                                                <label style={{ fontWeight: '700', marginTop: '16px' }}>Bảng size ({itemA.sizes.length}): <span onClick={() => dispatch(handleAddSize({ index: indexItemImport, indexColor: indexA }))} className={cx('icon-plus')}><BsPlusCircleFill /></span></label>
+                                                <label style={{ fontWeight: '700', marginTop: '16px' }}>Bảng size ({itemA.sizes.length}):
+                                                    <span onClick={() => dispatch(handleAddSize({ index: indexItemImport, indexColor: indexA }))} className={cx('icon-plus')}>
+                                                        <BsPlusCircleFill />
+                                                    </span>
+                                                </label>
                                                 <div style={{ marginTop: '16px', display: 'flex', flexDirection: 'column', gap: '16px' }}>
                                                     {
                                                         itemA.sizes.map((itemB, indexB) => {
@@ -173,7 +173,9 @@ function Modal({ setModal, indexItemImport }) {
                                                                         <div className={cx('form-group')} style={{ marginRight: '24px' }}>
                                                                             <label>Size:</label>
                                                                             <div className={cx('custom-selector')}>
-                                                                                <select className={cx('select-size')} onChange={(e) => dispatch(handleChangeSizeName({ index: indexItemImport, indexColor: indexA, indexSize: indexB, sizeName: e.target.value }))} value={itemB.sizeName}>
+                                                                                <select className={cx('select-size')} 
+                                                                                onChange={(e) => dispatch(handleChangeSizeName({ index: indexItemImport, indexColor: indexA, indexSize: indexB, sizeName: e.target.value }))} 
+                                                                                value={itemB.sizeName}>
                                                                                     <option value={''} selected>Chọn size</option>
                                                                                     {
                                                                                         itemA.colorName &&
@@ -187,7 +189,9 @@ function Modal({ setModal, indexItemImport }) {
                                                                         </div>
                                                                         <div className={cx('form-group')} >
                                                                             <label>Số lượng:</label>
-                                                                            <input value={itemB.quantity} onChange={(e) => dispatch(handleChangeSizeQuantity({ index: indexItemImport, indexColor: indexA, indexSize: indexB, quantity: e.target.value }))} placeholder="20" type="text" style={{ width: '80px', textAlign: 'center', background: 'transparent' }} disabled={itemB.sizeName ? false : true} />
+                                                                            <input value={itemB.quantity}
+                                                                                onChange={(e) => dispatch(handleChangeSizeQuantity({ index: indexItemImport, indexColor: indexA, indexSize: indexB, quantity: e.target.value }))}
+                                                                                placeholder="20" type="text" style={{ width: '80px', textAlign: 'center', background: 'transparent' }} disabled={itemB.sizeName ? false : true} />
                                                                         </div>
 
 
@@ -196,7 +200,10 @@ function Modal({ setModal, indexItemImport }) {
                                                                     {
                                                                         itemA.sizes.length > 1 &&
                                                                         <div>
-                                                                            <span onClick={() => dispatch(handleRemoveSize({ index: indexItemImport, indexColor: indexA, indexSize: indexB }))} style={{ cursor: 'pointer', padding: '4px 4px', borderRadius: '50%', display: 'inline-flex', backgroundColor: 'red', fontSize: '16px' }}><RiSubtractLine style={{ color: '#fff' }} /></span>
+                                                                            <span onClick={() => dispatch(handleRemoveSize({ index: indexItemImport, indexColor: indexA, indexSize: indexB }))}
+                                                                                style={{ cursor: 'pointer', padding: '4px 4px', borderRadius: '50%', display: 'inline-flex', backgroundColor: 'red', fontSize: '16px' }}>
+                                                                                <RiSubtractLine style={{ color: '#fff' }} />
+                                                                            </span>
                                                                         </div>
                                                                     }
                                                                 </div>

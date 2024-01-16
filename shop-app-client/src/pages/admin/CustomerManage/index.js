@@ -90,7 +90,8 @@ function CustomerManage() {
                                         return true
                                     })).filter(i => {
                                         if (selectedTextFilter.length === 0) return true;
-                                        else return (i.fullName.toLowerCase()).includes(selectedTextFilter.toLowerCase()) || (i.phoneNumber.toLowerCase()).includes(selectedTextFilter.toLowerCase())
+                                        else return (i.fullName.toLowerCase()).includes(selectedTextFilter.toLowerCase())
+                                            || (i.phoneNumber.toLowerCase()).includes(selectedTextFilter.toLowerCase())
                                     })).map((item, index) => {
                                         return (
                                             <CusRow key={index} item={item} index={index} currentPage={currentPage} setCustomerList={setCustomerList} />

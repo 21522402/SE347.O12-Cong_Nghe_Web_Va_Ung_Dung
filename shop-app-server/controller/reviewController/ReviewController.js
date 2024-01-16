@@ -124,7 +124,6 @@ const responseReview = async (req, res) => {
     rv.save();
     return successTemplate(res, rv, "Responsed review successfully!", 200);
   } catch (error) {
-    debugger;
     return errorTemplate(res, error.message);
   }
 };
@@ -132,7 +131,6 @@ const responseReview = async (req, res) => {
 const getReviewsByProductId = async (req, res) => {
   try {
     const { id } = req.params;
-    debugger;
     const reviews = await Review.find({})
       .populate([
         {

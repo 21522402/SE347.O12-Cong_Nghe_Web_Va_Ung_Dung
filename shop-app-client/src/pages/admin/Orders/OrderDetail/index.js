@@ -84,12 +84,7 @@ function OrderDetail({ index, getAllOrders }) {
 
     return (
         <div className={cx('wrapper')}>
-            <ToastContainer
-                position='top-right'
-                autoClose={1000}
-                hideProgressBar={true}
-                draggable={false}
-            />
+          
             {/* Header */}
             <div className={cx('header')}>
                 <div className={cx('tabpanel')}>Thông tin</div>

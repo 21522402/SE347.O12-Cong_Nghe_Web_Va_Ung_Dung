@@ -129,18 +129,14 @@ function Products() {
     }, [filter.productCategory])
     return (
         <ModalContext.Provider value={{ setShowModal, setTypeModal }}>
-
             <div className={cx('wrapper')}>
-                
                 <div className={cx('container')}>
                     <div>
                         <h1>QUẢN LÝ SẢN PHẨM</h1>
                         <div style={{ color: '#05CD99' }}>Lalitpur Branch</div>
                     </div>
                     <div className={cx('content')}>
-                        {/* Tool */}
                         <div className={cx('toolbox')}>
-                            {/* Filter */}
                             <div className={cx('filter-box')}>
                                 <div className={cx('search-box', {
                                     'input-focus': inputFocus
@@ -150,7 +146,6 @@ function Products() {
                                         value={filter.searchText} onChange={(e) => setFilter(prev => ({ ...prev, searchText: e.target.value }))} />
                                 </div>
 
-                                {/* nhóm hàng */}
                                 <div ref={filterCategoryElement} className={cx('product-category')} onClick={() => setShowCategory(prev => !prev)}>
                                     <div className={cx('function-button')}>
                                         <span className={cx('btn', 'btn-succeed')}>{filter.productCategory || 'Nhóm hàng'} <AiFillCaretDown /></span>
@@ -178,8 +173,6 @@ function Products() {
 
                                 </div>
                             </div>
-
-                            {/* function */}
                             <div className={cx('function-box')}>
 
                                 {/* thêm */}
@@ -190,8 +183,6 @@ function Products() {
 
                             </div>
                         </div>
-
-                        {/* table view */}
                         <div className={cx('tableView')}>
                             <table className={cx('table')}>
                                 <thead className={cx('thead')}>
@@ -209,16 +200,16 @@ function Products() {
 
                                     {listProductsState.map((item, index) => {
                                         return (
-                                            <ProductRow key={index} index={index}  getAllProducts={getAllProducts} />
+                                            <ProductRow key={index} index={index} getAllProducts={getAllProducts} />
                                         )
                                     })}
 
                                 </tbody>
                             </table>
                         </div>
-                        {showModal && <Modal setModal={setShowModal} typeModal={typeModal} filter={filter} getAllProducts={getAllProducts} getAllProductCaterogies={getAllProductCaterogies} />}
-
-
+                        {showModal && <Modal setModal={setShowModal}
+                            typeModal={typeModal} filter={filter} getAllProducts={getAllProducts}
+                            getAllProductCaterogies={getAllProductCaterogies} />}
                     </div>
                 </div>
             </div>

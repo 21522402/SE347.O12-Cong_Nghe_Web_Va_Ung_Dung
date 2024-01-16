@@ -161,9 +161,17 @@ function Payment() {
                 voucherCode: voucherIF.voucherCode,
             } : null
         }
-        let totalMoney = cartProducts.reduce((acc,cur) => {
-            return acc + cur.productPrice*cur.quantity
-        },0);
+        let totalMoney = 0;
+        if (currentUser) {
+            totalMoney = cartProducts.reduce((acc,cur) => {
+                return acc + cur.productPrice*cur.quantity
+            },0);
+        }
+        else {
+            totalMoney = cartProductsNonUser.reduce((acc,cur) => {
+                return acc + cur.productPrice*cur.quantity
+            },0);
+        }
         if (voucherIF) {
             totalMoney -= voucherIF.isPercent ? voucherIF.voucherPrice/100 * totalMoney : voucherIF.voucherPrice
         }

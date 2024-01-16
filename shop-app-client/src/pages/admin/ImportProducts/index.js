@@ -92,7 +92,7 @@ function ImportProducts() {
 
     ])
     const handleClickItemSearch = (item) => {
-        if (item.colors.length===0 || item.colors[0].sizes.length === 0) {
+        if (item.colors.length === 0 || item.colors[0].sizes.length === 0) {
             toast.error('Sản phẩm hiện chưa có mặt hàng nào để nhập hàng')
             return;
         }
@@ -152,7 +152,7 @@ function ImportProducts() {
                 toast.success('Nhập hàng thành công!')
                 setTimeout(() => {
                     window.location.href = '/admin/products'
-                },1000)
+                }, 1000)
             }
         } catch (error) {
 
@@ -187,7 +187,7 @@ function ImportProducts() {
                         })}>
                             <AiOutlineSearch className={cx('icon')} />
                             <input onChange={handleChangeSearch} ref={inputElement} type="text" placeholder="Theo mã, tên hàng" className={cx('search-input')} />
-                
+
                         </div>
                         {inputFocus &&
                             <div ref={dropElement}>
@@ -223,7 +223,9 @@ function ImportProducts() {
 
                             {listImportProducts.map((item, index) => {
                                 return (
-                                    <ImportProductRow key={index} index={index} setModal={setOpenModalImport} setIndexItemImport={setIndexItemImport} listImportsLength={listImportProducts.length} />
+                                    <ImportProductRow key={index} index={index} setModal={setOpenModalImport}
+                                        setIndexItemImport={setIndexItemImport}
+                                        listImportsLength={listImportProducts.length} />
                                 )
                             })}
 
@@ -232,7 +234,7 @@ function ImportProducts() {
                 </div>
                 {openModelImport && <Modal setModal={setOpenModalImport} indexItemImport={indexItemImport} />}
             </div>
-            <div style={{position: 'fixed', top: '0', left: '0', bottom: '0', right: '0', display: showContract && 'none', backgroundColor: 'rgba(4,4,4,0.3)'}}>
+            <div style={{ position: 'fixed', top: '0', left: '0', bottom: '0', right: '0', display: showContract && 'none', backgroundColor: 'rgba(4,4,4,0.3)' }}>
                 <div className={cx('import-contract', { hide: showContract })}>
 
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>

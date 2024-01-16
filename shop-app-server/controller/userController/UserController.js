@@ -391,7 +391,7 @@ const createOrderCtrl = async (req, res) => {
 
         await User.findByIdAndUpdate(userId, { orders: orderIds, cart: [] })
         await sendMail({
-            email: req.body.address.email,
+            email: user.email,
             subject: '[SHOP-APP]: ĐƠN ĐẶT HÀNG CỦA BẠN',
             html: templateHTMLOrder(req.body)
         })

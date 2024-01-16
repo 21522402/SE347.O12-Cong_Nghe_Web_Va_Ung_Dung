@@ -63,20 +63,6 @@ function Orders() {
     useEffect(() => {
         console.log(listOrders)
         setListOrdersExport(prev => {
-            // const nextState = [...listOrders].map(item => {
-            //     return {
-            //         'Mã đơn hàng': '#' + item._id.substring(12),
-            //         'Ngày đặt hàng': item.orderDate,
-            //         'Các mặt hàng': item.orderItem.map(i => {
-            //             return `${i.quantity} ${i.productId?.productName} ${i.color}/${i.size}`
-            //         }).join(' | '),
-            //         'Trị giá đơn hàng': formatMoney(item.finalPrice),
-            //         'Thông tin người nhận': `${item.address?.name}, ${item.address?.phoneNumber}, ${item.address?.ward}, ${item.address?.district}, ${item.address?.province}/${item.address?.detail}`,
-            //         'Trạng thái': item.status
-
-            //     }
-            // })
-            // console.log(nextState)
             const nextState = [];
             [...listOrders].forEach(row => {
                 nextState.push({
