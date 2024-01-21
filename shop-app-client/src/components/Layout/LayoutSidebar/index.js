@@ -5,10 +5,10 @@ function LayoutSidebar({children}) {
         <div>
             <div style={{ display:'flex'}}>
                 <Sidebar />
-                <div style={{paddingLeft:'250px'}}>{children}</div>
+                <div style={{marginLeft:'250px', width:'100%'}}>{children}</div>
             </div>
         </div>
-        );
+    );
 }
 
 export default LayoutSidebar;
