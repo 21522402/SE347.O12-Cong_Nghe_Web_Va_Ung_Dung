@@ -174,8 +174,7 @@ function LayoutNoSidebar({ children }) {
         console.log(arr)
 
         arr = arr.map(item => arrOrderDate.reduce((acc, i) => (i === item ? ++acc : acc), 0))
-        console.log(arr)
-        return arr.every(item => item >= 0)
+        return arr.reverse().filter((item, index) => index < 3).every(item => item >= 2)
     }
     return (
         <>

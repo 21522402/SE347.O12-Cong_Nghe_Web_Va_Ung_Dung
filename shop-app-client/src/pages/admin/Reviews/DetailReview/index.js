@@ -112,57 +112,6 @@ function DetailReview() {
                 </div>
               </div>
               {/* Sizes */}
-              <div className={cx("container-options")}>
-                <p>Kích thước: </p>
-                <div className={cx("list-options")}>
-                  <div>M</div>
-                  <div>L</div>
-                  <div>X</div>
-                  <div>XL</div>
-                  <div>2XL</div>
-                  <div>3XL</div>
-                  <div>4XL</div>
-                </div>
-              </div>
-              <div className={cx("product-baseOn")}><b>{itemReview.averageStar === false ? 0 : itemReview.averageStar} sao</b> dựa trên {itemReview.reviews?.length} đánh giá</div>
-              <div className={cx("product-stars")}>
-                <div className={cx("star-item")}>
-                  <div className={cx("star-num")}>5</div>
-                  <MdStar color="orange" size={26} />
-                  <div className={cx("star-percent")}>
-                    <ProgressBar borderRadius='6px' completed={itemReview.FiveStar === 0 ? 0 : itemReview.FiveStar} bgColor='orange' labelColor='black' labelAlignment="outside" customLabelStyles={{ fontWeight: '400', width: '40px' }} />
-                  </div>
-                </div>
-                <div className={cx("star-item")}>
-                  <div className={cx("star-num")}>4</div>
-                  <MdStar color="orange" size={26} />
-                  <div className={cx("star-percent")}>
-                    <ProgressBar borderRadius='6px' completed={itemReview.FourStar === 0 ? 0 : itemReview.FourStar} bgColor='orange' labelColor='black' labelAlignment="outside" customLabelStyles={{ fontWeight: '400', width: '40px' }} />
-                  </div>
-                </div>
-                <div className={cx("star-item")}>
-                  <div className={cx("star-num")}>3</div>
-                  <MdStar color="orange" size={26} />
-                  <div className={cx("star-percent")}>
-                    <ProgressBar borderRadius='6px' completed={itemReview.ThreeStar === 0 ? 0 : itemReview.ThreeStar} bgColor='orange' labelColor='black' labelAlignment="outside" customLabelStyles={{ fontWeight: '400', width: '40px' }} />
-                  </div>
-                </div>
-                <div className={cx("star-item")}>
-                  <div className={cx("star-num")}>2</div>
-                  <MdStar color="orange" size={26} />
-                  <div className={cx("star-percent")}>
-                    <ProgressBar borderRadius='6px' completed={itemReview.TwoStar === 0 ? 0 : itemReview.TwoStar} bgColor='orange' labelColor='black' labelAlignment="outside" customLabelStyles={{ fontWeight: '400', width: '40px' }} />
-                  </div>
-                </div>
-                <div className={cx("star-item")}>
-                  <div className={cx("star-num")}>1</div>
-                  <MdStar color="orange" size={26} />
-                  <div className={cx("star-percent")}>
-                    <ProgressBar borderRadius='6px' completed={itemReview.OneStar === 0 ? 0 : itemReview.OneStar} bgColor='orange' labelColor='black' labelAlignment="outside" customLabelStyles={{ fontWeight: '400', width: '40px' }} />
-                  </div>
-                </div>
-              </div>
-              <div className={cx("product-response")}><b>{(itemReview.quantityResponsed===false)?0:itemReview.quantityResponsed}/{itemReview.reviews?.length}</b> đánh giá đã được phản hồi</div>
             </div>
           </div>
           {/* Container Right */}
@@ -175,12 +124,6 @@ function DetailReview() {
                 onChange={handleCbb1}
                 openMenuOnClick={handleCbb1}
               />
-              <Select options={cbb}
-                defaultValue={cbb[0]}
-                className={cx('combobox')} 
-                onChange={handleCbb}
-                openMenuOnClick={handleCbb}/>
-
             </div>
             {/* List Reivew */}
             <div className={cx("container-content")}>
